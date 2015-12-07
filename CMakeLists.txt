@@ -34,7 +34,9 @@ elseif(MSVC)
 endif()
 
 
-
+#
+set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g")
+set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -O2")
 
 
 
@@ -43,11 +45,19 @@ include_directories(include)
 
 
 #
+
+add_library(hpm src/matrix.c)
+
 add_library(hpmavx2 src/avx2_matrix.c)
 add_library(hpmavx src/avx_matrix.c)
 add_library(hpmmmx src/mmx_matrix.c)
 add_library(hpmsee src/sse_matrix.c)
-add_library(hpm src/matrix.c)
+
+if(__arm__)
+	add_library(hpmneon src/neon_matrix.c)
+endif()
+
+
 
 # add the install targets
 install (TARGETS hpmavx2 DESTINATION lib)
