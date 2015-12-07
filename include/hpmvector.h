@@ -1,5 +1,5 @@
 /**
-    Copyright (C) 2014  Valdemar Lindberg
+    Copyright (C) 2015  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -15,25 +15,53 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_H_
-#define _HPM_H_ 1
+#ifndef _HPM_VECTOR_H_
+#define _HPM_VECTOR_H_ 1
 #include"hpmdef.h"
-#include"hpmmatrix.h"
-
-
-
-/*	function pointer type define*/
-typedef void ( *Some)(void );
 
 
 
 
+HPM_ALIGN(4)
+typedef float hpmvecf;
+
+HPM_ALIGN(8)
+typedef double hpmvecd;
 
 
-/**/
-extern void* hpm_get_address(const char* cfunctionName);
+HPM_ALIGN(8)
+typedef hpmvecf hpmvec2f[2];
 
-extern int hpm_version(void);
+HPM_ALIGN(16)
+typedef hpmvecd hpmvec2d[2];
 
+
+
+HPM_ALIGN(16)
+typedef hpmvecf hpmvec3f[3];
+
+HPM_ALIGN(32)
+typedef hpmvecd hpmvec3d[3];
+
+
+
+HPM_ALIGN(16)
+typedef hpmvecf hpmvec4f[4];
+
+HPM_ALIGN(32)
+typedef hpmvecd hpmvec4d[4];
+
+#ifdef __cplusplus /*	C++ Environment	*/
+extern "C"{
+#endif
+
+
+
+extern void hpm_vec4_addition_float(hpmvec3f larg, hpmvecf rarg);
+
+
+#ifdef __cplusplus /*	C++ Environment	*/
+}
+#endif
 
 #endif
