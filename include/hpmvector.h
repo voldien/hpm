@@ -20,35 +20,31 @@
 #include"hpmdef.h"
 
 
-
-
-HPM_ALIGN(4)
 typedef float hpmvecf;
 
-HPM_ALIGN(8)
 typedef double hpmvecd;
 
 
-HPM_ALIGN(8)
+//HPM_VECTORALIGN(8)
 typedef hpmvecf hpmvec2f[2];
 
-HPM_ALIGN(16)
+//HPM_VECTORALIGN(16)
 typedef hpmvecd hpmvec2d[2];
 
 
 
-HPM_ALIGN(16)
+//HPM_VECTORALIGN(16)
 typedef hpmvecf hpmvec3f[3];
 
-HPM_ALIGN(32)
+//HPM_VECTORALIGN(32)
 typedef hpmvecd hpmvec3d[3];
 
 
 
-HPM_ALIGN(16)
-typedef hpmvecf hpmvec4f[4];
 
-HPM_ALIGN(32)
+typedef hpmvecf hpmvec4f[4] HPM_VECTORALIGN(16);
+
+//HPM_VECTORALIGN(32)
 typedef hpmvecd hpmvec4d[4];
 
 #ifdef __cplusplus /*	C++ Environment	*/

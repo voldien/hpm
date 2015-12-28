@@ -7,6 +7,8 @@
 #		include<x86intrin.h>
 #   endif
 
+#		include<x86intrin.h>
+
 #ifndef __AVX2__
 	#define __AVX2__
 #endif

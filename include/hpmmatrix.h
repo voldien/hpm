@@ -23,13 +23,11 @@
 
 
 
-
-// matrix = {{0,0,0,0},{0,0,0,0},{0,0,0,0},{0,0,0,0}};
 /*
  * 	float
  */
-HPM_ALIGN(16)
-typedef hpmvecf hpmvec4x4f_t[4][4];
+//HPM_VECTORALIGN(16)
+typedef hpmvec4f hpmvec4x4f_t[4];
 typedef struct hpmvec4x4f_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
 
 
@@ -62,11 +60,18 @@ typedef struct hpmvec2x2d_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m4
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
-extern "C"{
+extern "C" {
 #endif
 
+/*
+ *
+ */
+extern void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination);
 
 
+/*
+ *
+ */
 extern void hpm_matrix4x4_assign(hpmvec4x4f_t larg,hpmvec4x4f_t rarg);
 
 
@@ -135,9 +140,11 @@ extern float hpm_mat4x4_inversefv(hpmvec4x4f_t f_mat4);
 /**/
 extern float hpm_mat4x4_inversedv(hpmvec4x4f_t f_mat4);
 
+
 /**/
 extern void hpm_mat4x4_decomposefv(const hpmvec4x4f_t f_mat4, hpmvec3f f_position, hpmvec4f f_rotation, hpmvec3f f_scale);
 
+/**/
 extern void hpm_mat4x4_decomposedv(const hpmvec4x4f_t f_mat4, hpmvec3f f_position, hpmvec4f f_rotation, hpmvec3f f_scale);
 
 
@@ -151,32 +158,32 @@ extern void hpm_mat4x4_translationdv(hpmvec4x4f_t f_mat4,const hpmvec3f translat
 
 /**
 */
-extern void mat4x4_scalef(hpmvec4x4f_t f_mat4, float x,float y, float z);
-extern void mat4x4_scaled(hpmvec4x4f_t f_mat4, float x,float y, float z);
+extern void hpm_mat4x4_scalef(hpmvec4x4f_t f_mat4, float x,float y, float z);
+extern void hpm_mat4x4_scaled(hpmvec4x4f_t f_mat4, float x,float y, float z);
 
-extern void mat4x4_scalevf(hpmvec4x4f_t f_mat4, hpmvec3f scale);
-extern void mat4x4_scalevfd(hpmvec4x4f_t f_mat4, hpmvec3f scale);
-
-/**/
-extern void mat4x4_rotationfv(hpmvec4x4f_t f_mat4,float angle,const hpmvec3f axis);
-extern void mat4x4_rotationdv(hpmvec4x4f_t f_mat4,float angle,const hpmvec3f axis);
+extern void hpm_mat4x4_scalevf(hpmvec4x4f_t f_mat4, hpmvec3f scale);
+extern void hpm_mat4x4_scalevfd(hpmvec4x4f_t f_mat4, hpmvec3f scale);
 
 /**/
-extern void mat4x4_rotationX(hpmvec4x4f_t f_mat4, float x_radi);
-extern void mat4x4_rotationY(hpmvec4x4f_t f_mat4, float y_radi);
-extern void mat4x4_rotationZ(hpmvec4x4f_t f_mat4, float z_radi);
-extern void mat4x4_rotationQ(hpmvec4x4f_t f_mat4, hpmvec4f quad);
+extern void hpm_mat4x4_rotationfv(hpmvec4x4f_t f_mat4,float angle,const hpmvec3f axis);
+extern void hpm_mat4x4_rotationdv(hpmvec4x4f_t f_mat4,float angle,const hpmvec3f axis);
+
+/**/
+extern void hpm_mat4x4_rotationX(hpmvec4x4f_t f_mat4, float x_radi);
+extern void hpm_mat4x4_rotationY(hpmvec4x4f_t f_mat4, float y_radi);
+extern void hpm_mat4x4_rotationZ(hpmvec4x4f_t f_mat4, float z_radi);
+extern void hpm_mat4x4_rotationQ(hpmvec4x4f_t f_mat4, hpmvec4f quad);
 
 /*
 
 */
-extern void mat4x4_multi_translation(hpmvec4x4f_t f_mat4,const hpmvec3f translate);
-extern void mat4x4_multi_scale(hpmvec4x4f_t f_mat4,const hpmvec3f scale);
-extern void mat4x4_multi_rotationx(hpmvec4x4f_t f_mat4, float f_x_radi);
-extern void mat4x4_multi_rotationy(hpmvec4x4f_t f_mat4, float f_y_radi);
-extern void mat4x4_multi_rotationz(hpmvec4x4f_t f_mat4, float f_z_radi);
+extern void hpm_mat4x4_multi_translation(hpmvec4x4f_t f_mat4,const hpmvec3f translate);
+extern void hpm_mat4x4_multi_scale(hpmvec4x4f_t f_mat4,const hpmvec3f scale);
+extern void hpm_mat4x4_multi_rotationx(hpmvec4x4f_t f_mat4, float f_x_radi);
+extern void hpm_mat4x4_multi_rotationy(hpmvec4x4f_t f_mat4, float f_y_radi);
+extern void hpm_mat4x4_multi_rotationz(hpmvec4x4f_t f_mat4, float f_z_radi);
 
-extern void mat4x4_multi_rotationQ(hpmvec4x4f_t f_mat4,const float f_quad[4]);
+extern void hpm_mat4x4_multi_rotationQ(hpmvec4x4f_t f_mat4,const float f_quad[4]);
 
 
 
@@ -196,6 +203,7 @@ extern int hpm_mat4x4_unproj(float winx, float winy, float winz,const hpmvec4x4f
 
 
 
+
 extern void hpm_mat3x3_multiply_mat3x3fv(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
 
 
@@ -208,10 +216,12 @@ extern void hpm_mat3x3_subraction_mat3x3(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, h
 
 
 
-extern void hpm_mat2x2_multiply_mat2x2(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
-extern void hpm_mat2x2_division_mat2x2(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
-extern void hpm_mat2x2_additition_mat2x2(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
-extern void hpm_mat2x2_subraction_mat2x2(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
+
+
+extern void hpm_mat2x2_multiply_mat2x2(hpmvec2x2f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
+extern void hpm_mat2x2_division_mat2x2(hpmvec2x2f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
+extern void hpm_mat2x2_additition_mat2x2(hpmvec2x2f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
+extern void hpm_mat2x2_subraction_mat2x2(hpmvec2x2f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/

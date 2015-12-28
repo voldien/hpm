@@ -9,8 +9,18 @@
 #endif
 #include <xmmintrin.h>
 
+
+void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
+
+	_mm_store_ps((float*)source[0], *(__m128*)&destination[0]);
+	_mm_store_ps((float*)source[1], *(__m128*)&destination[1]);
+	_mm_store_ps((float*)source[2], *(__m128*)&destination[2]);
+	_mm_store_ps((float*)source[3], *(__m128*)&destination[3]);
+}
+
 void hpm_mat4x4_multiply_mat4x4fv(const hpmvec4x4f_t larg, const  hpmvec4x4f_t rarg, hpmvec4x4f_t outf_mat4){
 	int i;
+	/*
 	__m128 row1 = _mm_load_ps(rarg[0]);
 	__m128 row2 = _mm_load_ps(rarg[1]);
 	__m128 row3 = _mm_load_ps(rarg[2]);
@@ -33,6 +43,6 @@ void hpm_mat4x4_multiply_mat4x4fv(const hpmvec4x4f_t larg, const  hpmvec4x4f_t r
 		_mm_store_ps(outf_mat4[i],row);
 
 	}
-
+	*/
 
 }

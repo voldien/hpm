@@ -20,9 +20,9 @@
 #include"hpmdef.h"
 #include"hpmmatrix.h"
 
-
-
-/*	function pointer type define*/
+/*
+ *	function pointer type define
+ */
 typedef void ( *Some)(void );
 
 
