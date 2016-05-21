@@ -2,8 +2,9 @@
 
 
 void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
-	memcpy(source,destination,sizeof(hpmvec4x4f_t));
+	memcpy(source, destination, sizeof(hpmvec4x4f_t));
 }
+
 
 
 void hpm_mat4x4_multiply_mat4x4fv( const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf_mat4){

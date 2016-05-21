@@ -38,3 +38,11 @@ Proj
 port/android/obj
 port/android/libs
 *.tar.*
+
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Makefile
+cmake_install.cmake
+install_manifest.txt
+CTestTestfile.cmake

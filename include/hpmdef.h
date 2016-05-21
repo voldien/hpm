@@ -20,6 +20,8 @@
 #include<stdio.h>
 
 
+
+
 /*
     Compiler
 */
@@ -199,6 +201,10 @@
 #endif
 
 
+
+/*
+ *	Calling function convention.
+ */
 #ifdef HPM_WINDOWS	        /** Windows Calling Convention.*/
 	#define HPMAPIENTRY     __cdecl
 	#define HPMAPIFASTENTRY __fastcall
@@ -210,7 +216,7 @@
     #define HPMAPITHISENTRY JNICALL
     #define HPMAPISTDENTRY JNICALL
 #else
-#   ifndef __cdecl
+#   if !defined(__cdecl) && defined(HPM_GNUC)
         #define __cdecl  __attribute__ ((__cdecl__))
         #define __stdcall  __attribute__ ((stdcall))
 		#define __fastcall __attribute__((fastcall))
@@ -221,10 +227,8 @@
 #endif
 
 
-
-
 /*
- *	Alignment
+ *	Alignment of data and vectors.
  */
 #ifdef HPM_GNUC
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
@@ -243,7 +247,7 @@
  *	library declaration.
  */
 #ifdef HPM_GNUC
-	#define HPMDECLSPEC
+	#define HPMDECLSPEC __attribute__((__visibility__ ("default")))
 #elif defined(HPM_VC)
 	#define HPMDECLSPEC __declspec(dllimport)
 #endif
@@ -256,21 +260,32 @@
 
 
 
-#ifdef HPM_MATH_H_
-#define HPM_PI				3.14159265358979323846  /* pi */
-#define HPM_PI_2			1.57079632679489661923  /* pi/2 */
-#define HPM_PI_4			0.78539816339744830962  /* pi/4 */
-#define HPM_E				2.7182818284590452354   /* e */
-#define HPM_LOG2E			1.4426950408889634074   /* log_2 e */
-#define HPM_LOG10E			0.43429448190325182765  /* log_10 e */
-#define HPM_LN2           0.69314718055994530942  /* log_e 2 */
-#define HPM_LN10          2.30258509299404568402  /* log_e 10 */
-#define HPM_1_PI          0.31830988618379067154  /* 1/pi */
-#define HPM_2_PI          0.63661977236758134308  /* 2/pi */
-#define HPM_2_SQRTPI      1.12837916709551257390  /* 2/sqrt(pi) */
-#define HPM_SQRT2         1.41421356237309504880  /* sqrt(2) */
-#define HPM_SQRT1_2       0.70710678118654752440  /* 1/sqrt(2) */
+/*
+ *
+ */
+#ifdef _HPM_MATH_H_
+	#define HPM_PI				3.14159265358979323846  /* pi */
+	#define HPM_PI_2			1.57079632679489661923  /* pi/2 */
+	#define HPM_PI_4			0.78539816339744830962  /* pi/4 */
+	#define HPM_E				2.7182818284590452354   /* e */
+	#define HPM_LOG2E			1.4426950408889634074   /* log_2 e */
+	#define HPM_LOG10E			0.43429448190325182765  /* log_10 e */
+	#define HPM_LN2           	0.69314718055994530942  /* log_e 2 */
+	#define HPM_LN10          	2.30258509299404568402  /* log_e 10 */
+	#define HPM_1_PI          	0.31830988618379067154  /* 1/pi */
+	#define HPM_2_PI          	0.63661977236758134308  /* 2/pi */
+	#define HPM_2_SQRTPI      	1.12837916709551257390  /* 2/sqrt(pi) */
+	#define HPM_SQRT2         	1.41421356237309504880  /* sqrt(2) */
+	#define HPM_SQRT1_2       	0.70710678118654752440  /* 1/sqrt(2) */
 #endif
+
+#define DEG2RAD( a ) ( ( (a) * PI ) / 180.0F )
+#define RAD2DEG( a ) ( ( (a) * 180.0f ) / PI )
+
+#define MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+#define MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+#define CLAMP(a,min,max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+#define LERP(a,b,t)	( ( (a) + ( (b) - (a) )*(t) )
 
 
 #endif

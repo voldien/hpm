@@ -21,12 +21,10 @@
 #include"hpmvector.h"
 
 
-
-
 /*
  * 	float
  */
-//HPM_VECTORALIGN(16)
+//
 typedef hpmvec4f hpmvec4x4f_t[4];
 typedef struct hpmvec4x4f_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
 
@@ -66,28 +64,18 @@ extern "C" {
 /*
  *
  */
-extern void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination);
+extern HPMDECLSPEC void HPMAPIENTRY hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination);
+extern HPMDECLSPEC void HPMAPIENTRY hpm_matrix4x4_assign(hpmvec4x4f_t larg, hpmvec4x4f_t rarg);
 
 
-/*
- *
- */
-extern void hpm_matrix4x4_assign(hpmvec4x4f_t larg,hpmvec4x4f_t rarg);
+extern HPMDECLSPEC void hpm_mat4x4_multiply_mat4x4fv(const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output);
+extern HPMDECLSPEC void hpm_mat4x4_multiply_mat4x4dv(const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t output);
 
 
-/*
- *
- */
-extern void hpm_mat4x4_multiply_mat4x4fv(const hpmvec4x4f_t larg, const  hpmvec4x4f_t rarg, hpmvec4x4f_t output);
-
-/*
- *
- */
-extern void hpm_mat4x4_multiply_mat4x4dv(const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t output);
+extern void hpm_mat4x4_multiply_mat1x4f(hpmvec4x4f_t larg, hpmvec4f rarg, hpmvec4x4f_t output);
+extern void hpm_mat4x4_multiply_mat1x4d(hpmvec4x4f_t larg, hpmvec4f rarg, hpmvec4x4f_t output);
 
 
-
-extern void hpm_mat4x4_multiply_mat1x4(hpmvec4x4f_t larg, hpmvec4f rarg, hpmvec4x4f_t output);
 
 extern void hpm_mat4x4_division_mat4x4fv(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, hpmvec4x4f_t output);
 
@@ -136,25 +124,20 @@ extern float hpm_mat4x4_determinantdv(const hpmvec4x4d_t f_mat4);
 
 /**/
 extern float hpm_mat4x4_inversefv(hpmvec4x4f_t f_mat4);
-
-/**/
 extern float hpm_mat4x4_inversedv(hpmvec4x4f_t f_mat4);
-
 
 /**/
 extern void hpm_mat4x4_decomposefv(const hpmvec4x4f_t f_mat4, hpmvec3f f_position, hpmvec4f f_rotation, hpmvec3f f_scale);
-
-/**/
 extern void hpm_mat4x4_decomposedv(const hpmvec4x4f_t f_mat4, hpmvec3f f_position, hpmvec4f f_rotation, hpmvec3f f_scale);
 
 
 /**
 */
-extern void hpm_mat4x4_translationf(hpmvec4x4f_t f_mat4,float x, float y, float z);
-extern void hpm_mat4x4_translationd(hpmvec4x4f_t f_mat4,float x, float y, float z);
+extern void hpm_mat4x4_translationf(hpmvec4x4f_t f_mat4, float x, float y, float z);
+extern void hpm_mat4x4_translationd(hpmvec4x4f_t f_mat4, float x, float y, float z);
 
-extern void hpm_mat4x4_translationfv(hpmvec4x4f_t f_mat4,const hpmvec3f translation);
-extern void hpm_mat4x4_translationdv(hpmvec4x4f_t f_mat4,const hpmvec3f translation);
+extern void hpm_mat4x4_translationfv(hpmvec4x4f_t f_mat4, const hpmvec3f translation);
+extern void hpm_mat4x4_translationdv(hpmvec4x4f_t f_mat4, const hpmvec3f translation);
 
 /**
 */

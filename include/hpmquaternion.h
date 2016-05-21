@@ -17,46 +17,112 @@
 */
 #ifndef _HPM_QUATERNION_H_
 #define _HPM_QUATERNION_H_ 1
+#include"hpmdef.h"
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
 
-HPM_ALIGN(16)
-typedef hpmvecf hpmquatf[4];
+typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 
 HPM_ALIGN(32)
-typedef hpmvecd hpmquatd[4];
+typedef hpmvecd hpmquatd HPM_VECTORALIGN(16);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C"{
 #endif
 
-/*
- *
- */
-extern void hpm_quat_multi_quatfv(const hpmquatf larg,const hpmquatf larg,const hpmquatf out);
+
+extern HPMDECLSPEC void HPMAPIENTRY hpm_quad_copyf(const hpmquatf source, hpmquatf destination);
+extern HPMDECLSPEC void HPMAPIENTRY hpm_quad_copyd(const hpmquatf source, hpmquatf destination);
 
 /*
  *
  */
-extern void hpm_quat_multi_quatdv(const hpmquatd larg,const hpmquatd larg,const hpmquatd out);
+extern HPMDECLSPEC void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_dv(const hpmquatd larg, const hpmquatd rarg, hpmquatd out);
+
+/*
+ *
+ */
+extern HPMDECLSPEC void hpm_quat_multi_quatfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_multi_quatdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_multi_vec3fv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_multi_vec3dv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_directionfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_directiondv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+
+extern HPMDECLSPEC void hpm_quat_conjugatefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_conjugatedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_lengthfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_lengthdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_lengthsqurefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_lengthsquredv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_normalizefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_normalizedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+
+extern HPMDECLSPEC void hpm_quat_inversefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_inversedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_dotfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_dotdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_identityfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_identitydv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quat_copyfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+extern HPMDECLSPEC void hpm_quat_copydv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+
+extern HPMDECLSPEC void hpm_quad_lerpfv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+extern HPMDECLSPEC void hpm_quad_lerpdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+extern HPMDECLSPEC void hpm_quad_slerpfv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+extern HPMDECLSPEC void hpm_quad_slerpdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+
+#define QuaternionDirection(x)	{}
+#define QuaternionConjugate(x)	{x[1] = -x[1];x[2] = -x[2];x[3] = -x[3];}
+#define QuaternionLength(x)	sqrtf((x[0] * x[0]) + (x[1] * x[1]) + (x[2] * x[2]) + (x[3] * x[3]))
+#define QuaternionLengthSqrt(x)	((x[0] * x[0]) + (x[1] * x[1]) + (x[2] * x[2]) + (x[3] * x[3]))
+#define QuaternionNormalize(x)	{float length = QuaternionLength(x);x[0] /= length;x[1] /= length;x[2] /= length;x[3] /= length;}
+#define QuaternionInverse(x)	{float length = QuaternionLength(x);x[0] /= length;x[1] /= -length; x[2] /= -length; x[3] /= -length;}
+#define QuaternionDot(x,y) (x[0]*y[0]+x[1]*y[1]+x[2]*y[2] + x[3] * y[3])
+#define QuaternionIdentity(x) {x[0] = 1.0f;x[1] = 0.0f;x[2] = 0.0f;x[3] = 0.0f;}
+#define QuaternionCopy(a,b) {b[0] = a[0];b[1] = a[1];b[2] = a[2];b[3] = a[3];}
+#define QuaternionYaw(lf_quad)  (float)atan2f(2.0f * (lf_quad[QUAD_W] * lf_quad[QUAD_X] + lf_quad[QUAD_Y] * lf_quad[QUAD_W]),( 1.0f - ( 2.0f * (lf_quad[QUAD_X] * lf_quad[QUAD_X] + lf_quad[QUAD_Y] * lf_quad[QUAD_Y]))))
+#define QuaternionPitch(lf_quad) (float)asinf(-2.0f * (lf_quad[QUAD_Z] * lf_quad[QUAD_Y] + lf_quad[QUAD_W] * lf_quad[QUAD_X]))
+#define QuaternionRoll(lf_quad) (float)atan2f(2.0f * (lf_quad[QUAD_W] * lf_quad[QUAD_Z] + lf_quad[QUAD_X] * lf_quad[QUAD_Y]), 1.0f - (2.0f * (lf_quad[QUAD_Y] * lf_quad[QUAD_Y] + lf_quad[QUAD_Z] * lf_quad[QUAD_Z])))
+
+
+
 
 
 
 /*
-	quaternion x rotation in radian
-*/
+ *	quaternion x rotation in radian.
+ */
 extern float HPMAPIFASTENTRY hpm_quat_pitchfv(const hpmquatf lf_quad);
-/*
-	quaternion y rotation in radian
-*/
-extern float HPMAPIFASTENTRY hpm_quat_yawfv(const hpmquatf lf_quad);
-/*
-	quaternion z rotation in radian
-*/
-extern float HPMAPIFASTENTRY hpm_quat_rollfv(const hpmquatf lf_quad);
+extern float HPMAPIFASTENTRY hpm_quat_pitchdv(const hpmquatf lf_quad);
 
+/*
+ *	quaternion y rotation in radian.
+ */
+extern float HPMAPIFASTENTRY hpm_quat_yawfv(const hpmquatf lf_quad);
+extern float HPMAPIFASTENTRY hpm_quat_yawdv(const hpmquatf lf_quad);
+
+/*
+ *	quaternion z rotation in radian.
+ */
+extern float HPMAPIFASTENTRY hpm_quat_rollfv(const hpmquatf lf_quad);
+extern float HPMAPIFASTENTRY hpm_quat_rolldv(const hpmquatf lf_quad);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
