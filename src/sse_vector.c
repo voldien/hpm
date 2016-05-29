@@ -10,7 +10,7 @@
 
 void hpm_vec4_copyf(const hpmvec4f source, hpmvec4f destination){
 	destination = source;
-	__m128d
+	//__m128d
 }
 
 void hpm_vec4_copyd(const hpmvec4f source, hpmvec4f destination){

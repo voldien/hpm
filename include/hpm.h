@@ -20,6 +20,23 @@
 #include"hpmdef.h"
 #include"hpmmatrix.h"
 
+#define HPM_SSE			0x1
+#define HPM_SSE2		0x2
+#define HPM_SSE3		0x4
+#define HPM_SSSE3		0x8
+#define HPM_SSE4_1		0x10
+#define HPM_SSE4_2		0x20
+#define HPM_AVX			0x40
+#define HPM_AVX2		0x80
+#define HPM_AVX512		0x100
+#define HPM_FMA			0x200
+
+
+
+extern int hpm_init(unsigned int simd);
+
+
+
 /*
  *	function pointer type define
  */
@@ -27,12 +44,10 @@ typedef void ( *Some)(void );
 
 
 
-
-
-
 /**/
 extern void* hpm_get_address(const char* cfunctionName);
 
+/**/
 extern int hpm_version(void);
 
 
