@@ -50,7 +50,8 @@ include_directories(include)
 #39848390912
 #
 
-ADD_LIBRARY(hpm src/matrix.c)
+
+ADD_LIBRARY(hpm src/matrix.c src/hpm.c )
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "" )
 
 ADD_LIBRARY(hpmavx2 src/avx2_matrix.c)
