@@ -5,7 +5,8 @@
 #      include<intrin.h>
 #   endif
 
-HPMDECLSPEC void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out){
+
+void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out){
 
 	__m128 wzyx = _mm_shuffle_ps(larg, larg, _MM_SHUFFLE(0,1,2,3) );
 	__m128 baba = _mm_shuffle_ps(rarg, rarg, _MM_SHUFFLE(0,1,0,1) );
@@ -43,7 +44,7 @@ HPMDECLSPEC void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf 
 	out = _mm_shuffle_ps(XZWY, XZWY, _MM_SHUFFLE(2,1,3,0));
 }
 
-HPMDECLSPEC void hpm_quat_dv(const hpmquatd larg, const hpmquatd rarg, hpmquatd out){
 
+void hpm_quat_dv(const hpmquatd larg, const hpmquatd rarg, hpmquatd out){
 
 }

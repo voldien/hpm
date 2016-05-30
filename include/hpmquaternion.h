@@ -21,11 +21,23 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
-
+/**
+ *
+ */
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 
-HPM_ALIGN(32)
-typedef hpmvecd hpmquatd HPM_VECTORALIGN(16);
+/**
+ *
+ */
+typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
+
+/**
+ *
+ */
+#define HPM_QUAD_W 0
+#define HPM_QUAD_X 1
+#define HPM_QUAD_Y 2
+#define HPM_QUAD_Z 3
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
@@ -104,22 +116,23 @@ extern HPMDECLSPEC void hpm_quad_slerpdv(const hpmquatd larg, const hpmquatd rar
 
 
 
-
-
-/*
+/**
  *	quaternion x rotation in radian.
+ *	@Return
  */
 extern float HPMAPIFASTENTRY hpm_quat_pitchfv(const hpmquatf lf_quad);
 extern float HPMAPIFASTENTRY hpm_quat_pitchdv(const hpmquatf lf_quad);
 
-/*
+/**
  *	quaternion y rotation in radian.
+ *	@Return
  */
 extern float HPMAPIFASTENTRY hpm_quat_yawfv(const hpmquatf lf_quad);
 extern float HPMAPIFASTENTRY hpm_quat_yawdv(const hpmquatf lf_quad);
 
-/*
+/**
  *	quaternion z rotation in radian.
+ *	@Return
  */
 extern float HPMAPIFASTENTRY hpm_quat_rollfv(const hpmquatf lf_quad);
 extern float HPMAPIFASTENTRY hpm_quat_rolldv(const hpmquatf lf_quad);
