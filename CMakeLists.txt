@@ -24,10 +24,17 @@ if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 	endif()
 
-	#add_definitions(-fvisibility=hidden -Wall)
-	# hide all not exported symbols and ignore warnings
-	#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fvisibility=hidden -Wall")
-		set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -O3")
+	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
+		MESSAGE(STATUS "Compile for release.")
+		ADD_DEFINITIONS(-DNDEBUG)
+		ADD_DEFINITIONS(-O3)
+		SET(CMAKE_RELEASE TRUE)
+	ELSE()
+		MESSAGE(STATUS "Compile for debug.")
+		ADD_DEFINITIONS(-D_DEBUG)
+		ADD_DEFINITIONS(-g3)
+		SET(CMAKE_DEBUG TRUE)
+	ENDIF()
 
 elseif(MSVC)
 		# enable multi-core complication with MSVC
