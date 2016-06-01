@@ -7,7 +7,7 @@
 #   endif
 
 
-void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
+void hpm_matrxi4x4_copyfv(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
 /*
 	_mm_store_ps((float*)source[0], *(__m128*)&destination[0]);
 	_mm_store_ps((float*)source[1], *(__m128*)&destination[1]);

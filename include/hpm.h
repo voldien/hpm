@@ -28,40 +28,42 @@
 /*
  *	function pointer type define
  */
-typedef void ( *p_hpm_vec4_addition_scalef)(hpmvec4f larg, hpmvecf rarg);
+typedef void (HPMAPIENTRY *p_hpm_vec4_addition_scalef)(hpmvec4f larg, hpmvecf rarg);
+
+
 
 
 /**
  *
  */
-#define HPM_MMX			0x1
-#define HPM_SSE			0x2
-#define HPM_SSE2		0x4
-#define HPM_SSE3		0x8
-#define HPM_SSSE3		0x10
-#define HPM_SSE4_1		0x20
-#define HPM_SSE4_2		0x40
-#define HPM_AVX			0x80
-#define HPM_AVX2		0x100
-#define HPM_AVX512		0x200
-#define HPM_FMA			0x400
+#define HPM_MMX			0x1			/*	*/
+#define HPM_SSE			0x2			/*	*/
+#define HPM_SSE2		0x4			/*	*/
+#define HPM_SSE3		0x8			/*	*/
+#define HPM_SSSE3		0x10		/*	*/
+#define HPM_SSE4_1		0x20		/*	*/
+#define HPM_SSE4_2		0x40		/*	*/
+#define HPM_AVX			0x80		/*	*/
+#define HPM_AVX2		0x100		/*	*/
+#define HPM_AVX512		0x200		/*	*/
 
 
 /**
  *
+ *	@Return
  */
-extern int hpm_init(unsigned int simd);
-
-
-/**
- *
- */
-extern void* hpm_get_address(const char* cfunctionName);
+extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int simd);
 
 /**
- *
+ *	\cfunctionName
+ *	@Return func pointer
  */
-extern int hpm_version(void);
+extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
+
+/**
+ *	@Return
+ */
+extern HPMDECLSPEC int HPMAPIENTRY hpm_version(void);
 
 
 #endif

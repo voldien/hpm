@@ -1,7 +1,7 @@
 #include"hpmmatrix.h"
 
 
-void hpm_matrxi4x4_copy(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
+void hpm_matrxi4x4_copyfv(const hpmvec4x4f_t source, hpmvec4x4f_t destination){
 	memcpy(source, destination, sizeof(hpmvec4x4f_t));
 }
 
