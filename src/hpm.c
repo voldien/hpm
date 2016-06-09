@@ -10,8 +10,6 @@ p_hpm_vec4_addition_scalef _hpm_vec4_addition_scalef = NULL;
 
 
 
-
-
 int hpm_init(unsigned int simd){
 	char* libpath;
 
@@ -50,7 +48,6 @@ int hpm_init(unsigned int simd){
 		libhandle = dlopen("libhpm.so", RTLD_LAZY);
 		break;
 	}
-
 
 	if(libhandle == NULL){
 		fprintf(stderr, "%s\n", dlerror());

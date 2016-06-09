@@ -24,7 +24,6 @@
 
 
 
-
 /*
  *	function pointer type define
  */
