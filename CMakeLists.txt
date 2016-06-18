@@ -58,38 +58,54 @@ endif()
 
 
 FILE (GLOB headers "include/*.h")
+FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quad_base.c)
 INCLUDE_DIRECTORIES(include)
 
-ADD_LIBRARY(hpm src/matrix.c src/hpm.c )
+ADD_LIBRARY(hpm src/hpm.c)
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "" )
+TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
-ADD_LIBRARY(hpmavx2 src/avx2_matrix.c)
+ADD_LIBRARY(hpmnosimd ${basecore})
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "" )
+TARGET_LINK_LIBRARIES(hpmnosimd -lm)
+
+#ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )
+#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
+
+ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} )
 SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2" )
+TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
-ADD_LIBRARY(hpmavx src/avx_matrix.c src/avx_vector.c)
+ADD_LIBRARY(hpmavx src/avx_matrix.c src/avx_vector.c ${basecore} )
 SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx" )
+TARGET_LINK_LIBRARIES(hpmavx -lm)
 
-ADD_LIBRARY(hpmmmx src/mmx_matrix.c)
+ADD_LIBRARY(hpmmmx src/mmx_matrix.c ${basecore} )
 SET_TARGET_PROPERTIES(hpmmmx PROPERTIES COMPILE_FLAGS "-mmmx" )
+TARGET_LINK_LIBRARIES(hpmmmx -lm)
 
-ADD_LIBRARY(hpmsse src/sse_matrix.c src/sse_vector.c src/sse_quaternion.c)
+ADD_LIBRARY(hpmsse src/sse_matrix.c src/sse_vector.c src/sse_quaternion.c  ${basecore} )
 SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse" )
+TARGET_LINK_LIBRARIES(hpmsse -lm)
 
-ADD_LIBRARY(hpmsse2 src/sse_matrix.c)
+ADD_LIBRARY(hpmsse2 src/sse_matrix.c  ${basecore} )
 SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2" )
+TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
-ADD_LIBRARY(hpmsse3 src/sse_matrix.c src/sse3_vector.c)
+ADD_LIBRARY(hpmsse3 src/sse_matrix.c src/sse3_vector.c  ${basecore} )
 SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3" )
+TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
-ADD_LIBRARY(hpmsse41 src/sse_matrix.c)
-SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4" )
+ADD_LIBRARY(hpmsse41 src/sse_matrix.c ${basecore})
+SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1" )
+TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
-ADD_LIBRARY(hpmsse42 src/sse_matrix.c)
-SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4" )
-
+ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore})
+SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2" )
+TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
 if(__arm__)
-	ADD_LIBRARY(hpmneon src/neon_matrix.c)
+	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} )
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon" )
 endif()
 
