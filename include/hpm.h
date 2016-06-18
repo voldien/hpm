@@ -23,18 +23,10 @@
 #include"hpmquaternion.h"
 
 
-
-/*
- *	function pointer type define
- */
-typedef void (HPMAPIENTRY *p_hpm_vec4_addition_scalef)(hpmvec4f larg, hpmvecf rarg);
-
-
-
-
 /**
  *
  */
+#define HPM_NOSIMD		0x0			/*	*/
 #define HPM_MMX			0x1			/*	*/
 #define HPM_SSE			0x2			/*	*/
 #define HPM_SSE2		0x4			/*	*/
@@ -48,18 +40,20 @@ typedef void (HPMAPIENTRY *p_hpm_vec4_addition_scalef)(hpmvec4f larg, hpmvecf ra
 
 
 /**
- *
+ *	initialize hpm.
  *	@Return
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int simd);
 
 /**
+ *	Get function pointer address.
  *	\cfunctionName
  *	@Return func pointer
  */
 extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
 
 /**
+ *	Get hpm version.
  *	@Return
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_version(void);

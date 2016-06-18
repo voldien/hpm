@@ -258,7 +258,23 @@
 #endif
 
 
+/**
+ *
+ */
+#define HPM_STR_HELPER(x) #x
+#define HPM_STR(x) HPM_STR_HELPER(x)
+#define HPM_FUNCSYMBOLNAME(func) fimp##func
+#define HPM_FUNCPOINTER(func) _##func func
+#define HPM_EXPORT(ret, callback, func, ...)						\
+		typedef ret (*_##func)(__VA_ARGS__); 						\
+		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);	\
+		HPM_FUNCPOINTER(func)										\
 
+/**
+ *
+ */
+#define HPM_IMP(ret, func, ...)		\
+ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 
 /*
  *

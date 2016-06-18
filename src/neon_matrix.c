@@ -1,3 +1,5 @@
 #include"hpmmatrix.h"
-#include<arm_neon.h>
 
+#ifdef __arm__
+#include<arm_neon.h>
+#endif

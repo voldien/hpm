@@ -29,7 +29,8 @@ typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 /**
  *
  */
-typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
+typedef hpmvecd hpmquatd HPM_VECTORALIGN(16);
+
 
 /**
  *
@@ -45,59 +46,73 @@ extern "C"{
 #endif
 
 
-extern HPMDECLSPEC void HPMAPIENTRY hpm_quad_copyf(const hpmquatf source, hpmquatf destination);
-extern HPMDECLSPEC void HPMAPIENTRY hpm_quad_copyd(const hpmquatf source, hpmquatf destination);
+/*
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_copyf, hpmquatf destination, const hpmquatf source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_copyd, hpmquatf destination, const hpmquatf source);
 
 /*
  *
  */
-extern HPMDECLSPEC void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_dv(const hpmquatd larg, const hpmquatd rarg, hpmquatd out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_fv, const hpmquatf larg, const hpmquatf rarg, hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dv, const hpmquatd larg, const hpmquatd rarg, hpmquatd out);
 
 /*
  *
  */
-extern HPMDECLSPEC void hpm_quat_multi_quatfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_multi_quatdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatdv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
 
-extern HPMDECLSPEC void hpm_quat_multi_vec3fv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_multi_vec3dv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+/*
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3dv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
 
-extern HPMDECLSPEC void hpm_quat_directionfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_directiondv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+/*
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directiondv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
 
-
-extern HPMDECLSPEC void hpm_quat_conjugatefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_conjugatedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_lengthfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_lengthdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_lengthsqurefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_lengthsquredv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_normalizefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_normalizedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-
-extern HPMDECLSPEC void hpm_quat_inversefv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_inversedv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_dotfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_dotdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_identityfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_identitydv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-
-extern HPMDECLSPEC void hpm_quat_copyfv(const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
-extern HPMDECLSPEC void hpm_quat_copydv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+/*
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_conjugatefv, hpmquatf larg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_conjugatedv, hpmquatd larg);
 
 
-extern HPMDECLSPEC void hpm_quad_lerpfv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-extern HPMDECLSPEC void hpm_quad_lerpdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+/**/
+HPM_EXPORT( float, HPMAPIENTRY, hpm_quat_lengthfv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_quat_lengthdv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
 
-extern HPMDECLSPEC void hpm_quad_slerpfv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
-extern HPMDECLSPEC void hpm_quad_slerpdv(const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+/**/
+HPM_EXPORT( float, HPMAPIENTRY, hpm_quat_lengthsqurefv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_quat_lengthsquredv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_normalizefv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_normalizedv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+/**/
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_inversefv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_inversedv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+/**/
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf larg, const hpmquatf rarg, const hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dotdv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+/**/
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_identityfv, hpmquatf out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_identitydv, hpmquatd out);
+
+/**/
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_lerpfv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_lerpdv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+
+/**/
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_slerpfv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_slerpdv, const hpmquatd larg, const hpmquatd rarg, const hpmquatd out);
 
 
 #define QuaternionDirection(x)	{}
@@ -114,28 +129,26 @@ extern HPMDECLSPEC void hpm_quad_slerpdv(const hpmquatd larg, const hpmquatd rar
 #define QuaternionRoll(lf_quad) (float)atan2f(2.0f * (lf_quad[QUAD_W] * lf_quad[QUAD_Z] + lf_quad[QUAD_X] * lf_quad[QUAD_Y]), 1.0f - (2.0f * (lf_quad[QUAD_Y] * lf_quad[QUAD_Y] + lf_quad[QUAD_Z] * lf_quad[QUAD_Z])))
 
 
-
-
 /**
  *	quaternion x rotation in radian.
  *	@Return
  */
-extern float HPMAPIFASTENTRY hpm_quat_pitchfv(const hpmquatf lf_quad);
-extern float HPMAPIFASTENTRY hpm_quat_pitchdv(const hpmquatf lf_quad);
+HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_pitchfv, const hpmquatf lf_quad);
+HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_quat_pitchdv, const hpmquatd lf_quad);
 
 /**
  *	quaternion y rotation in radian.
  *	@Return
  */
-extern float HPMAPIFASTENTRY hpm_quat_yawfv(const hpmquatf lf_quad);
-extern float HPMAPIFASTENTRY hpm_quat_yawdv(const hpmquatf lf_quad);
+HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_yawfv, const hpmquatf lf_quad);
+HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_quat_yawdv, const hpmquatd lf_quad);
 
 /**
  *	quaternion z rotation in radian.
  *	@Return
  */
-extern float HPMAPIFASTENTRY hpm_quat_rollfv(const hpmquatf lf_quad);
-extern float HPMAPIFASTENTRY hpm_quat_rolldv(const hpmquatf lf_quad);
+HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_rollfv, const hpmquatf lf_quad);
+HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_quat_rolldv, const hpmquatd lf_quad);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/

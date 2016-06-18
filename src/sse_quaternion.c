@@ -6,7 +6,7 @@
 #   endif
 
 
-void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out){
+HPM_IMP(void, hpm_quat_fv, const hpmquatf larg, const hpmquatf rarg, hpmquatf out){
 
 	__m128 wzyx = _mm_shuffle_ps(larg, larg, _MM_SHUFFLE(0,1,2,3) );
 	__m128 baba = _mm_shuffle_ps(rarg, rarg, _MM_SHUFFLE(0,1,0,1) );
@@ -44,7 +44,6 @@ void hpm_quat_fv(const hpmquatf larg, const hpmquatf rarg, hpmquatf out){
 	out = _mm_shuffle_ps(XZWY, XZWY, _MM_SHUFFLE(2,1,3,0));
 }
 
-
-void hpm_quat_dv(const hpmquatd larg, const hpmquatd rarg, hpmquatd out){
+HPM_IMP( void, hpm_quat_dv, const hpmquatd larg, const hpmquatd rarg, hpmquatd out){
 
 }
