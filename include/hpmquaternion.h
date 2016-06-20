@@ -49,8 +49,8 @@ extern "C"{
 /*
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_copyf, hpmquatf destination, const hpmquatf source);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_copyd, hpmquatf destination, const hpmquatf source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyf, hpmquatf destination, const hpmquatf source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyd, hpmquatf destination, const hpmquatf source);
 
 /*
  *

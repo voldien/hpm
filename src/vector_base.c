@@ -36,6 +36,16 @@ HPM_IMP( void, hpm_vec4_multid, hpmvec4d larg, const hpmvecd rarg){
 }
 
 
+HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f larg, float rarg){
+	larg *= rarg;
+}
+
+HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d larg, double rarg){
+	larg *= rarg;
+}
+
+
+
 
 
 HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f arg){

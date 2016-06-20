@@ -79,8 +79,6 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_multid = hpm_get_symbolfuncp(hpm_vec4_multid);
 	hpm_vec4_dotf = hpm_get_symbolfuncp(hpm_vec4_dotf);
 	hpm_vec4_dotd = hpm_get_symbolfuncp(hpm_vec4_dotd);
-	hpm_vec4_crossproductf = hpm_get_symbolfuncp(hpm_vec4_crossproductf);
-	hpm_vec4_crossproductd = hpm_get_symbolfuncp(hpm_vec4_crossproductd);
 	hpm_vec4_lengthf = hpm_get_symbolfuncp(hpm_vec4_lengthf);
 	hpm_vec4_lengthd = hpm_get_symbolfuncp(hpm_vec4_lengthd);
 	hpm_vec4_lengthsquref = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
@@ -106,13 +104,18 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
 	hpm_vec3_divisionf = hpm_get_symbolfuncp(hpm_vec3_divisionf);
 	hpm_vec3_divisionf = hpm_get_symbolfuncp(hpm_vec3_divisionf);
-
+	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
+	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
 
 	/*	vector 2.	*/
 	hpm_vec2_copyf = hpm_get_symbolfuncp(hpm_vec2_copyf);
 	hpm_vec2_copyd = hpm_get_symbolfuncp(hpm_vec2_copyd);
 
 	/*	quaternion	*/
+	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
+	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
+
+
 
 	error:	/*	error*/
 

@@ -78,8 +78,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4f, hpmvec4x4f_t larg, hpmvec4f rarg, hpmvec4x4f_t output);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4d, hpmvec4x4f_t larg, hpmvec4f rarg, hpmvec4x4f_t output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4f, const hpmvec4x4f_t larg, const hpmvec4f rarg, hpmvec4f output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4d, const hpmvec4x4d_t larg, const hpmvec4d rarg, hpmvec4d output);
 
 /**
  *
@@ -94,7 +94,7 @@ extern void hpm_mat4x4_division_mat4x4dv(hpmvec4x4f_t larg, hpmvec4x4f_t rarg, h
 extern void hpm_mat4x4_additition_mat4x4fv( const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output);
 extern void hpm_mat4x4_additition_mat4x4dv(const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output);
 
-/*
+/**
  *
  */
 extern void hpm_mat4x4_subraction_mat4x4fv(const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output);
