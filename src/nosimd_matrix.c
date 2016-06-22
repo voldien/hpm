@@ -69,7 +69,7 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmve
 
 }
 
-HPM_IMP( void, hpm_mat4x4_multiply_mat1x4f, const hpmvec4x4f_t larg, const hpmvec4f rarg, hpmvec4f output){
+HPM_IMP( void, hpm_mat4x4_multiply_mat1x4f, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
 	output[0] = larg[0][1] * rarg[0] +
 				larg[0][1] * rarg[1] +
 				larg[0][2] * rarg[2] +
@@ -92,7 +92,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4f, const hpmvec4x4f_t larg, const hpmve
 
 }
 
-HPM_IMP( void, hpm_mat4x4_multiply_mat1x4d, const hpmvec4x4d_t larg, const hpmvec4d rarg, hpmvec4d output){
+HPM_IMP( void, hpm_mat4x4_multiply_mat1x4d, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output){
 	output[0] = larg[0][1] * rarg[0] +
 				larg[0][1] * rarg[1] +
 				larg[0][2] * rarg[2] +

@@ -4,9 +4,8 @@
 
 /*	library handle.	*/
 void* libhandle = NULL;
-#define hpm_get_symbolfuncp(symbol) hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
+#define hpm_get_symbolfuncp(symbol)  ( HPM_FUNCTYPE(symbol) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
 
-/*	*/
 
 int hpm_init(unsigned int simd){
 	char* libpath;
@@ -43,12 +42,14 @@ int hpm_init(unsigned int simd){
 		libpath = "libhpmavx512.so";
 		break;
 	default:
-		libpath = "libhpm.so";
+		libpath = "libhpmnosimd.so";
 		break;
 	}
 
+	/*	load library.	*/
 	libhandle = dlopen(libpath, RTLD_LAZY);
 
+	/*	*/
 	if(libhandle == NULL){
 		fprintf(stderr, "%s\n", dlerror());
 		goto error;
@@ -58,10 +59,49 @@ int hpm_init(unsigned int simd){
 	hpm_matrxi4x4_copyfv = hpm_get_symbolfuncp(hpm_matrxi4x4_copyfv);
 	hpm_matrxi4x4_copydv = hpm_get_symbolfuncp(hpm_matrxi4x4_copydv);
 
+	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
+	hpm_mat4x4_multiply_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4dv);
+	hpm_mat4x4_multiply_mat1x4f = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4f);
+	hpm_mat4x4_multiply_mat1x4d = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4d);
+	hpm_mat4x4_division_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4fv);
+	hpm_mat4x4_division_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4dv);
+	hpm_mat4x4_additition_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4fv);
+	hpm_mat4x4_additition_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4dv);
+	hpm_mat4x4_subraction_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_subraction_mat4x4fv);
+	hpm_mat4x4_subraction_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_subraction_mat4x4dv);
+
+
 	hpm_mat4x4_identityfv = hpm_get_symbolfuncp(hpm_mat4x4_identityfv);
 	hpm_mat4x4_identitydv = hpm_get_symbolfuncp(hpm_mat4x4_identitydv);
+	hpm_mat4x4_transposefv = hpm_get_symbolfuncp(hpm_mat4x4_transposefv);
+	hpm_mat4x4_transposedv = hpm_get_symbolfuncp(hpm_mat4x4_transposedv);
+	hpm_mat4x4_determinantfv = hpm_get_symbolfuncp(hpm_mat4x4_determinantfv);
+	hpm_mat4x4_determinantdv = hpm_get_symbolfuncp(hpm_mat4x4_determinantdv);
+	hpm_mat4x4_inversefv = hpm_get_symbolfuncp(hpm_mat4x4_inversefv);
+	hpm_mat4x4_inversedv = hpm_get_symbolfuncp(hpm_mat4x4_inversedv);
+
+	hpm_mat4x4_decomposefv = hpm_get_symbolfuncp(hpm_mat4x4_decomposefv);
+	hpm_mat4x4_decomposedv = hpm_get_symbolfuncp(hpm_mat4x4_decomposedv);
+
+	hpm_mat4x4_translationf = hpm_get_symbolfuncp(hpm_mat4x4_translationf);
+	hpm_mat4x4_translationd = hpm_get_symbolfuncp(hpm_mat4x4_translationd);
+	hpm_mat4x4_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_translationfv);
+	hpm_mat4x4_translationdv = hpm_get_symbolfuncp(hpm_mat4x4_translationdv);
+
+
+
 	hpm_mat4x4_scalef = hpm_get_symbolfuncp(hpm_mat4x4_scalef);
 	hpm_mat4x4_scaled = hpm_get_symbolfuncp(hpm_mat4x4_scaled);
+
+
+	hpm_mat4x4_multi_translationf = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationf);
+	hpm_mat4x4_multi_translationd = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationd);
+	hpm_mat4x4_multi_scale = hpm_get_symbolfuncp(hpm_mat4x4_multi_scale);
+	hpm_mat4x4_multi_rotationx = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationx);
+	hpm_mat4x4_multi_rotationy = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationy);
+	hpm_mat4x4_multi_rotationz = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationz);
+	hpm_mat4x4_multi_rotationQ = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQ);
+
 
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_projdv = hpm_get_symbolfuncp(hpm_mat4x4_projdv);
@@ -77,6 +117,8 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_subtractiond = hpm_get_symbolfuncp(hpm_vec4_subtractiond);
 	hpm_vec4_multif = hpm_get_symbolfuncp(hpm_vec4_multif);
 	hpm_vec4_multid = hpm_get_symbolfuncp(hpm_vec4_multid);
+	hpm_vec4_multi_scalef = hpm_get_symbolfuncp(hpm_vec4_multi_scalef);
+	hpm_vec4_multi_scaled = hpm_get_symbolfuncp(hpm_vec4_multi_scaled);
 	hpm_vec4_dotf = hpm_get_symbolfuncp(hpm_vec4_dotf);
 	hpm_vec4_dotd = hpm_get_symbolfuncp(hpm_vec4_dotd);
 	hpm_vec4_lengthf = hpm_get_symbolfuncp(hpm_vec4_lengthf);
@@ -126,11 +168,11 @@ int hpm_init(unsigned int simd){
 void* hpm_get_address(const char* cfunctionName){
 	void* pfunc = dlsym(libhandle, cfunctionName);
 	if(pfunc == NULL){
-		fprintf(stderr, "could load func with symbol %s | %s\n", cfunctionName, dlerror());
+		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
 	}
 	return pfunc;
 }
 
 int hpm_version(void){
-	return 0;
+	return ( HPM_MAJOR_VERSION * 100 + HPM_MINOR_VERSION * 10 + HPM_REVISION_VERSION );
 }

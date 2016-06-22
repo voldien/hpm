@@ -18,8 +18,18 @@
 #ifndef _HPM_DEF_H_
 #define _HPM_DEF_H_ 1
 #include<stdio.h>
+#include<stdlib.h>
 
 
+#ifndef HPM_MAJOR_VERSION
+	#define HPM_MAJOR_VERSION	1
+#endif
+#ifndef HPM_MINOR_VERSION
+	#define HPM_MINOR_VERSION		0
+#endif
+#ifndef HPM_REVISION_VERSION
+	#define HPM_REVISION_VERSION 	0
+#endif
 
 
 /*
@@ -265,8 +275,9 @@
 #define HPM_STR(x) HPM_STR_HELPER(x)
 #define HPM_FUNCSYMBOLNAME(func) fimp##func
 #define HPM_FUNCPOINTER(func) _##func func
+#define HPM_FUNCTYPE(func) _##func
 #define HPM_EXPORT(ret, callback, func, ...)						\
-		typedef ret (*_##func)(__VA_ARGS__); 						\
+		typedef ret (*HPM_FUNCTYPE(func))(__VA_ARGS__); 						\
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);	\
 		HPM_FUNCPOINTER(func)										\
 

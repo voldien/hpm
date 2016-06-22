@@ -14,7 +14,7 @@
 
 
 /*
-void hpm_vec4_addition_scalef(hpmvec4f larg, hpmvecf rarg){
+void hpm_vec4_addition_scalef(hpmvec4f* larg, hpmvecf rarg){
 
 }
 */

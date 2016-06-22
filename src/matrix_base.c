@@ -62,20 +62,20 @@ HPM_IMP( void, hpm_mat4x4_translationd, hpmvec4x4d_t f_mat4, float x, float y, f
 	f_mat4[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t f_mat4, const hpmvec3f translation){
-	const hpmvec4f row0 = {1, 0, 0, translation[0]};
-	const hpmvec4f row1 = {0, 1, 0, translation[1]};
-	const hpmvec4f row2 = {0, 0, 1, translation[2]};
+HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t f_mat4, const hpmvec3f* translation){
+	const hpmvec4f row0 = {1, 0, 0, (*translation)[0] };
+	const hpmvec4f row1 = {0, 1, 0, (*translation)[1] };
+	const hpmvec4f row2 = {0, 0, 1, (*translation)[2] };
 	const hpmvec4f row3 = {0, 0, 0, 1};
 	f_mat4[0] = row0;
 	f_mat4[1] = row1;
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-HPM_IMP( void, hpm_mat4x4_translationdv, hpmvec4x4d_t f_mat4, const hpmvec3f translation){
-	const hpmvec4d row0 = {1, 0, 0, translation[0]};
-	const hpmvec4d row1 = {0, 1, 0, translation[1]};
-	const hpmvec4d row2 = {0, 0, 1, translation[2]};
+HPM_IMP( void, hpm_mat4x4_translationdv, hpmvec4x4d_t f_mat4, const hpmvec3f* translation){
+	const hpmvec4d row0 = {1, 0, 0, (*translation)[0]};
+	const hpmvec4d row1 = {0, 1, 0, (*translation)[1]};
+	const hpmvec4d row2 = {0, 0, 1, (*translation)[2]};
 	const hpmvec4d row3 = {0, 0, 0, 1};
 	f_mat4[0] = row0;
 	f_mat4[1] = row1;
@@ -108,21 +108,21 @@ HPM_IMP(void, hpm_mat4x4_scaled, hpmvec4x4d_t d_mat4, float x, float y, float z)
 	d_mat4[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f scale){
-	const hpmvec4f row0 = {scale[0],0,0,0};
-	const hpmvec4f row1 = {0,scale[1],0,0};
-	const hpmvec4f row2 = {0,0,scale[2],0};
-	const hpmvec4f row3 = {0,0,0,1};
+HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f* scale){
+	const hpmvec4f row0 = {(*scale)[0],0,0,0};
+	const hpmvec4f row1 = {0, (*scale)[1],0,0};
+	const hpmvec4f row2 = {0, 0, (*scale)[2],0};
+	const hpmvec4f row3 = {0, 0, 0, 1};
 	f_mat4[0] = row0;
 	f_mat4[1] = row1;
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t d_mat4, const hpmvec3d scale){
-	const hpmvec4d row0 = {scale[0],0,0,0};
-	const hpmvec4d row1 = {0,scale[1],0,0};
-	const hpmvec4d row2 = {0,0,scale[2],0};
+HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t d_mat4, const hpmvec3d* scale){
+	const hpmvec4d row0 = {scale[0][0],0,0,0};
+	const hpmvec4d row1 = {0,scale[0][1],0,0};
+	const hpmvec4d row2 = {0,0,scale[0][2],0};
 	const hpmvec4d row3 = {0,0,0,1};
 	d_mat4[0] = row0;
 	d_mat4[1] = row1;
@@ -141,12 +141,28 @@ HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspe
 
 }
 
-HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t f_mat4,float f_right, float f_left, float f_top, float f_bottom, float f_far,float f_near){
+HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t f_mat4, float f_right, float f_left, float f_top, float f_bottom, float f_far,float f_near){
+	const hpmvec4f row0 = {2.0f/(f_right - f_left), 0.0f, 0.0f, 0.0f};
+	const hpmvec4f row1 = {0.0, 2.0f/(f_top - f_bottom), 0.0f, 0.0};
+	const hpmvec4f row2 = {0.0, 0.0f,-2.0f/(f_far - f_near), 0.0 };
+	const hpmvec4f row3 = {-(f_right + f_left)/(f_right - f_left), -(f_top + f_bottom)/(f_top - f_bottom), -(f_far + f_near)/(f_far - f_near), 1.0};
 
+	f_mat4[0] = row0;
+	f_mat4[1] = row1;
+	f_mat4[2] = row2;
+	f_mat4[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4f_t f_mat4,float f_right, float f_left, float f_top, float f_bottom, float f_far,float f_near){
+HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4d_t f_mat4, double f_right, double f_left, double f_top, double f_bottom, double f_far, double f_near){
+	const hpmvec4d row0 = {2.0f/(f_right - f_left), 0.0f, 0.0f, 0.0f};
+	const hpmvec4d row1 = {0.0, 2.0f/(f_top - f_bottom), 0.0f, 0.0};
+	const hpmvec4d row2 = {0.0, 0.0f,-2.0f/(f_far - f_near), 0.0 };
+	const hpmvec4d row3 = {-(f_right + f_left)/(f_right - f_left), -(f_top + f_bottom)/(f_top - f_bottom), -(f_far + f_near)/(f_far - f_near), 1.0};
 
+	f_mat4[0] = row0;
+	f_mat4[1] = row1;
+	f_mat4[2] = row2;
+	f_mat4[3] = row3;
 }
 
 
