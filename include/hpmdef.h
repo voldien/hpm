@@ -276,10 +276,20 @@
 #define HPM_FUNCSYMBOLNAME(func) fimp##func
 #define HPM_FUNCPOINTER(func) _##func func
 #define HPM_FUNCTYPE(func) _##func
+#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)
+
+#ifdef HPM_INTERNAL
+
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (*HPM_FUNCTYPE(func))(__VA_ARGS__); 						\
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);	\
 		HPM_FUNCPOINTER(func)										\
+
+#else
+#define HPM_EXPORT(ret, callback, func, ...)						\
+		typedef ret (*HPM_FUNCTYPE(func))(__VA_ARGS__); 						\
+
+#endif
 
 /**
  *
@@ -290,6 +300,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 /*
  *
  */
+#define _HPM_MATH_H_
 #ifdef _HPM_MATH_H_
 	#define HPM_PI				3.14159265358979323846  /* pi */
 	#define HPM_PI_2			1.57079632679489661923  /* pi/2 */
@@ -306,13 +317,13 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 	#define HPM_SQRT1_2       	0.70710678118654752440  /* 1/sqrt(2) */
 #endif
 
-#define DEG2RAD( a ) ( ( (a) * PI ) / 180.0F )
-#define RAD2DEG( a ) ( ( (a) * 180.0f ) / PI )
+#define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0F )
+#define HPM_RAD2DEG( a ) ( ( (a) * 180.0f ) / HPM_PI )
 
-#define MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
-#define MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-#define CLAMP(a,min,max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
-#define LERP(a,b,t)	( ( (a) + ( (b) - (a) )*(t) )
+#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+#define HPM_CLAMP(a,min,max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+#define HPM_LERP(a,b,t)	( ( (a) + ( (b) - (a) )*(t) )
 
 
 #endif

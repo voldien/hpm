@@ -153,9 +153,18 @@ int hpm_init(unsigned int simd){
 	hpm_vec2_copyf = hpm_get_symbolfuncp(hpm_vec2_copyf);
 	hpm_vec2_copyd = hpm_get_symbolfuncp(hpm_vec2_copyd);
 
+
+
 	/*	quaternion	*/
 	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
 	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
+
+	hpm_quat_multi_quatfv = hpm_get_symbolfuncp(hpm_quat_multi_quatfv);
+	hpm_quat_multi_quatdv = hpm_get_symbolfuncp(hpm_quat_multi_quatdv);
+
+	hpm_quat_multi_vec3fv = hpm_get_symbolfuncp(hpm_quat_multi_vec3fv);
+	hpm_quat_multi_vec3dv = hpm_get_symbolfuncp(hpm_quat_multi_vec3dv);
+
 
 
 

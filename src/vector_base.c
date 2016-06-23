@@ -46,11 +46,11 @@ HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, double rarg){
 
 
 HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f* arg){
-	*arg /= hpm_vec4_lengthf(arg);
+	*arg /=  (float)HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
 }
 
 HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
-	*arg /= hpm_vec4_lengthd(arg);
+	*arg /= (float)HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
 }
 
 HPM_IMP(void, hpm_vec4_negatef, hpmvec4f* arg){
