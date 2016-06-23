@@ -104,8 +104,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_subraction_mat4x4dv, const hpmvec4x4d_
 /**
  *
  */
-HPM_EXPORT(void, HPMDECLSPEC, hpm_mat4x4_identityfv, hpmvec4x4f_t f_mat4);
-HPM_EXPORT(void, HPMDECLSPEC, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_identityfv, hpmvec4x4f_t f_mat4);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4);
 
 
 /**
@@ -122,7 +122,7 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_determinantdv, const hpmvec4x4d_t f_m
 
 /**/
 HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t out);
-HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat4, hpmvec4x4d_t out);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat4, hpmvec4x4d_t out);
 
 /**/
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_decomposefv, const hpmvec4x4f_t f_mat4, hpmvec3f* f_position, hpmvec4f* f_rotation, hpmvec3f* f_scale);

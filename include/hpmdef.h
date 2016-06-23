@@ -257,9 +257,9 @@
  *	library declaration.
  */
 #ifdef HPM_GNUC
-	#define HPMDECLSPEC __attribute__((__visibility__ ("default")))
+	#define HPMDECLSPEC /*__attribute__((__visibility__ ("default")))	*/
 #elif defined(HPM_VC)
-	#define HPMDECLSPEC __declspec(dllimport)
+	#define HPMDECLSPEC __declspec(dllexport)
 #endif
 
 
@@ -272,29 +272,38 @@
  *
  */
 #define HPM_STR_HELPER(x) #x
-#define HPM_STR(x) HPM_STR_HELPER(x)
-#define HPM_FUNCSYMBOLNAME(func) fimp##func
-#define HPM_FUNCPOINTER(func) _##func func
-#define HPM_FUNCTYPE(func) _##func
+#define HPM_STR(x) HPM_STR_HELPER(x)					/*	String helper macro.	*/
+#define HPM_FUNCSYMBOLNAME(func) fimp##func				/*	declare func internal symbol name.	*/
+#define HPM_FUNCTYPE(func) func##_t						/*	declare function data type.	*/
+#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)
 
-#ifdef HPM_INTERNAL
 
+/**
+ *	Internal.
+ */
+#if defined(HPM_INTERNAL)
 #define HPM_EXPORT(ret, callback, func, ...)						\
-		typedef ret (*HPM_FUNCTYPE(func))(__VA_ARGS__); 						\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);	\
-		HPM_FUNCPOINTER(func)										\
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
+		HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
+		HPM_FUNCPOINTER(func) = NULL										\
+
+#elif defined(HPM_INTERNAL_IMP)
+#define HPM_EXPORT(ret, callback, func, ...)						\
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
+
 
 #else
-#define HPM_EXPORT(ret, callback, func, ...)						\
-		typedef ret (*HPM_FUNCTYPE(func))(__VA_ARGS__); 						\
+#define HPM_EXPORT(ret, callback, func, ...)								\
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
+		HPM_FUNCPOINTER(func) = NULL										\
 
 #endif
 
 /**
  *
  */
-#define HPM_IMP(ret, func, ...)		\
+#define HPM_IMP(ret, func, ...)				\
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 
 /*

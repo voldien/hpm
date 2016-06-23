@@ -42,6 +42,7 @@
 #define HPM_AVX			0x80		/*	AVX (Advanced Vector Extension)	*/
 #define HPM_AVX2		0x100		/*	AVX (Advanced Vector Extension)	*/
 #define HPM_AVX512		0x200		/*	AVX512 (Advanced Vector Extension)*/
+#define HPM_NEON		0x400		/*	ARM	*/
 
 
 /**

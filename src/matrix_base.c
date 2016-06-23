@@ -15,7 +15,6 @@ HPM_IMP( void, hpm_matrxi4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_
 	destination[3] = source[3];
 }
 
-
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t f_mat4){
 	const hpmvec4f row0 = {1, 0, 0, 0};
 	const hpmvec4f row1 = {0, 1, 0, 0};

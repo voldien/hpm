@@ -33,11 +33,12 @@ SET(HPM_VERSION ${HPM_VERSION_MAJOR}.${HPM_VERSION_MINOR}.${HPM_VERSION_REVISION
 
 
 
+#ADD_DEFINITIONS(-DHPM_MAJOR_VERSION=${HPM_VERSION_MAJOR})
 if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
-	if(BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+	IF(BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 		ADD_DEFINITIONS(-fPIC)
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
-	endif()
+	ENDIF()
 
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
@@ -58,8 +59,9 @@ endif()
 
 
 FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quad_base.c)
-FILE (GLOB nosimdsource src/nosimd_*)
+FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quad_base.c )
+FILE (GLOB nosimdsource src/nosimd_* )
+FILE (GLOB allsimdsource src/allsimd_* )
 INCLUDE_DIRECTORIES(include)
 
 ADD_LIBRARY(hpm src/hpm.c)
@@ -67,47 +69,47 @@ SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 #ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )
 #SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
 
-ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} )
-SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2" )
+ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
-ADD_LIBRARY(hpmavx src/avx_matrix.c src/avx_vector.c ${basecore} )
-SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx" )
+ADD_LIBRARY(hpmavx src/avx_matrix.c src/avx_vector.c ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmavx -lm)
 
 ADD_LIBRARY(hpmmmx src/mmx_matrix.c ${basecore} )
-SET_TARGET_PROPERTIES(hpmmmx PROPERTIES COMPILE_FLAGS "-mmmx" )
+SET_TARGET_PROPERTIES(hpmmmx PROPERTIES COMPILE_FLAGS "-mmmx -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmmmx -lm)
 
-ADD_LIBRARY(hpmsse src/sse_matrix.c src/sse_vector.c src/sse_quaternion.c  ${basecore} )
-SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse" )
+ADD_LIBRARY(hpmsse src/sse_matrix.c src/sse_vector.c src/sse_quaternion.c  ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmsse -lm)
 
-ADD_LIBRARY(hpmsse2 src/sse_matrix.c  ${basecore} )
-SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2" )
+ADD_LIBRARY(hpmsse2 src/sse_matrix.c  ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
-ADD_LIBRARY(hpmsse3 src/sse_matrix.c src/sse3_vector.c  ${basecore} )
-SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3" )
+ADD_LIBRARY(hpmsse3 src/sse_matrix.c src/sse3_vector.c  ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
-ADD_LIBRARY(hpmsse41 src/sse_matrix.c ${basecore})
-SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1" )
+ADD_LIBRARY(hpmsse41 src/sse_matrix.c ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
-ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore})
-SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2" )
+ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore} ${allsimdsource})
+SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1")
 TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
 if(__arm__)
-	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} )
-	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon" )
+	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} ${allsimdsource})
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon -DHPM_INTERNAL_IMP=1" )
 endif()
 
 
@@ -121,6 +123,7 @@ INSTALL (TARGETS hpmmmx DESTINATION lib)
 INSTALL (TARGETS hpmsse DESTINATION lib)
 INSTALL (TARGETS hpmsse2 DESTINATION lib)
 INSTALL (TARGETS hpmsse3 DESTINATION lib)
+#INSTALL (TARGETS hpmssse3 DESTINATION lib)
 INSTALL (TARGETS hpmsse41 DESTINATION lib)
 INSTALL (TARGETS hpmsse42 DESTINATION lib)
 IF(__arm__)

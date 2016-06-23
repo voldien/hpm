@@ -101,31 +101,23 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_inversedv, const hpmquatd* larg, const h
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dotdv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
 
-/**/
+/**
+ *
+ */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_identityfv, hpmquatf* out);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_identitydv, hpmquatd* out);
 
-/**/
-HPM_EXPORT( void, HPMAPIENTRY, hpm__lerpfv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
-HPM_EXPORT( void, HPMAPIENTRY, hpm__lerpdv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_lerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out);
 
-/**/
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_slerpdv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
-
-
-#define QuaternionDirection(x)	{}
-#define QuaternionConjugate(x)	{x[1] = -x[1];x[2] = -x[2];x[3] = -x[3];}
-#define QuaternionLength(x)	sqrtf((x[0] * x[0]) + (x[1] * x[1]) + (x[2] * x[2]) + (x[3] * x[3]))
-#define QuaternionLengthSqrt(x)	((x[0] * x[0]) + (x[1] * x[1]) + (x[2] * x[2]) + (x[3] * x[3]))
-#define QuaternionNormalize(x)	{float length = QuaternionLength(x);x[0] /= length;x[1] /= length;x[2] /= length;x[3] /= length;}
-#define QuaternionInverse(x)	{float length = QuaternionLength(x);x[0] /= length;x[1] /= -length; x[2] /= -length; x[3] /= -length;}
-#define QuaternionDot(x,y) (x[0]*y[0]+x[1]*y[1]+x[2]*y[2] + x[3] * y[3])
-#define QuaternionIdentity(x) {x[0] = 1.0f;x[1] = 0.0f;x[2] = 0.0f;x[3] = 0.0f;}
-#define QuaternionCopy(a,b) {b[0] = a[0];b[1] = a[1];b[2] = a[2];b[3] = a[3];}
-#define QuaternionYaw(lf_)  (float)atan2f(2.0f * (lf_[QUAD_W] * lf_[QUAD_X] + lf_[QUAD_Y] * lf_[QUAD_W]),( 1.0f - ( 2.0f * (lf_[QUAD_X] * lf_[QUAD_X] + lf_[QUAD_Y] * lf_[QUAD_Y]))))
-#define QuaternionPitch(lf_) (float)asinf(-2.0f * (lf_[QUAD_Z] * lf_[QUAD_Y] + lf_[QUAD_W] * lf_[QUAD_X]))
-#define QuaternionRoll(lf_) (float)atan2f(2.0f * (lf_[QUAD_W] * lf_[QUAD_Z] + lf_[QUAD_X] * lf_[QUAD_Y]), 1.0f - (2.0f * (lf_[QUAD_Y] * lf_[QUAD_Y] + lf_[QUAD_Z] * lf_[QUAD_Z])))
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatd* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_slerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out);
 
 
 /**

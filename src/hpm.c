@@ -1,13 +1,13 @@
 #include"hpm.h"
 #include"hpmmatrix.h"
-#include<dlfcn.h>
+#include <dlfcn.h>
 
 /*	library handle.	*/
 void* libhandle = NULL;
-#define hpm_get_symbolfuncp(symbol)  ( HPM_FUNCTYPE(symbol) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
-
+#define hpm_get_symbolfuncp(symbol)		/*( HPM_FUNCTYPE(symbol) ) */hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
 
 int hpm_init(unsigned int simd){
+	int closestatus;
 	char* libpath;
 
 	switch(simd){
@@ -41,13 +41,26 @@ int hpm_init(unsigned int simd){
 	case HPM_AVX512:
 		libpath = "libhpmavx512.so";
 		break;
+	case HPM_NEON:
+		libpath = "libhpmneon.so";
+		break;
+	case HPM_NOSIMD:
 	default:
 		libpath = "libhpmnosimd.so";
 		break;
 	}
 
 	/*	load library.	*/
-	libhandle = dlopen(libpath, RTLD_LAZY);
+	libhandle = dlopen((const char*)libpath, RTLD_NOLOAD);
+	if(libhandle != NULL){
+		libhandle = dlopen((const char*)libpath, RTLD_DEEPBIND);
+	}else{
+		libhandle = dlopen((const char*)libpath, RTLD_NOW);
+	}
+	if(libhandle == NULL)
+		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
+
+
 
 	/*	*/
 	if(libhandle == NULL){
@@ -165,10 +178,35 @@ int hpm_init(unsigned int simd){
 	hpm_quat_multi_vec3fv = hpm_get_symbolfuncp(hpm_quat_multi_vec3fv);
 	hpm_quat_multi_vec3dv = hpm_get_symbolfuncp(hpm_quat_multi_vec3dv);
 
+	hpm_quat_directionfv = hpm_get_symbolfuncp(hpm_quat_directionfv);
+	hpm_quat_directiondv = hpm_get_symbolfuncp(hpm_quat_directiondv);
+
+	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
+	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
+
+	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_quat_lengthfv);
+	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_quat_lengthdv);
+	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_quat_lengthsqurefv);
+	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_quat_lengthsquredv);
+	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_normalizefv);
+	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_normalizefv);
+	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
+	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
+	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_quat_dotfv);
+	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_quat_dotdv);
+	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
+	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
+	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
+	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
+	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
+	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 
 
 
+
+	closestatus = dlclose(libhandle);
 	error:	/*	error*/
+
 
 	return ( libhandle != NULL) ;
 }
@@ -179,7 +217,7 @@ void* hpm_get_address(const char* cfunctionName){
 	if(pfunc == NULL){
 		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
 	}
-	return pfunc;
+	return ( pfunc );
 }
 
 int hpm_version(void){

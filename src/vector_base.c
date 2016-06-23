@@ -36,11 +36,11 @@ HPM_IMP( void, hpm_vec4_multid, hpmvec4d* larg, const hpmvec4d* rarg){
 }
 
 
-HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, float rarg){
+HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg){
 	*larg *= rarg;
 }
 
-HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, double rarg){
+HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg){
 	*larg *= rarg;
 }
 
@@ -54,11 +54,11 @@ HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
 }
 
 HPM_IMP(void, hpm_vec4_negatef, hpmvec4f* arg){
-	*arg *= -1;
+	*arg *= -1.0f;
 }
 
 HPM_IMP(void, hpm_vec4_negated, hpmvec4d* arg){
-	*arg *= -1;
+	*arg *= -1.0;
 }
 
 
@@ -76,6 +76,7 @@ HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* destination, const hpmvec3d* source){
 HPM_IMP(void, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg){
 	*larg += rarg;
 }
+
 HPM_IMP( void, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg){
 	*larg *= rarg;
 }
