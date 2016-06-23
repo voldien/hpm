@@ -59,13 +59,14 @@ endif()
 
 FILE (GLOB headers "include/*.h")
 FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quad_base.c)
+FILE (GLOB nosimdsource src/nosimd_*)
 INCLUDE_DIRECTORIES(include)
 
 ADD_LIBRARY(hpm src/hpm.c)
-SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "" )
+SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
-ADD_LIBRARY(hpmnosimd ${basecore})
+ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
 SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
@@ -113,6 +114,7 @@ endif()
 
 # add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
+INSTALL (TARGETS hpmnosimd DESTINATION lib)
 INSTALL (TARGETS hpmavx2 DESTINATION lib)
 INSTALL (TARGETS hpmavx DESTINATION lib)
 INSTALL (TARGETS hpmmmx DESTINATION lib)
