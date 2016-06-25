@@ -72,8 +72,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractiond, hpmvec4d* larg, const hpmv
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multif, hpmvec4f* larg, const hpmvec4f* rarg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multid, hpmvec4d* larg, const hpmvec4d* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multidv, hpmvec4d* larg, const hpmvec4d* rarg);
 
 /**
  *
@@ -143,7 +143,6 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_refractd, hpmvec4f* arg);
 #define VectorOrthoNormalize(x,y) { float length;}
 #define VectorProj(x,y,c)	{float lengthy = VectorLength(y);float dot = DotProduct(x,y); c[0] = dot * x[0] / lengthy;  c[1] = dot * x[1] / lengthy;  c[2] = dot * x[2] / lengthy; }
 #define VectorLerp(x,y,t,c)	{}
-#define VectorDefine(a,x,y,z)	{a[0] = x;a[1] = y;a[2] = z;}
 
 
 /*
@@ -161,8 +160,12 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyd, hpmvec3d* destination, const hpmv
 /**
  *
  */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg);
+
+/**/
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_addition_scalerf, hpmvec3f* larg, const hpmvecf rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_addition_scalerd, hpmvec3d* larg, const hpmvecd rarg);
 
@@ -181,8 +184,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd ra
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionf, hpmvec3f* larg, const hpmvecf rarg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiond, hpmvec3d* larg, const hpmvecd rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionfv, hpmvec3f* larg, const hpmvecf rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiondv, hpmvec3d* larg, const hpmvecd rarg);
 
 /**
  *
@@ -215,24 +218,26 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lengthd, const hpmvec3d* larg, const hpm
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectf, hpmvec3f* arg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectd, hpmvec3d* arg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectf, const hpmvec3f* arg, const hpmvec3f* normal);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3f* normal);
 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractf, hpmvec3f* larg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractd, hpmvec3d* larg);
-
-/**/
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpf, hpmvec3f* larg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpd, hpmvec3d* larg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractf, hpmvec3f* larg, const hpmvec3f* normal, float index);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractd, hpmvec3d* larg, const hpmvec3f* normal, float index);
 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpf, hpmvec3f* larg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpd, hpmvec3d* larg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out);
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out);
 
 /**
  *	Project vector onto vector.

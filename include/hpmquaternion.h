@@ -19,7 +19,6 @@
 #define _HPM_QUATERNION_H_ 1
 #include"hpmdef.h"
 #include"hpmvector.h"
-#include"hpmmatrix.h"
 
 /**
  *

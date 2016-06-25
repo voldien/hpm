@@ -76,8 +76,8 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_multiply_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4dv);
 	hpm_mat4x4_multiply_mat1x4f = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4f);
 	hpm_mat4x4_multiply_mat1x4d = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4d);
-	hpm_mat4x4_division_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4fv);
-	hpm_mat4x4_division_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4dv);
+	hpm_mat4x4_division_mat4x4f = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4f);
+	hpm_mat4x4_division_mat4x4d = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4d);
 	hpm_mat4x4_additition_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4fv);
 	hpm_mat4x4_additition_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4dv);
 	hpm_mat4x4_subraction_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_subraction_mat4x4fv);
@@ -100,26 +100,40 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_translationd = hpm_get_symbolfuncp(hpm_mat4x4_translationd);
 	hpm_mat4x4_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_translationfv);
 	hpm_mat4x4_translationdv = hpm_get_symbolfuncp(hpm_mat4x4_translationdv);
-
-
-
 	hpm_mat4x4_scalef = hpm_get_symbolfuncp(hpm_mat4x4_scalef);
 	hpm_mat4x4_scaled = hpm_get_symbolfuncp(hpm_mat4x4_scaled);
 
 
+
 	hpm_mat4x4_multi_translationf = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationf);
 	hpm_mat4x4_multi_translationd = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationd);
-	hpm_mat4x4_multi_scale = hpm_get_symbolfuncp(hpm_mat4x4_multi_scale);
-	hpm_mat4x4_multi_rotationx = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationx);
-	hpm_mat4x4_multi_rotationy = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationy);
-	hpm_mat4x4_multi_rotationz = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationz);
-	hpm_mat4x4_multi_rotationQ = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQ);
+	hpm_mat4x4_multi_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scalefv);
+	hpm_mat4x4_multi_scaledv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scaledv);
+
+	/**/
+	hpm_mat4x4_multi_rotationxf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationxf);
+	hpm_mat4x4_multi_rotationxd = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationxd);
+	hpm_mat4x4_multi_rotationyf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationyf);
+	hpm_mat4x4_multi_rotationyd = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationyd);
+	hpm_mat4x4_multi_rotationzf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationzf);
+	hpm_mat4x4_multi_rotationzd = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationzd);
+	hpm_mat4x4_multi_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQfv);
+	hpm_mat4x4_multi_rotationQdv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQdv);
 
 
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_projdv = hpm_get_symbolfuncp(hpm_mat4x4_projdv);
 	hpm_mat4x4_orthdv = hpm_get_symbolfuncp(hpm_mat4x4_orthdv);
 	hpm_mat4x4_orthdv = hpm_get_symbolfuncp(hpm_mat4x4_orthdv);
+	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
+	hpm_mat4x4_unprojd = hpm_get_symbolfuncp(hpm_mat4x4_unprojd);
+
+
+
+	hpm_matrxi3x3_copyfv = hpm_get_symbolfuncp(hpm_matrxi3x3_copyfv);
+	hpm_matrxi3x3_copydv = hpm_get_symbolfuncp(hpm_matrxi3x3_copydv);
+
+
 
 	/*	vector	*/
 	hpm_vec4_copyf = hpm_get_symbolfuncp(hpm_vec4_copyf);
@@ -128,8 +142,8 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_addition_scaled = hpm_get_symbolfuncp(hpm_vec4_addition_scaled);
 	hpm_vec4_subtractionf = hpm_get_symbolfuncp(hpm_vec4_subtractionf);
 	hpm_vec4_subtractiond = hpm_get_symbolfuncp(hpm_vec4_subtractiond);
-	hpm_vec4_multif = hpm_get_symbolfuncp(hpm_vec4_multif);
-	hpm_vec4_multid = hpm_get_symbolfuncp(hpm_vec4_multid);
+	hpm_vec4_multifv = hpm_get_symbolfuncp(hpm_vec4_multifv);
+	hpm_vec4_multidv = hpm_get_symbolfuncp(hpm_vec4_multidv);
 	hpm_vec4_multi_scalef = hpm_get_symbolfuncp(hpm_vec4_multi_scalef);
 	hpm_vec4_multi_scaled = hpm_get_symbolfuncp(hpm_vec4_multi_scaled);
 	hpm_vec4_dotf = hpm_get_symbolfuncp(hpm_vec4_dotf);
@@ -157,8 +171,8 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_subractionf = hpm_get_symbolfuncp(hpm_vec3_subractionf);
 	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
 	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
-	hpm_vec3_divisionf = hpm_get_symbolfuncp(hpm_vec3_divisionf);
-	hpm_vec3_divisionf = hpm_get_symbolfuncp(hpm_vec3_divisionf);
+	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
+	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
 

@@ -32,9 +32,9 @@
 #endif
 
 
-/*
-    Compiler
-*/
+/**
+ *    Compiler
+ */
 #ifdef _MSC_VER 	/*	Visual Studio C++ Compiler.	*/
 	#define HPM_VC
 	#define HPM_COMPILER 1
