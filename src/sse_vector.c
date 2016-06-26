@@ -1,8 +1,9 @@
 #include"hpmvector.h"
-
 #include<immintrin.h>
-#   ifdef _WIN32
+#   ifdef HPM_VC
 #      include<intrin.h>
+#	elif defined(HPM_GNUC)
+#		include<x86intrin.h>
 #   endif
 
 

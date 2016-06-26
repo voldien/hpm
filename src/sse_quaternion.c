@@ -1,12 +1,14 @@
 #include"hpmquaternion.h"
 
 #include<immintrin.h>
-#   ifdef _WIN32
+#   ifdef HPM_VC
 #      include<intrin.h>
+#	elif defined(HPM_GNUC)
+#		include<x86intrin.h>
 #   endif
 
 
-HPM_IMP(void, hpm_quat_fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
+HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
 
 	hpmquatf wzyx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,1,2,3) );
 	hpmquatf baba = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,0,1) );
@@ -44,6 +46,6 @@ HPM_IMP(void, hpm_quat_fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf*
 	*out = _mm_shuffle_ps(XZWY, XZWY, _MM_SHUFFLE(2,1,3,0));
 }
 
-HPM_IMP( void, hpm_quat_dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
+HPM_IMP( void, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
 
 }

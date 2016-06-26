@@ -38,7 +38,7 @@ typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);
  *
  */
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);
-typedef hpmvecd hpmvec3d HPM_VECTORALIGN(16);
+typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
 
 /*
  *
@@ -82,30 +82,29 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg, const floa
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg);
 
 /**
- *
+ *	@Return
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec4_dotf, const hpmvec4f* larg, const hpmvec4f* rarg);
 HPM_EXPORT( double, HPMAPIENTRY, hpm_vec4_dotd, const hpmvec4d* larg, const hpmvec4d* rarg);
 
 
+/**
+ *	@Return
+ */
+HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthf, const hpmvec4f* arg);
+HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_vec4_lengthd, const hpmvec4d* arg);
 
 /**
  *
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec4_lengthf, const hpmvec4f* arg);
-HPM_EXPORT( double, HPMAPIENTRY, hpm_vec4_lengthd, const hpmvec4d* arg);
+HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthsquref, const hpmvec4f* arg);
+HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_vec4_lengthsqured, const hpmvec4d* arg);
 
 /**
  *
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec4_lengthsquref, const hpmvec4f* arg);
-HPM_EXPORT( double, HPMAPIENTRY, hpm_vec4_lengthsqured, const hpmvec4d* arg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_normalizef, hpmvec4f* arg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_normalized, hpmvec4d* arg);
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_normalizef, hpmvec4f* arg);
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_normalized, hpmvec4d* arg);
 
 /**
  *
@@ -124,6 +123,21 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_reflectd, hpmvec4f* arg);
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_refractf, hpmvec4f* arg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_refractd, hpmvec4f* arg);
+
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out);
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out);
+
+
 
 
 #define DotProduct(x,y) (x[0]*y[0]+x[1]*y[1]+x[2]*y[2])
@@ -162,6 +176,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyd, hpmvec3d* destination, const hpmv
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg);
+
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg);
 
@@ -180,18 +195,24 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_subractiond, hpmvec3d* larg, const hpmve
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multif, hpmvec3f* larg, const hpmvecf rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multifv, hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionfv, hpmvec3f* larg, const hpmvecf rarg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiondv, hpmvec3d* larg, const hpmvecd rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionf, hpmvec3f* larg, const hpmvecf rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiond, hpmvec3d* larg, const hpmvecd rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionfv, hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiondv, hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_division_scalef, hpmvec3f* larg, const hpmvecf rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_division_scaled, hpmvec3d* larg, const hpmvecd rarg);
+
+
 
 
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_inversefv, hpmvec3f* larg, const hpmvecf rarg);

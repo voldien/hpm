@@ -1,6 +1,7 @@
 #include"hpmmatrix.h"
 #include<math.h>
 
+
 HPM_IMP( void, hpm_matrxi4x4_copyfv,hpmvec4x4f_t destination, const hpmvec4x4f_t source){
 	destination[0] = source[0];
 	destination[1] = source[1];
@@ -175,7 +176,6 @@ HPM_IMP( void, hpm_mat4x4_multi_scaledv, hpmvec4x4d_t f_mat4, const hpmvec3d* sc
 }
 
 
-
 HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t f_mat4, const hpmquatf* f_quat){
 	hpmvec4x4f_t quat;
 	hpmvec4x4f_t tmp;
@@ -215,11 +215,16 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspe
 	f_mat4[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, float f_fov, float f_aspect, float f_near, float f_far){
-	const hpmvec4d row0 = {1.0f / (tanf(HPM_DEG2RAD(f_fov * 0.5f)) * f_aspect), 0, 0, 0};
-	const hpmvec4d row1 = {0, 1.0f / tanf(HPM_DEG2RAD(f_fov * 0.5f)), 0, 0};
-	const hpmvec4d row2 = {0,0,(f_far + f_near) / (f_near - f_far), -1};
-	const hpmvec4d row3 = {0,0,(2.0f * f_far * f_near) / (f_near - f_far), 0};
+HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, double f_fov, double f_aspect, double f_near, double f_far){
+	const hpmvecd xScale = 1.0 / (tan(HPM_DEG2RAD(f_fov * 0.5f)) * f_aspect);
+	const hpmvecd yScale = 1.0 / tan(HPM_DEG2RAD(f_fov * 0.5f));
+	const hpmvecd zScale = (f_far + f_near) / (f_near - f_far);
+	const hpmvecd tScale = (f_far + f_near) / (f_near - f_far);
+
+	const hpmvec4d row0 = {xScale, 0.0f, 0.0f, 0.0f};
+	const hpmvec4d row1 = {0.0f, yScale, 0.0f, 0.0f};
+	const hpmvec4d row2 = {0.0f, 0.0f,zScale, -1.0f};
+	const hpmvec4d row3 = {0.0f, 0.0f,tScale, 0.0f};
 
 	f_mat4[0] = row0;
 	f_mat4[1] = row1;

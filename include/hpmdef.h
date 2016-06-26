@@ -272,11 +272,11 @@
  *
  */
 #define HPM_STR_HELPER(x) #x
-#define HPM_STR(x) HPM_STR_HELPER(x)					/*	String helper macro.	*/
-#define HPM_FUNCSYMBOLNAME(func) fimp##func				/*	declare func internal symbol name.	*/
-#define HPM_FUNCTYPE(func) func##_t						/*	declare function data type.	*/
-#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	declare function pointer.	*/
-#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)
+#define HPM_STR(x) HPM_STR_HELPER(x)								/*	String helper macro.	*/
+#define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare func internal symbol name.	*/
+#define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
+#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
+#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Declare	*/
 
 
 /**
@@ -292,7 +292,6 @@
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 
-
 #else
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
@@ -307,7 +306,7 @@
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 
 /*
- *
+ *	HPM math constants.
  */
 #define _HPM_MATH_H_
 #ifdef _HPM_MATH_H_
@@ -326,13 +325,13 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
 	#define HPM_SQRT1_2       	0.70710678118654752440  /* 1/sqrt(2) */
 #endif
 
-#define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0F )
-#define HPM_RAD2DEG( a ) ( ( (a) * 180.0f ) / HPM_PI )
+#define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
+#define HPM_RAD2DEG( a ) ( ( (a) * 180.0 ) / HPM_PI )
 
 #define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 #define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-#define HPM_CLAMP(a,min,max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
-#define HPM_LERP(a,b,t)	( ( (a) + ( (b) - (a) )*(t) )
+#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 
 
 #endif

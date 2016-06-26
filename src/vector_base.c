@@ -1,4 +1,5 @@
 #include"hpmvector.h"
+#include<math.h>
 
 
 HPM_IMP(void, hpm_vec4_copyf, hpmvec4f* destination, const hpmvec4f* source){
@@ -27,11 +28,11 @@ HPM_IMP( void, hpm_vec4_subtractiond, hpmvec4d* larg, const hpmvecd rarg){
 	*larg -= rarg;
 }
 
-HPM_IMP( void, hpm_vec4_multif, hpmvec4f* larg, const hpmvec4f* rarg){
+HPM_IMP( void, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg){
 	*larg *= *rarg;
 }
 
-HPM_IMP( void, hpm_vec4_multid, hpmvec4d* larg, const hpmvec4d* rarg){
+HPM_IMP( void, hpm_vec4_multidv, hpmvec4d* larg, const hpmvec4d* rarg){
 	*larg *= *rarg;
 }
 
@@ -63,6 +64,38 @@ HPM_IMP(void, hpm_vec4_negated, hpmvec4d* arg){
 
 
 
+HPM_IMP( void, hpm_vec4_lerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+	*out = (*a + (*b - *a) *t);
+}
+
+HPM_IMP( void, hpm_vec4_lerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out){
+	*out = (*a + (*b - *a) *t);
+}
+
+HPM_IMP( void, hpm_vec4_slerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+	float theta;
+	hpmvec4f relative;
+	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(a,b);
+	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	theta = acosf(dot) * t;
+	relative = *b - *a * t;
+	HPM_CALLLOCALFUNC(hpm_vec4_normalizef)(&relative);
+	*out = (*a * cosf(theta)) + (relative * sinf(t));
+}
+
+HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out){
+	double theta;
+	hpmvec4d relative;
+	double dot = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(a,b);
+	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	theta = acos(dot) * t;
+	relative = *b - *a * t;
+	HPM_CALLLOCALFUNC(hpm_vec4_normalizef)(&relative);
+	*out = (*a * cos(theta)) + (relative * sin(t));
+}
+
+
+
 
 HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* destination, const hpmvec3f* source){
 	*destination = *source;
@@ -73,15 +106,67 @@ HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* destination, const hpmvec3d* source){
 }
 
 
+
+HPM_IMP( void, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg){
+	*larg += *rarg;
+}
+
+HPM_IMP( void, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg){
+	*larg += *rarg;
+}
+
 HPM_IMP(void, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg){
 	*larg += rarg;
 }
 
 HPM_IMP( void, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg){
-	*larg *= rarg;
+	*larg += rarg;
 }
 
 
+HPM_IMP( void, hpm_vec3_multif, hpmvec3f* larg, const hpmvecf rarg){
+	*larg += rarg;
+}
+HPM_IMP( void, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd rarg){
+	*larg += rarg;
+}
+HPM_IMP( void, hpm_vec3_multifv, hpmvec3f* larg, const hpmvec3f* rarg){
+	*larg += *rarg;
+}
+HPM_IMP( void, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg){
+	*larg += *rarg;
+}
+
+
+HPM_IMP( void, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
+	*out = (*a + (*b - *a) * t);
+}
+
+HPM_IMP( void, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
+	*out = (*a + (*b - *a) * t);
+}
+
+HPM_IMP( void, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
+	float theta;
+	hpmvec3f relative;
+	float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(a,b);
+	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	theta = acosf(dot) * t;
+	relative = *b - *a * t;
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizef)(&relative);
+	*out = (*a * cosf(theta)) + (relative * sinf(t));
+}
+
+HPM_IMP( void, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
+	double theta;
+	hpmvec3d relative;
+	double dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(a,b);
+	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	theta = acos(dot) * t;
+	relative = *b - *a * t;
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizef)(&relative);
+	*out = (*a * cos(theta)) + (relative * sin(t));
+}
 
 
 

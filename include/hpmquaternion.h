@@ -53,20 +53,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyd, hpmquatf* destination, const hpmq
 /*
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out);
 
 /*
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
-
-/*
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out);
 
 /*
  *

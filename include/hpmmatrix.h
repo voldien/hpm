@@ -27,6 +27,10 @@
  */
 typedef hpmvec4f hpmvec4x4f_t[4];
 typedef struct hpmvec4x4f_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
+typedef union{
+	hpmvec4x4f_t m;
+	hpmmat4f s;
+}hpmmatuf;
 /*typedef hpmvec4x4f_t hpmmat4f;*/
 
 /**
@@ -79,15 +83,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4f, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4d, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output);
 
 /**
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const float rarg);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4d, hpmvec4x4d_t larg, const double rarg);
-
 
 /**
  *
@@ -115,16 +118,14 @@ HPM_EXPORT(void, HPMAPISTDENTRY, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t f_mat4);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_transposedv, hpmvec4x4d_t f_mat4);
 
-
 /**
- *
+ *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4);
-HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_determinantdv, const hpmvec4x4d_t f_mat4);
-
+HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg);
 
 /**
- *
+ *	@Return
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t out);
 HPM_EXPORT( double, HPMAPIENTRY, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat4, hpmvec4x4d_t out);
@@ -163,7 +164,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_scaledv, hpmvec4x4d_t f_mat4, const hp
 
 /**/
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_rotationfv, hpmvec4x4f_t f_mat4, float angle, const hpmvec3f* axis);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_rotationdv, hpmvec4x4f_t f_mat4, float angle, const hpmvec3f* axis);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_rotationdv, hpmvec4x4d_t f_mat4, float angle, const hpmvec3d* axis);
 
 /**/
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_rotationXf, hpmvec4x4f_t f_mat4, float x_radi);
@@ -218,7 +219,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQdv, hpmvec4x4d_t f_mat4
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspect, float f_near, float f_far);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, float f_fov, float f_aspect, float f_near, float f_far);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, double f_fov, double f_aspect, double f_near, double f_far);
 
 /**
  *
@@ -230,7 +231,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthdv, hpmvec4x4d_t f_mat4, double f_
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx, float winy, float winz,const hpmvec4x4f_t projection,const hpmvec4x4f_t modelview, const int* viewport, hpmvec3f* pos);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_unprojd, float winx, float winy, float winz,const hpmvec4x4f_t projection,const hpmvec4x4f_t modelview, const int* viewport, hpmvec3f* pos);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_unprojd, float winx, float winy, float winz,const hpmvec4x4d_t projection,const hpmvec4x4d_t modelview, const int* viewport, hpmvec3f* pos);
 
 
 /**
@@ -251,15 +252,50 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_matrxi3x3_copydv, hpmvec3x3d_t destination, co
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_multiply_mat3x3fv, hpmvec3x3f_t larg, hpmvec3x3f_t rarg, hpmvec3x3f_t output);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_multiply_mat3x3dv, hpmvec3x3f_t larg, hpmvec3x3f_t rarg, hpmvec3x3f_t output);
 
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_multiply_mat1x3fv, const hpmvec3x3f_t larg, const hpmvec3f* rarg, hpmvec3f* output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_multiply_mat1x3dv, const hpmvec3x3d_t larg, const hpmvec3d* rarg, hpmvec3d* output);
 
+
+/**
+ *
+ */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_division_mat3x3, hpmvec3x3f_t larg, hpmvec3x3f_t rarg, hpmvec3x3f_t output);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_ma3x3_additition_mat3x3, hpmvec3x3f_t larg, hpmvec3x3f_t rarg, hpmvec3x3f_t output);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_subraction_mat3x3, hpmvec3x3f_t larg, hpmvec3x3f_t rarg, hpmvec3x3f_t output);
 
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_transposefv, hpmvec3x3f_t f_mat4);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat3x3_transposedv, hpmvec3x3d_t f_mat4);
+
+/**
+ *	@Return
+ */
+HPM_EXPORT( float, HPMAPIENTRY, hpm_mat3x3_determinantfv, const hpmvec3x3f_t arg);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_mat3x3_determinantdv, const hpmvec3x3d_t arg);
+
+/**
+ *	@Return
+ */
+HPM_EXPORT( float, HPMAPIENTRY, hpm_mat3x3_inversefv, const hpmvec3x3f_t f_mat4, hpmvec3x3f_t out);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_mat3x3_inversedv, const hpmvec3x3d_t f_mat4, hpmvec3x3d_t out);
 
 
-/*	*/
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat2x2_multiply_mat2x2, hpmvec2x2f_t larg, hpmvec2x2f_t rarg, hpmvec2x2f_t output);
+
+
+
+
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat2x2_multiply_mat2x2f, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat2x2_multiply_mat2x2d, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output);
+
 
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat2x2_division_mat2x2, hpmvec2x2f_t larg, hpmvec2x2f_t rarg, hpmvec2x2f_t output);
 

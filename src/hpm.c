@@ -74,8 +74,8 @@ int hpm_init(unsigned int simd){
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
 	hpm_mat4x4_multiply_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4dv);
-	hpm_mat4x4_multiply_mat1x4f = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4f);
-	hpm_mat4x4_multiply_mat1x4d = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4d);
+	hpm_mat4x4_multiply_mat1x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4fv);
+	hpm_mat4x4_multiply_mat1x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4dv);
 	hpm_mat4x4_division_mat4x4f = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4f);
 	hpm_mat4x4_division_mat4x4d = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4d);
 	hpm_mat4x4_additition_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4fv);
@@ -102,7 +102,6 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_translationdv = hpm_get_symbolfuncp(hpm_mat4x4_translationdv);
 	hpm_mat4x4_scalef = hpm_get_symbolfuncp(hpm_mat4x4_scalef);
 	hpm_mat4x4_scaled = hpm_get_symbolfuncp(hpm_mat4x4_scaled);
-
 
 
 	hpm_mat4x4_multi_translationf = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationf);
@@ -175,6 +174,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
+
 
 	/*	vector 2.	*/
 	hpm_vec2_copyf = hpm_get_symbolfuncp(hpm_vec2_copyf);
