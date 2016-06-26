@@ -4,7 +4,7 @@
 
 /*	library handle.	*/
 void* libhandle = NULL;
-#define hpm_get_symbolfuncp(symbol)		/*( HPM_FUNCTYPE(symbol) ) */hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
+#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE(symbol) ) hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -51,12 +51,14 @@ int hpm_init(unsigned int simd){
 	}
 
 	/*	load library.	*/
+	/*
 	libhandle = dlopen((const char*)libpath, RTLD_NOLOAD);
 	if(libhandle != NULL){
 		libhandle = dlopen((const char*)libpath, RTLD_DEEPBIND);
 	}else{
 		libhandle = dlopen((const char*)libpath, RTLD_NOW);
 	}
+	*/
 	if(libhandle == NULL)
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
 
@@ -218,7 +220,7 @@ int hpm_init(unsigned int simd){
 
 
 
-	closestatus = dlclose(libhandle);
+	//closestatus = dlclose(libhandle);
 	error:	/*	error*/
 
 
