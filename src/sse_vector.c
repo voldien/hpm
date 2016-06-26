@@ -32,23 +32,6 @@ HPM_IMP(double, hpm_vec4_lengthd, const hpmvec4d* arg){
 
 
 
-/*
-
-void hpm_vec3_multif(hpmvec3f* larg, hpmvecf rarg){
-	larg = _mm_mul_ps(larg, _mm_setr_ps(rarg,rarg,rarg,rarg));
-}
-
-*/
-
-
-
-
-
-
-
-
-
-
 
 
 

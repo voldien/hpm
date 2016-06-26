@@ -138,6 +138,40 @@ HPM_IMP( void, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg){
 }
 
 
+HPM_IMP( void, hpm_vec3_reflectf, const hpmvec3f* arg, const hpmvec3f* normal){
+	2.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotf)(arg, normal) * *normal - *arg;
+}
+
+HPM_IMP( void, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3d* normal){
+	2.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotd)(arg, normal) * *normal - *arg;
+}
+
+HPM_IMP( void, hpm_vec3_refractf, hpmvec3f* incidentVec, const hpmvec3f* normal, float index){
+	float N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
+	float k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+	hpmvec3f out;
+	if (k < 0.f){
+		const hpmvec3f zero = {0,0,0,0};
+		out = zero;
+	}
+	else{
+		out = index * *incidentVec - (index * N_dot_I + sqrtf(k)) * *normal;
+	}
+}
+
+HPM_IMP( void, hpm_vec3_refractd, hpmvec3d* incidentVec, const hpmvec3d* normal, double index){
+	double N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
+	double k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+	hpmvec3d out;
+	if (k < 0.f){
+		const hpmvec3d zero = {0,0,0,0};
+		out = zero;
+	}
+	else{
+		out = index * *incidentVec - (index * N_dot_I + sqrt(k)) * *normal;
+	}
+}
+
 HPM_IMP( void, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
 	*out = (*a + (*b - *a) * t);
 }

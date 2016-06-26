@@ -69,7 +69,7 @@ SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL_IMP=1" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL_IMP=1 #-mno-mmx -mno-sse -mno-sse2" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 #ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )

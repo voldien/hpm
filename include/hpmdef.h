@@ -22,10 +22,10 @@
 
 
 #ifndef HPM_MAJOR_VERSION
-	#define HPM_MAJOR_VERSION	1
+	#define HPM_MAJOR_VERSION	0
 #endif
 #ifndef HPM_MINOR_VERSION
-	#define HPM_MINOR_VERSION		0
+	#define HPM_MINOR_VERSION		5
 #endif
 #ifndef HPM_REVISION_VERSION
 	#define HPM_REVISION_VERSION 	0

@@ -162,6 +162,11 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_refractf = hpm_get_symbolfuncp(hpm_vec4_refractf);
 	hpm_vec4_refractd = hpm_get_symbolfuncp(hpm_vec4_refractd);
 
+	hpm_vec4_lerpf = hpm_get_symbolfuncp(hpm_vec4_lerpf);
+	hpm_vec4_lerpd = hpm_get_symbolfuncp(hpm_vec4_lerpd);
+	hpm_vec4_slerpf = hpm_get_symbolfuncp(hpm_vec4_slerpf);
+	hpm_vec4_slerpd = hpm_get_symbolfuncp(hpm_vec4_slerpd);
+
 
 	/*	vector 3.	*/
 	hpm_vec3_copyf = hpm_get_symbolfuncp(hpm_vec3_copyf);
@@ -176,6 +181,11 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
+
+	hpm_vec3_lerpf = hpm_get_symbolfuncp(hpm_vec3_lerpf);
+	hpm_vec3_lerpd = hpm_get_symbolfuncp(hpm_vec3_lerpd);
+	hpm_vec3_slerpf = hpm_get_symbolfuncp(hpm_vec3_slerpf);
+	hpm_vec3_slerpd = hpm_get_symbolfuncp(hpm_vec3_slerpd);
 
 
 	/*	vector 2.	*/
@@ -216,8 +226,6 @@ int hpm_init(unsigned int simd){
 	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
-
-
 
 
 	//closestatus = dlclose(libhandle);
