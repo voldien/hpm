@@ -133,15 +133,45 @@ HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f* scale){
 }
 
 HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t d_mat4, const hpmvec3d* scale){
-	const hpmvec4d row0 = {scale[0][0],0,0,0};
-	const hpmvec4d row1 = {0,scale[0][1],0,0};
-	const hpmvec4d row2 = {0,0,scale[0][2],0};
+	const hpmvec4d row0 = {(*scale)[0],0,0,0};
+	const hpmvec4d row1 = {0,(*scale)[1],0,0};
+	const hpmvec4d row2 = {0,0,(*scale)[2],0};
 	const hpmvec4d row3 = {0,0,0,1};
 	d_mat4[0] = row0;
 	d_mat4[1] = row1;
 	d_mat4[2] = row2;
 	d_mat4[3] = row3;
 }
+
+HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t f_mat4, float x_radi){
+	const hpmvec4d row0 = {0,0,0,0};
+	const hpmvec4d row1 = {0,0,0,0};
+	const hpmvec4d row2 = {0,0,0,0};
+	const hpmvec4d row3 = {0,0,0,1};
+}
+HPM_IMP( void, hpm_mat4x4_rotationXd, hpmvec4x4d_t f_mat4, double x_radi){
+
+}
+
+HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t f_mat4, float y_radi){
+
+}
+HPM_IMP( void, hpm_mat4x4_rotationYd, hpmvec4x4d_t f_mat4, float y_radi){
+
+}
+
+HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t f_mat4, float z_radi){
+
+}
+HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t f_mat4, float z_radi){
+
+}
+
+
+
+
+
+
 
 HPM_IMP( void, hpm_mat4x4_multi_translationf, hpmvec4x4f_t f_mat4, const hpmvec3f* translate){
 	hpmvec4x4f_t trans;

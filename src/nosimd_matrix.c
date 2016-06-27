@@ -391,39 +391,19 @@ HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t ou
 
 
 
-HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t f_mat4, float angle, const hpmvec3f* axis){
+HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat4, float angle, const hpmvec3f* axis){
 
 }
-HPM_IMP( void, hpm_mat4x4_rotationdv, hpmvec4x4d_t f_mat4, float angle, const hpmvec3d* axis){
-
-}
-
-HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t f_mat4, float x_radi){
-
-}
-HPM_IMP( void, hpm_mat4x4_rotationXd, hpmvec4x4d_t f_mat4, double x_radi){
+HPM_IMP( void, hpm_mat4x4_rotationdv, hpmvec4x4d_t mat4, float angle, const hpmvec3d* axis){
 
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t f_mat4, float y_radi){
 
-}
-HPM_IMP( void, hpm_mat4x4_rotationYd, hpmvec4x4d_t f_mat4, float y_radi){
-
-}
-
-HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t f_mat4, float z_radi){
-
-}
-HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t f_mat4, float z_radi){
+HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat4, const hpmquatf* quat){
 
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t f_mat4, const hpmvec4f* quad){
-
-}
-
-HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t f_mat4, const hpmvec4d* quad){
+HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat4, const hpmquatd* quat){
 
 }
 
