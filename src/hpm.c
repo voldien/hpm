@@ -222,13 +222,12 @@ int hpm_init(unsigned int simd){
 	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_quat_dotdv);
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
+
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 
-
-	//closestatus = dlclose(libhandle);
 	error:	/*	error*/
 
 

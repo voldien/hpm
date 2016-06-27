@@ -194,11 +194,11 @@ HPM_IMP( void, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, h
 HPM_IMP( void, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
 	double theta;
 	hpmvec3d relative;
-	double dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(a,b);
+	double dot = HPM_CALLLOCALFUNC(hpm_vec3_dotd)(a,b);
 	dot = HPM_CLAMP(dot, -1.0, 1.0);
 	theta = acos(dot) * t;
 	relative = *b - *a * t;
-	HPM_CALLLOCALFUNC(hpm_vec3_normalizef)(&relative);
+	HPM_CALLLOCALFUNC(hpm_vec3_normalized)(&relative);
 	*out = (*a * cos(theta)) + (relative * sin(t));
 }
 
