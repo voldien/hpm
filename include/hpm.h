@@ -22,11 +22,10 @@
 #include"hpmvector.h"
 #include"hpmquaternion.h"
 
-/*
+/**
  *	hpm follows opengl structure for how row and coloum is defiend for the
  *	matrix.
  */
-
 
 /**
  *
@@ -38,9 +37,9 @@
 #define HPM_SSE3		0x8			/*	SSE3	*/
 #define HPM_SSSE3		0x10		/*	SSSE3	*/
 #define HPM_SSE4_1		0x20		/*	SSE4.1	*/
-#define HPM_SSE4_2		0x40		/*	SSE4.2*/
-#define HPM_AVX			0x80		/*	AVX (Advanced Vector Extension)	*/
-#define HPM_AVX2		0x100		/*	AVX (Advanced Vector Extension)	*/
+#define HPM_SSE4_2		0x40		/*	SSE4.2	*/
+#define HPM_AVX			0x80		/*	AVX Version 1 (Advanced Vector Extension)	*/
+#define HPM_AVX2		0x100		/*	AVX Version 2 (Advanced Vector Extension)	*/
 #define HPM_AVX512		0x200		/*	AVX512 (Advanced Vector Extension)*/
 #define HPM_NEON		0x400		/*	ARM	*/
 

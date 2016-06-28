@@ -30,19 +30,21 @@ typedef int hpmveci;
 /*
  *
  */
-typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);
 typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);
+typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);
 typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);
 
 /*
  *
  */
+typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);
 typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
 
 /*
  *
  */
+typedef hpmveci hpmvec4i HPM_VECTORALIGN(32);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
 typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
 

@@ -82,12 +82,13 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
 	det = _mm_sub_ss(_mm_add_ss(tmp1, tmp1), _mm_mul_ss(det, _mm_mul_ss(tmp1, tmp1)));
 	det = _mm_shuffle_ps(det, det, 0x00);
+
+	return det[0];
 }
 
 HPM_IMP( double, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg){
 
 }
-
 
 /*	Cramer's rule	*/
 HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){

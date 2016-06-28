@@ -21,6 +21,9 @@
 #include<stdlib.h>
 
 
+/**
+ *	Version.
+ */
 #ifndef HPM_MAJOR_VERSION
 	#define HPM_MAJOR_VERSION	0
 #endif

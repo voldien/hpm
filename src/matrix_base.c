@@ -16,6 +16,20 @@ HPM_IMP( void, hpm_matrxi4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_
 	destination[3] = source[3];
 }
 
+
+HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
+	output[0] = larg[0] * rarg;
+	output[1] = larg[1] * rarg;
+	output[2] = larg[2] * rarg;
+	output[3] = larg[3] * rarg;
+}
+HPM_IMP( void, hpm_mat4x4_multiply_scalard, const hpmvec4x4d_t larg, const double rarg, hpmvec4x4d_t output){
+	output[0] = larg[0] * rarg;
+	output[1] = larg[1] * rarg;
+	output[2] = larg[2] * rarg;
+	output[3] = larg[3] * rarg;
+}
+
 HPM_IMP( void, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const float rarg){
 	larg[0] /= rarg;
 	larg[1] /= rarg;

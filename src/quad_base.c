@@ -38,6 +38,7 @@ HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
 
 
 
+
 HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
 	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
 }

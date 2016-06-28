@@ -24,14 +24,10 @@
  *
  */
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
-
-/**
- *
- */
 typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
 
 /**
- *
+ *	quaternion component index.
  */
 #define HPM_QUAD_W 0
 #define HPM_QUAD_X 1

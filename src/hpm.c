@@ -50,7 +50,7 @@ int hpm_init(unsigned int simd){
 		break;
 	}
 
-	/*	load library.	*/
+
 	/*
 	libhandle = dlopen((const char*)libpath, RTLD_NOLOAD);
 	if(libhandle != NULL){
@@ -59,8 +59,10 @@ int hpm_init(unsigned int simd){
 		libhandle = dlopen((const char*)libpath, RTLD_NOW);
 	}
 	*/
-	if(libhandle == NULL)
+	/*	load library.	*/
+	if(libhandle == NULL){
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
+	}
 
 
 
