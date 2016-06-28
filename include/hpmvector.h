@@ -227,16 +227,23 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductf, const hpmvec3f* larg, con
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductd, const hpmvec3d* larg, const hpmvec3d* rarg, hpmvec3d* out);
 
 /**
- *
+ *	@Return
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotf, const hpmvec3f* larg, const hpmvec3f* rarg);
 HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_dotd, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
- *
+ *	@Return
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lengthf, const hpmvec3f* larg, const hpmvec3f* rarg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lengthd, const hpmvec3d* larg, const hpmvec3d* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthf, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_lengthd, const hpmvec3d* larg, const hpmvec3d* rarg);
+
+/**
+ *	@Return
+ */
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquaref, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_lengthsquared, const hpmvec3d* larg, const hpmvec3d* rarg);
+
 
 /**
  *

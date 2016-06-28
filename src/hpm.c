@@ -132,9 +132,14 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_unprojd = hpm_get_symbolfuncp(hpm_mat4x4_unprojd);
 
 
-
+	/**/
 	hpm_matrxi3x3_copyfv = hpm_get_symbolfuncp(hpm_matrxi3x3_copyfv);
 	hpm_matrxi3x3_copydv = hpm_get_symbolfuncp(hpm_matrxi3x3_copydv);
+
+
+	/**/
+	hpm_mat2x2_copyfv = hpm_get_symbolfuncp(hpm_mat2x2_copyfv);
+	hpm_mat2x2_copydv = hpm_get_symbolfuncp(hpm_mat2x2_copydv);
 
 
 
@@ -183,6 +188,22 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
+
+
+	hpm_vec3_dotf = hpm_get_symbolfuncp(hpm_vec3_dotf);
+	hpm_vec3_dotd = hpm_get_symbolfuncp(hpm_vec3_dotd);
+	hpm_vec3_lengthf = hpm_get_symbolfuncp(hpm_vec3_lengthf);
+	hpm_vec3_lengthd = hpm_get_symbolfuncp(hpm_vec3_lengthd);
+	hpm_vec3_lengthsquaref = hpm_get_symbolfuncp(hpm_vec3_lengthsquaref);
+	hpm_vec3_lengthsquared = hpm_get_symbolfuncp(hpm_vec3_lengthsquared);
+	hpm_vec3_reflectf = hpm_get_symbolfuncp(hpm_vec3_reflectf);
+	hpm_vec3_reflectd = hpm_get_symbolfuncp(hpm_vec3_reflectd);
+	hpm_vec3_refractf = hpm_get_symbolfuncp(hpm_vec3_refractf);
+	hpm_vec3_refractd = hpm_get_symbolfuncp(hpm_vec3_refractd);
+
+
+
+
 
 	hpm_vec3_lerpf = hpm_get_symbolfuncp(hpm_vec3_lerpf);
 	hpm_vec3_lerpd = hpm_get_symbolfuncp(hpm_vec3_lerpd);

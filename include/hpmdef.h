@@ -289,7 +289,7 @@
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
-		HPM_FUNCPOINTER(func) = NULL										\
+		extern HPM_FUNCPOINTER(func)										\
 
 #elif defined(HPM_INTERNAL_IMP)
 #define HPM_EXPORT(ret, callback, func, ...)						\
@@ -298,17 +298,19 @@
 #else
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
-		HPM_FUNCPOINTER(func) = NULL										\
-
+		extern HPM_FUNCPOINTER(func)										\
 
 #endif
 
 /**
  *
  */
-#define HPM_IMP(ret, func, ...)				\
-ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)
+#define HPM_IMP(ret, func, ...)					\
+HPM_FUNCPOINTER(func) = NULL;					\
+ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
+
+
+
 
 /*
  *	HPM math constants.

@@ -301,3 +301,33 @@ HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4d_t f_mat4, double f_right, double f_
 }
 
 
+
+
+
+
+HPM_IMP(void, hpm_matrxi3x3_copyfv, hpmvec3x3f_t destination, const hpmvec3x3f_t source){
+	destination[0] = source[0];
+	destination[1] = source[1];
+	destination[2] = source[2];
+}
+HPM_IMP(void, hpm_matrxi3x3_copydv, hpmvec3x3d_t destination, const hpmvec3x3d_t source){
+	destination[0] = source[0];
+	destination[1] = source[1];
+	destination[2] = source[2];
+}
+
+
+
+
+
+
+HPM_IMP( void, hpm_mat2x2_copyfv, hpmvec2x2f_t destination, const hpmvec2x2f_t source){
+	destination[0] = source[0];
+	destination[1] = source[1];
+}
+HPM_IMP( void, hpm_mat2x2_copydv, hpmvec2x2f_t destination, const hpmvec2x2f_t source){
+	destination[0] = source[0];
+	destination[1] = source[1];
+}
+
+
