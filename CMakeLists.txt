@@ -69,13 +69,13 @@ SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL_IMP=1 #-mno-mmx -mno-sse -mno-sse2" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL_IMP=1 -ftree-vectorize #-mno-mmx -mno-sse -mno-sse2" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
+
+IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 
 #ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )
 #SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
-
-IF(NOT __arm__)
 
 ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1" )
@@ -113,10 +113,9 @@ ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1")
 TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
-ENDIF()
-IF(__arm__)
+ELSE()
 	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} ${allsimdsource})
-	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon -DHPM_INTERNAL_IMP=1 -funsafe-math-optimizations  -mfpu=‘neon’" )
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1 -funsafe-math-optimizations  -mfpu=neon" )
 ENDIF()
 
 
@@ -124,6 +123,7 @@ ENDIF()
 # add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
 INSTALL (TARGETS hpmnosimd DESTINATION lib)
+IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 INSTALL (TARGETS hpmavx2 DESTINATION lib)
 INSTALL (TARGETS hpmavx DESTINATION lib)
 INSTALL (TARGETS hpmmmx DESTINATION lib)
@@ -133,6 +133,7 @@ INSTALL (TARGETS hpmsse3 DESTINATION lib)
 #INSTALL (TARGETS hpmssse3 DESTINATION lib)
 INSTALL (TARGETS hpmsse41 DESTINATION lib)
 INSTALL (TARGETS hpmsse42 DESTINATION lib)
+ENDIF()
 IF(__arm__)
 INSTALL (TARGETS hpmneon DESTINATION lib)
 ENDIF()
