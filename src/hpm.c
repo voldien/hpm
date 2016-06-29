@@ -1,10 +1,15 @@
 #include"hpm.h"
 #include"hpmmatrix.h"
+#include"hpmvector.h"
+#include"hpmquaternion.h"
 #include <dlfcn.h>
+
+
 
 /*	library handle.	*/
 void* libhandle = NULL;
-#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE(symbol) ) hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME(symbol)))
+#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
+
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -72,8 +77,9 @@ int hpm_init(unsigned int simd){
 		goto error;
 	}
 
+
 	/*	matrix	*/
-	hpm_matrxi4x4_copyfv = hpm_get_symbolfuncp(hpm_matrxi4x4_copyfv);
+	hpm_matrxi4x4_copyfv = hpm_get_symbolfuncp( hpm_matrxi4x4_copyfv );
 	hpm_matrxi4x4_copydv = hpm_get_symbolfuncp(hpm_matrxi4x4_copydv);
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
@@ -126,7 +132,7 @@ int hpm_init(unsigned int simd){
 
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_projdv = hpm_get_symbolfuncp(hpm_mat4x4_projdv);
-	hpm_mat4x4_orthdv = hpm_get_symbolfuncp(hpm_mat4x4_orthdv);
+	hpm_mat4x4_orthfv = hpm_get_symbolfuncp(hpm_mat4x4_orthfv);
 	hpm_mat4x4_orthdv = hpm_get_symbolfuncp(hpm_mat4x4_orthdv);
 	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
 	hpm_mat4x4_unprojd = hpm_get_symbolfuncp(hpm_mat4x4_unprojd);
@@ -181,11 +187,11 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_additionf = hpm_get_symbolfuncp(hpm_vec3_additionf);
 	hpm_vec3_additiond = hpm_get_symbolfuncp(hpm_vec3_additiond);
 	hpm_vec3_subractionf = hpm_get_symbolfuncp(hpm_vec3_subractionf);
-	hpm_vec3_subractionf = hpm_get_symbolfuncp(hpm_vec3_subractionf);
+	hpm_vec3_subractiond = hpm_get_symbolfuncp(hpm_vec3_subractiond);
 	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
-	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
+	hpm_vec3_multid = hpm_get_symbolfuncp(hpm_vec3_multid);
 	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
-	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
+	hpm_vec3_divisiondv = hpm_get_symbolfuncp(hpm_vec3_divisiondv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
 
@@ -238,9 +244,14 @@ int hpm_init(unsigned int simd){
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_quat_lengthsqurefv);
 	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_quat_lengthsquredv);
 	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_normalizefv);
-	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_normalizefv);
+	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_quat_normalizedv);
+	/*
 	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
+	*/
+	hpm_quat_inversedv = hpm_get_symbolfuncp(hpm_quat_inversedv);
+
+
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_quat_dotfv);
 	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_quat_dotdv);
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
@@ -249,14 +260,13 @@ int hpm_init(unsigned int simd){
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
-	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
+	hpm_quat_slerpdv = hpm_get_symbolfuncp(hpm_quat_slerpdv);
 
 	error:	/*	error*/
 
 
 	return ( libhandle != NULL) ;
 }
-
 
 void* hpm_get_address(const char* cfunctionName){
 	void* pfunc = dlsym(libhandle, cfunctionName);

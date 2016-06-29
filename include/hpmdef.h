@@ -288,12 +288,15 @@
 #if defined(HPM_INTERNAL)
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
-		extern HPM_FUNCPOINTER(func)										\
+		extern HPM_FUNCPOINTER(func);										\
+		HPM_FUNCPOINTER(func) = NULL										\
+
 
 #elif defined(HPM_INTERNAL_IMP)
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
+		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
+
 
 #else
 #define HPM_EXPORT(ret, callback, func, ...)								\
@@ -306,7 +309,6 @@
  *
  */
 #define HPM_IMP(ret, func, ...)					\
-HPM_FUNCPOINTER(func) = NULL;					\
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 
 
