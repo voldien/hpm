@@ -75,6 +75,8 @@ TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 #ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )
 #SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
 
+IF(NOT __arm__)
+
 ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmavx2 -lm)
@@ -111,10 +113,11 @@ ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1")
 TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
-if(__arm__)
+ENDIF()
+IF(__arm__)
 	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} ${allsimdsource})
-	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon -DHPM_INTERNAL_IMP=1" )
-endif()
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS "-mneon -DHPM_INTERNAL_IMP=1 -funsafe-math-optimizations  -mfpu=‘neon’" )
+ENDIF()
 
 
 
