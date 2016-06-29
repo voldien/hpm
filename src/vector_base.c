@@ -12,7 +12,8 @@ HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* destination, const hpmvec4d* source){
 
 
 HPM_IMP( void, hpm_vec4_addition_scalef , hpmvec4f* larg, const hpmvecf rarg){
-	*larg += rarg;
+	const hpmvec4f row0 = {rarg,rarg,rarg,rarg};
+	*larg += row0;
 }
 
 HPM_IMP( void, hpm_vec4_addition_scaled, hpmvec4d* larg, const hpmvecd rarg){

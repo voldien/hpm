@@ -27,6 +27,10 @@ typedef float hpmvecf;
 typedef double hpmvecd;
 typedef int hpmveci;
 
+typedef float hpmvecfv HPM_VECTORALIGN(4);
+typedef double hpmvecdv HPM_VECTORALIGN(8);
+typedef int hpmveciv HPM_VECTORALIGN(4);
+
 /*
  *
  */
