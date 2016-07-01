@@ -53,19 +53,25 @@ HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg){
 
 
 HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f* arg){
-	*arg /=  (float)HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
+	hpmvecf l = HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
+	const hpmvecf row0 = {l,l,l,l};
+	*arg /=  row0;
 }
 
 HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
-	*arg /= (float)HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
+	hpmvecd l = HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
+	const hpmvecd row0 = {l,l,l,l};
+	*arg /= row0;
 }
 
 HPM_IMP(void, hpm_vec4_negatef, hpmvec4f* arg){
-	*arg *= -1.0f;
+	const hpmvecf row0 = {-1,-1,-1,-1};
+	*arg *= row0;
 }
 
 HPM_IMP(void, hpm_vec4_negated, hpmvec4d* arg){
-	*arg *= -1.0;
+	const hpmvecd row0 = {-1,-1,-1,-1};
+	*arg *= row0;
 }
 
 
@@ -105,8 +111,6 @@ HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, 
 }
 
 
-
-
 HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* destination, const hpmvec3f* source){
 	*destination = *source;
 }
@@ -114,8 +118,6 @@ HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* destination, const hpmvec3f* source){
 HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* destination, const hpmvec3d* source){
 	*destination = *source;
 }
-
-
 
 HPM_IMP( void, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg){
 	*larg += *rarg;
@@ -151,7 +153,6 @@ HPM_IMP( void, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg){
 HPM_IMP( void, hpm_vec3_reflectf, const hpmvec3f* arg, const hpmvec3f* normal){
 	2.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotf)(arg, normal) * *normal - *arg;
 }
-
 HPM_IMP( void, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3d* normal){
 	2.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotd)(arg, normal) * *normal - *arg;
 }
@@ -183,11 +184,13 @@ HPM_IMP( void, hpm_vec3_refractd, hpmvec3d* incidentVec, const hpmvec3d* normal,
 }
 
 HPM_IMP( void, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
-	*out = (*a + (*b - *a) * t);
+	const hpmvec3f time = {t,t,t,t};
+	*out = (*a + (*b - *a) * time);
 }
 
 HPM_IMP( void, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
-	*out = (*a + (*b - *a) * t);
+	const hpmvec3d time = {t,t,t,t};
+	*out = (*a + (*b - *a) * time);
 }
 
 HPM_IMP( void, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
