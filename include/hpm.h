@@ -31,17 +31,17 @@
  *
  */
 #define HPM_NOSIMD		0x0			/*	No SIMD hardware feature.	*/
-#define HPM_MMX			0x1			/*	MMX	*/
-#define HPM_SSE			0x2			/*	SSE	*/
-#define HPM_SSE2		0x4			/*	SSE2	*/
-#define HPM_SSE3		0x8			/*	SSE3	*/
-#define HPM_SSSE3		0x10		/*	SSSE3	*/
-#define HPM_SSE4_1		0x20		/*	SSE4.1	*/
-#define HPM_SSE4_2		0x40		/*	SSE4.2	*/
-#define HPM_AVX			0x80		/*	AVX Version 1 (Advanced Vector Extension)	*/
-#define HPM_AVX2		0x100		/*	AVX Version 2 (Advanced Vector Extension)	*/
-#define HPM_AVX512		0x200		/*	AVX512 (Advanced Vector Extension)*/
-#define HPM_NEON		0x400		/*	ARM	*/
+#define HPM_MMX			0x1			/*	MMX.	*/
+#define HPM_SSE			0x2			/*	SSE.	*/
+#define HPM_SSE2		0x4			/*	SSE2.	*/
+#define HPM_SSE3		0x8			/*	SSE3.	*/
+#define HPM_SSSE3		0x10		/*	SSSE3.	*/
+#define HPM_SSE4_1		0x20		/*	SSE4.1.	*/
+#define HPM_SSE4_2		0x40		/*	SSE4.2.	*/
+#define HPM_AVX			0x80		/*	AVX Version 1 (Advanced Vector Extension).	*/
+#define HPM_AVX2		0x100		/*	AVX Version 2 (Advanced Vector Extension).	*/
+#define HPM_AVX512		0x200		/*	AVX512 (Advanced Vector Extension).	*/
+#define HPM_NEON		0x400		/*	ARM	fpu feature.	*/
 
 
 /**

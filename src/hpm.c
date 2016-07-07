@@ -55,20 +55,10 @@ int hpm_init(unsigned int simd){
 		break;
 	}
 
-
-	/*
-	libhandle = dlopen((const char*)libpath, RTLD_NOLOAD);
-	if(libhandle != NULL){
-		libhandle = dlopen((const char*)libpath, RTLD_DEEPBIND);
-	}else{
-		libhandle = dlopen((const char*)libpath, RTLD_NOW);
-	}
-	*/
 	/*	load library.	*/
 	if(libhandle == NULL){
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
 	}
-
 
 
 	/*	*/
@@ -207,10 +197,6 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_refractf = hpm_get_symbolfuncp(hpm_vec3_refractf);
 	hpm_vec3_refractd = hpm_get_symbolfuncp(hpm_vec3_refractd);
 
-
-
-
-
 	hpm_vec3_lerpf = hpm_get_symbolfuncp(hpm_vec3_lerpf);
 	hpm_vec3_lerpd = hpm_get_symbolfuncp(hpm_vec3_lerpd);
 	hpm_vec3_slerpf = hpm_get_symbolfuncp(hpm_vec3_slerpf);
@@ -220,7 +206,6 @@ int hpm_init(unsigned int simd){
 	/*	vector 2.	*/
 	hpm_vec2_copyf = hpm_get_symbolfuncp(hpm_vec2_copyf);
 	hpm_vec2_copyd = hpm_get_symbolfuncp(hpm_vec2_copyd);
-
 
 
 	/*	quaternion	*/

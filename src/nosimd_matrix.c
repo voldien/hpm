@@ -4,7 +4,7 @@
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
 
-	 hpmvecf a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
+	const hpmvecf a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
 	        a10 =    larg[1][0], a11 =  larg[1][1], a12 = larg[1][2], a13 = larg[1][3],
 	        a20 =    larg[2][0], a21 =  larg[2][1], a22 = larg[2][2], a23 = larg[2][3],
 	        a30 =    larg[3][0], a31 =  larg[3][1], a32 = larg[3][2], a33 = larg[3][3],
@@ -37,7 +37,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmv
 
 HPM_IMP(void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t outf){
 
-	hpmvecd a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
+	const hpmvecd a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
 	        a10 =    larg[1][0], a11 =  larg[1][1], a12 = larg[1][2], a13 = larg[1][3],
 	        a20 =    larg[2][0], a21 =  larg[2][1], a22 = larg[2][2], a23 = larg[2][3],
 	        a30 =    larg[3][0], a31 =  larg[3][1], a32 = larg[3][2], a33 = larg[3][3],
