@@ -114,7 +114,7 @@ SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL
 TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
 ELSE()
-	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore} ${allsimdsource})
+	ADD_LIBRARY(hpmneon src/neon_matrix.c ${basecore})
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1 -funsafe-math-optimizations  -mfpu=neon" )
 ENDIF()
 
