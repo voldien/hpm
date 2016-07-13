@@ -26,6 +26,7 @@
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
 
+
 /**
  *	quaternion component index.
  */

@@ -63,7 +63,9 @@ typedef union{
 	struct hpmvec3x3d_s s;
 }hpmmat3ud;
 
-/**/
+/*
+ *
+ */
 typedef hpmvec2f hpmvec2x2f_t[2];
 typedef struct hpmvec2x2f_s{float m11,m21,m12,m22;}hpmmat2f;
 typedef union{
@@ -71,7 +73,10 @@ typedef union{
 	struct hpmvec2x2f_s s;
 }hpmmat2uf;
 
-/**/
+
+/*
+ *
+ */
 typedef hpmvec2d hpmvec2x2d_t[2];
 typedef struct hpmvec2x2d_s{double m11,m21,m12,m22;}hpmmat2d;
 typedef union{

@@ -317,9 +317,7 @@
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 
 
-
-
-/*
+/**
  *	HPM math constants.
  */
 #define _HPM_MATH_H_
@@ -339,9 +337,11 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 	#define HPM_SQRT1_2       	0.70710678118654752440  /* 1/sqrt(2) */
 #endif
 
+/**/
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
 #define HPM_RAD2DEG( a ) ( ( (a) * 180.0 ) / HPM_PI )
 
+/**/
 #define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 #define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
 #define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))

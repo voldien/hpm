@@ -57,7 +57,6 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t f_mat4){
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-
 HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4){
 	const hpmvec4d row0 = {1.0, 0.0, 0.0, 0.0};
 	const hpmvec4d row1 = {0.0, 1.0, 0.0, 0.0};
@@ -125,7 +124,6 @@ HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t f_mat4, float x, float y, float z
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-
 HPM_IMP(void, hpm_mat4x4_scaled, hpmvec4x4d_t d_mat4, const double x, const double y, const double z){
 	const hpmvec4d row0 = {x,0,0,0};
 	const hpmvec4d row1 = {0,y,0,0};
@@ -147,7 +145,6 @@ HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f* scale){
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-
 HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t d_mat4, const hpmvec3d* scale){
 	const hpmvec4d row0 = {(*scale)[0],0,0,0};
 	const hpmvec4d row1 = {0,(*scale)[1],0,0};
@@ -188,7 +185,6 @@ HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t f_mat4, float z_radi){
 
 
 
-
 HPM_IMP( void, hpm_mat4x4_multi_translationf, hpmvec4x4f_t f_mat4, const hpmvec3f* translate){
 	hpmvec4x4f_t trans;
 	hpmvec4x4f_t tmp;
@@ -196,7 +192,6 @@ HPM_IMP( void, hpm_mat4x4_multi_translationf, hpmvec4x4f_t f_mat4, const hpmvec3
 	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(trans, translate);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, trans, f_mat4);
 }
-
 HPM_IMP( void, hpm_mat4x4_multi_translationd, hpmvec4x4d_t f_mat4, const hpmvec3d* translate){
 	hpmvec4x4d_t trans;
 	hpmvec4x4d_t tmp;
@@ -212,7 +207,6 @@ HPM_IMP( void, hpm_mat4x4_multi_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f* sc
 	HPM_CALLLOCALFUNC(hpm_mat4x4_scalefv)(scal, scale);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, scal, f_mat4);
 }
-
 HPM_IMP( void, hpm_mat4x4_multi_scaledv, hpmvec4x4d_t f_mat4, const hpmvec3d* scale){
 	hpmvec4x4d_t scal;
 	hpmvec4x4d_t tmp;
@@ -231,7 +225,6 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t f_mat4, const hpmquatf
 	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4dv)(tmp, quat, f_mat4);
 }
-
 HPM_IMP( void, hpm_mat4x4_multi_rotationQdv, hpmvec4x4d_t f_mat4, const hpmquatd* f_quat){
 	hpmvec4x4d_t quat;
 	hpmvec4x4d_t tmp;
@@ -241,7 +234,6 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQdv, hpmvec4x4d_t f_mat4, const hpmquatd
 	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4dv)(tmp, quat, f_mat4);
 }
-
 
 
 HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspect, float f_near, float f_far){
@@ -260,7 +252,6 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspe
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-
 HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, double f_fov, double f_aspect, double f_near, double f_far){
 	const hpmvecd xScale = 1.0 / (tan(HPM_DEG2RAD(f_fov * 0.5f)) * f_aspect);
 	const hpmvecd yScale = 1.0 / tan(HPM_DEG2RAD(f_fov * 0.5f));
@@ -289,7 +280,6 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t f_mat4, float f_right, float f_le
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-
 HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4d_t f_mat4, double f_right, double f_left, double f_top, double f_bottom, double f_far, double f_near){
 	const hpmvec4d row0 = {2.0f/(f_right - f_left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4d row1 = {0.0, 2.0f/(f_top - f_bottom), 0.0f, 0.0};
