@@ -253,6 +253,11 @@ int hpm_init(unsigned int simd){
 	return ( libhandle != NULL) ;
 }
 
+int hpm_release(void){
+	return dlclose(libhandle);
+}
+
+
 void* hpm_get_address(const char* cfunctionName){
 	void* pfunc = dlsym(libhandle, cfunctionName);
 	if(pfunc == NULL){

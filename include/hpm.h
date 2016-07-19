@@ -41,7 +41,7 @@
 #define HPM_AVX			0x80		/*	AVX Version 1 (Advanced Vector Extension).	*/
 #define HPM_AVX2		0x100		/*	AVX Version 2 (Advanced Vector Extension).	*/
 #define HPM_AVX512		0x200		/*	AVX512 (Advanced Vector Extension).	*/
-#define HPM_NEON		0x400		/*	ARM	fpu feature.	*/
+#define HPM_NEON		0x400		/*	ARM	fpu(floating-point unit) feature.	*/
 
 
 /**
@@ -49,6 +49,11 @@
  *	@Return
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int simd);
+
+/**
+ *
+ */
+extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
 /**
  *	Get function pointer address.
