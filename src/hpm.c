@@ -258,6 +258,7 @@ int hpm_release(void){
 	if(status < 0 ){
 		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
 	}
+	libhandle = NULL;
 	return status == 0;
 }
 
