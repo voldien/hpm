@@ -113,6 +113,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_dotdv, const hpmquatd* larg, const hpmqu
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* out);
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identitydv, hpmquatd* out);
 
+
+
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_anglefv, hpmquatf* lf_quad, const hpmquatf* axis, float f_angle);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_angledv, hpmquatd* lf_quad, const hpmquatd* axis, float f_angle);
+
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axisf, hpmquatf* lf_quad, float pitch_rad,float yaw_rad,float roll_rad);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axisd, hpmquatf* lf_quad, float pitch_rad,float yaw_rad,float roll_rad);
+
 /**
  *
  */

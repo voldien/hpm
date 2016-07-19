@@ -254,7 +254,11 @@ int hpm_init(unsigned int simd){
 }
 
 int hpm_release(void){
-	return dlclose(libhandle);
+	int status = dlclose(libhandle);
+	if(status < 0 ){
+		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
+	}
+	return status == 0;
 }
 
 

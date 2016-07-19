@@ -51,7 +51,8 @@
 extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int simd);
 
 /**
- *
+ *	Release library.
+ *	@Return
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
