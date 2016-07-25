@@ -251,6 +251,7 @@
 #ifdef HPM_GNUC
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
+	#define HPM_VECTORALIGN_(alignment) __attribute__ ((__vector_size__ (alignment)))
 
 #elif defined(HPM_VC)
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))

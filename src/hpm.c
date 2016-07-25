@@ -69,13 +69,17 @@ int hpm_init(unsigned int simd){
 
 
 	/*	matrix	*/
-	hpm_matrxi4x4_copyfv = hpm_get_symbolfuncp( hpm_matrxi4x4_copyfv );
-	hpm_matrxi4x4_copydv = hpm_get_symbolfuncp(hpm_matrxi4x4_copydv);
+	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
+	hpm_mat4x4_copydv = hpm_get_symbolfuncp(hpm_mat4x4_copydv);
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
 	hpm_mat4x4_multiply_mat4x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4dv);
+	hpm_mat4x4_multiply_scalarf = hpm_get_symbolfuncp(hpm_mat4x4_multiply_scalarf);
+	hpm_mat4x4_multiply_scalard = hpm_get_symbolfuncp(hpm_mat4x4_multiply_scalard);
 	hpm_mat4x4_multiply_mat1x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4fv);
 	hpm_mat4x4_multiply_mat1x4dv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4dv);
+
+
 	hpm_mat4x4_division_mat4x4f = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4f);
 	hpm_mat4x4_division_mat4x4d = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4d);
 	hpm_mat4x4_additition_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4fv);
@@ -96,6 +100,7 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_decomposefv = hpm_get_symbolfuncp(hpm_mat4x4_decomposefv);
 	hpm_mat4x4_decomposedv = hpm_get_symbolfuncp(hpm_mat4x4_decomposedv);
 
+	/*	transformations.	*/
 	hpm_mat4x4_translationf = hpm_get_symbolfuncp(hpm_mat4x4_translationf);
 	hpm_mat4x4_translationd = hpm_get_symbolfuncp(hpm_mat4x4_translationd);
 	hpm_mat4x4_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_translationfv);
@@ -103,7 +108,18 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_scalef = hpm_get_symbolfuncp(hpm_mat4x4_scalef);
 	hpm_mat4x4_scaled = hpm_get_symbolfuncp(hpm_mat4x4_scaled);
 
+	hpm_mat4x4_rotationfv = hpm_get_symbolfuncp(hpm_mat4x4_rotationfv);
+	hpm_mat4x4_rotationdv = hpm_get_symbolfuncp(hpm_mat4x4_rotationdv);
+	hpm_mat4x4_rotationXf = hpm_get_symbolfuncp(hpm_mat4x4_rotationXf);
+	hpm_mat4x4_rotationXd = hpm_get_symbolfuncp(hpm_mat4x4_rotationXd);
+	hpm_mat4x4_rotationYf = hpm_get_symbolfuncp(hpm_mat4x4_rotationYf);
+	hpm_mat4x4_rotationYd = hpm_get_symbolfuncp(hpm_mat4x4_rotationYd);
+	hpm_mat4x4_rotationZf = hpm_get_symbolfuncp(hpm_mat4x4_rotationZf);
+	hpm_mat4x4_rotationZd = hpm_get_symbolfuncp(hpm_mat4x4_rotationZd);
+	hpm_mat4x4_rotationQf = hpm_get_symbolfuncp(hpm_mat4x4_rotationQf);
+	hpm_mat4x4_rotationQd = hpm_get_symbolfuncp(hpm_mat4x4_rotationQd);
 
+	/**/
 	hpm_mat4x4_multi_translationf = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationf);
 	hpm_mat4x4_multi_translationd = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationd);
 	hpm_mat4x4_multi_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scalefv);
@@ -119,13 +135,15 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_multi_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQfv);
 	hpm_mat4x4_multi_rotationQdv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQdv);
 
-
+	/**/
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_projdv = hpm_get_symbolfuncp(hpm_mat4x4_projdv);
 	hpm_mat4x4_orthfv = hpm_get_symbolfuncp(hpm_mat4x4_orthfv);
 	hpm_mat4x4_orthdv = hpm_get_symbolfuncp(hpm_mat4x4_orthdv);
 	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
 	hpm_mat4x4_unprojd = hpm_get_symbolfuncp(hpm_mat4x4_unprojd);
+
+
 
 
 	/**/
@@ -165,6 +183,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_refractf = hpm_get_symbolfuncp(hpm_vec4_refractf);
 	hpm_vec4_refractd = hpm_get_symbolfuncp(hpm_vec4_refractd);
 
+	/**/
 	hpm_vec4_lerpf = hpm_get_symbolfuncp(hpm_vec4_lerpf);
 	hpm_vec4_lerpd = hpm_get_symbolfuncp(hpm_vec4_lerpd);
 	hpm_vec4_slerpf = hpm_get_symbolfuncp(hpm_vec4_slerpf);
@@ -184,7 +203,6 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_divisiondv = hpm_get_symbolfuncp(hpm_vec3_divisiondv);
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
-
 
 	hpm_vec3_dotf = hpm_get_symbolfuncp(hpm_vec3_dotf);
 	hpm_vec3_dotd = hpm_get_symbolfuncp(hpm_vec3_dotd);
@@ -208,6 +226,8 @@ int hpm_init(unsigned int simd){
 	hpm_vec2_copyd = hpm_get_symbolfuncp(hpm_vec2_copyd);
 
 
+
+
 	/*	quaternion	*/
 	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
 	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
@@ -224,18 +244,20 @@ int hpm_init(unsigned int simd){
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
 
-	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_quat_lengthfv);
-	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_quat_lengthdv);
-	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_quat_lengthsqurefv);
-	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_quat_lengthsquredv);
-	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_normalizefv);
-	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_quat_normalizedv);
-	/*
-	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
+	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthf);
+	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthd);
+	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
+	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsqured);
+	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizef);
+	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_vec4_normalized);
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
-	*/
 	hpm_quat_inversedv = hpm_get_symbolfuncp(hpm_quat_inversedv);
 
+
+	hpm_quad_axis_anglefv = hpm_get_symbolfuncp(hpm_quad_axis_anglefv);
+	hpm_quad_axis_angledv = hpm_get_symbolfuncp(hpm_quad_axis_angledv);
+	hpm_quad_axisf = hpm_get_symbolfuncp(hpm_quad_axisf);
+	hpm_quad_axisd = hpm_get_symbolfuncp(hpm_quad_axisd);
 
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_quat_dotfv);
 	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_quat_dotdv);
@@ -248,7 +270,6 @@ int hpm_init(unsigned int simd){
 	hpm_quat_slerpdv = hpm_get_symbolfuncp(hpm_quat_slerpdv);
 
 	error:	/*	error*/
-
 
 	return ( libhandle != NULL) ;
 }

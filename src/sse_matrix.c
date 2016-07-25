@@ -1,6 +1,5 @@
 #include"hpmmatrix.h"
 
-
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>

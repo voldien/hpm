@@ -295,6 +295,8 @@ HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat, hpmvec4x4f_t out
 	det = 1/det;
 	for (j = 0; j < 16; j++)
 		dst[j] *= det;
+
+	return det;
 }
 
 HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t out){

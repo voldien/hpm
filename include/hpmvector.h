@@ -54,6 +54,21 @@ typedef hpmveci hpmvec4i HPM_VECTORALIGN(32);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
 typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
 
+/*
+typedef double __v4df __attribute__ ((__vector_size__ (32)));
+typedef float __v8sf __attribute__ ((__vector_size__ (32)));
+typedef long long __v4di __attribute__ ((__vector_size__ (32)));
+typedef int __v8si __attribute__ ((__vector_size__ (32)));
+typedef short __v16hi __attribute__ ((__vector_size__ (32)));
+typedef char __v32qi __attribute__ ((__vector_size__ (32)));
+
+typedef double __v2df __attribute__ ((__vector_size__ (16)));
+typedef long long __v2di __attribute__ ((__vector_size__ (16)));
+typedef int __v4si __attribute__ ((__vector_size__ (16)));
+typedef short __v8hi __attribute__ ((__vector_size__ (16)));
+typedef char __v16qi __attribute__ ((__vector_size__ (16)));
+*/
+
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C"{
 #endif
@@ -61,8 +76,8 @@ extern "C"{
 /**
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyf, hpmvec4f* destination, const hpmvec4f* source);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyd, hpmvec4d* destination, const hpmvec4d* source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyf, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source);
 
 
 /**
@@ -162,8 +177,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyf, hpmvec3f* destination, const hpmvec3f* source);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyd, hpmvec3d* destination, const hpmvec3d* source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyf, hpmvec3f* __restrict__ destination, const hpmvec3f* __restrict__ source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyd, hpmvec3d* __restrict__ destination, const hpmvec3d* __restrict__ source);
 
 /**
  *
@@ -282,17 +297,32 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projd, const hpmvec3d* a, const hpmvec3d
  * =====
  */
 
+
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_copyf, hpmvec2f* destination, const hpmvec2f* source);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_copyd, hpmvec2d* destination, const hpmvec2d* source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_copyf, hpmvec2f* __restrict__ destination, const hpmvec2f* __restrict__ source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_copyd, hpmvec2d* __restrict__ destination, const hpmvec2d* __restrict__ source);
 
 /**
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_multif, hpmvec2f* destination, const hpmvec2f* source);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_multid, hpmvec2d* destination, const hpmvec2d* source);
+
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_additionfv, hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_additiondv, hpmvec3d* larg, const hpmvec3d* rarg);
+
+/**
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_additionf, hpmvec3f* larg, const hpmvecf rarg);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec2_additiond, hpmvec3d* larg, const hpmvecd rarg);
+
 
 
 

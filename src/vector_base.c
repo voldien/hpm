@@ -1,21 +1,26 @@
 #include"hpmvector.h"
 #include<math.h>
 
+#include<immintrin.h>
+#   ifdef HPM_VC
+#      include<intrin.h>
+#	elif defined(HPM_GNUC)
+#		include<x86intrin.h>
+#   endif
 
-HPM_IMP(void, hpm_vec4_copyf, hpmvec4f* destination, const hpmvec4f* source){
+
+HPM_IMP(void, hpm_vec4_copyf, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source){
 	*destination = *source;
 }
-
-HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* destination, const hpmvec4d* source){
+HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source){
 	*destination = *source;
 }
 
 
 HPM_IMP( void, hpm_vec4_addition_scalef , hpmvec4f* larg, const hpmvecf rarg){
-	const hpmvec4f row0 = {rarg,rarg,rarg,rarg};
+	const hpmvec4f row0 = {rarg, rarg,rarg, rarg};
 	*larg += row0;
 }
-
 HPM_IMP( void, hpm_vec4_addition_scaled, hpmvec4d* larg, const hpmvecd rarg){
 	const hpmvec4d row0 = {rarg,rarg,rarg,rarg};
 	*larg += row0;
@@ -26,7 +31,6 @@ HPM_IMP( void, hpm_vec4_subtractionf, hpmvec4f* larg, const hpmvecf rarg){
 	const hpmvec4f row0 = {rarg,rarg,rarg,rarg};
 	*larg -= row0;
 }
-
 HPM_IMP( void, hpm_vec4_subtractiond, hpmvec4d* larg, const hpmvecd rarg){
 	const hpmvec4d row0 = {rarg,rarg,rarg,rarg};
 	*larg -= row0;
@@ -35,7 +39,6 @@ HPM_IMP( void, hpm_vec4_subtractiond, hpmvec4d* larg, const hpmvecd rarg){
 HPM_IMP( void, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg){
 	*larg *= *rarg;
 }
-
 HPM_IMP( void, hpm_vec4_multidv, hpmvec4d* larg, const hpmvec4d* rarg){
 	*larg *= *rarg;
 }
@@ -45,7 +48,6 @@ HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg){
 	const hpmvec4f row0 = {rarg,rarg,rarg,rarg};
 	*larg *= row0;
 }
-
 HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg){
 	const hpmvec4d row0 = {rarg,rarg,rarg,rarg};
 	*larg *= row0;
@@ -57,18 +59,17 @@ HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f* arg){
 	const hpmvec4f row0 = {l,l,l,l};
 	*arg /=  row0;
 }
-
 HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
 	hpmvecd l = HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
 	const hpmvec4d row0 = {l,l,l,l};
 	*arg /= row0;
 }
 
+
 HPM_IMP(void, hpm_vec4_negatef, hpmvec4f* arg){
 	const hpmvec4f row0 = {-1,-1,-1,-1};
 	*arg *= row0;
 }
-
 HPM_IMP(void, hpm_vec4_negated, hpmvec4d* arg){
 	const hpmvec4d row0 = {-1,-1,-1,-1};
 	*arg *= row0;
@@ -80,7 +81,6 @@ HPM_IMP( void, hpm_vec4_lerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hp
 	const hpmvec4f time = {t,t,t,t};
 	*out = (*a + (*b - *a) * time);
 }
-
 HPM_IMP( void, hpm_vec4_lerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out){
 	const hpmvec4d time = {t,t,t,t};
 	*out = (*a + (*b - *a) * time);
@@ -100,7 +100,6 @@ HPM_IMP( void, hpm_vec4_slerpf, const hpmvec4f* a, const hpmvec4f* b, float t, h
 	const hpmvec4f vsint = {vsintime, vsintime, vsintime, vsintime};
 	*out = (*a * vtheta) + (relative *vsint);
 }
-
 HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out){
 	double theta;
 	hpmvec4d relative;
@@ -117,18 +116,16 @@ HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, 
 }
 
 
-HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* destination, const hpmvec3f* source){
+HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* __restrict__ destination, const hpmvec3f* __restrict__ source){
 	*destination = *source;
 }
-
-HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* destination, const hpmvec3d* source){
+HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* __restrict__ destination, const hpmvec3d* __restrict__ source){
 	*destination = *source;
 }
 
 HPM_IMP( void, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg){
 	*larg += *rarg;
 }
-
 HPM_IMP( void, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg){
 	*larg += *rarg;
 }
@@ -137,11 +134,11 @@ HPM_IMP(void, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg){
 	const hpmvec3f row0 = {rarg,rarg,rarg,rarg};
 	*larg += row0;
 }
-
 HPM_IMP( void, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg){
 	const hpmvec3d row0 = {rarg,rarg,rarg,rarg};
 	*larg += row0;
 }
+
 
 
 HPM_IMP( void, hpm_vec3_multif, hpmvec3f* larg, const hpmvecf rarg){
@@ -152,6 +149,7 @@ HPM_IMP( void, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd rarg){
 	const hpmvec3d row0 = {rarg,rarg,rarg,rarg};
 	*larg *= row0;
 }
+
 
 HPM_IMP( void, hpm_vec3_multifv, hpmvec3f* larg, const hpmvec3f* rarg){
 	*larg += *rarg;
@@ -249,10 +247,10 @@ HPM_IMP( void, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, 
 
 
 
-HPM_IMP( void, hpm_vec2_copyf, hpmvec2f* destination, const hpmvec2f* source){
+HPM_IMP( void, hpm_vec2_copyf, hpmvec2f* __restrict__ destination, const hpmvec2f* __restrict__ source){
 	*destination = *source;
 }
 
-HPM_IMP( void, hpm_vec2_copyd, hpmvec2d* destination, const hpmvec2d* source){
+HPM_IMP( void, hpm_vec2_copyd, hpmvec2d* __restrict__ destination, const hpmvec2d* __restrict__ source){
 	*destination = *source;
 }

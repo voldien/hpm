@@ -1,18 +1,40 @@
 #include"hpmmatrix.h"
 #include<math.h>
 
+#include<immintrin.h>
+#   ifdef HPM_VC
+#      include<intrin.h>
+#	elif defined(HPM_GNUC)
+#		include<x86intrin.h>
+#   endif
 
-HPM_IMP( void, hpm_matrxi4x4_copyfv,hpmvec4x4f_t destination, const hpmvec4x4f_t source){
+
+
+HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t  destination, const hpmvec4x4f_t source){
 	destination[0] = source[0];
 	destination[1] = source[1];
 	destination[2] = source[2];
 	destination[3] = source[3];
 }
-HPM_IMP( void, hpm_matrxi4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source){
+HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t source){
+	hpmmat4ud* d = destination;
+	hpmmat4ud* s = source;
+#ifndef __AVX__
+	d->t[0][0] = s->t[0][0];
+	d->t[0][1] = s->t[0][1];
+	d->t[1][0] = s->t[1][0];
+	d->t[1][1] = s->t[1][1];
+	d->t[2][0] = s->t[2][0];
+	d->t[2][1] = s->t[2][1];
+	d->t[3][0] = s->t[3][0];
+	d->t[3][1] = s->t[3][1];
+#else
+
 	destination[0] = source[0];
 	destination[1] = source[1];
 	destination[2] = source[2];
 	destination[3] = source[3];
+#endif
 }
 
 
@@ -47,11 +69,40 @@ HPM_IMP( void, hpm_mat4x4_division_mat4x4d, hpmvec4x4d_t larg, const double rarg
 }
 
 
+HPM_IMP( void, hpm_mat4x4_additition_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output){
+	output[0] = larg[0] + rarg[0];
+	output[1] = larg[1] + rarg[1];
+	output[2] = larg[2] + rarg[2];
+	output[3] = larg[3] + rarg[3];
+}
+HPM_IMP( void, hpm_mat4x4_additition_mat4x4dv, const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t output){
+	output[0] = larg[0] + rarg[0];
+	output[1] = larg[1] + rarg[1];
+	output[2] = larg[2] + rarg[2];
+	output[3] = larg[3] + rarg[3];
+}
+
+
+HPM_IMP( void, hpm_mat4x4_subraction_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t output){
+	output[0] = larg[0] - rarg[0];
+	output[1] = larg[1] - rarg[1];
+	output[2] = larg[2] - rarg[2];
+	output[3] = larg[3] - rarg[3];
+}
+HPM_IMP( void, hpm_mat4x4_subraction_mat4x4dv, const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t output){
+	output[0] = larg[0] - rarg[0];
+	output[1] = larg[1] - rarg[1];
+	output[2] = larg[2] - rarg[2];
+	output[3] = larg[3] - rarg[3];
+}
+
+
+
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t f_mat4){
-	const hpmvec4f row0 = {1, 0, 0, 0};
-	const hpmvec4f row1 = {0, 1, 0, 0};
-	const hpmvec4f row2 = {0, 0, 1, 0};
-	const hpmvec4f row3 = {0, 0, 0, 1};
+	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
+	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
 	f_mat4[0] = row0;
 	f_mat4[1] = row1;
 	f_mat4[2] = row2;
@@ -145,38 +196,45 @@ HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t f_mat4, const hpmvec3f* scale){
 	f_mat4[2] = row2;
 	f_mat4[3] = row3;
 }
-HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t d_mat4, const hpmvec3d* scale){
+HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t mat, const hpmvec3d* scale){
 	const hpmvec4d row0 = {(*scale)[0],0,0,0};
 	const hpmvec4d row1 = {0,(*scale)[1],0,0};
 	const hpmvec4d row2 = {0,0,(*scale)[2],0};
 	const hpmvec4d row3 = {0,0,0,1};
-	d_mat4[0] = row0;
-	d_mat4[1] = row1;
-	d_mat4[2] = row2;
-	d_mat4[3] = row3;
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t f_mat4, float x_radi){
-	const hpmvec4d row0 = {0,0,0,0};
-	const hpmvec4d row1 = {0,0,0,0};
-	const hpmvec4d row2 = {0,0,0,0};
-	const hpmvec4d row3 = {0,0,0,1};
-}
-HPM_IMP( void, hpm_mat4x4_rotationXd, hpmvec4x4d_t f_mat4, double x_radi){
+HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float x_radi){
 
+	const hpmvec4f row0 = {0,0,0,0};
+	const hpmvec4f row1 = {0,0,0,0};
+	const hpmvec4f row2 = {0,0,0,0};
+	const hpmvec4f row3 = {0,0,0,1};
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
-
-HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t f_mat4, float y_radi){
-
-}
-HPM_IMP( void, hpm_mat4x4_rotationYd, hpmvec4x4d_t f_mat4, float y_radi){
+HPM_IMP( void, hpm_mat4x4_rotationXd, hpmvec4x4d_t mat, double x_radi){
 
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t f_mat4, float z_radi){
+
+HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float y_radi){
 
 }
-HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t f_mat4, float z_radi){
+HPM_IMP( void, hpm_mat4x4_rotationYd, hpmvec4x4d_t mat, double y_radi){
+
+}
+
+
+HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t mat, float z_radi){
+
+}
+HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t mat, double z_radi){
 
 }
 
@@ -236,7 +294,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQdv, hpmvec4x4d_t f_mat4, const hpmquatd
 }
 
 
-HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspect, float f_near, float f_far){
+HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
 	const hpmvecf xScale = 1.0f / (tanf(HPM_DEG2RAD(f_fov * 0.5f)) * f_aspect);
 	const hpmvecf yScale = 1.0f / tanf(HPM_DEG2RAD(f_fov * 0.5f));
 	const hpmvecf zScale = (f_far + f_near) / (f_near - f_far);
@@ -247,12 +305,12 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t f_mat4, float f_fov, float f_aspe
 	const hpmvec4f row2 = {0.0f, 0.0f,zScale, -1.0f};
 	const hpmvec4f row3 = {0.0f, 0.0f,tScale, 0.0f};
 
-	f_mat4[0] = row0;
-	f_mat4[1] = row1;
-	f_mat4[2] = row2;
-	f_mat4[3] = row3;
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
-HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, double f_fov, double f_aspect, double f_near, double f_far){
+HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t mat, double f_fov, double f_aspect, double f_near, double f_far){
 	const hpmvecd xScale = 1.0 / (tan(HPM_DEG2RAD(f_fov * 0.5f)) * f_aspect);
 	const hpmvecd yScale = 1.0 / tan(HPM_DEG2RAD(f_fov * 0.5f));
 	const hpmvecd zScale = (f_far + f_near) / (f_near - f_far);
@@ -263,33 +321,35 @@ HPM_IMP( void, hpm_mat4x4_projdv, hpmvec4x4d_t f_mat4, double f_fov, double f_as
 	const hpmvec4d row2 = {0.0f, 0.0f,zScale, -1.0f};
 	const hpmvec4d row3 = {0.0f, 0.0f,tScale, 0.0f};
 
-	f_mat4[0] = row0;
-	f_mat4[1] = row1;
-	f_mat4[2] = row2;
-	f_mat4[3] = row3;
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t f_mat4, float f_right, float f_left, float f_top, float f_bottom, float f_far,float f_near){
+HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float f_right, float f_left, float f_top, float f_bottom, float f_far,float f_near){
+	/**/
 	const hpmvec4f row0 = {2.0f/(f_right - f_left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0, 2.0f/(f_top - f_bottom), 0.0f, 0.0};
 	const hpmvec4f row2 = {0.0, 0.0f,-2.0f/(f_far - f_near), 0.0 };
 	const hpmvec4f row3 = {-(f_right + f_left)/(f_right - f_left), -(f_top + f_bottom)/(f_top - f_bottom), -(f_far + f_near)/(f_far - f_near), 1.0};
-
-	f_mat4[0] = row0;
-	f_mat4[1] = row1;
-	f_mat4[2] = row2;
-	f_mat4[3] = row3;
+	/**/
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
-HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4d_t f_mat4, double f_right, double f_left, double f_top, double f_bottom, double f_far, double f_near){
+HPM_IMP( void, hpm_mat4x4_orthdv, hpmvec4x4d_t mat, double f_right, double f_left, double f_top, double f_bottom, double f_far, double f_near){
+	/**/
 	const hpmvec4d row0 = {2.0f/(f_right - f_left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4d row1 = {0.0, 2.0f/(f_top - f_bottom), 0.0f, 0.0};
 	const hpmvec4d row2 = {0.0, 0.0f,-2.0f/(f_far - f_near), 0.0 };
 	const hpmvec4d row3 = {-(f_right + f_left)/(f_right - f_left), -(f_top + f_bottom)/(f_top - f_bottom), -(f_far + f_near)/(f_far - f_near), 1.0};
-
-	f_mat4[0] = row0;
-	f_mat4[1] = row1;
-	f_mat4[2] = row2;
-	f_mat4[3] = row3;
+	/**/
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
 
 
