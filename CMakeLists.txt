@@ -11,29 +11,36 @@ endif()
 
 
 
+#	Extract tag version from git.
+EXECUTE_PROCESS(COMMAND git describe
+		COMMAND sed -e 's/[^0-9]*//g'
+		COMMAND cut -c1-1
+		OUTPUT_VARIABLE _hpm_major OUTPUT_STRIP_TRAILING_WHITESPACE
+		RESULT_VARIABLE _major_version_failed)
 
-EXECUTE_PROCESS(COMMAND " git describe | sed -e 's/[^0-9]*//g' | cut -c1-1 "
-#	    OUTPUT_VARIABLE _hpm_major OUTPUT_STRIP_TRAILING_WHITESPACE
-	    RESULT_VARIABLE _major_version_failed)
+EXECUTE_PROCESS(COMMAND git describe 
+		COMMAND sed -e 's/[^0-9].[^0-9]*//g'
+		COMMAND cut -c1-1
+		OUTPUT_VARIABLE _hpm_minor OUTPUT_STRIP_TRAILING_WHITESPACE
+		RESULT_VARIABLE _minor_version_failed)
 
-EXECUTE_PROCESS(COMMAND  " git describe | sed -e 's/[^0-9].[^0-9]*//g' | cut -c1-1 "
-#	    OUTPUT_VARIABLE _hpm_minor OUTPUT_STRIP_TRAILING_WHITESPACE
-	    RESULT_VARIABLE _minor_version_failed)
+EXECUTE_PROCESS(COMMAND git describe
+		COMMAND sed -e 's/[^0-9].[^0-9].[^0-9]*//g'
+		COMMAND cut -c1-2
+		OUTPUT_VARIABLE _hpm_revision OUTPUT_STRIP_TRAILING_WHITESPACE
+		RESULT_VARIABLE _revision_version_failed)
 
-EXECUTE_PROCESS(COMMAND "git describe | sed -e 's/[^0-9].[^0-9].[^0-9]*//g' | cut -c1-2"
-#	    OUTPUT_VARIABLE _hpm_revision OUTPUT_STRIP_TRAILING_WHITESPACE
-	    RESULT_VARIABLE _revision_version_failed)
-
-
-SET(HPM_VERSION_MAJOR ${_major_version_failed})
+#	hpm version setup.
+SET(HPM_VERSION_MAJOR ${_hpm_major})
 SET(HPM_VERSION_MINOR ${_hpm_minor})
 SET(HPM_VERSION_REVISION ${_hpm_revision})
 SET(HPM_VERSION ${HPM_VERSION_MAJOR}.${HPM_VERSION_MINOR}.${HPM_VERSION_REVISION} )
 
 
-
-
+MESSAGE(STATUS "Version ${HPM_VERSION}")
 #ADD_DEFINITIONS(-DHPM_MAJOR_VERSION=${HPM_VERSION_MAJOR})
+#ADD_DEFINITIONS(-DHPM_MINOR_VERSION=${HPM_VERSION_MINOR})
+#ADD_DEFINITIONS(-DHPM_REVISION_VERSION=${HPM_VERSION_REVISION})
 if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	IF(BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 		ADD_DEFINITIONS(-fPIC)
@@ -60,31 +67,45 @@ elseif(MSVC)
 endif()
 
 
+#	File source paths
 FILE (GLOB headers "include/*.h")
 FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quat_base.c )
 FILE (GLOB nosimdsource src/nosimd_* )
 FILE (GLOB allsimdsource src/allsimd_* )
 FILE (GLOB all_sse_source src/all_sse_*)
+FILE (GLOB sse_source src/sse_*)
+FILE (GLOB sse2_source src/sse2_*)
+FILE (GLOB sse3_source src/sse3_*)
+FILE (GLOB sse41_source src/sse41_*)
+FILE (GLOB sse42_source src/sse42_*)
+FILE (GLOB avx_source src/avx_*)
+FILE (GLOB avx2_source src/avx2_*)
 INCLUDE_DIRECTORIES(include)
 
+
+#
 ADD_LIBRARY(hpm src/hpm.c)
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
+#	Target for cpu with no supported simd extensions.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
 SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -O2 -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
+
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-
-#ADD_LIBRARY(hpmavx512 src/avx_matrix.c src/avx_vector.c ${basecore} )
+#ADD_LIBRARY(${avx512_source} ${basecore} )
 #SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
+#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
 
-ADD_LIBRARY(hpmavx2 src/avx2_matrix.c  ${basecore} ${allsimdsource})
+#	Target for AVX2
+ADD_LIBRARY(hpmavx2 ${avx2_source}  ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
-ADD_LIBRARY(hpmavx src/avx_matrix.c src/avx_vector.c ${basecore} ${allsimdsource})
+#	Target for AVX
+ADD_LIBRARY(hpmavx ${avx_source} ${basecore} ${allsimdsource})
 SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmavx -lm)
 
@@ -123,10 +144,11 @@ ENDIF()
 
 
 
-# add the install targets
+# Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
 INSTALL (TARGETS hpmnosimd DESTINATION lib)
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+#INSTALL (TARGETS hpmavx512 DESTINATION lib)
 INSTALL (TARGETS hpmavx2 DESTINATION lib)
 INSTALL (TARGETS hpmavx DESTINATION lib)
 #INSTALL (TARGETS hpmmmx DESTINATION lib)
@@ -140,8 +162,8 @@ ENDIF()
 IF(__arm__)
 INSTALL (TARGETS hpmneon DESTINATION lib)
 ENDIF()
-
 INSTALL (FILES ${headers} DESTINATION include/hpm)
+
 
 #	AND HPM_OPT_BUILD_PACKAGES
 if(CMAKE_CPACK_COMMAND AND UNIX AND HPM_OPT_BUILD_PACKAGES)
@@ -209,7 +231,6 @@ if(CMAKE_CPACK_COMMAND AND UNIX AND HPM_OPT_BUILD_PACKAGES)
 	SET(CPACK_COMPONENTS_ALL_IN_ONE_PACKAGE ON)
 	SET(CPACK_ARCHIVE_COMPONENT_INSTALL ON)
 
-
 	SET(CPACK_SOURCE_GENERATOR "TGZ")
 	SET(CPACK_SYSTEM_NAME "Linux")
 	SET(CPACK_TOPLEVEL_TAG "Linux")
@@ -218,6 +239,5 @@ if(CMAKE_CPACK_COMMAND AND UNIX AND HPM_OPT_BUILD_PACKAGES)
  	#INCLUDE(DebSourcePPA)
 
 ENDIF()
-
 
 
