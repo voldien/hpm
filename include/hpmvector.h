@@ -50,24 +50,23 @@ typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
 /*
  *
  */
-typedef hpmveci hpmvec4i HPM_VECTORALIGN(32);
+typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
+
+
+/*
+ * 	AVX	256 bits
+ */
+typedef hpmveci hpmvec8i HPM_VECTORALIGN(32);
+typedef hpmvecf hpmvec8f HPM_VECTORALIGN(32);
 typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
 
 /*
-typedef double __v4df __attribute__ ((__vector_size__ (32)));
-typedef float __v8sf __attribute__ ((__vector_size__ (32)));
-typedef long long __v4di __attribute__ ((__vector_size__ (32)));
-typedef int __v8si __attribute__ ((__vector_size__ (32)));
-typedef short __v16hi __attribute__ ((__vector_size__ (32)));
-typedef char __v32qi __attribute__ ((__vector_size__ (32)));
-
-typedef double __v2df __attribute__ ((__vector_size__ (16)));
-typedef long long __v2di __attribute__ ((__vector_size__ (16)));
-typedef int __v4si __attribute__ ((__vector_size__ (16)));
-typedef short __v8hi __attribute__ ((__vector_size__ (16)));
-typedef char __v16qi __attribute__ ((__vector_size__ (16)));
-*/
+ *	AVX512
+ */
+typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
+typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
+typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C"{

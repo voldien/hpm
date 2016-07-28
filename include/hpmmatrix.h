@@ -96,8 +96,8 @@ extern "C" {
 /**
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv, hpmvec4x4f_t  destination, const hpmvec4x4f_t  source);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t  source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t  source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t  source);
 
 /**
  *
