@@ -234,7 +234,7 @@
     #define HPMAPITHISENTRY JNICALL
     #define HPMAPISTDENTRY JNICALL
 #else
-#   if !defined(__cdecl) && defined(HPM_GNUC)
+#   if !defined(__cdecl) && ( defined(HPM_GNUC)  || defined(HPM_CLANG) )
         #define __cdecl  __attribute__ ((__cdecl__))
         #define __stdcall  __attribute__ ((stdcall))
 		#define __fastcall __attribute__((fastcall))
@@ -248,11 +248,10 @@
 /*
  *	Alignment of data and vectors.
  */
-#ifdef HPM_GNUC
+#if defined(HPM_GNUC) || defined(HPM_CLANG)
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
 	#define HPM_VECTORALIGN_(alignment) __attribute__ ((__vector_size__ (alignment)))
-
 #elif defined(HPM_VC)
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
