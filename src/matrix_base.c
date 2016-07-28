@@ -8,36 +8,6 @@
 #		include<x86intrin.h>
 #   endif
 
-
-
-HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t  destination, const hpmvec4x4f_t source){
-	destination[0] = source[0];
-	destination[1] = source[1];
-	destination[2] = source[2];
-	destination[3] = source[3];
-}
-HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t source){
-	hpmmat4ud* d = destination;
-	hpmmat4ud* s = source;
-#ifndef __AVX__
-	d->t[0][0] = s->t[0][0];
-	d->t[0][1] = s->t[0][1];
-	d->t[1][0] = s->t[1][0];
-	d->t[1][1] = s->t[1][1];
-	d->t[2][0] = s->t[2][0];
-	d->t[2][1] = s->t[2][1];
-	d->t[3][0] = s->t[3][0];
-	d->t[3][1] = s->t[3][1];
-#else
-
-	destination[0] = source[0];
-	destination[1] = source[1];
-	destination[2] = source[2];
-	destination[3] = source[3];
-#endif
-}
-
-
 HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;

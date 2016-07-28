@@ -92,3 +92,21 @@ HPM_IMP( void, hpm_quad_axisd, hpmquatf* lf_quad, float pitch_rad,float yaw_rad,
 	lf_quad[0][HPM_QUAD_Z] = (float)((double)num9 * (double)num6 * (double)num2 - (double)num8 * (double)num5 * (double)num3);
 	lf_quad[0][HPM_QUAD_W] = (float)((double)num9 * (double)num6 * (double)num3 + (double)num8 * (double)num6 * (double)num2);
 }
+
+
+
+
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out){
+
+}
+HPM_IMP( void, hpm_quat_lerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){
+
+}
+
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatd* out){
+
+}
+HPM_IMP( void, hpm_quat_slerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){
+
+}
+

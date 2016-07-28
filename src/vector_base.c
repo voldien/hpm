@@ -4,7 +4,7 @@
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
-#	elif defined(HPM_GNUC)
+#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #		include<x86intrin.h>
 #   endif
 
@@ -186,7 +186,6 @@ HPM_IMP( void, hpm_vec3_refractf, hpmvec3f* incidentVec, const hpmvec3f* normal,
 		*out = index0 * *incidentVec - tmp0 * *normal;
 	}
 }
-
 HPM_IMP( void, hpm_vec3_refractd, hpmvec3d* incidentVec, const hpmvec3d* normal, double index, hpmvec3d* out){
 	double N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
 	double k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
@@ -206,7 +205,6 @@ HPM_IMP( void, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hp
 	const hpmvec3f time = {t,t,t,t};
 	*out = (*a + (*b - *a) * time);
 }
-
 HPM_IMP( void, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
 	const hpmvec3d time = {t,t,t,t};
 	*out = (*a + (*b - *a) * time);

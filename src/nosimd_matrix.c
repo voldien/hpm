@@ -1,6 +1,12 @@
 #include"hpmmatrix.h"
 
 
+HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t  source){
+
+}
+HPM_IMP(void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t  source){
+
+}
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
 
@@ -34,7 +40,6 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmv
 	outf[3][2] = b30 * a02 + b31 * a12 + b32 * a22 + b33 * a32;
 	outf[3][3] = b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33;
 }
-
 HPM_IMP(void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t outf){
 
 	const hpmvecd a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
@@ -91,7 +96,6 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 				larg[3][3] * (*rarg)[3];
 
 }
-
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output){
 	(*output)[0] = larg[0][1] * (*rarg)[0] +
 				larg[0][1] * (*rarg)[1] +
@@ -121,7 +125,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmv
 
 
 
-
+/*	TODO add where its based from.	*/
 HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 	float dst[4];
 	float src[16];
@@ -162,7 +166,6 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
     return ( src[0]*dst[0]+src[1]*dst[1]+src[2]*dst[2]+src[3]*dst[3] );
 }
-
 HPM_IMP( double, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg){
 	double dst[4];
 	double src[16];
@@ -298,7 +301,6 @@ HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat, hpmvec4x4f_t out
 
 	return det;
 }
-
 HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t out){
 	float tmp[12]; /* temp array for pairs*/
 	float src[16]; /* array of transpose source matrix */
@@ -391,8 +393,6 @@ HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t ou
 		dst[j] *= det;
 }
 
-
-
 HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat4, float angle, const hpmvec3f* axis){
 
 }
@@ -404,7 +404,6 @@ HPM_IMP( void, hpm_mat4x4_rotationdv, hpmvec4x4d_t mat4, float angle, const hpmv
 HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat4, const hpmquatf* quat){
 
 }
-
 HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat4, const hpmquatd* quat){
 
 }
