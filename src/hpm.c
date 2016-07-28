@@ -259,8 +259,8 @@ int hpm_init(unsigned int simd){
 	hpm_quad_axisf = hpm_get_symbolfuncp(hpm_quad_axisf);
 	hpm_quad_axisd = hpm_get_symbolfuncp(hpm_quad_axisd);
 
-	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_quat_dotfv);
-	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_quat_dotdv);
+	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotf);
+	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotd);
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
 
@@ -294,4 +294,25 @@ void* hpm_get_address(const char* cfunctionName){
 
 int hpm_version(void){
 	return ( HPM_MAJOR_VERSION * 100 + HPM_MINOR_VERSION * 10 + HPM_REVISION_VERSION );
+}
+
+int hpm_supportcpufeat(unsigned int simd_extension){
+	switch(simd_extension){
+	case HPM_SSE:
+		break;
+	case HPM_SSE2:
+		break;
+	case HPM_SSE3:
+		break;
+	case HPM_SSE4_1:
+		break;
+	case HPM_SSE4_2:
+		break;
+	case HPM_AVX:
+		break;
+	case HPM_AVX2:
+		break;
+	default:
+		return -1;
+	}
 }

@@ -69,5 +69,10 @@ extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_version(void);
 
+/**
+ *	@Return
+ */
+extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int simd_extension);
+
 
 #endif
