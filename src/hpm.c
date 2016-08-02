@@ -269,7 +269,7 @@ int hpm_init(unsigned int simd){
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 	hpm_quat_slerpdv = hpm_get_symbolfuncp(hpm_quat_slerpdv);
 
-	error:	/*	error*/
+	error:	/*	error.	*/
 
 	return ( libhandle != NULL) ;
 }
@@ -296,22 +296,36 @@ int hpm_version(void){
 	return ( HPM_MAJOR_VERSION * 100 + HPM_MINOR_VERSION * 10 + HPM_REVISION_VERSION );
 }
 
+#include<cpuid.h>
+#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
+
 int hpm_supportcpufeat(unsigned int simd_extension){
+	int cpuInfo[4];
+	/*	TODO evalute if working as according.*/
 	switch(simd_extension){
+	case HPM_NOSIMD:
+		return 1;
 	case HPM_SSE:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[3] & bit_SSE);
 	case HPM_SSE2:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[3] & bit_SSE2);
 	case HPM_SSE3:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE3);
 	case HPM_SSE4_1:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE4_1);
 	case HPM_SSE4_2:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE4_2);
 	case HPM_AVX:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_AVX);
 	case HPM_AVX2:
-		break;
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[0] & bit_AVX2);
 	default:
 		return -1;
 	}
