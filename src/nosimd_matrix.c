@@ -2,10 +2,47 @@
 
 
 HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t  source){
+	destination[0][0] = source[0][0];
+	destination[0][1] = source[0][1];
+	destination[0][2] = source[0][2];
+	destination[0][3] = source[0][3];
+
+	destination[1][0] = source[1][0];
+	destination[1][1] = source[1][1];
+	destination[1][2] = source[1][2];
+	destination[1][3] = source[1][3];
+
+	destination[2][0] = source[2][0];
+	destination[2][1] = source[2][1];
+	destination[2][2] = source[2][2];
+	destination[2][3] = source[2][3];
+
+	destination[3][0] = source[3][0];
+	destination[3][1] = source[3][1];
+	destination[3][2] = source[3][2];
+	destination[3][3] = source[3][3];
 
 }
 HPM_IMP(void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t  source){
+	destination[0][0] = source[0][0];
+	destination[0][1] = source[0][1];
+	destination[0][2] = source[0][2];
+	destination[0][3] = source[0][3];
 
+	destination[1][0] = source[1][0];
+	destination[1][1] = source[1][1];
+	destination[1][2] = source[1][2];
+	destination[1][3] = source[1][3];
+
+	destination[2][0] = source[2][0];
+	destination[2][1] = source[2][1];
+	destination[2][2] = source[2][2];
+	destination[2][3] = source[2][3];
+
+	destination[3][0] = source[3][0];
+	destination[3][1] = source[3][1];
+	destination[3][2] = source[3][2];
+	destination[3][3] = source[3][3];
 }
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){

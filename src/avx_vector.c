@@ -11,7 +11,6 @@
 
 
 
-
 HPM_IMP(float, hpm_vec4_lengthf, const hpmvec4f* arg){
 	return _mm_cvtss_f32(_mm_sqrt_ss(*arg));
 }

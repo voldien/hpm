@@ -26,13 +26,13 @@
  */
 #ifndef HPM_MAJOR_VERSION
 	#define HPM_MAJOR_VERSION	0
-#endif
+#endif	/*	Not HPM_MAJOR_VERSION	*/
 #ifndef HPM_MINOR_VERSION
 	#define HPM_MINOR_VERSION		5
-#endif
+#endif	/*	Not HPM_MINOR_VERSION	*/
 #ifndef HPM_REVISION_VERSION
 	#define HPM_REVISION_VERSION 	0
-#endif
+#endif	/*	Not HPM_REVISION_VERSION	*/
 
 
 /**
@@ -102,13 +102,13 @@
 #if defined(__GNUC__) && defined(__ARM_NEON__)
      /* GCC-compatible compiler, targeting ARM with NEON */
      #include <arm_neon.h>
-#endif
+#endif	/**/
 
 
-/*
-	Platform define
-	Architecture!
-*/
+/**
+ *	Platform define
+ *	Architecture!
+ */
 #ifdef HPM_VC
 	#if defined(_M_IX86) || defined(_WIN32)
 		#define HPM_X86                          /**/
@@ -322,33 +322,34 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
  */
 #define _HPM_MATH_H_
 #ifdef _HPM_MATH_H_
-	#define HPM_PI				3.14159265358979323846  /* pi */
-	#define HPM_PI_2			1.57079632679489661923  /* pi/2 */
-	#define HPM_PI_4			0.78539816339744830962  /* pi/4 */
-	#define HPM_E				2.7182818284590452354   /* e */
-	#define HPM_LOG2E			1.4426950408889634074   /* log_2 e */
-	#define HPM_LOG10E			0.43429448190325182765  /* log_10 e */
-	#define HPM_LN2           	0.69314718055994530942  /* log_e 2 */
-	#define HPM_LN10          	2.30258509299404568402  /* log_e 10 */
-	#define HPM_1_PI          	0.31830988618379067154  /* 1/pi */
-	#define HPM_2_PI          	0.63661977236758134308  /* 2/pi */
-	#define HPM_2_SQRTPI      	1.12837916709551257390  /* 2/sqrt(pi) */
-	#define HPM_SQRT2         	1.41421356237309504880  /* sqrt(2) */
-	#define HPM_SQRT1_2       	0.70710678118654752440  /* 1/sqrt(2) */
-#endif
+	#define HPM_PI				3.14159265358979323846  	/* pi */
+	#define HPM_PI_2			1.57079632679489661923  	/* pi/2 */
+	#define HPM_PI_4			0.78539816339744830962  	/* pi/4 */
+	#define HPM_E				2.7182818284590452354   	/* e */
+	#define HPM_LOG2E			1.4426950408889634074   	/* log_2 e */
+	#define HPM_LOG10E			0.43429448190325182765  	/* log_10 e */
+	#define HPM_LN2           	0.69314718055994530942  	/* log_e 2 */
+	#define HPM_LN10          	2.30258509299404568402  	/* log_e 10 */
+	#define HPM_1_PI          	0.31830988618379067154  	/* 1/pi */
+	#define HPM_2_PI          	0.63661977236758134308  	/* 2/pi */
+	#define HPM_2_SQRTPI      	1.12837916709551257390  	/* 2/sqrt(pi) */
+	#define HPM_SQRT2         	1.41421356237309504880  	/* sqrt(2) */
+	#define HPM_SQRT1_2       	0.70710678118654752440  	/* 1/sqrt(2) */
+#endif	/*	_HPM_MATH_H_	*/
 
-/**/
+/**
+ *
+ */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
 #define HPM_RAD2DEG( a ) ( ( (a) * 180.0 ) / HPM_PI )
 
-/**/
+/**
+ *
+ */
 #define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 #define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
 #define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
 #define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 
 
-#endif
-
-
-
+#endif	/*	Not _HPM_DEF_H_*/

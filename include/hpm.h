@@ -23,56 +23,90 @@
 #include"hpmquaternion.h"
 
 /**
- *	hpm follows opengl structure for how row and coloum is defiend for the
- *	matrix.
+ * 	Main hpm library header file. Hpm library has be initialize be being
+ * 	able to utilize the library.
  */
 
+
+#ifdef __cplusplus /*	C++ Environment	*/
+extern "C" {
+#endif
+
 /**
- *
+ *	Function data types.
+ */
+typedef int (HPMAPIENTRY PHPMINIT)(unsigned int simd);
+typedef int (HPMAPIENTRY PHPMRELEASE)(void);
+typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionname);
+typedef int (HPMAPIENTRY PHPMVERSION)(void);
+typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
+
+
+/**
+ *	SIMD extensions flags.
  */
 #define HPM_NOSIMD		(0 << 0)	/*	No SIMD hardware feature.	*/
 #define HPM_MMX			(1 << 0)	/*	MMX. (Yet not supported)	*/
-#define HPM_SSE			(1 << 1)	/*	SSE.	*/
-#define HPM_SSE2		(1 << 2)	/*	SSE2.	*/
-#define HPM_SSE3		(1 << 3)	/*	SSE3.	*/
-#define HPM_SSSE3		(1 << 4)	/*	SSSE3.	*/
-#define HPM_SSE4_1		(1 << 5)	/*	SSE4.1.	*/
-#define HPM_SSE4_2		(1 << 6)	/*	SSE4.2.	*/
+#define HPM_SSE			(1 << 1)	/*	SSE (Streaming SIMD Extensions).	*/
+#define HPM_SSE2		(1 << 2)	/*	SSE2 (Streaming SIMD Extensions).	*/
+#define HPM_SSE3		(1 << 3)	/*	SSE3 (Streaming SIMD Extensions).	*/
+#define HPM_SSSE3		(1 << 4)	/*	SSSE3 (Streaming SIMD Extensions).	*/
+#define HPM_SSE4_1		(1 << 5)	/*	SSE4.1 (Streaming SIMD Extensions).	*/
+#define HPM_SSE4_2		(1 << 6)	/*	SSE4.2 (Streaming SIMD Extensions).	*/
 #define HPM_AVX			(1 << 7)	/*	AVX Version 1 (Advanced Vector Extension).	*/
 #define HPM_AVX2		(1 << 8)	/*	AVX Version 2 (Advanced Vector Extension).	*/
 #define HPM_AVX512		(1 << 9)	/*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-#define HPM_NEON		(1 << 10)	/*	ARM	fpu(floating-point unit) feature.	*/
+#define HPM_NEON		(1 << 10)	/*	ARM	FPU (floating-point unit) feature.	*/
+#define HPM_SVML		(1 << 30)	/*	Future feature.	*/
+#define HPM_ACML		(1 << 31)	/*	Future feature.	*/
 
 
 /**
- *	initialize hpm.
- *	@Return
+ *	Initialize hpm library by assigning all function pointer in respect
+ *	to what SIMD (Single Instruction multiple data) extension chosen.
+ *
+ *	\SIMD what SIMD (Single Instruction multiple data) extension.
+ *
+ *	@Return 1 if successfully initialized. 0 if there was a failure.
  */
-extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int simd);
+extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int SIMD);
 
 /**
- *	Release library.
- *	@Return
+ *	Release library which all the function pointer associates with.
+ *	This means all the function pointer will become invalid.
+ *
+ *	@Return 1
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
 /**
- *	Get function pointer address.
+ *	Get function pointer address by its symbol name.
+ *
  *	\cfunctionName
- *	@Return func pointer
+ *
+ *	@Return func pointer to the function. if NULL then the cfunctionName was valid.
  */
 extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
 
 /**
  *	Get hpm version.
+ *
  *	@Return
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_version(void);
 
 /**
- *	@Return
+ *	Determine if SIMD extension is supported on the CPU.
+ *
+ *	\SIMD SIMD extension to check if supported on the CPU.
+ *
+ *	@Return 1 if supported. 0 if not supported.
  */
-extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int simd_extension);
+extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int SIMD);
 
 
+#ifdef __cplusplus /*	C++ Environment	*/
+}
 #endif
+
+#endif	/*	_HPM_H_	*/

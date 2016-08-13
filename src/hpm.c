@@ -4,10 +4,16 @@
 #include"hpmquaternion.h"
 #include <dlfcn.h>
 
+/**
+ *
+ *
+ */
 
 
-/*	library handle.	*/
+/*	library handle.
+ 	NULL means that there is no library open.	*/
 void* libhandle = NULL;
+
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
 
 
@@ -15,6 +21,7 @@ int hpm_init(unsigned int simd){
 	int closestatus;
 	char* libpath;
 
+	/**/
 	switch(simd){
 	case HPM_MMX:
 		libpath = "libhpmmmx.so";
@@ -51,6 +58,7 @@ int hpm_init(unsigned int simd){
 		break;
 	case HPM_NOSIMD:
 	default:
+		fprintf(stderr, "Not a valid simd.");
 		libpath = "libhpmnosimd.so";
 		break;
 	}
@@ -60,8 +68,7 @@ int hpm_init(unsigned int simd){
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
 	}
 
-
-	/*	*/
+	/*	error checks.	*/
 	if(libhandle == NULL){
 		fprintf(stderr, "%s\n", dlerror());
 		goto error;
@@ -296,15 +303,19 @@ int hpm_version(void){
 	return ( HPM_MAJOR_VERSION * 100 + HPM_MINOR_VERSION * 10 + HPM_REVISION_VERSION );
 }
 
+/*	TODO resolve for non x86 and non x86_64 cpu*/
 #include<cpuid.h>
 #define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
 
-int hpm_supportcpufeat(unsigned int simd_extension){
+int hpm_supportcpufeat(unsigned int simd){
 	int cpuInfo[4];
-	/*	TODO evalute if working as according.*/
-	switch(simd_extension){
+	/*	TODO evaluate if working as accordingly.*/
+	switch(simd){
 	case HPM_NOSIMD:
 		return 1;
+	case HPM_MMX:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);
 		return (cpuInfo[3] & bit_SSE);
@@ -314,6 +325,9 @@ int hpm_supportcpufeat(unsigned int simd_extension){
 	case HPM_SSE3:
 		cpuid(cpuInfo, 1);
 		return (cpuInfo[2] & bit_SSE3);
+	case HPM_SSSE3:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSSE3);
 	case HPM_SSE4_1:
 		cpuid(cpuInfo, 1);
 		return (cpuInfo[2] & bit_SSE4_1);
