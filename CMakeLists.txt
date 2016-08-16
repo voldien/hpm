@@ -12,20 +12,20 @@ endif()
 
 
 #	Extract tag version from git.
-EXECUTE_PROCESS(COMMAND git describe
-		COMMAND sed -e 's/[^0-9]*//g'
+execute_process(COMMAND git describe
+		COMMAND sed -e "s/[^0-9]*//g"
 		COMMAND cut -c1-1
 		OUTPUT_VARIABLE _hpm_major OUTPUT_STRIP_TRAILING_WHITESPACE
 		RESULT_VARIABLE _major_version_failed)
 
-EXECUTE_PROCESS(COMMAND git describe 
-		COMMAND sed -e 's/[^0-9].[^0-9]*//g'
+execute_process(COMMAND git describe
+		COMMAND sed -e "s/[^0-9].[^0-9]*//g"
 		COMMAND cut -c1-1
 		OUTPUT_VARIABLE _hpm_minor OUTPUT_STRIP_TRAILING_WHITESPACE
 		RESULT_VARIABLE _minor_version_failed)
 
-EXECUTE_PROCESS(COMMAND git describe
-		COMMAND sed -e 's/[^0-9].[^0-9].[^0-9]*//g'
+execute_process(COMMAND git describe
+		COMMAND sed -e "s/[^0-9].[^0-9].[^0-9]*//g"
 		COMMAND cut -c1-2
 		OUTPUT_VARIABLE _hpm_revision OUTPUT_STRIP_TRAILING_WHITESPACE
 		RESULT_VARIABLE _revision_version_failed)
@@ -121,7 +121,7 @@ ADD_LIBRARY(hpmsse2 src/sse_matrix.c  ${basecore} ${allsimdsource} ${all_sse_sou
 SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
-ADD_LIBRARY(hpmsse3 src/sse_matrix.c src/sse3_vector.c  ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse3 src/sse_matrix.c ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
