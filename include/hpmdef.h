@@ -27,9 +27,11 @@
 #ifndef HPM_MAJOR_VERSION
 	#define HPM_MAJOR_VERSION	0
 #endif	/*	Not HPM_MAJOR_VERSION	*/
+
 #ifndef HPM_MINOR_VERSION
 	#define HPM_MINOR_VERSION		5
 #endif	/*	Not HPM_MINOR_VERSION	*/
+
 #ifndef HPM_REVISION_VERSION
 	#define HPM_REVISION_VERSION 	0
 #endif	/*	Not HPM_REVISION_VERSION	*/
@@ -220,7 +222,7 @@
 
 
 
-/*
+/**
  *	Calling function convention.
  */
 #ifdef HPM_WINDOWS	        /** Windows Calling Convention.*/
@@ -245,7 +247,7 @@
 #endif
 
 
-/*
+/**
  *	Alignment of data and vectors.
  */
 #if defined(HPM_GNUC) || defined(HPM_CLANG)
@@ -279,12 +281,14 @@
 /**
  *
  */
-#define HPM_STR_HELPER(x) #x
+#define HPM_STR_HELPER(x) #x										/**/
 #define HPM_STR(x) HPM_STR_HELPER(x)								/*	String helper macro.	*/
-#define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare func internal symbol name.	*/
+#define HPM_TEXT(quote) quote										/*	*/
+
+#define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare function internal symbol name.	*/
 #define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
-#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Declare	*/
+#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
 
 
 /**
@@ -336,6 +340,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 	#define HPM_SQRT2         	1.41421356237309504880  	/* sqrt(2) */
 	#define HPM_SQRT1_2       	0.70710678118654752440  	/* 1/sqrt(2) */
 #endif	/*	_HPM_MATH_H_	*/
+
 
 /**
  *
