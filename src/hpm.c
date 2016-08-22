@@ -14,8 +14,10 @@
  	NULL means that there is no library open.	*/
 void* libhandle = NULL;
 
+/**
+ *
+ */
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
-
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -161,6 +163,8 @@ int hpm_init(unsigned int simd){
 	/**/
 	hpm_mat2x2_copyfv = hpm_get_symbolfuncp(hpm_mat2x2_copyfv);
 	hpm_mat2x2_copydv = hpm_get_symbolfuncp(hpm_mat2x2_copydv);
+	hpm_mat2x2_multiply_mat2x2f = hpm_get_symbolfuncp(hpm_mat2x2_multiply_mat2x2f);
+	hpm_mat2x2_multiply_mat2x2d = hpm_get_symbolfuncp(hpm_mat2x2_multiply_mat2x2d);
 
 
 
@@ -211,6 +215,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
 	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
 
+	/**/
 	hpm_vec3_dotf = hpm_get_symbolfuncp(hpm_vec3_dotf);
 	hpm_vec3_dotd = hpm_get_symbolfuncp(hpm_vec3_dotd);
 	hpm_vec3_lengthf = hpm_get_symbolfuncp(hpm_vec3_lengthf);
@@ -234,7 +239,6 @@ int hpm_init(unsigned int simd){
 
 
 
-
 	/*	quaternion	*/
 	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
 	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
@@ -251,26 +255,28 @@ int hpm_init(unsigned int simd){
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
 
+	/*	Because some function for quaternion is computed the same as some vec4 function, thus we're using their pointer instead. */
 	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthf);
 	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthd);
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
 	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsqured);
 	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizef);
 	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_vec4_normalized);
+	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotf);
+	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotd);
+
+	/**/
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
 	hpm_quat_inversedv = hpm_get_symbolfuncp(hpm_quat_inversedv);
-
-
+	/**/
 	hpm_quad_axis_anglefv = hpm_get_symbolfuncp(hpm_quad_axis_anglefv);
 	hpm_quad_axis_angledv = hpm_get_symbolfuncp(hpm_quad_axis_angledv);
 	hpm_quad_axisf = hpm_get_symbolfuncp(hpm_quad_axisf);
 	hpm_quad_axisd = hpm_get_symbolfuncp(hpm_quad_axisd);
-
-	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotf);
-	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotd);
+	/**/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
-
+	/**/
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
@@ -299,8 +305,9 @@ void* hpm_get_address(const char* cfunctionName){
 	return ( pfunc );
 }
 
-int hpm_version(void){
-	return ( HPM_MAJOR_VERSION * 100 + HPM_MINOR_VERSION * 10 + HPM_REVISION_VERSION );
+#define HPM_COMPILER_VERSION(major, minor, revision) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
+const char* hpm_version(void){
+	return HPM_COMPILER_VERSION(HPM_MAJOR_VERSION, HPM_MINOR_VERSION, HPM_REVISION_VERSION);
 }
 
 /*	TODO resolve for non x86 and non x86_64 cpu*/
