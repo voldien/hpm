@@ -1,7 +1,7 @@
 #include"hpmmatrix.h"
 
 
-HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t  source){
+HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
 	destination[0][0] = source[0][0];
 	destination[0][1] = source[0][1];
 	destination[0][2] = source[0][2];
@@ -23,7 +23,7 @@ HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t  s
 	destination[3][3] = source[3][3];
 
 }
-HPM_IMP(void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t  source){
+HPM_IMP(void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source){
 	destination[0][0] = source[0][0];
 	destination[0][1] = source[0][1];
 	destination[0][2] = source[0][2];
@@ -112,21 +112,22 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmve
 }
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
+	/*	X	*/
 	(*output)[0] = larg[0][1] * (*rarg)[0] +
 				larg[0][1] * (*rarg)[1] +
 				larg[0][2] * (*rarg)[2] +
 				larg[0][3] * (*rarg)[3];
-
+	/*	Y	*/
 	(*output)[1] = larg[1][0] * (*rarg)[0] +
 				larg[1][1] * (*rarg)[1] +
 				larg[1][2] * (*rarg)[2] +
 				larg[1][3] * (*rarg)[3];
-
+	/*	Z	*/
 	(*output)[2] = larg[2][0] * (*rarg)[0] +
 				larg[2][1] * (*rarg)[1] +
 				larg[2][2] * (*rarg)[2] +
 				larg[2][3] * (*rarg)[3];
-
+	/*	W	*/
 	(*output)[3] = larg[3][0] * (*rarg)[0] +
 				larg[3][1] * (*rarg)[1] +
 				larg[3][2] * (*rarg)[2] +
@@ -154,9 +155,6 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmv
 				larg[3][2] * (*rarg)[2] +
 				larg[3][3] * (*rarg)[3];
 }
-
-
-
 
 
 
@@ -428,14 +426,42 @@ HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t ou
 	det = 1/det;
 	for (j = 0; j < 16; j++)
 		dst[j] *= det;
+
+	return det;
+}
+
+
+HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
+	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
+	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
+}
+HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4){
+	const hpmvec4d row0 = {1.0, 0.0, 0.0, 0.0};
+	const hpmvec4d row1 = {0.0, 1.0, 0.0, 0.0};
+	const hpmvec4d row2 = {0.0, 0.0, 1.0, 0.0};
+	const hpmvec4d row3 = {0.0, 0.0, 0.0, 1.0};
+	d_mat4[0] = row0;
+	d_mat4[1] = row1;
+	d_mat4[2] = row2;
+	d_mat4[3] = row3;
 }
 
 HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat4, float angle, const hpmvec3f* axis){
+	cosf(angle);
 
 }
 HPM_IMP( void, hpm_mat4x4_rotationdv, hpmvec4x4d_t mat4, float angle, const hpmvec3d* axis){
+	cosf(angle);
 
 }
+
+
 
 
 HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat4, const hpmquatf* quat){
@@ -453,4 +479,12 @@ HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat4, const hpmquatd* quat){
 
 
 
+
+
+HPM_IMP( void, hpm_mat2x2_multiply_mat2x2f, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output){
+
+}
+HPM_IMP( void, hpm_mat2x2_multiply_mat2x2d, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output){
+
+}
 

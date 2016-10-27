@@ -9,6 +9,23 @@
 
 
 
+HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source){
+	*destination = *source;
+}
+
+
+
+
+HPM_IMP(float, hpm_vec4_dotf, const hpmvec4f* larg, const hpmvec4f* rarg){
+	const hpmvec4f lvMult = *larg * *rarg;
+
+
+
+}
+HPM_IMP(double, hpm_vec4_dotd, const hpmvec4d* larg, const hpmvec4d* rarg){
+
+}
+
 
 
 HPM_IMP(float, hpm_vec4_lengthf, const hpmvec4f* arg){

@@ -59,15 +59,22 @@ int hpm_init(unsigned int simd){
 		libpath = "libhpmneon.so";
 		break;
 	case HPM_NOSIMD:
-	default:
-		fprintf(stderr, "Not a valid simd.");
 		libpath = "libhpmnosimd.so";
 		break;
+	default:
+		fprintf(stderr, "Not a valid SIMD extension.");
+		return -2;
 	}
 
 	/*	load library.	*/
 	if(libhandle == NULL){
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
+	}else{
+		/*	if library has only been initialized.	*/
+		/*
+		hpm_release();
+		return hpm_init(simd);
+		*/
 	}
 
 	/*	error checks.	*/
@@ -310,6 +317,9 @@ const char* hpm_version(void){
 	return HPM_COMPILER_VERSION(HPM_MAJOR_VERSION, HPM_MINOR_VERSION, HPM_REVISION_VERSION);
 }
 
+
+
+
 /*	TODO resolve for non x86 and non x86_64 cpu*/
 #include<cpuid.h>
 #define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
@@ -345,8 +355,10 @@ int hpm_supportcpufeat(unsigned int simd){
 		cpuid(cpuInfo, 1);
 		return (cpuInfo[2] & bit_AVX);
 	case HPM_AVX2:
-		cpuid(cpuInfo, 1);
+		cpuid(cpuInfo, 7);
 		return (cpuInfo[0] & bit_AVX2);
+	case HPM_NEON:
+		return -1;
 	default:
 		return -1;
 	}

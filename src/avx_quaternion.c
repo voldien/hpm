@@ -15,20 +15,20 @@ HPM_IMP( void, hpm_quat_copyd, hpmquatf* destination, const hpmquatf* source){
 	*destination = *source;
 }
 
-HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
-	const hpmquatf conj = {-1.0, -1.0, -1.0, 1.0};
-	*larg *= conj;
+
+
+
+
+HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
+
 }
-HPM_IMP( void, hpm_quat_conjugatedv, hpmquatd* larg){
-	const hpmquatd conj = {-1.0, -1.0, -1.0, 1.0};
-	*larg *= conj;
+HPM_IMP( void, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
+
 }
 
-HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
-	const hpmquatf iden = {1.0f, 0.0f, 0.0f, 0.0f};
-	*out = iden;
+HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
+
 }
-HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
-	const hpmquatd iden = {1.0, 0.0, 0.0, 0.0};
-	*out = iden;
+HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
+
 }

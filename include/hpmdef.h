@@ -230,7 +230,7 @@
 	#define HPMAPIFASTENTRY __fastcall
 	#define HPMAPITHISENTRY __thiscall
 	#define HPMAPISTDENTRY  __stdcall
-#elif defined(HPM_ANDROID)   /** Android Calling Convention*/
+#elif defined(HPM_ANDROID)   /** Android Calling Convention	*/
     #define HPMAPIENTRY JNICALL
     #define HPMAPIFASTENTRY JNICALL
     #define HPMAPITHISENTRY JNICALL
@@ -263,11 +263,11 @@
 
 
 
-/*
+/**
  *	library declaration.
  */
 #ifdef HPM_GNUC
-	#define HPMDECLSPEC /*__attribute__((__visibility__ ("default")))	*/
+	#define HPMDECLSPEC	/*__attribute__((__visibility__ ("default")))	*/
 #elif defined(HPM_VC)
 	#define HPMDECLSPEC __declspec(dllexport)
 #endif
@@ -281,7 +281,7 @@
 /**
  *
  */
-#define HPM_STR_HELPER(x) #x										/**/
+#define HPM_STR_HELPER(x) #x										/*	*/
 #define HPM_STR(x) HPM_STR_HELPER(x)								/*	String helper macro.	*/
 #define HPM_TEXT(quote) quote										/*	*/
 
@@ -325,6 +325,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
  *	HPM math constants.
  */
 #define _HPM_MATH_H_
+#include<math.h>
 #ifdef _HPM_MATH_H_
 	#define HPM_PI				3.14159265358979323846  	/* pi */
 	#define HPM_PI_2			1.57079632679489661923  	/* pi/2 */
@@ -351,10 +352,18 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 /**
  *
  */
-#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
-#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
-#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
+#ifdef __SSE4__
+	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
+#else
+	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
+#endif
+
 
 
 #endif	/*	Not _HPM_DEF_H_*/

@@ -79,6 +79,9 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int SIMD);
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
+
+extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
+
 /**
  *	Get function pointer address by its symbol name.
  *

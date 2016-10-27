@@ -45,35 +45,15 @@ HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg,
 	/* now we only need to shuffle the components in place and return the result      */
 	*out = _mm_shuffle_ps(XZWY, XZWY, _MM_SHUFFLE(2,1,3,0));
 }
-
 HPM_IMP( void, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
 
 }
 
-HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){}
-HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){}
+HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
 
+}
+HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
 
-
-
-
-
-
-
-
-
-
-
-
-
-HPM_IMP( float, hpm_quat_lengthfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out){}
-HPM_IMP( double, hpm_quat_lengthdv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out){}
-
-HPM_IMP( float, hpm_quat_lengthsqurefv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out){}
-HPM_IMP( double, hpm_quat_lengthsquredv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out){}
-
-
-HPM_IMP( void, hpm_quat_normalizefv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out){}
-HPM_IMP( void, hpm_quat_normalizedv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out){}
+}
 
 

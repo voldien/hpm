@@ -23,42 +23,46 @@
 extern "C"{
 #endif
 
-/*
+/**
+ *
  *
  */
 typedef float hpmvecf;
 typedef double hpmvecd;
 typedef int hpmveci;
+typedef long long hpmvec1di;
+typedef char hpmvecqi;
 
-/*
+/**
  *
  */
 typedef float hpmvecfv HPM_VECTORALIGN(4);
 typedef double hpmvecdv HPM_VECTORALIGN(8);
 typedef int hpmveciv HPM_VECTORALIGN(4);
+typedef char hpmvecqiv HPM_VECTORALIGN(4);
 
-/*
+/**
  *
  */
 typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);
 typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);
 typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);
 
-/*
+/**
  *
  */
 typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);
 typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
 
-/*
+/**
  *	SEE 128 bit
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
 
 
-/*
+/**
  * 	AVX	256 bits
  */
 typedef hpmveci hpmvec8i HPM_VECTORALIGN(32);
@@ -66,14 +70,19 @@ typedef hpmvecf hpmvec8f HPM_VECTORALIGN(32);
 typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
 
 /*
- *	AVX512
+ *	AVX 512 bits
  */
 typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
 typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
 typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
 
+
+
+
+
 /**
- *
+ *	Copy vector4 source to destination.
+ *	destination = source
  *
  *	\destination
  *
@@ -83,14 +92,20 @@ typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyf, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source);
 
-
 /**
+ *	Perform addition with two 1x4 vectors.
+ *	larg = larg * rarg
+ *
+ *	\larg
+ *
+ *	\arg
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg, const hpmvecf rarg);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scaled, hpmvec4d* larg, const hpmvecd rarg);
 
 /**
+ *
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg, const hpmvecf rarg);
@@ -113,9 +128,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg, const floa
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg);
 
 /**
- *	Compute dot product.
+ *	Compute dot product of two 1x4 vectors.
+ *	Because dot product is associatve, which means
+ *	that the order you put the two vectors won't matter.
+ *	|larg||rarg|cos(x)
  *
+ *	\larg left side argument
  *
+ *	\rarg right side argument.
  *
  *	@Return
  */
@@ -124,7 +144,8 @@ HPM_EXPORT( double, HPMAPIENTRY, hpm_vec4_dotd, const hpmvec4d* larg, const hpmv
 
 
 /**
- *
+ *	Compute vector length.
+ *	sqrt(x * x + y * y + z * z + w * w)
  *
  *	@Return
  */
@@ -132,14 +153,18 @@ HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthf, const hpmvec4f* arg);
 HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_vec4_lengthd, const hpmvec4d* arg);
 
 /**
+ *	Compute vector square length.
+*	(x * x + y * y + z * z + w * w)
  *
- *
+ *	@Return
  */
 HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthsquref, const hpmvec4f* arg);
 HPM_EXPORT( double, HPMAPIFASTENTRY, hpm_vec4_lengthsqured, const hpmvec4d* arg);
 
 /**
- *	Normalize vector4 with length 1.0.
+ *	Normalize 1x4 vector with length 1.0. The direction of
+ *	the vector will remain as the same.
+ *	arg = arg / |arg|
  *
  *	\arg
  *
@@ -148,12 +173,13 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_normalizef, hpmvec4f* arg);
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_normalized, hpmvec4d* arg);
 
 /**
- *	Negate vector4
+ *	Negate vector by multiply each component of the vector by -1.
+ *	arg = arg * -1
  *
  *	\arg
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_negatef, hpmvec4f* arg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_negated, hpmvec4d* arg);
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negatef, hpmvec4f* arg);
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negated, hpmvec4d* arg);
 
 /**
  *
@@ -171,16 +197,29 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_refractd, hpmvec4f* arg);
 
 /**
  *	Linear interpolation between a and b in respect to t.
+ *	out = (a + (b -a) * t)
  *
- *	\t
+ *	\a	start vector
  *
+ *	\b	end vector
  *
+ *	\t time
+ *
+ *	\out
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpd, const hpmvec4d* a, const hpmvec4d* b, double t, hpmvec4d* out);
 
 /**
- *	Spherical Interpolation between a and b in respect to t.
+ *	Spherical interpolation between a and b in respect to t.
+ *
+ *	\a
+ *
+ *	\b
+ *
+ *	\t
+ *
+ *	\out
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpf, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out);
@@ -190,14 +229,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4
 
 
 
-#define CrossProduct(x,y,c)	{c[0] = ((x[1] * y[2]) - (x[2] * y[1])); c[1] = ((x[2] * y[0]) - (x[0] * y[2])); c[2] = ((x[0] * y[1]) - (x[1] * y[0]));}
-#define VectorScale(a,b,c) {c[0]=b*a[0];c[1]=b*a[1];c[2]=b*a[2];}
-#define VectorProduct(a,b,c) {c[0] = a[0]*b[0];c[1] = a[1]*b[1];c[2] = a[2]*b[2];}
-#define VectorNormalize(x) {float length = VectorLength(x); x[0] /= length; x[1] /= length; x[2] /= length;}
-#define VectorReflect(x,n,y)	{y[0] = 2.0f *( x[0] * n[0]) * n[0] - x[0];y[0] = 2.0f *( x[1] * n[1]) * n[1] - x[1];y[2] = 2.0f *( x[2] * n[2]) * n[2] - x[2];}
-#define VectorOrthoNormalize(x,y) { float length;}
-#define VectorProj(x,y,c)	{float lengthy = VectorLength(y);float dot = DotProduct(x,y); c[0] = dot * x[0] / lengthy;  c[1] = dot * x[1] / lengthy;  c[2] = dot * x[2] / lengthy; }
-#define VectorLerp(x,y,t,c)	{}
+
+
 
 
 /**
@@ -333,10 +366,12 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projd, const hpmvec3d* a, const hpmvec3d
  */
 
 
+
 /**
  *	Copy source matrix to destination matrix.
  *
  *	\destination
+ *
  *	\source
  *
  */

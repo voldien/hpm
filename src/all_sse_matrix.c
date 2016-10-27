@@ -29,9 +29,7 @@ HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t 
 	d->t[3][1] = s->t[3][1];
 }
 
-
-
-HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf_mat4){
+HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t out ){
 	int i;
 
 	for(i = 0; i < 4; i++){
@@ -47,20 +45,60 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmve
 						_mm_add_ps(
 							_mm_mul_ps(brod3, rarg[2]),
 							_mm_mul_ps(brod4, rarg[3])));
-		outf_mat4[i] = row;
+		out [i] = row;
 
 	}
 }
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmvec4x4d_t rarg, hpmvec4x4d_t output){
+	int i;
 
+	for(i = 0; i < 4; i++){
+
+	}
 }
 
-
-
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
-
+	(*output)[0] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[0], rarg);
+	(*output)[1] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[1], rarg);
+	(*output)[2] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[2], rarg);
+	(*output)[3] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[3], rarg);
 }
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output){
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
+	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
+	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
+}
+HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t mat){
+	const hpmvec4d row0 = {1.0, 0.0, 0.0, 0.0};
+	const hpmvec4d row1 = {0.0, 1.0, 0.0, 0.0};
+	const hpmvec4d row2 = {0.0, 0.0, 1.0, 0.0};
+	const hpmvec4d row3 = {0.0, 0.0, 0.0, 1.0};
+	hpmmat4ud* dmat = mat;	/*	TODO FIX.	*/
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
+}
+
+
 

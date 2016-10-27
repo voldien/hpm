@@ -9,8 +9,8 @@
 
 
 
-HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t f_mat4){
-	_MM_TRANSPOSE4_PS(f_mat4[0], f_mat4[1], f_mat4[2], f_mat4[3]);
+HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
+	_MM_TRANSPOSE4_PS(mat[0], mat[1], mat[2], mat[3]);
 }
 
 HPM_IMP( void, hpm_mat4x4_transposedv, hpmvec4x4d_t f_mat4){

@@ -4,7 +4,7 @@
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
-#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
+#	elif defined(HPM_GNUC)
 #		include<x86intrin.h>
 #   endif
 
@@ -12,9 +12,7 @@
 HPM_IMP(void, hpm_vec4_copyf, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source){
 	*destination = *source;
 }
-HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source){
-	*destination = *source;
-}
+
 
 
 HPM_IMP( void, hpm_vec4_addition_scalef , hpmvec4f* larg, const hpmvecf rarg){
@@ -55,14 +53,14 @@ HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg){
 
 
 HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f* arg){
-	hpmvecf l = HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
+	hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
 	const hpmvec4f row0 = {l,l,l,l};
-	*arg /=  row0;
+	*arg *=  row0;
 }
 HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
-	hpmvecd l = HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
+	hpmvecd l = 1.0 / HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
 	const hpmvec4d row0 = {l,l,l,l};
-	*arg /= row0;
+	*arg *= row0;
 }
 
 
@@ -114,6 +112,12 @@ HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, 
 	const hpmvec4d vsint = {vsintime, vsintime, vsintime, vsintime};
 	*out = (*a * vtheta) + (relative *vsint);
 }
+
+
+
+
+
+
 
 
 HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* __restrict__ destination, const hpmvec3f* __restrict__ source){
@@ -239,6 +243,11 @@ HPM_IMP( void, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, 
 	HPM_CALLLOCALFUNC(hpm_vec3_normalized)(&relative);
 	*out = (*a * vtheta) + (relative *vsint);
 }
+
+
+
+
+
 
 
 
