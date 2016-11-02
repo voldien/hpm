@@ -25,6 +25,8 @@
  * 						Information.
  *	hpm follows how OpenGL allocates their matrices.
  *	That is to say in a not how a 2 dimensional array in c.
+ *
+ *	For using it with DirectX. The matrix has to be transposed.
  */
 
 
@@ -260,7 +262,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_translationd, hpmvec4x4d_t mat, float 
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_translationfv, hpmvec4x4f_t mat, const hpmvec3f* translation);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_translationdv, hpmvec4x4d_t mat, const hpmvec3f* translation);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_translationdv, hpmvec4x4d_t mat, const hpmvec3d* translation);
 
 /**
  *	Construct scalar matrix.

@@ -49,7 +49,7 @@ typedef union{
 }hpmquatud;
 
 /**
- *	quaternion component index.
+ *	Quaternion component index.
  */
 #define HPM_QUAD_W 0
 #define HPM_QUAD_X 1

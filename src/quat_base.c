@@ -7,7 +7,7 @@ HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
 	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
 }
 HPM_IMP( double, hpm_quat_pitchdv, const hpmquatd* lf_quat){
-	return asin(-2.0f * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
+	return asin(-2.0 * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
 }
 
 HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
