@@ -90,6 +90,7 @@ HPM_IMP( double, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg){
 	return 0;
 }
 
+
 /*	Cramer's rule	*/
 HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){
 	hpmvec4f row0, row1, row2,row3;

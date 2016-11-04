@@ -20,6 +20,18 @@ HPM_IMP( void, hpm_quat_conjugatedv, hpmquatd* larg){
 	*larg *= conj;
 }
 
+HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
+	hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsqurefv )(arg);
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
+	*arg *= sqrleng;
+}
+HPM_IMP( void, hpm_quat_inversedv, hpmquatd* arg){
+	hpmvecd sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsquredv )(arg);
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatedv )(arg);
+	*arg *= sqrleng;
+}
+
+
 HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
 	const hpmquatf iden = {1.0f, 0.0f, 0.0f, 0.0f};
 	*out = iden;
@@ -28,4 +40,22 @@ HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
 	hpmquatud* pquat;
 	const hpmquatd iden = {1.0, 0.0, 0.0, 0.0};
 	*out = iden;
+}
+
+
+
+
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out){
+
+}
+HPM_IMP( void, hpm_quat_lerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){
+
+}
+
+
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatd* out){
+
+}
+HPM_IMP( void, hpm_quat_slerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){
+
 }
