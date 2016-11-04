@@ -10,10 +10,10 @@
 
 
 HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
-	hpmvec8f* restrict d = destination;
-	const hpmvec8f* restrict s = source;
-	d[0] = s[0];
-	d[1] = s[1];
+	hpmmat4uf* restrict d = destination;
+	const hpmmat4uf* restrict s = source;
+	d->oc[0] = s->oc[0];
+	d->oc[1] = s->oc[1];
 }
 HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t source){
 	destination[0] = source[0];
@@ -22,8 +22,28 @@ HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t 
 	destination[3] = source[3];
 }
 
+
 HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t out){
 	int i;
+
+	for(i = 0; i < 4; i++){
+		const hpmvec4f brod1 = _mm_set1_ps(larg[i][0]);
+		const hpmvec4f brod2 = _mm_set1_ps(larg[i][1]);
+		const hpmvec4f brod3 = _mm_set1_ps(larg[i][2]);
+		const hpmvec4f brod4 = _mm_set1_ps(larg[i][3]);
+
+		const hpmvec4f row = _mm_add_ps(
+					_mm_add_ps(
+						_mm_mul_ps(brod1, rarg[0]),
+						_mm_mul_ps(brod2, rarg[1])),
+						_mm_add_ps(
+							_mm_mul_ps(brod3, rarg[2]),
+							_mm_mul_ps(brod4, rarg[3])));
+		out [i] = row;
+
+	}
+	return;	/*	tmp solution.	*/
+	//int i;
 
 	for(i = 0; i < 2; i++){
 		/*
