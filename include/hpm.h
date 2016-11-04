@@ -21,6 +21,7 @@
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
+#include"hpmmath.h"
 
 /**
  * 	Main hpm library header file. Hpm library has be initialize be being
