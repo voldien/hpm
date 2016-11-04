@@ -15,8 +15,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_MATH_H_
-#define _HPM_MATH_H_ 1
+#ifndef _HPM_MATH_FUNC_H_
+#define _HPM_MATH_FUNC_H_ 1
 #include"hpmdef.h"
 #include"hpmvector.h"
 #include"hpmmatrix.h"
@@ -25,8 +25,34 @@
 extern "C" {
 #endif
 
+/**/
+HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_maxdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+
+/**/
+HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_mindv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
 
 
+
+/**/
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+
+
+/**/
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+
+
+/**/
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+
+
+/**/
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_ldv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/

@@ -1,7 +1,9 @@
 #include"hpm.h"
+#include"hpmmath.h"
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
+
 #include <dlfcn.h>
 
 /**
@@ -136,8 +138,8 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_rotationQd = hpm_get_symbolfuncp(hpm_mat4x4_rotationQd);
 
 	/**/
-	hpm_mat4x4_multi_translationf = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationf);
-	hpm_mat4x4_multi_translationd = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationd);
+	hpm_mat4x4_multi_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationfv);
+	hpm_mat4x4_multi_translationdv = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationdv);
 	hpm_mat4x4_multi_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scalefv);
 	hpm_mat4x4_multi_scaledv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scaledv);
 
@@ -246,7 +248,7 @@ int hpm_init(unsigned int simd){
 
 
 
-	/*	quaternion	*/
+	/*	Quaternion	*/
 	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
 	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
 
@@ -262,7 +264,8 @@ int hpm_init(unsigned int simd){
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
 
-	/*	Because some function for quaternion is computed the same as some vec4 function, thus we're using their pointer instead. */
+	/*	Because some function for quaternion is computed the same
+		as some vec4 function, thus we're using their pointer instead. */
 	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthf);
 	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthd);
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
@@ -272,22 +275,35 @@ int hpm_init(unsigned int simd){
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotf);
 	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotd);
 
-	/**/
+	/*	*/
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
 	hpm_quat_inversedv = hpm_get_symbolfuncp(hpm_quat_inversedv);
-	/**/
+	/*	*/
 	hpm_quad_axis_anglefv = hpm_get_symbolfuncp(hpm_quad_axis_anglefv);
 	hpm_quad_axis_angledv = hpm_get_symbolfuncp(hpm_quad_axis_angledv);
 	hpm_quad_axisf = hpm_get_symbolfuncp(hpm_quad_axisf);
 	hpm_quad_axisd = hpm_get_symbolfuncp(hpm_quad_axisd);
-	/**/
+	/*	*/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
-	/**/
+	/*	*/
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 	hpm_quat_slerpdv = hpm_get_symbolfuncp(hpm_quat_slerpdv);
+
+
+
+
+	/*	Math	*/
+	hpm_vec4_maxfv = hpm_get_symbolfuncp(hpm_vec4_maxfv);
+	hpm_vec4_maxdv = hpm_get_symbolfuncp(hpm_vec4_maxdv);
+	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
+	hpm_vec4_mindv = hpm_get_symbolfuncp(hpm_vec4_mindv);
+	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
+	hpm_vec4_eqdv = hpm_get_symbolfuncp(hpm_vec4_eqdv);
+	hpm_vec4_neqfv = hpm_get_symbolfuncp(hpm_vec4_neqfv);
+	hpm_vec4_neqdv = hpm_get_symbolfuncp(hpm_vec4_neqdv);
 
 	error:	/*	error.	*/
 
