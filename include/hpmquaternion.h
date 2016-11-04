@@ -26,7 +26,7 @@ extern "C"{
 
 
 /**
- *
+ *	Quaternion data types.
  */
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
@@ -131,8 +131,8 @@ HPM_EXPORT( double, HPMAPIENTRY, hpm_quat_lengthdv, const hpmquatd* larg, const 
  *
  *	@Return length.
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_quat_lengthsqurefv, const hpmquatf* larg, const hpmquatf* rarg);
-HPM_EXPORT( double, HPMAPIENTRY, hpm_quat_lengthsquredv, const hpmquatd* larg, const hpmquatd* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_quat_lengthsqurefv, const hpmvec4f* arg);
+HPM_EXPORT( double, HPMAPIENTRY, hpm_quat_lengthsquredv, const hpmvec4f* arg);
 
 /**
  *	Normalize quaternion.
@@ -182,8 +182,8 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identitydv, hpmquatd* destination);
  *	\angle
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_anglefv, hpmquatf* quat, const hpmquatf* axis, float angle);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_angledv, hpmquatd* quat, const hpmquatd* axis, double angle);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_anglefv, hpmquatf* quat, const hpmvec3f* axis, float angle);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quad_axis_angledv, hpmquatd* quat, const hpmvec3d* axis, double angle);
 
 /**
  *	Compute quaternion from eular.

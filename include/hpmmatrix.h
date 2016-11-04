@@ -48,6 +48,7 @@ typedef union{
 }hpmmat4uf;
 /*typedef hpmvec4x4f_t hpmmat4f;*/
 
+
 /**
  *
  */
@@ -344,8 +345,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat, const hp
  *	\translation
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_translationf, hpmvec4x4f_t mat, const hpmvec4f* translation);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_translationd, hpmvec4x4d_t mat, const hpmvec4d* translation);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_translationfv, hpmvec4x4f_t mat, const hpmvec4f* translation);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_translationdv, hpmvec4x4d_t mat, const hpmvec4d* translation);
 
 /**
  *	Multiply mat by translation matrix.
@@ -418,8 +419,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_projdv, hpmvec4x4d_t mat, double fov, 
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float right, float left, float top, float bottom, float far, float near);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthdv, hpmvec4x4d_t mat, double right, double left, double top, double bottom, double far, double near);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, float bottom, float top, float zNear, float zFar);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthdv, hpmvec4x4d_t mat, double left, double right, double bottom, double top, double zNear, double zFar);
 
 /**
  *	Unproject matrix.

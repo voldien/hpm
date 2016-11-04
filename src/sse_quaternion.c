@@ -57,3 +57,18 @@ HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg
 }
 
 
+
+
+
+HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out){
+
+}
+HPM_IMP( void, hpm_quat_directiondv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out){
+
+}
+
+
+
+
+
+
