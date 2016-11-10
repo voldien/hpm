@@ -125,6 +125,8 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_translationdv = hpm_get_symbolfuncp(hpm_mat4x4_translationdv);
 	hpm_mat4x4_scalef = hpm_get_symbolfuncp(hpm_mat4x4_scalef);
 	hpm_mat4x4_scaled = hpm_get_symbolfuncp(hpm_mat4x4_scaled);
+	hpm_mat4x4_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_scalefv);
+	hpm_mat4x4_scaledv = hpm_get_symbolfuncp(hpm_mat4x4_scaledv);
 
 	hpm_mat4x4_rotationfv = hpm_get_symbolfuncp(hpm_mat4x4_rotationfv);
 	hpm_mat4x4_rotationdv = hpm_get_symbolfuncp(hpm_mat4x4_rotationdv);
@@ -249,8 +251,8 @@ int hpm_init(unsigned int simd){
 
 
 	/*	Quaternion	*/
-	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_quat_copyf);
-	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_quat_copyd);
+	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_vec4_copyf);
+	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_vec4_copyd);
 
 	hpm_quat_multi_quatfv = hpm_get_symbolfuncp(hpm_quat_multi_quatfv);
 	hpm_quat_multi_quatdv = hpm_get_symbolfuncp(hpm_quat_multi_quatdv);
@@ -279,10 +281,10 @@ int hpm_init(unsigned int simd){
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
 	hpm_quat_inversedv = hpm_get_symbolfuncp(hpm_quat_inversedv);
 	/*	*/
-	hpm_quad_axis_anglefv = hpm_get_symbolfuncp(hpm_quad_axis_anglefv);
-	hpm_quad_axis_angledv = hpm_get_symbolfuncp(hpm_quad_axis_angledv);
-	hpm_quad_axisf = hpm_get_symbolfuncp(hpm_quad_axisf);
-	hpm_quad_axisd = hpm_get_symbolfuncp(hpm_quad_axisd);
+	hpm_quat_axis_anglefv = hpm_get_symbolfuncp(hpm_quat_axis_anglefv);
+	hpm_quat_axis_angledv = hpm_get_symbolfuncp(hpm_quat_axis_angledv);
+	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
+	hpm_quat_axisd = hpm_get_symbolfuncp(hpm_quat_axisd);
 	/*	*/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	hpm_quat_identitydv = hpm_get_symbolfuncp(hpm_quat_identitydv);
@@ -298,12 +300,27 @@ int hpm_init(unsigned int simd){
 	/*	Math	*/
 	hpm_vec4_maxfv = hpm_get_symbolfuncp(hpm_vec4_maxfv);
 	hpm_vec4_maxdv = hpm_get_symbolfuncp(hpm_vec4_maxdv);
+	hpm_vec8_maxfv = hpm_get_symbolfuncp(hpm_vec8_maxfv);
+	hpm_vec8_maxdv = hpm_get_symbolfuncp(hpm_vec8_maxdv);
+
 	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
 	hpm_vec4_mindv = hpm_get_symbolfuncp(hpm_vec4_mindv);
+	hpm_vec8_minfv = hpm_get_symbolfuncp(hpm_vec8_minfv);
+	hpm_vec8_mindv = hpm_get_symbolfuncp(hpm_vec8_mindv);
+
+
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_eqdv = hpm_get_symbolfuncp(hpm_vec4_eqdv);
 	hpm_vec4_neqfv = hpm_get_symbolfuncp(hpm_vec4_neqfv);
 	hpm_vec4_neqdv = hpm_get_symbolfuncp(hpm_vec4_neqdv);
+
+	hpm_vec4_gfv = hpm_get_symbolfuncp(hpm_vec4_gfv);
+	hpm_vec4_gdv = hpm_get_symbolfuncp(hpm_vec4_gdv);
+	hpm_vec4_lfv = hpm_get_symbolfuncp(hpm_vec4_lfv);
+	hpm_vec4_ldv = hpm_get_symbolfuncp(hpm_vec4_ldv);
+
+
+
 
 	error:	/*	error.	*/
 
@@ -317,6 +334,10 @@ int hpm_release(void){
 	}
 	libhandle = NULL;
 	return status == 0;
+}
+
+int hpm_isinit(void){
+	return libhandle != NULL;
 }
 
 

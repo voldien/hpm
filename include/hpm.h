@@ -24,8 +24,9 @@
 #include"hpmmath.h"
 
 /**
- * 	Main hpm library header file. Hpm library has be initialize be being
- * 	able to utilize the library.
+ * 	The main hpm library header file.
+ * 	Hpm library has be initialize in order
+ * 	utilize the library with hpm_init.
  */
 
 
@@ -38,6 +39,7 @@ extern "C" {
  */
 typedef int (HPMAPIENTRY PHPMINIT)(unsigned int simd);
 typedef int (HPMAPIENTRY PHPMRELEASE)(void);
+typedef int (HPMAPIENTRY PHPMISINIT)(void);
 typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionname);
 typedef int (HPMAPIENTRY PHPMVERSION)(void);
 typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
@@ -46,7 +48,7 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 /**
  *	SIMD extensions flags.
  */
-#define HPM_NOSIMD		(1 << 0)	/*	No SIMD hardware feature, using FPU and ALU.	*/
+#define HPM_NOSIMD		(1 << 0)	/*	No SIMD hardware feature, using the FPU and ALU.	*/
 #define HPM_MMX			(1 << 1)	/*	MMX. (Yet not supported)	*/
 #define HPM_SSE			(1 << 2)	/*	SSE (Streaming SIMD Extensions).	*/
 #define HPM_SSE2		(1 << 3)	/*	SSE2 (Streaming SIMD Extensions).	*/
@@ -55,7 +57,7 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 #define HPM_SSE4_1		(1 << 6)	/*	SSE4.1 (Streaming SIMD Extensions).	*/
 #define HPM_SSE4_2		(1 << 7)	/*	SSE4.2 (Streaming SIMD Extensions).	*/
 #define HPM_AVX			(1 << 8)	/*	AVX Version 1 (Advanced Vector Extension).	*/
-#define HPM_AVX2		(1 << 9)	/*	AVX Version 2 (Advanced Vector Extension).	*/
+#define HPM_AVX2		(1 << 9)	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
 #define HPM_AVX512		(1 << 10)	/*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
 #define HPM_NEON		(1 << 11)	/*	ARM	FPU (floating-point unit) feature.	*/
 #define HPM_SVML		(1 << 30)	/*	Future feature.	*/
@@ -80,11 +82,17 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int SIMD);
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
-
+/**
+ * 	Check if hpm has been initialized.
+ *
+ *	@Return non zero if initialized. Otherwise 0.
+ */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
 
 /**
- *	Get function pointer address by its symbol name.
+ *	Get function pointer address by its symbol name
+ *	from the hpm library currently loaded, that was
+ *	specified in hpm_init.
  *
  *	\cfunctionName
  *
