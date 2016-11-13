@@ -190,12 +190,12 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_multidv = hpm_get_symbolfuncp(hpm_vec4_multidv);
 	hpm_vec4_multi_scalef = hpm_get_symbolfuncp(hpm_vec4_multi_scalef);
 	hpm_vec4_multi_scaled = hpm_get_symbolfuncp(hpm_vec4_multi_scaled);
-	hpm_vec4_dotf = hpm_get_symbolfuncp(hpm_vec4_dotf);
-	hpm_vec4_dotd = hpm_get_symbolfuncp(hpm_vec4_dotd);
-	hpm_vec4_lengthf = hpm_get_symbolfuncp(hpm_vec4_lengthf);
-	hpm_vec4_lengthd = hpm_get_symbolfuncp(hpm_vec4_lengthd);
-	hpm_vec4_lengthsquref = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
-	hpm_vec4_lengthsqured = hpm_get_symbolfuncp(hpm_vec4_lengthsqured);
+	hpm_vec4_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotfv);
+	hpm_vec4_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotdv);
+	hpm_vec4_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthfv);
+	hpm_vec4_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthdv);
+	hpm_vec4_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
+	hpm_vec4_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsquredv);
 	hpm_vec4_normalizef = hpm_get_symbolfuncp(hpm_vec4_normalizef);
 	hpm_vec4_normalized = hpm_get_symbolfuncp(hpm_vec4_normalized);
 	hpm_vec4_negatef = hpm_get_symbolfuncp(hpm_vec4_negatef);
@@ -268,14 +268,14 @@ int hpm_init(unsigned int simd){
 
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
-	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthf);
-	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthd);
-	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsquref);
-	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsqured);
+	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthfv);
+	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthdv);
+	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
+	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsquredv);
 	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizef);
 	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_vec4_normalized);
-	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotf);
-	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotd);
+	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotfv);
+	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotdv);
 
 	/*	*/
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
@@ -359,7 +359,11 @@ const char* hpm_version(void){
 
 /*	TODO resolve for non x86 and non x86_64 cpu*/
 #include<cpuid.h>
-#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
+#if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
+	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
+#else
+	#define cpuid(regs, i)
+#endif
 
 int hpm_supportcpufeat(unsigned int simd){
 	int cpuInfo[4];
