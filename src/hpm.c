@@ -46,10 +46,8 @@ int hpm_init(unsigned int simd){
 		libpath = "libhpmsse2.so";
 		break;
 	case HPM_SSE3:
-		libpath = "libhpmsse3.so";
-		break;
 	case HPM_SSSE3:
-		libpath = "libhpmssse3.so";
+		libpath = "libhpmsse3.so";
 		break;
 	case HPM_SSE4_1:
 		libpath = "libhpmsse41.so";
@@ -325,8 +323,6 @@ int hpm_init(unsigned int simd){
 	//hpm_vec4_gdv = hpm_get_symbolfuncp(hpm_vec4_gdv);
 	hpm_vec4_lfv = hpm_get_symbolfuncp(hpm_vec4_lfv);
 	//hpm_vec4_ldv = hpm_get_symbolfuncp(hpm_vec4_ldv);
-
-
 
 
 	error:	/*	error.	*/
