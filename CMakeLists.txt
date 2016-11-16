@@ -53,14 +53,16 @@ if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		MESSAGE(STATUS "Compile for release.")
 		ADD_DEFINITIONS(-DNDEBUG)
 		SET(CMAKE_RELEASE TRUE)
-		SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s")
+		SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O3")
+		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized") # -march=native
 	ELSE()
 		MESSAGE(STATUS "Compile for debug.")
 		ADD_DEFINITIONS(-D_DEBUG)
 		ADD_DEFINITIONS(-g3)
 		SET(CMAKE_DEBUG TRUE)
+		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized") # -march=native
 	ENDIF()
-	SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized -O3 ") # -march=native
+
 
 elseif(MSVC)
 		# enable multi-core complication with MSVC
@@ -91,7 +93,7 @@ TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
 #	Target for cpu with no supported simd extensions.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -O2 -DHPM_INTERNAL_IMP=1" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 
@@ -114,27 +116,27 @@ TARGET_LINK_LIBRARIES(hpmavx -lm)
 #SET_TARGET_PROPERTIES(hpmmmx PROPERTIES COMPILE_FLAGS "-mmmx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 #TARGET_LINK_LIBRARIES(hpmmmx -lm)
 
-ADD_LIBRARY(hpmsse src/sse_matrix.c src/sse_vector.c src/sse_quaternion.c  ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse -lm)
 
-ADD_LIBRARY(hpmsse2 src/sse_matrix.c  ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse2 ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
-ADD_LIBRARY(hpmsse3 src/sse_matrix.c ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse3 ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
-ADD_LIBRARY(hpmssse3 ${basecore} ${allsimdsource} ${all_sse_source})
-SET_TARGET_PROPERTIES(hpmssse3 PROPERTIES COMPILE_FLAGS "-mssse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
-TARGET_LINK_LIBRARIES(hpmssse3 -lm)
+#ADD_LIBRARY(hpmssse3 ${basecore} ${allsimdsource} ${all_sse_source})
+#SET_TARGET_PROPERTIES(hpmssse3 PROPERTIES COMPILE_FLAGS "-mssse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
+#TARGET_LINK_LIBRARIES(hpmssse3 -lm)
 
-ADD_LIBRARY(hpmsse41 src/sse_matrix.c ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse41 ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
-ADD_LIBRARY(hpmsse42 src/sse_matrix.c ${basecore} ${allsimdsource} ${all_sse_source})
+ADD_LIBRARY(hpmsse42 ${basecore} ${allsimdsource} ${all_sse_source})
 SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
 TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
@@ -156,7 +158,6 @@ INSTALL (TARGETS hpmavx DESTINATION lib)
 INSTALL (TARGETS hpmsse DESTINATION lib)
 INSTALL (TARGETS hpmsse2 DESTINATION lib)
 INSTALL (TARGETS hpmsse3 DESTINATION lib)
-#INSTALL (TARGETS hpmssse3 DESTINATION lib)
 INSTALL (TARGETS hpmsse41 DESTINATION lib)
 INSTALL (TARGETS hpmsse42 DESTINATION lib)
 ENDIF()
