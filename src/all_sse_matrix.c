@@ -8,13 +8,13 @@
 #   endif
 
 
-HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t  destination, const hpmvec4x4f_t source){
-	destination[0] = source[0];
-	destination[1] = source[1];
-	destination[2] = source[2];
-	destination[3] = source[3];
+HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4fp_t* __restrict__ destination, const hpmvec4x4fp_t* __restrict__ source){
+	destination[0] = (hpmv4sf)source[0];
+	destination[1] = (hpmv4sf)source[1];
+	destination[2] = (hpmv4sf)source[2];
+	destination[3] = (hpmv4sf)source[3];
 }
-HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t source){
+HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source){
 	hpmmat4ud* restrict d = destination;
 	const hpmmat4ud* restrict s = source;
 
@@ -33,19 +33,19 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmve
 	int i;
 
 	for(i = 0; i < 4; i++){
-		const hpmvec4f brod1 = _mm_set1_ps(larg[i][0]);
-		const hpmvec4f brod2 = _mm_set1_ps(larg[i][1]);
-		const hpmvec4f brod3 = _mm_set1_ps(larg[i][2]);
-		const hpmvec4f brod4 = _mm_set1_ps(larg[i][3]);
+		const hpmv4sf brod1 = _mm_set1_ps(larg[i][0]);
+		const hpmv4sf brod2 = _mm_set1_ps(larg[i][1]);
+		const hpmv4sf brod3 = _mm_set1_ps(larg[i][2]);
+		const hpmv4sf brod4 = _mm_set1_ps(larg[i][3]);
 
-		const hpmvec4f row = _mm_add_ps(
+		const hpmv4sf row = _mm_add_ps(
 					_mm_add_ps(
 						_mm_mul_ps(brod1, rarg[0]),
 						_mm_mul_ps(brod2, rarg[1])),
 						_mm_add_ps(
 							_mm_mul_ps(brod3, rarg[2]),
 							_mm_mul_ps(brod4, rarg[3])));
-		out [i] = row;
+		out[i] = row;
 
 	}
 }
@@ -58,10 +58,10 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat4x4dv, const hpmvec4x4d_t larg, const hpmv
 }
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
-	(*output)[0] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[0], rarg);
-	(*output)[1] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[1], rarg);
-	(*output)[2] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[2], rarg);
-	(*output)[3] = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(&larg[3], rarg);
+	(*output)[0] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[0], rarg);
+	(*output)[1] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[1], rarg);
+	(*output)[2] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[2], rarg);
+	(*output)[3] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[3], rarg);
 }
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output){
 

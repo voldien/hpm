@@ -10,12 +10,12 @@
 
 
 HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
-	hpmmat4uf* restrict d = destination;
-	const hpmmat4uf* restrict s = source;
-	d->oc[0] = s->oc[0];
-	d->oc[1] = s->oc[1];
+	hpmmat4uf* __restrict__ d = destination;
+	const hpmmat4uf* __restrict__ s = source;
+	 _mm256_storeu_ps(&d->oc[0], s->oc[0]);
+	 _mm256_storeu_ps(&d->oc[1], s->oc[1]);
 }
-HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t  destination, const hpmvec4x4d_t source){
+HPM_IMP( void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source){
 	destination[0] = source[0];
 	destination[1] = source[1];
 	destination[2] = source[2];
@@ -80,7 +80,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_scalard, const hpmvec4x4d_t larg, const doubl
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){	/*	TODO fix if it can be optimized even further.*/
 	const hpmvec8f row0 = {1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f};
 	const hpmvec8f row1 = {0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f};
-	hpmmat4uf* mat8 = (hpmmat4uf*)mat;
+	hpmmat4uf* mat8 = mat;
 	mat8->oc[0] = row0;
 	mat8->oc[1] = row1;
 }

@@ -46,14 +46,33 @@ HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
 
 
 HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out){
-
+	//(from * (1.0f - time) + to * time);
+	hpmvecf ht = (1.0f - t);
+	*out = *larg * ht + *rarg * t;
 }
 HPM_IMP( void, hpm_quat_lerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){
 
 }
 
 
-HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatd* out){
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out){
+/*
+	float fdot = dot(q1,q2);
+	Quaternion q3;
+	if(fdot < 0.0f){
+		fdot = -fdot;
+		q3 = -q2;
+	}
+	else q3 = q2;
+
+	if(fdot <0.95f){
+		float angle = acosf(fdot);
+		return (q1 * sinf(angle * (1.0f - time)) + q3 * sinf(angle * time) ) / sinf(angle);
+	}
+	else
+		return Quaternion::lerp(q1, q2, time);
+ */
+
 
 }
 HPM_IMP( void, hpm_quat_slerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out){

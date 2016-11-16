@@ -55,14 +55,12 @@ HPM_IMP( void, hpm_vec4_multi_scaled, hpmvec4d* larg, const double rarg){
 
 
 HPM_IMP(void, hpm_vec4_normalizef, hpmvec4f* arg){
-	hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthf)(arg);
-	const hpmvec4f row0 = {l,l,l,l};
-	*arg *=  row0;
+	hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthfv)(arg);
+	*arg *= l;
 }
 HPM_IMP(void, hpm_vec4_normalized, hpmvec4d* arg){
-	hpmvecd l = 1.0 / HPM_CALLLOCALFUNC( hpm_vec4_lengthd)(arg);
-	const hpmvec4d row0 = {l,l,l,l};
-	*arg *= row0;
+	hpmvecd l = 1.0 / HPM_CALLLOCALFUNC( hpm_vec4_lengthdv)(arg);
+	*arg *= l;
 }
 
 

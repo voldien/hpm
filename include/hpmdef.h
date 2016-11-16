@@ -253,11 +253,11 @@
 #if defined(HPM_GNUC) || defined(HPM_CLANG)
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
-	#define HPM_VECTORALIGN_(alignment) __attribute__ ((__vector_size__ (alignment)))
+	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
 #elif defined(HPM_VC)
 	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
-
+	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
 #elif defined(HPM_)
 #endif
 
@@ -291,6 +291,9 @@
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
 
 
+#define HPM_FLOATIMP
+#define HPM_DOUBLETIMP
+
 /**
  *	Internal.
  */
@@ -301,18 +304,21 @@
 		HPM_FUNCPOINTER(func) = NULL										\
 
 
-#elif defined(HPM_INTERNAL_IMP)
+#elif defined(HPM_INTERNAL_IMP)	/**/
 #define HPM_EXPORT(ret, callback, func, ...)						\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
 
-
-#else
+#else	/**/
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func)										\
 
 #endif
+
+
+
+
 
 /**
  *

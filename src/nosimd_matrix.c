@@ -454,50 +454,6 @@ HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4){
 
 
 
-HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat4, const hpmquatf* quat){
-/*
-	float w = quat[0], x = quat[1], y = quat[2], z = quat[3],
-	x2 = x + x,
-	y2 = y + y,
-	z2 = z + z,
-
-	xx = x * x2,
-	xy = x * y2,
-	xz = x * z2,
-	yy = y * y2,
-	yz = y * z2,
-	zz = z * z2,
-	wx = w * x2,
-	wy = w * y2,
-	wz = w * z2;
-
-
-	mat4[0][0] = 1 - (yy + zz);
-	mat4[0][1] = xy + wz;
-	mat4[0][2] = xz - wy;
-	mat4[0][3] = 0;
-
-	mat4[1][0] = xy - wz;
-	mat4[1][1] =  1 - (xx + zz);
-	mat4[1][2] = yz + wx;
-	mat4[1][3] = 0;
-
-	mat4[2][0] =xz + wy;
-	mat4[2][1] =yz - wx;
-	mat4[2][2] = 1 - (xx + yy);
-	mat4[2][3] = 0.0;
-
-	mat4[3][0] =0.0;
-	mat4[3][1] =0.0;
-	mat4[3][2] =0.0;
-	mat4[3][3] =1.0;
-	*/
-
-}
-HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat4, const hpmquatd* quat){
-
-}
-
 
 
 

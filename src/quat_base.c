@@ -4,14 +4,14 @@
 
 
 
-HPM_IMP( void, hpm_quad_axis_anglefv, hpmquatf* quat, const hpmvec3f* axis, float angle){
+HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
 	const float half_angle = sinf(angle * 0.5f);
 	(*quat)[HPM_QUAD_X] = (*axis)[0] * half_angle;
 	(*quat)[HPM_QUAD_Y] = (*axis)[1] * half_angle;
 	(*quat)[HPM_QUAD_Z] = (*axis)[2] * half_angle;
 	(*quat)[HPM_QUAD_W] = cosf(half_angle);
 }
-HPM_IMP( void, hpm_quad_axis_angledv, hpmquatd* quat, const hpmvec3d* axis, double angle){
+HPM_IMP( void, hpm_quat_axis_angledv, hpmquatd* __restrict__ quat, const hpmvec3d* __restrict__ axis, double angle){
 	const double half_angle = sin(angle * 0.5f);
 	(*quat)[HPM_QUAD_X] = (*axis)[0] * half_angle;
 	(*quat)[HPM_QUAD_Y] = (*axis)[1] * half_angle;
@@ -19,7 +19,7 @@ HPM_IMP( void, hpm_quad_axis_angledv, hpmquatd* quat, const hpmvec3d* axis, doub
 	(*quat)[HPM_QUAD_W] = cos(half_angle);
 }
 
-HPM_IMP( void, hpm_quad_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
+HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
 	const float num1 = roll_radian * 0.5f;
 	const float num2 = (float)sinf((float)num1);
 	const float num3 = (float)cosf((float)num1);
@@ -35,7 +35,7 @@ HPM_IMP( void, hpm_quad_axisf, hpmquatf* quat, float pitch_radian, float yaw_rad
 	(*quat)[HPM_QUAD_Z] = (float)((float)num9 * (float)num6 * (float)num2 - (float)num8 * (float)num5 * (float)num3);
 	(*quat)[HPM_QUAD_W] = (float)((float)num9 * (float)num6 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
 }
-HPM_IMP( void, hpm_quad_axisd, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
+HPM_IMP( void, hpm_quat_axisd, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
 	const hpmvecd num1 = roll_radian * 0.5f;
 	const hpmvecd num2 = (hpmvecd)sin((hpmvecd)num1);
 	const hpmvecd num3 = (hpmvecd)cos((hpmvecd)num1);

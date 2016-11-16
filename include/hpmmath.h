@@ -25,34 +25,64 @@
 extern "C" {
 #endif
 
-/**/
+/**
+ *	Compute max value of a and b.
+ *	max = a > b ? a : b
+ *
+ *	@Return max value for each element of the vector.
+ */
 HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_maxdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_maxdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __restrict__ b);
+//HPM_EXPORT(hpmvec8d, HPMAPIENTRY, hpm_vec8_maxdv, const hpmvec8d* __restrict__ a, const hpmvec8d* __restrict__ b);
 
-/**/
+
+/**
+ *	Compute min value of a and b.
+ *	min = a < b ? a : b
+ *
+ *	@Return min value for each element of the vector.
+ */
 HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_mindv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_mindv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __restrict__ b);
+//HPM_EXPORT(hpmvec8d, HPMAPIENTRY, hpm_vec8_mindv, const hpmvec8d* __restrict__ a, const hpmvec8d* __restrict__ b);
 
 
-
-/**/
+/**
+ *	Determine if a and b is equal.
+ *
+ *
+ *	@Return return a non 0 value for each element of the vector.
+ */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
 
 
-/**/
+/**
+ *
+ *	@Return
+ */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
 
 
-/**/
+/**
+ *
+ *	@Return
+ */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
 
 
-/**/
+/**
+ *
+ *	@Return
+ */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_ldv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+//HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_ldv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
+
+
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
