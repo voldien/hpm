@@ -72,7 +72,7 @@ endif()
 
 #	File source paths
 FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/vector_base.c src/matrix_base.c src/quat_base.c )
+FILE (GLOB basecore src/base_* )
 FILE (GLOB nosimdsource src/nosimd_* )
 FILE (GLOB allsimdsource src/allsimd_* )
 FILE (GLOB all_sse_source src/all_sse_*)
