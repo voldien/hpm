@@ -1,5 +1,6 @@
 /**
-    Copyright (C) 2015  Valdemar Lindberg
+	High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -25,11 +26,12 @@
 extern "C" {
 #endif
 
+
 /**
  *	Compute max value of a and b.
  *	max = a > b ? a : b
  *
- *	@Return max value for each element of the vector.
+ *	@Return max value for each element of the vector data type.
  */
 HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
 //HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_maxdv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
@@ -41,7 +43,7 @@ HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a
  *	Compute min value of a and b.
  *	min = a < b ? a : b
  *
- *	@Return min value for each element of the vector.
+ *	@Return min value for each element of the vector data type.
  */
 HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
 //HPM_EXPORT(hpmvec4d, HPMAPIENTRY, hpm_vec4_mindv, const hpmvec4d* __restrict__ a, const hpmvec4d* __restrict__ b);
@@ -61,6 +63,7 @@ HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 
 /**
  *
+ *
  *	@Return
  */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
@@ -69,6 +72,7 @@ HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a
 
 /**
  *
+ *
  *	@Return
  */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
@@ -76,6 +80,7 @@ HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, 
 
 
 /**
+ *
  *
  *	@Return
  */

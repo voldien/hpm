@@ -1,5 +1,6 @@
 /**
-    Copyright (C) 2015  Valdemar Lindberg
+	High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -24,8 +25,7 @@ extern "C"{
 #endif
 
 /**
- *
- *
+ *	Data types.
  */
 typedef float hpmvecf;
 typedef double hpmvecd;
@@ -33,8 +33,9 @@ typedef int hpmveci;
 typedef long long hpmvec1di;
 typedef char hpmvecqi;
 
+
 /**
- *
+ *	Single component vector data type.
  */
 typedef float hpmvecfv HPM_VECTORALIGN(4);
 typedef double hpmvecdv HPM_VECTORALIGN(8);
@@ -42,7 +43,7 @@ typedef int hpmveciv HPM_VECTORALIGN(4);
 typedef char hpmvecqiv HPM_VECTORALIGN(4);
 
 /**
- *
+ *	Two component vector data type.
  */
 typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);
 typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);
@@ -55,22 +56,31 @@ typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);
 typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
 
+
 /**
- *	SEE 128 bit
+ *	SEE 128 bits data types.
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
-/*	Internal data types for implementing the intrinsics.	*/
+/**
+ * 	Internal SSE 128 bit  data types
+ *	for implementing the intrinsics.
+ */
+typedef hpmveci hpmv4si HPM_VECTORALIGNI(16);
 typedef hpmvecf hpmv4sf HPM_VECTORALIGNI(16);
 
 
 
 /**
- * 	AVX	256 bits
+ * 	AVX	256 bits data types.
  */
 typedef hpmveci hpmvec8i HPM_VECTORALIGN(32);
 typedef hpmvecf hpmvec8f HPM_VECTORALIGN(32);
 typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
+
+/**
+ *	Union data types
+ */
 HPM_ALIGN(16)
 typedef struct hpmvec8fu_t{
 	union{
@@ -87,8 +97,8 @@ typedef struct hpmvec4du_t{
 }hpmvec4du;
 
 
-/*
- *	AVX 512 bits
+/**
+ *	AVX 512 bits data types.
  */
 typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
 typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
@@ -103,7 +113,6 @@ typedef struct hpmvec8du_t{
 
 
 
-
 /**
  *	Copy vector4 source to destination.
  *	destination = source
@@ -113,7 +122,7 @@ typedef struct hpmvec8du_t{
  *	\source source pointer.
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyf, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
 //HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d* __restrict__ source);
 
 /**
@@ -243,87 +252,21 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpf, const hpmvec4f* a, const hpmvec4
 
 
 
-
-
-
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyf, hpmvec3f* __restrict__ destination, const hpmvec3f* __restrict__ source);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_copyd, hpmvec3d* __restrict__ destination, const hpmvec3d* __restrict__ source);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_addition_scalerf, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_addition_scalerd, hpmvec3d* larg, const hpmvecd rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_subractionf, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_subractiond, hpmvec3d* larg, const hpmvecd rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multif, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multifv, hpmvec3f* larg, const hpmvec3f* rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionf, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiond, hpmvec3d* larg, const hpmvecd rarg);
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisionfv, hpmvec3f* larg, const hpmvec3f* rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_divisiondv, hpmvec3d* larg, const hpmvec3d* rarg);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_division_scalef, hpmvec3f* larg, const hpmvecf rarg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_division_scaled, hpmvec3d* larg, const hpmvecd rarg);
-
-
-
-
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_inversefv, hpmvec3f* larg);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_inversedv, hpmvec3d* larg);
-
 /**
  *	Compute cross product.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductf, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductd, const hpmvec3d* larg, const hpmvec3d* rarg, hpmvec3d* out);
 
 /**/
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_tripleProductf, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_tripleProductd, const hpmvec3d* larg, const hpmvec3d* rarg, hpmvec3d* out);
 
 /**
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotf, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg);
 //HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_dotd, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
@@ -331,7 +274,7 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotf, const hpmvec3f* larg, const hpmve
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthf, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* larg, const hpmvec3f* rarg);
 //HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_lengthd, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
@@ -339,36 +282,26 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthf, const hpmvec3f* larg, const hp
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquaref, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, const hpmvec3f* rarg);
 //HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_lengthsquared, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectf, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3d* normal, hpmvec3d* out);
 
 /**
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractf, hpmvec3f* larg, const hpmvec3f* normal, float index, hpmvec3f* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg, const hpmvec3f* normal, float index, hpmvec3f* out);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractd, hpmvec3d* larg, const hpmvec3d* normal, double index, hpmvec3d* out);
 
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out);
-
-/**
- *
- */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out);
-//HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out);
 
 /**
  *	Project vector onto vector.
+ *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projf, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* larg);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projd, const hpmvec3d* a, const hpmvec3d* b, hpmvec3d* larg);

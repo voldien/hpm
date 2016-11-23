@@ -3,13 +3,7 @@
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
-
 #include <dlfcn.h>
-
-/**
- *
- *
- */
 
 
 /*	library handle.
@@ -22,6 +16,7 @@ void* libhandle = NULL;
  *	the function pointer.
  */
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
+
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -36,9 +31,6 @@ int hpm_init(unsigned int simd){
 
 	/*	Translate SIMD to library filename.	*/
 	switch(simd){
-	case HPM_MMX:
-		libpath = "libhpmmmx.so";
-		break;
 	case HPM_SSE:
 		libpath = "libhpmsse.so";
 		break;
@@ -168,8 +160,6 @@ int hpm_init(unsigned int simd){
 	//		hpm_mat4x4_unprojd = hpm_get_symbolfuncp(hpm_mat4x4_unprojd);
 
 
-
-
 	/**/
 	/*
 	hpm_matrxi3x3_copyfv = hpm_get_symbolfuncp(hpm_matrxi3x3_copyfv);
@@ -186,8 +176,10 @@ int hpm_init(unsigned int simd){
 	*/
 
 
-	/*	vector	*/
-	hpm_vec4_copyf = hpm_get_symbolfuncp(hpm_vec4_copyf);
+
+
+	/*	vector4	*/
+	hpm_vec4_copyfv = hpm_get_symbolfuncp(hpm_vec4_copyfv);
 	//	hpm_vec4_copyd = hpm_get_symbolfuncp(hpm_vec4_copyd);
 	hpm_vec4_addition_scalef = hpm_get_symbolfuncp(hpm_vec4_addition_scalef);
 	//	hpm_vec4_addition_scaled = hpm_get_symbolfuncp(hpm_vec4_addition_scaled);
@@ -215,37 +207,25 @@ int hpm_init(unsigned int simd){
 	//	hpm_vec4_slerpd = hpm_get_symbolfuncp(hpm_vec4_slerpd);
 
 
+
+
+
+
 	/*	vector 3.	*/
-	hpm_vec3_copyf = hpm_get_symbolfuncp(hpm_vec3_copyf);
-	//	hpm_vec3_copyd = hpm_get_symbolfuncp(hpm_vec3_copyd);
-	hpm_vec3_additionf = hpm_get_symbolfuncp(hpm_vec3_additionf);
-	//	hpm_vec3_additiond = hpm_get_symbolfuncp(hpm_vec3_additiond);
-	hpm_vec3_subractionf = hpm_get_symbolfuncp(hpm_vec3_subractionf);
-	//	hpm_vec3_subractiond = hpm_get_symbolfuncp(hpm_vec3_subractiond);
-	hpm_vec3_multif = hpm_get_symbolfuncp(hpm_vec3_multif);
-	//	hpm_vec3_multid = hpm_get_symbolfuncp(hpm_vec3_multid);
-	hpm_vec3_divisionfv = hpm_get_symbolfuncp(hpm_vec3_divisionfv);
-	//	hpm_vec3_divisiondv = hpm_get_symbolfuncp(hpm_vec3_divisiondv);
-	hpm_vec3_crossproductf = hpm_get_symbolfuncp(hpm_vec3_crossproductf);
+	hpm_vec3_crossproductfv = hpm_get_symbolfuncp(hpm_vec3_crossproductfv);
 	//	hpm_vec3_crossproductd = hpm_get_symbolfuncp(hpm_vec3_crossproductd);
 
 	/**/
-	hpm_vec3_dotf = hpm_get_symbolfuncp(hpm_vec3_dotf);
+	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	//	hpm_vec3_dotd = hpm_get_symbolfuncp(hpm_vec3_dotd);
-	hpm_vec3_lengthf = hpm_get_symbolfuncp(hpm_vec3_lengthf);
+	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	//	hpm_vec3_lengthd = hpm_get_symbolfuncp(hpm_vec3_lengthd);
-	hpm_vec3_lengthsquaref = hpm_get_symbolfuncp(hpm_vec3_lengthsquaref);
+	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
 	//	hpm_vec3_lengthsquared = hpm_get_symbolfuncp(hpm_vec3_lengthsquared);
-	hpm_vec3_reflectf = hpm_get_symbolfuncp(hpm_vec3_reflectf);
+	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	//	hpm_vec3_reflectd = hpm_get_symbolfuncp(hpm_vec3_reflectd);
-	hpm_vec3_refractf = hpm_get_symbolfuncp(hpm_vec3_refractf);
+	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
 	//	hpm_vec3_refractd = hpm_get_symbolfuncp(hpm_vec3_refractd);
-
-	hpm_vec3_lerpf = hpm_get_symbolfuncp(hpm_vec3_lerpf);
-	//	hpm_vec3_lerpd = hpm_get_symbolfuncp(hpm_vec3_lerpd);
-	hpm_vec3_slerpf = hpm_get_symbolfuncp(hpm_vec3_slerpf);
-	//	hpm_vec3_slerpd = hpm_get_symbolfuncp(hpm_vec3_slerpd);
-
 
 	/*	vector 2.	*/
 	/*
@@ -255,9 +235,6 @@ int hpm_init(unsigned int simd){
 
 
 	/*	Quaternion	*/
-	hpm_quat_copyf = hpm_get_symbolfuncp(hpm_vec4_copyf);
-	//	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_vec4_copyd);
-
 	hpm_quat_multi_quatfv = hpm_get_symbolfuncp(hpm_quat_multi_quatfv);
 	//	hpm_quat_multi_quatdv = hpm_get_symbolfuncp(hpm_quat_multi_quatdv);
 
@@ -272,6 +249,8 @@ int hpm_init(unsigned int simd){
 
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
+	hpm_quat_copyfv = hpm_get_symbolfuncp(hpm_vec4_copyfv);
+	//	hpm_quat_copyd = hpm_get_symbolfuncp(hpm_vec4_copyd);
 	hpm_quat_lengthfv = hpm_get_symbolfuncp(hpm_vec4_lengthfv);
 	//	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthdv);
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
@@ -280,6 +259,8 @@ int hpm_init(unsigned int simd){
 	//	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_vec4_normalized);
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotfv);
 	//	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotdv);
+
+
 
 
 	/*	*/

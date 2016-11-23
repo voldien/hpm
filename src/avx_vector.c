@@ -14,8 +14,6 @@ HPM_IMP(void, hpm_vec4_copyd, hpmvec4d* __restrict__ destination, const hpmvec4d
 }
 
 
-
-
 HPM_IMP(float, hpm_vec4_dotf, const hpmvec4f* larg, const hpmvec4f* rarg){
 	const hpmvec4f lvMult = *larg * *rarg;
 

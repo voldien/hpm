@@ -1,5 +1,6 @@
 /**
-    Copyright (C) 2015  Valdemar Lindberg
+	High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -26,17 +27,30 @@
  *	hpm follows how OpenGL allocates their matrices.
  *	That is to say in a not how a 2 dimensional array in c.
  *
- *	For using it with DirectX. The matrix has to be transposed.
+ *		C array					OpenGL matrix array
+ *
+ *		| a b c d |				| a e i m |
+ *		| e f g h |		==>		| b f j n |
+ *		| i j k l |		==>		| c j k o |
+ *		| m n o q |				| d h l q |
+ *
+ *	When using the matrix data types with e.g OpenGL
+ *	Uniform matrix function. The 'transpose' parameter has to be
+ *	GL_FALSE. Because hpm's matrix in system memory is allocated
+ *	 with OpenGL's convention.
+ *
+ *
  */
-
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
 
 
+
 /**
- *	matrix4x4 float
+ *	Matrix4x4 float
+ *
  */
 HPM_ALIGN(32)
 typedef hpmvec4f hpmvec4x4f_t[4];
@@ -45,13 +59,13 @@ typedef hpmv4sf hpmvec4x4fi_t[4];
 typedef hpmvec4f hpmvec4x4fp_t;
 typedef union{
 	hpmvec4x4f_t m;
-	struct hpmvec4x4f_s s;
+	hpmmat4f s;
 	struct {hpmvec8f oc[2];};
 }hpmmat4uf;
-/*typedef hpmvec4x4f_t hpmmat4f;*/
 
 
 /**
+ *	Matrix4x4 double.
  *
  */
 typedef hpmvec4d hpmvec4x4d_t[4];
@@ -64,7 +78,7 @@ typedef union{
 }hpmmat4ud;
 
 /**
- *
+ *	Matrix3x3 data types for floating points.
  */
 typedef hpmvec3f hpmvec3x3f_t[3];
 typedef struct hpmvec3x3f_s{float m11,m21,m31,m12,m22,m32,m13,m23,m33;}hpmmat3f;
@@ -74,7 +88,7 @@ typedef union{
 }hpmmat3uf;
 
 /**
- *
+ *	Matrix3x3 data types.
  */
 typedef hpmvec3d hpmvec3x3d_t[3];
 typedef struct hpmvec3x3d_s{double m11,m21,m31,m12,m22,m32,m13,m23,m33;}hpmmat3d;
@@ -83,7 +97,8 @@ typedef union{
 	struct hpmvec3x3d_s s;
 }hpmmat3ud;
 
-/*
+/**
+ *	Matrix2x2 data types.
  *
  */
 typedef hpmvec2f hpmvec2x2f_t[2];
@@ -94,7 +109,7 @@ typedef union{
 }hpmmat2uf;
 
 
-/*
+/**
  *
  */
 typedef hpmvec2d hpmvec2x2d_t[2];
@@ -117,6 +132,8 @@ typedef union{
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv, hpmvec4x4fp_t* __restrict__ destination, const hpmvec4x4fp_t* __restrict__ source);
 /*HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source);*/
+
+
 
 /**
  *	Multiply two matrices.
@@ -242,7 +259,7 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_inversefv, const hpmvec4x4f_t mat, hp
  *	\scale
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat4, hpmvec3f* __restrict__ position, hpmvec4f* __restrict__ rotation, hpmvec3f* __restrict__ scale);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat, hpmvec3f* __restrict__ position, hpmquatf* __restrict__ rotation, hpmvec3f* __restrict__ scale);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_decomposedv, const hpmvec4x4d_t mat4, hpmvec3d* __restrict__ position, hpmvec4d* __restrict__ rotation, hpmvec3d* __restrict__ scale);
 
 
@@ -417,6 +434,15 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, 
 /**
  *	Unproject matrix.
  *
+ *	\winz
+ *
+ *	\winx
+ *
+ *	\winy
+ *
+ *	\projection
+ *
+ *	\modelview
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx, float winy, float winz, const hpmvec4x4f_t projection, const hpmvec4x4f_t modelview, const int* viewport, hpmvec3f* pos);
@@ -425,9 +451,12 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx, float winy, float
 
 
 
+
+
+
 /**
  *=========================================================
- *
+ *			Will be added later because the 4x4 matrix is used more.
  *=========================================================
  */
 

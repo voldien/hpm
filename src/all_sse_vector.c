@@ -36,3 +36,46 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 HPM_IMP( double, hpm_vec4_lengthsquredv, const hpmvec4d* arg){
 	return _mm_cvtss_f32(_mm_sqrt_ss(_mm_setr_ps((*arg)[0], (*arg)[1], (*arg)[2], 0 ) ) );						/*	TODO FIX */
 }
+
+
+
+
+
+
+
+HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out){
+
+
+}
+
+HPM_IMP( float, hpm_vec3_tripleProductf, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3){
+	hpmvec3f tmp;
+	hpm_vec3_crossproductfv(v1, v2, &tmp);
+	return hpm_vec3_dotfv(v3, &tmp);
+}
+
+
+
+
+
+HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
+	hpmvec3f tmp1 = *larg;
+	hpmvec3f tmp2 = *rarg;
+	tmp1[3] = 0;
+	tmp2[3] = 0;
+	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1,&tmp2);
+}
+
+HPM_IMP( float, hpm_vec3_lengthf, const hpmvec3f* larg, const hpmvec3f* rarg){
+	hpmvec3f tmp = *rarg;
+	tmp[3] = 0;
+	return HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )(&tmp);
+}
+
+HPM_IMP( float, hpm_vec3_lengthsquaref, const hpmvec3f* larg, const hpmvec3f* rarg){
+	hpmvec3f tmp = *rarg;
+	tmp[3] = 0;
+	return HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(&tmp);
+}
+
+

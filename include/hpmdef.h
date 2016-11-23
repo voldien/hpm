@@ -1,5 +1,6 @@
 /**
-    Copyright (C) 2015  Valdemar Lindberg
+	High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

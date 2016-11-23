@@ -2,48 +2,13 @@
 
 
 HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
-	destination[0][0] = source[0][0];
-	destination[0][1] = source[0][1];
-	destination[0][2] = source[0][2];
-	destination[0][3] = source[0][3];
-
-	destination[1][0] = source[1][0];
-	destination[1][1] = source[1][1];
-	destination[1][2] = source[1][2];
-	destination[1][3] = source[1][3];
-
-	destination[2][0] = source[2][0];
-	destination[2][1] = source[2][1];
-	destination[2][2] = source[2][2];
-	destination[2][3] = source[2][3];
-
-	destination[3][0] = source[3][0];
-	destination[3][1] = source[3][1];
-	destination[3][2] = source[3][2];
-	destination[3][3] = source[3][3];
+	destination[0] = source[0];
+	destination[1] = source[1];
+	destination[2] = source[2];
+	destination[3] = source[3];
 
 }
-HPM_IMP(void, hpm_mat4x4_copydv, hpmvec4x4d_t destination, const hpmvec4x4d_t source){
-	destination[0][0] = source[0][0];
-	destination[0][1] = source[0][1];
-	destination[0][2] = source[0][2];
-	destination[0][3] = source[0][3];
 
-	destination[1][0] = source[1][0];
-	destination[1][1] = source[1][1];
-	destination[1][2] = source[1][2];
-	destination[1][3] = source[1][3];
-
-	destination[2][0] = source[2][0];
-	destination[2][1] = source[2][1];
-	destination[2][2] = source[2][2];
-	destination[2][3] = source[2][3];
-
-	destination[3][0] = source[3][0];
-	destination[3][1] = source[3][1];
-	destination[3][2] = source[3][2];
-	destination[3][3] = source[3][3];
-}
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
 
@@ -134,27 +99,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 				larg[3][3] * (*rarg)[3];
 
 }
-HPM_IMP( void, hpm_mat4x4_multiply_mat1x4dv, const hpmvec4x4d_t larg, const hpmvec4d* rarg, hpmvec4d* output){
-	(*output)[0] = larg[0][1] * (*rarg)[0] +
-				larg[0][1] * (*rarg)[1] +
-				larg[0][2] * (*rarg)[2] +
-				larg[0][3] * (*rarg)[3];
 
-	(*output)[1] = larg[1][0] * (*rarg)[0] +
-				larg[1][1] * (*rarg)[1] +
-				larg[1][2] * (*rarg)[2] +
-				larg[1][3] * (*rarg)[3];
-
-	(*output)[2] = larg[2][0] * (*rarg)[0] +
-				larg[2][1] * (*rarg)[1] +
-				larg[2][2] * (*rarg)[2] +
-				larg[2][3] * (*rarg)[3];
-
-	(*output)[3] = larg[3][0] * (*rarg)[0] +
-				larg[3][1] * (*rarg)[1] +
-				larg[3][2] * (*rarg)[2] +
-				larg[3][3] * (*rarg)[3];
-}
 
 
 
@@ -201,46 +146,7 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
     return ( src[0]*dst[0]+src[1]*dst[1]+src[2]*dst[2]+src[3]*dst[3] );
 }
-HPM_IMP( double, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg){
-	double dst[4];
-	double src[16];
-	double tmp[16];
-	int i;
-	const double* mat = arg;
 
-
-	for ( i = 0; i < 4; i++) {
-		src[i] = mat[i*4];
-		src[i + 4] = mat[i*4 + 1];
-		src[i + 8] = mat[i*4 + 2];
-		src[i + 12] = mat[i*4 + 3];
-	}
-
-	tmp[0] = src[10] * src[15];
-	tmp[1] = src[11] * src[14];
-	tmp[2] =	src[9] *	src[15];
-	tmp[3] =	src[11] *	src[13];
-	tmp[4] =	src[9] *	src[14];
-	tmp[5] =	src[10] *	src[13];
-	tmp[6] =	src[8] *	src[15];
-	tmp[7] =	src[11] *	src[12];
-	tmp[8] =	src[8] *	src[14];
-	tmp[9] =	src[10] *	src[12];
-	tmp[10] =	src[8] *	src[13];
-	tmp[11] =	src[9] *	src[12];
-
-	dst[0]	= tmp[0]*src[5] +tmp[3]*src[6] +tmp[4]*src[7];
-	dst[0]	-= tmp[1]*src[5] +tmp[2]*src[6] +tmp[5]*src[7];
-	dst[1]	= tmp[1]*src[4] +tmp[6]*src[6] +tmp[9]*src[7];
-	dst[1]	-=tmp[0]*src[4] +tmp[7]*src[6] +tmp[8]*src[7];
-	dst[2]	=tmp[2]*src[4] +tmp[7]*src[5] +tmp[10]*src[7];
-	dst[2]	-=tmp[3]*src[4] +tmp[6]*src[5] +tmp[11]*src[7];
-	dst[3]	=tmp[5]*src[4] +tmp[8]*src[5] +tmp[11]*src[6];
-	dst[3]	-=tmp[4]*src[4] +tmp[9]*src[5] +tmp[10]*src[6];
-	dst[4]	=	tmp[1]*src[1] +tmp[3]*src[2] +tmp[4]*src[3];
-
-    return ( src[0]*dst[0]+src[1]*dst[1]+src[2]*dst[2]+src[3]*dst[3] );
-}
 
 /*	Cramer's rule	*/ /*	TODO Fix	*/
 HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat, hpmvec4x4f_t out){
@@ -249,99 +155,6 @@ HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat, hpmvec4x4f_t out
 	float det;
 	float* dst = out;
 	const float* mat = f_mat;
-	int i,j;
-
-	/* determinant */
-	/* transpose matrix */
-	for ( i = 0; i < 4; i++) {
-		src[i] = mat[i*4];
-		src[i + 4] = mat[i*4 + 1];
-		src[i + 8] = mat[i*4 + 2];
-		src[i + 12] = mat[i*4 + 3];
-	}
-	/* calculate pairs for first 8 elements (cofactors) */
-	tmp[0] = src[10] * src[15];
-	tmp[1] = src[11] * src[14];
-	tmp[2] =	src[9] *	src[15];
-	tmp[3] =	src[11] *	src[13];
-	tmp[4] =	src[9] *	src[14];
-	tmp[5] =	src[10] *	src[13];
-	tmp[6] =	src[8] *	src[15];
-	tmp[7] =	src[11] *	src[12];
-	tmp[8] =	src[8] *	src[14];
-	tmp[9] =	src[10] *	src[12];
-	tmp[10] =	src[8] *	src[13];
-	tmp[11] =	src[9] *	src[12];
-
-
-	/* calculate first 8 elements (cofactors) */
-	dst[0]	= tmp[0]*src[5] +tmp[3]*src[6] +tmp[4]*src[7];
-	dst[0]	-= tmp[1]*src[5] +tmp[2]*src[6] +tmp[5]*src[7];
-	dst[1]	= tmp[1]*src[4] +tmp[6]*src[6] +tmp[9]*src[7];
-	dst[1]	-=tmp[0]*src[4] +tmp[7]*src[6] +tmp[8]*src[7];
-	dst[2]	=tmp[2]*src[4] +tmp[7]*src[5] +tmp[10]*src[7];
-	dst[2]	-=tmp[3]*src[4] +tmp[6]*src[5] +tmp[11]*src[7];
-	dst[3]	=tmp[5]*src[4] +tmp[8]*src[5] +tmp[11]*src[6];
-	dst[3]	-=tmp[4]*src[4] +tmp[9]*src[5] +tmp[10]*src[6];
-	dst[4]	=	tmp[1]*src[1] +tmp[3]*src[2] +tmp[4]*src[3];
-	dst[4]	-=tmp[0]*src[1] +tmp[7]*src[2] +tmp[8]*src[3];
-	dst[5]	=tmp[0]*src[0] +tmp[6]*src[2] +tmp[9]*src[3];
-	dst[5]	-=tmp[1]*src[0] +tmp[6]*src[1] +tmp[11]*src[3];
-	dst[6]	=tmp[3]*src[0] +tmp[7]*src[1] +tmp[10]*src[3];
-	dst[6]	-=tmp[2]*src[0] +tmp[9]*src[1] +tmp[10]*src[2];
-	dst[7]	=tmp[4]*src[0] +tmp[8]*src[1] +tmp[11]*src[2];
-	dst[7]	-= tmp[5]*src[0] + tmp[8]*src[1] + tmp[11]*src[2];
-
-
-
-	/* calculate pairs for second 8 elements (cofactors) */
-	tmp[0] =	src[2]*src[7];
-	tmp[1] =src[3]*src[6];
-	tmp[2] =src[1]*src[7];
-	tmp[3] =src[3]*src[5];
-	tmp[4] =src[1]*src[6];
-	tmp[5] =src[2]*src[5];
-
-	tmp[6] =src[0]*src[7];
-	tmp[7] =src[3]*src[4];
-	tmp[8] =	src[0]*src[6];
-	tmp[9] =src[2]*src[4];
-	tmp[10] =src[0]*src[5];
-	tmp[11] =src[1]*src[4];
-
-	/* calculate second 8 elements (cofactors) */
-	dst[8]	= tmp[0]*src[13] + tmp[3]*src[14] + tmp[4]*src[15];
-	dst[8]	-= tmp[1]*src[13] + tmp[2]*src[14] + tmp[5]*src[15];
-	dst[9]	= tmp[1]*src[12] + tmp[6]*src[14] + tmp[9]*src[15];
-	dst[9] -= tmp[0]*src[12] + tmp[7]*src[14] + tmp[8]*src[15];
-	dst[10] = tmp[2]*src[12] + tmp[7]*src[13] + tmp[10]*src[15];
-	dst[10]-= tmp[3]*src[12] + tmp[6]*src[13] + tmp[11]*src[15];
-	dst[11] = tmp[5]*src[12] + tmp[8]*src[13] + tmp[11]*src[14];
-	dst[11]-= tmp[4]*src[12] + tmp[9]*src[13] + tmp[10]*src[14];
-	dst[12] = tmp[2]*src[10] + tmp[5]*src[11] + tmp[1]*src[9];
-	dst[12]-= tmp[4]*src[11] + tmp[0]*src[9] + tmp[3]*src[10];
-	dst[13] = 	tmp[8]*src[11] + tmp[0]*src[8] + tmp[7]*src[10];
-	dst[13]-= tmp[6]*src[10] + tmp[9]*src[11] + tmp[1]*src[8];
-	dst[14] = tmp[6]*src[9] + tmp[11]*src[11] + tmp[3]*src[8];
-	dst[14]-= tmp[10]*src[11] + tmp[2]*src[8] + tmp[7]*src[9];
-	dst[15] = tmp[10]*src[10] + tmp[4]*src[8] + tmp[9]*src[9];
-	dst[15]-= tmp[8]*src[9] + tmp[11]*src[10] + tmp[5]*src[8];
-
-	/* calculate determinant */
-	det=src[0]*dst[0]+src[1]*dst[1]+src[2]*dst[2]+src[3]*dst[3];
-	/* calculate matrix inverse */
-	det = 1/det;
-	for (j = 0; j < 16; j++)
-		dst[j] *= det;
-
-	return det;
-}
-HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat, hpmvec4x4d_t out){
-	float tmp[12]; /* temp array for pairs*/
-	float src[16]; /* array of transpose source matrix */
-	float det;
-	double* dst = out;
-	const double* mat = f_mat;
 	int i,j;
 
 	/* determinant */
@@ -450,24 +263,5 @@ HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4){
 	d_mat4[1] = row1;
 	d_mat4[2] = row2;
 	d_mat4[3] = row3;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-HPM_IMP( void, hpm_mat2x2_multiply_mat2x2f, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output){
-
-}
-HPM_IMP( void, hpm_mat2x2_multiply_mat2x2d, const hpmvec2x2f_t larg, const hpmvec2x2f_t rarg, hpmvec2x2f_t output){
-
 }
 

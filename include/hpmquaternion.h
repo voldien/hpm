@@ -1,5 +1,6 @@
 /**
-    Copyright (C) 2015  Valdemar Lindberg
+	High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -31,13 +32,16 @@ extern "C"{
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
 
+
 /**
  *
  */
+/*
 HPM_ALIGN(16)
 typedef union{
 	hpmquatf m;
 }hpmquatuf;
+*/
 
 /**
  *
@@ -48,8 +52,9 @@ typedef union{
 	hpmvec2d n[2];
 }hpmquatud;
 
+
 /**
- *	Quaternion component index.
+ *	Quaternion component subscript.
  */
 #define HPM_QUAD_W 0
 #define HPM_QUAD_X 1
@@ -65,7 +70,7 @@ typedef union{
  *	\source
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyf, hpmquatf* __restrict__ destination, const hpmquatf* __restrict__ source);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyfv, hpmquatf* __restrict__ destination, const hpmquatf* __restrict__ source);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyd, hpmquatf* __restrict__ destination, const hpmquatf* __restrict__ source);*/
 
 /**
@@ -81,8 +86,10 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyf, hpmquatf* __restrict__ destinatio
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out);*/
 
+
 /**
  *	Multiply quaternion with vector.
+ *
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
@@ -94,6 +101,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, cons
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directiondv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);*/
+
 
 /**
  *	Compute vector direction of the quaternions orientation.
@@ -107,6 +115,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, const
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* quatdir);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_get_vectordv, const hpmquatd* quat, const hpmvec3d* vect, hpmvec3d* quatdir);*/
+
 
 /**
  *	Conjugate of quaternion. All the real component of
@@ -185,6 +194,19 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* destination);
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axis_angledv, hpmquatd* __restrict__ quat, const hpmvec3d* __restrict__ axis, double angle);*/
 
+
+/**
+ *	TODO rename later.
+ *	Create quaternion from matrix.
+ *
+ *	\quat
+ *
+ *	\mat
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4, hpmquatf* quat, const hpmvecf* mat);
+
+
 /**
  *	Compute quaternion from eular.
  *
@@ -214,6 +236,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat, float pitch_radia
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_lerpdv, const hpmquatd* larg, const hpmquatd* rarg, double t, hpmquatd* out);*/
+
 
 /**
  *	Compute spherical interpolation between two quaternion.

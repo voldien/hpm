@@ -48,3 +48,19 @@ HPM_IMP(hpmvec8d, hpm_vec8_mindv, const hpmvec8d* __restrict__ a, const hpmvec8d
 
 
 
+
+
+HPM_IMP(hpmvec4i, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
+	return (*a) == (*b);
+}
+
+HPM_IMP(hpmvec4i, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
+	return (*a) != (*b);
+}
+
+HPM_IMP(hpmvec4i, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
+	return (*a) > (*b);
+}
+HPM_IMP(hpmvec4i, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
+	return (*a) < (*b);
+}
