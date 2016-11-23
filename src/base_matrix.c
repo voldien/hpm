@@ -8,6 +8,8 @@
 #		include<x86intrin.h>
 #   endif
 
+
+
 HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;
@@ -66,24 +68,44 @@ HPM_IMP( void, hpm_mat4x4_subraction_mat4x4dv, const hpmvec4x4d_t larg, const hp
 	output[3] = larg[3] - rarg[3];
 }
 
-HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat4,
+HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 		hpmvec3f* __restrict__ position,
-		hpmvec4f* __restrict__ rotation,
+		hpmquatf* __restrict__ rotation,
 		hpmvec3f* __restrict__ scale){
 
-}
-HPM_IMP( void, hpm_mat4x4_decomposedv, const hpmvec4x4d_t mat4,
-		hpmvec3d* __restrict__ position,
-		hpmvec4d* __restrict__ rotation,
-		hpmvec3d* __restrict__ scale){
+	const hpmmat4uf* umat = mat;
+	hpmmat4uf m1;
+
+	/*	Set position.	*/
+	*position = mat[3];
+
+
+	/*	*/
+	hpmvecf xs = (signbit(umat->s.m11 * umat->s.m12 * umat->s.m13 * umat->s.m14) < 0) ? -1 : 1;
+	hpmvecf ys = (signbit(umat->s.m21 * umat->s.m22 * umat->s.m23 * umat->s.m24) < 0) ? -1 : 1;
+	hpmvecf zs = (signbit(umat->s.m31 * umat->s.m32 * umat->s.m33 * umat->s.m34) < 0) ? -1 : 1;
+
+
+	/*	*/
+	(*scale)[0] = xs * (hpmvecf)sqrtf(umat->s.m11 * umat->s.m11 + umat->s.m12 * umat->s.m12 + umat->s.m13 * umat->s.m13);
+	(*scale)[1] = ys * (hpmvecf)sqrtf(umat->s.m21 * umat->s.m21 + umat->s.m22 * umat->s.m22 + umat->s.m23 * umat->s.m23);
+	(*scale)[2] = zs * (hpmvecf)sqrtf(umat->s.m31 * umat->s.m31 + umat->s.m32 * umat->s.m32 + umat->s.m33 * umat->s.m33);
+
+
+	/*	*/
+	if ((*scale)[0] == 0.0 || (*scale)[0] == 0.0 || (*scale)[0] == 0.0){
+		hpm_quat_identityfv(rotation);
+		return;
+	}
+
+	/*	Extract matrix and compute the quaternion */
+	m1.s.m11 = umat->s.m11 / scale[0]; m1.s.m11 = umat->s.m12 / scale[0]; m1.s.m13 = umat->s.m13 / scale[0]; m1.s.m14 = 0;
+	m1.s.m21 = umat->s.m21 / scale[1]; m1.s.m22 = umat->s.m22 / scale[1]; m1.s.m23 = umat->s.m23 / scale[1]; m1.s.m24 = 0,
+	m1.s.m31 = umat->s.m31 / scale[2]; m1.s.m32 = umat->s.m32 / scale[2]; m1.s.m33 = umat->s.m33 / scale[2]; m1.s.m34 = 0;
+	m1.s.m41 = 0; m1.s.m42 = 0; m1.s.m43 = 0; m1.s.m44 = 1;
+	hpm_quat_from_mat4x4(rotation, &m1.s);
 
 }
-
-
-
-
-
-
 
 
 HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, float x, float y, float z){
@@ -178,6 +200,8 @@ HPM_IMP( void, hpm_mat4x4_scaledv, hpmvec4x4d_t mat, const hpmvec3d* scale){
 
 HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmvec3f* axis){
 
+
+
 }
 HPM_IMP( void, hpm_mat4x4_rotationdv, hpmvec4x4d_t mat, float angle, const hpmvec3d* axis){
 
@@ -266,19 +290,20 @@ HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat, const hpmquatf* quat){
 	mat[1][2] = yz + wx;
 	mat[1][3] = 0;
 
-	mat[2][0] =xz + wy;
-	mat[2][1] =yz - wx;
+	mat[2][0] = xz + wy;
+	mat[2][1] = yz - wx;
 	mat[2][2] = 1 - (xx + yy);
 	mat[2][3] = 0.0;
 
-	mat[3][0] =0.0;
-	mat[3][1] =0.0;
-	mat[3][2] =0.0;
-	mat[3][3] =1.0;
+	mat[3][0] = 0.0;
+	mat[3][1] = 0.0;
+	mat[3][2] = 0.0;
+	mat[3][3] = 1.0;
 }
 HPM_IMP( void, hpm_mat4x4_rotationQd, hpmvec4x4d_t mat, const hpmquatd* quat){
 
 }
+
 
 
 

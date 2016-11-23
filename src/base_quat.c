@@ -1,5 +1,13 @@
 #include"hpmquaternion.h"
+#include"hpmmatrix.h"
 #include<math.h>
+
+#include<immintrin.h>
+#   ifdef HPM_VC
+#      include<intrin.h>
+#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
+#		include<x86intrin.h>
+#   endif
 
 
 
@@ -47,6 +55,49 @@ HPM_IMP( void, hpm_quat_axisd, hpmquatf* quat, float pitch_radian, float yaw_rad
 	const hpmvecd num9 = (hpmvecd)cos((hpmvecd)num7);
 
 
+}
+
+
+HPM_IMP(void, hpm_quat_from_mat4x4, hpmquatf* quat, const hpmvecf* mat){
+	const hpmmat4uf* umat = mat;
+
+	float trace = umat->s.m11 + umat->s.m22 + umat->s.m33;
+
+	if( trace > 0 ) {
+
+		float s = 0.5f / sqrtf(trace + 1.0f);
+		(*quat)[HPM_QUAD_W] = 0.25f / s;
+		(*quat)[HPM_QUAD_X] = ( umat->s.m32 - umat->s.m23 ) * s;
+		(*quat)[HPM_QUAD_Y] = ( umat->s.m13 - umat->s.m31 ) * s;
+		(*quat)[HPM_QUAD_Z] = ( umat->s.m21 - umat->s.m12 ) * s;
+
+	}else {
+		if ( umat->s.m11 > umat->s.m22 && umat->s.m11 > umat->s.m33 ) {
+
+			float s = 2.0f * sqrtf( 1.0f + umat->s.m11 - umat->s.m22 - umat->s.m33);
+			(*quat)[HPM_QUAD_W] = (umat->s.m32 - umat->s.m23 ) / s;
+			(*quat)[HPM_QUAD_X] = 0.25f * s;
+			(*quat)[HPM_QUAD_Y] = (umat->s.m12 + umat->s.m21 ) / s;
+			(*quat)[HPM_QUAD_Z] = (umat->s.m13 + umat->s.m31 ) / s;
+
+		} else if (umat->s.m22 > umat->s.m33) {
+
+			float s = 2.0f * sqrtf( 1.0f + umat->s.m22 - umat->s.m11 - umat->s.m33);
+			(*quat)[HPM_QUAD_W] = (umat->s.m13 - umat->s.m31 ) / s;
+			(*quat)[HPM_QUAD_X] = (umat->s.m12 + umat->s.m21 ) / s;
+			(*quat)[HPM_QUAD_Y] = 0.25f * s;
+			(*quat)[HPM_QUAD_Z] = (umat->s.m23 + umat->s.m32 ) / s;
+
+		} else {
+
+			float s = 2.0f * sqrtf( 1.0f + umat->s.m33 - umat->s.m11 - umat->s.m22 );
+			(*quat)[HPM_QUAD_W] = (umat->s.m21 - umat->s.m12 ) / s;
+			(*quat)[HPM_QUAD_X] = (umat->s.m13 + umat->s.m31 ) / s;
+			(*quat)[HPM_QUAD_Y] = (umat->s.m23 + umat->s.m32 ) / s;
+			(*quat)[HPM_QUAD_Z] = 0.25f * s;
+
+		}
+	}
 }
 
 

@@ -117,90 +117,36 @@ HPM_IMP( void, hpm_vec4_slerpd, const hpmvec4d* a, const hpmvec4d* b, double t, 
 
 
 
-
-
-
-HPM_IMP(void, hpm_vec3_copyf, hpmvec3f* __restrict__ destination, const hpmvec3f* __restrict__ source){
-	*destination = *source;
-}
-HPM_IMP(void, hpm_vec3_copyd, hpmvec3d* __restrict__ destination, const hpmvec3d* __restrict__ source){
-	*destination = *source;
-}
-
-HPM_IMP( void, hpm_vec3_additionfv, hpmvec3f* larg, const hpmvec3f* rarg){
-	*larg += *rarg;
-}
-HPM_IMP( void, hpm_vec3_additiondv, hpmvec3d* larg, const hpmvec3d* rarg){
-	*larg += *rarg;
-}
-
-HPM_IMP(void, hpm_vec3_additionf, hpmvec3f* larg, const hpmvecf rarg){
-	const hpmvec3f row0 = {rarg,rarg,rarg,rarg};
-	*larg += row0;
-}
-HPM_IMP( void, hpm_vec3_additiond, hpmvec3d* larg, const hpmvecd rarg){
-	const hpmvec3d row0 = {rarg,rarg,rarg,rarg};
-	*larg += row0;
-}
-
-
-
-HPM_IMP( void, hpm_vec3_multif, hpmvec3f* larg, const hpmvecf rarg){
-	const hpmvec3f row0 = {rarg,rarg,rarg,rarg};
-	*larg *= row0;
-}
-HPM_IMP( void, hpm_vec3_multid, hpmvec3d* larg, const hpmvecd rarg){
-	const hpmvec3d row0 = {rarg,rarg,rarg,rarg};
-	*larg *= row0;
-}
-
-
-HPM_IMP( void, hpm_vec3_multifv, hpmvec3f* larg, const hpmvec3f* rarg){
-	*larg += *rarg;
-}
-HPM_IMP( void, hpm_vec3_multidv, hpmvec3d* larg, const hpmvec3d* rarg){
-	*larg += *rarg;
-}
+/*========================================================================
+ *
+ *
+==========================================================================
+ * 						Vector 3 implementation.
+==========================================================================
+ *
+ *
+ *========================================================================
+ */
 
 
 HPM_IMP( void, hpm_vec3_reflectf, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out){
 	const float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(arg, normal);
-	const hpmvec3f row0 = {2,2,2,2};
+	const hpmvec3f row0 = {2.0f,2.0f,2.0f,2.0f};
 	const hpmvec3f vdot = {dot, dot, dot,dot};
-	*out = row0 * vdot * *normal - *arg;
-}
-HPM_IMP( void, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3d* normal, hpmvec3d* out){
-	const double dot = HPM_CALLLOCALFUNC(hpm_vec3_dotd)(arg, normal);
-	const hpmvec3d row0 = {2,2,2,2};
-	const hpmvec3d vdot = {dot, dot, dot,dot};
 	*out = row0 * vdot * *normal - *arg;
 }
 
 HPM_IMP( void, hpm_vec3_refractf, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
-	float N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
-	float k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
-	if (k < 0.f){
+	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
+	hpmvecf k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+	if (k < 0.0f){
 		const hpmvec3f zero = {0,0,0,0};
 		*out = zero;
 	}
 	else{
-		const float tmp = index * N_dot_I + sqrt(k);
+		const hpmvecf tmp = index * N_dot_I + sqrtf(k);
 		const hpmvec3f index0 = {index,index,index,index};
 		const hpmvec3f tmp0 = {tmp,tmp,tmp,tmp};
-		*out = index0 * *incidentVec - tmp0 * *normal;
-	}
-}
-HPM_IMP( void, hpm_vec3_refractd, hpmvec3d* incidentVec, const hpmvec3d* normal, double index, hpmvec3d* out){
-	double N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
-	double k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
-	if (k < 0.f){
-		const hpmvec3d zero = {0,0,0,0};
-		*out = zero;
-	}
-	else{
-		const double tmp = index * N_dot_I + sqrt(k);
-		const hpmvec3d index0 = {index,index,index,index};
-		const hpmvec3d tmp0 = {tmp,tmp,tmp,tmp};
 		*out = index0 * *incidentVec - tmp0 * *normal;
 	}
 }
@@ -215,12 +161,12 @@ HPM_IMP( void, hpm_vec3_lerpd, const hpmvec3d* a, const hpmvec3d* b, double t, h
 }
 
 HPM_IMP( void, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, hpmvec3f* out){
-	float theta;
+	hpmvecf theta;
 	hpmvec3f relative;
 	float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(a,b);
-	const float vsintime = sin(t);
+	const hpmvecf vsintime = sinf(t);
 	const hpmvec4f time = {t,t,t,t};
-	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	dot = HPM_CLAMP(dot, -1.0f, 1.0f);
 	theta = acosf(dot) * t;
 	relative = *b - *a * time;
 	const hpmvec4f vtheta = {theta, theta, theta, theta};
@@ -229,20 +175,7 @@ HPM_IMP( void, hpm_vec3_slerpf, const hpmvec3f* a, const hpmvec3f* b, float t, h
 	*out = (*a * vtheta) + (relative *vsint);
 }
 
-HPM_IMP( void, hpm_vec3_slerpd, const hpmvec3d* a, const hpmvec3d* b, double t, hpmvec3d* out){
-	double theta;
-	hpmvec3d relative;
-	double dot = HPM_CALLLOCALFUNC(hpm_vec3_dotd)(a,b);
-	const double vsintime = sin(t);
-	const hpmvec4d time = {t,t,t,t};
-	dot = HPM_CLAMP(dot, -1.0, 1.0);
-	theta = acos(dot) * t;
-	relative = *b - *a * time;
-	const hpmvec4d vtheta = {theta, theta, theta, theta};
-	const hpmvec4d vsint = {vsintime, vsintime, vsintime, vsintime};
-	HPM_CALLLOCALFUNC(hpm_vec3_normalized)(&relative);
-	*out = (*a * vtheta) + (relative *vsint);
-}
+
 
 
 
