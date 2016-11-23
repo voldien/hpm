@@ -62,6 +62,12 @@ typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);
+typedef struct hpm_vec4uf_t{
+	union{
+		hpmvec4f v;
+		struct{hpmvecf x, y, z, w;};
+	};
+};
 /**
  * 	Internal SSE 128 bit  data types
  *	for implementing the intrinsics.
