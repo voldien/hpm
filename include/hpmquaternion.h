@@ -56,10 +56,10 @@ typedef union{
 /**
  *	Quaternion component subscript.
  */
-#define HPM_QUAD_W 0
-#define HPM_QUAD_X 1
-#define HPM_QUAD_Y 2
-#define HPM_QUAD_Z 3
+#define HPM_QUAT_W 0
+#define HPM_QUAT_X 1
+#define HPM_QUAT_Y 2
+#define HPM_QUAT_Z 3
 
 
 /**

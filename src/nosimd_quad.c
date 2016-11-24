@@ -42,3 +42,6 @@ HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* lf_quat, const hpmquatd* r
 	out_quat[0][HPM_QUAD_Z] =  (lf_quat[0][HPM_QUAD_W] * (*rf_vec)[HPM_QUAD_Z]) + (lf_quat[0][HPM_QUAD_X] * (*rf_vec)[HPM_QUAD_Y]) - (lf_quat[0][HPM_QUAD_Y] * (*rf_vec)[HPM_QUAD_X]);
 }
 
+
+
+

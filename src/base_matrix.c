@@ -266,7 +266,7 @@ HPM_IMP( void, hpm_mat4x4_rotationZd, hpmvec4x4d_t mat, double angle){
 
 
 HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat, const hpmquatf* quat){
-	hpmvecf w = (*quat)[HPM_QUAD_W], x = (*quat)[1], y = (*quat)[2], z = (*quat)[3],
+	hpmvecf w = (*quat)[HPM_QUAT_W], x = (*quat)[1], y = (*quat)[2], z = (*quat)[3],
 	x2 = x + x,
 	y2 = y + y,
 	z2 = z + z,

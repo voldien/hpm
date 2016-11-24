@@ -45,23 +45,42 @@ HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
 }
 
 
+HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
+
+	/*	return ( *this * ( Quaternion(0, vector.x(),vector.y(),-vector.z()) ) * conjugate() ).getVector();*/
+	hpmquatf tmpq = *out;
+	hpmquatf tmpq1 = *out;
+	tmpq[HPM_QUAT_W] = 0;
+
+	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&tmpq1);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(larg, &tmpq, out);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &tmpq1, &tmpq);
+
+	/**/
+	(*out)[0] = tmpq[HPM_QUAT_X];
+	(*out)[1] = tmpq[HPM_QUAT_Y];
+	(*out)[2] = tmpq[HPM_QUAT_Z];
+	(*out)[3] = 0;
+}
+
 
 
 
 HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
 	const float half_angle = sinf(angle * 0.5f);
-	(*quat)[HPM_QUAD_X] = (*axis)[0] * half_angle;
-	(*quat)[HPM_QUAD_Y] = (*axis)[1] * half_angle;
-	(*quat)[HPM_QUAD_Z] = (*axis)[2] * half_angle;
-	(*quat)[HPM_QUAD_W] = cosf(half_angle);
+	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
+	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
+	(*quat)[HPM_QUAT_Z] = (*axis)[2] * half_angle;
+	(*quat)[HPM_QUAT_W] = cosf(half_angle);
 }
 HPM_IMP( void, hpm_quat_axis_angledv, hpmquatd* __restrict__ quat, const hpmvec3d* __restrict__ axis, double angle){
 	const double half_angle = sin(angle * 0.5f);
-	(*quat)[HPM_QUAD_X] = (*axis)[0] * half_angle;
-	(*quat)[HPM_QUAD_Y] = (*axis)[1] * half_angle;
-	(*quat)[HPM_QUAD_Z] = (*axis)[2] * half_angle;
-	(*quat)[HPM_QUAD_W] = cos(half_angle);
+	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
+	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
+	(*quat)[HPM_QUAT_Z] = (*axis)[2] * half_angle;
+	(*quat)[HPM_QUAT_W] = cos(half_angle);
 }
+
 
 HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
 	const float num1 = roll_radian * 0.5f;
@@ -74,10 +93,10 @@ HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_rad
 	const float num8 = (float)sinf((float)num7);
 	const float num9 = (float)cosf((float)num7);
 
-	(*quat)[HPM_QUAD_X] = (float)((float)num9 * (float)num5 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
-	(*quat)[HPM_QUAD_Y] = (float)((float)num8 * (float)num6 * (float)num3 - (float)num9 * (float)num5 * (float)num2);
-	(*quat)[HPM_QUAD_Z] = (float)((float)num9 * (float)num6 * (float)num2 - (float)num8 * (float)num5 * (float)num3);
-	(*quat)[HPM_QUAD_W] = (float)((float)num9 * (float)num6 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
+	(*quat)[HPM_QUAT_X] = (float)((float)num9 * (float)num5 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
+	(*quat)[HPM_QUAT_Y] = (float)((float)num8 * (float)num6 * (float)num3 - (float)num9 * (float)num5 * (float)num2);
+	(*quat)[HPM_QUAT_Z] = (float)((float)num9 * (float)num6 * (float)num2 - (float)num8 * (float)num5 * (float)num3);
+	(*quat)[HPM_QUAT_W] = (float)((float)num9 * (float)num6 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
 }
 HPM_IMP( void, hpm_quat_axisd, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
 	const hpmvecd num1 = roll_radian * 0.5f;
@@ -107,35 +126,35 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4
 	if( trace > 0 ) {
 
 		float s = 0.5f / sqrtf(trace + 1.0f);
-		(*quat)[HPM_QUAD_W] = 0.25f / s;
-		(*quat)[HPM_QUAD_X] = ( umat->s.m32 - umat->s.m23 ) * s;
-		(*quat)[HPM_QUAD_Y] = ( umat->s.m13 - umat->s.m31 ) * s;
-		(*quat)[HPM_QUAD_Z] = ( umat->s.m21 - umat->s.m12 ) * s;
+		(*quat)[HPM_QUAT_W] = 0.25f / s;
+		(*quat)[HPM_QUAT_X] = ( umat->s.m32 - umat->s.m23 ) * s;
+		(*quat)[HPM_QUAT_Y] = ( umat->s.m13 - umat->s.m31 ) * s;
+		(*quat)[HPM_QUAT_Z] = ( umat->s.m21 - umat->s.m12 ) * s;
 
 	}else {
 		if ( umat->s.m11 > umat->s.m22 && umat->s.m11 > umat->s.m33 ) {
 
 			float s = 2.0f * sqrtf( 1.0f + umat->s.m11 - umat->s.m22 - umat->s.m33);
-			(*quat)[HPM_QUAD_W] = (umat->s.m32 - umat->s.m23 ) / s;
-			(*quat)[HPM_QUAD_X] = 0.25f * s;
-			(*quat)[HPM_QUAD_Y] = (umat->s.m12 + umat->s.m21 ) / s;
-			(*quat)[HPM_QUAD_Z] = (umat->s.m13 + umat->s.m31 ) / s;
+			(*quat)[HPM_QUAT_W] = (umat->s.m32 - umat->s.m23 ) / s;
+			(*quat)[HPM_QUAT_X] = 0.25f * s;
+			(*quat)[HPM_QUAT_Y] = (umat->s.m12 + umat->s.m21 ) / s;
+			(*quat)[HPM_QUAT_Z] = (umat->s.m13 + umat->s.m31 ) / s;
 
 		} else if (umat->s.m22 > umat->s.m33) {
 
 			float s = 2.0f * sqrtf( 1.0f + umat->s.m22 - umat->s.m11 - umat->s.m33);
-			(*quat)[HPM_QUAD_W] = (umat->s.m13 - umat->s.m31 ) / s;
-			(*quat)[HPM_QUAD_X] = (umat->s.m12 + umat->s.m21 ) / s;
-			(*quat)[HPM_QUAD_Y] = 0.25f * s;
-			(*quat)[HPM_QUAD_Z] = (umat->s.m23 + umat->s.m32 ) / s;
+			(*quat)[HPM_QUAT_W] = (umat->s.m13 - umat->s.m31 ) / s;
+			(*quat)[HPM_QUAT_X] = (umat->s.m12 + umat->s.m21 ) / s;
+			(*quat)[HPM_QUAT_Y] = 0.25f * s;
+			(*quat)[HPM_QUAT_Z] = (umat->s.m23 + umat->s.m32 ) / s;
 
 		} else {
 
 			float s = 2.0f * sqrtf( 1.0f + umat->s.m33 - umat->s.m11 - umat->s.m22 );
-			(*quat)[HPM_QUAD_W] = (umat->s.m21 - umat->s.m12 ) / s;
-			(*quat)[HPM_QUAD_X] = (umat->s.m13 + umat->s.m31 ) / s;
-			(*quat)[HPM_QUAD_Y] = (umat->s.m23 + umat->s.m32 ) / s;
-			(*quat)[HPM_QUAD_Z] = 0.25f * s;
+			(*quat)[HPM_QUAT_W] = (umat->s.m21 - umat->s.m12 ) / s;
+			(*quat)[HPM_QUAT_X] = (umat->s.m13 + umat->s.m31 ) / s;
+			(*quat)[HPM_QUAT_Y] = (umat->s.m23 + umat->s.m32 ) / s;
+			(*quat)[HPM_QUAT_Z] = 0.25f * s;
 
 		}
 	}
@@ -181,24 +200,24 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, 
 
 
 HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
-	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
+	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));
 }
 HPM_IMP( double, hpm_quat_pitchdv, const hpmquatd* lf_quat){
-	return asin(-2.0 * ((*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X]));
+	return asin(-2.0 * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));
 }
 
 HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
-	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X] + (*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAD_X] * (*lf_quat)[HPM_QUAD_X] + (*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_Y]))));
+	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y]))));
 }
 HPM_IMP( double, hpm_quat_yawdv, const hpmquatd* lf_quat){
-	return atan2(2.0 * ((*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_X] + (*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAD_X] * (*lf_quat)[HPM_QUAD_X] + (*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_Y]))));
+	return atan2(2.0 * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y]))));
 }
 
 HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
-	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_Z] + (*lf_quat)[HPM_QUAD_X] * (*lf_quat)[HPM_QUAD_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Z])));
+	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_Z] + (*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Z])));
 }
 HPM_IMP( double, hpm_quat_rolldv, const hpmquatd* lf_quat){
-	return atan2(2.0 * ((*lf_quat)[HPM_QUAD_W] * (*lf_quat)[HPM_QUAD_Z] + (*lf_quat)[HPM_QUAD_X] * (*lf_quat)[HPM_QUAD_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAD_Y] * (*lf_quat)[HPM_QUAD_Y] + (*lf_quat)[HPM_QUAD_Z] * (*lf_quat)[HPM_QUAD_Z])));
+	return atan2(2.0 * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_Z] + (*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Z])));
 }
 
 
