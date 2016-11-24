@@ -13,12 +13,6 @@ HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
 	_MM_TRANSPOSE4_PS(mat[0], mat[1], mat[2], mat[3]);
 }
 
-HPM_IMP( void, hpm_mat4x4_transposedv, hpmvec4x4d_t f_mat4){
-	/*
-	_MM_TRANSPOSE4_PS(f_mat4[0],f_mat4[1],f_mat4[2],f_mat4[3]);
-	*/
-}
-
 
 HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 	hpmvec4f row0, row1, row2,row3;
@@ -86,9 +80,7 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
 	return det[0];
 }
-HPM_IMP( double, hpm_mat4x4_determinantdv, const hpmvec4x4d_t arg){
-	return 0;
-}
+
 
 
 /*	Cramer's rule	*/
@@ -219,45 +211,6 @@ HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){
 
 	return det[0];
 }
-HPM_IMP( double, hpm_mat4x4_inversedv, const hpmvec4x4d_t f_mat4, hpmvec4x4d_t out){
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-HPM_IMP( void, hpm_mat3x3_transposefv, hpmvec3x3f_t mat){
-	_MM_TRANSPOSE4_PS(mat[0], mat[1] ,mat[2], mat[3]);
-}
-HPM_IMP( void, hpm_mat3x3_transposedv, hpmvec3x3d_t mat){
-
-}
-
 
 
 

@@ -10,6 +10,8 @@
 
 
 
+
+
 HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;
@@ -94,7 +96,7 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 
 	/*	*/
 	if ((*scale)[0] == 0.0 || (*scale)[0] == 0.0 || (*scale)[0] == 0.0){
-		hpm_quat_identityfv(rotation);
+		HPM_CALLLOCALFUNC( hpm_quat_identityfv )(rotation);
 		return;
 	}
 
@@ -103,7 +105,7 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 	m1.s.m21 = umat->s.m21 / (*scale)[1]; m1.s.m22 = umat->s.m22 / (*scale)[1]; m1.s.m23 = umat->s.m23 / (*scale)[1]; m1.s.m24 = 0,
 	m1.s.m31 = umat->s.m31 / (*scale)[2]; m1.s.m32 = umat->s.m32 / (*scale)[2]; m1.s.m33 = umat->s.m33 / (*scale)[2]; m1.s.m34 = 0;
 	m1.s.m41 = 0; m1.s.m42 = 0; m1.s.m43 = 0; m1.s.m44 = 1;
-	hpm_quat_from_mat4x4(rotation, &m1.s);
+	HPM_CALLLOCALFUNC( hpm_quat_from_mat4x4fv )(rotation, &m1);
 
 }
 

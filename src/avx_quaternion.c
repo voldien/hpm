@@ -8,27 +8,18 @@
 #   endif
 
 
-HPM_IMP( void, hpm_quat_copyf, hpmquatf* destination, const hpmquatf* source){
-	*destination = *source;
-}
-HPM_IMP( void, hpm_quat_copyd, hpmquatf* destination, const hpmquatf* source){
-	*destination = *source;
-}
-
-
-
-
-
 HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
 
 }
-HPM_IMP( void, hpm_quat_multi_quatdv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
+
+HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg, hpmquatf* out){
+
 
 }
 
-HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
+
+HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
+
 
 }
-HPM_IMP( void, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out){
 
-}

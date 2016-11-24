@@ -195,15 +195,15 @@ int hpm_init(unsigned int simd){
 	//	hpm_vec4_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthdv);
 	hpm_vec4_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
 	//	hpm_vec4_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsquredv);
-	hpm_vec4_normalizef = hpm_get_symbolfuncp(hpm_vec4_normalizef);
+	hpm_vec4_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	//	hpm_vec4_normalized = hpm_get_symbolfuncp(hpm_vec4_normalized);
-	hpm_vec4_negatef = hpm_get_symbolfuncp(hpm_vec4_negatef);
+	hpm_vec4_negatefv = hpm_get_symbolfuncp(hpm_vec4_negatefv);
 	//	hpm_vec4_negated = hpm_get_symbolfuncp(hpm_vec4_negated);
 
 	/**/
-	hpm_vec4_lerpf = hpm_get_symbolfuncp(hpm_vec4_lerpf);
+	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	//	hpm_vec4_lerpd = hpm_get_symbolfuncp(hpm_vec4_lerpd);
-	hpm_vec4_slerpf = hpm_get_symbolfuncp(hpm_vec4_slerpf);
+	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 	//	hpm_vec4_slerpd = hpm_get_symbolfuncp(hpm_vec4_slerpd);
 
 
@@ -246,6 +246,8 @@ int hpm_init(unsigned int simd){
 
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	//	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
+	hpm_quat_from_mat4x4fv = hpm_get_symbolfuncp(hpm_quat_from_mat4x4fv);
+
 
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
@@ -255,7 +257,7 @@ int hpm_init(unsigned int simd){
 	//	hpm_quat_lengthdv = hpm_get_symbolfuncp(hpm_vec4_lengthdv);
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
 	//	hpm_quat_lengthsquredv = hpm_get_symbolfuncp(hpm_vec4_lengthsquredv);
-	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizef);
+	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	//	hpm_quat_normalizedv = hpm_get_symbolfuncp(hpm_vec4_normalized);
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotfv);
 	//	hpm_quat_dotdv = hpm_get_symbolfuncp(hpm_vec4_dotdv);

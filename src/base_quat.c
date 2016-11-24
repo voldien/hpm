@@ -12,6 +12,42 @@
 
 
 
+/*	TODO fix for double.	*/
+HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
+	const hpmquatf conj = {-1.0, -1.0, -1.0, 1.0};
+	*larg *= conj;
+}
+HPM_IMP( void, hpm_quat_conjugatedv, hpmquatd* larg){
+	const hpmquatd conj = {-1.0, -1.0, -1.0, 1.0};
+	*larg *= conj;
+}
+
+HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
+	hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsqurefv )(arg);
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
+	*arg *= sqrleng;
+}
+HPM_IMP( void, hpm_quat_inversedv, hpmquatd* arg){
+	hpmvecd sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsquredv )(arg);
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatedv )(arg);
+	*arg *= sqrleng;
+}
+
+
+HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
+	const hpmquatf iden = {1.0f, 0.0f, 0.0f, 0.0f};
+	*out = iden;
+}
+HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
+	hpmquatud* pquat;
+	const hpmquatd iden = {1.0, 0.0, 0.0, 0.0};
+	*out = iden;
+}
+
+
+
+
+
 HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
 	const float half_angle = sinf(angle * 0.5f);
 	(*quat)[HPM_QUAD_X] = (*axis)[0] * half_angle;
@@ -53,13 +89,18 @@ HPM_IMP( void, hpm_quat_axisd, hpmquatf* quat, float pitch_radian, float yaw_rad
 	const hpmvecd num7 = yaw_radian * 0.5f;
 	const hpmvecd num8 = (hpmvecd)sin((hpmvecd)num7);
 	const hpmvecd num9 = (hpmvecd)cos((hpmvecd)num7);
-
-
 }
 
 
-HPM_IMP(void, hpm_quat_from_mat4x4, hpmquatf* quat, const hpmvecf* mat){
-	const hpmmat4uf* umat = mat;
+
+
+
+
+
+
+
+HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat){
+	const hpmmat4uf* __restrict__ umat = mat;
 
 	float trace = umat->s.m11 + umat->s.m22 + umat->s.m33;
 
@@ -99,6 +140,42 @@ HPM_IMP(void, hpm_quat_from_mat4x4, hpmquatf* quat, const hpmvecf* mat){
 		}
 	}
 }
+
+
+
+
+
+
+
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out){
+	//(from * (1.0f - time) + to * time);
+	hpmvecf ht = (1.0f - t);
+	*out = *a * ht + *b * t;
+}
+
+
+
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out){
+
+	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
+	hpmquatf q3;
+	if(fdot < 0.0f){
+		fdot = -fdot;
+		q3 = ( *b ) * -1.0f;
+	}
+	else q3 = *b;
+
+	if(fdot <0.95f){
+		float angle = acosf(fdot);
+		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
+	}
+	else
+		return hpm_quat_lerpfv(a, b, t, out);
+
+}
+
+
+
 
 
 

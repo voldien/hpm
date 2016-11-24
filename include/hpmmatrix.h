@@ -57,6 +57,7 @@ typedef hpmvec4f hpmvec4x4f_t[4];
 typedef struct hpmvec4x4f_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
 typedef hpmv4sf hpmvec4x4fi_t[4];
 typedef hpmvec4f hpmvec4x4fp_t;
+HPM_ALIGN(16)
 typedef union{
 	hpmvec4x4f_t m;
 	hpmmat4f s;

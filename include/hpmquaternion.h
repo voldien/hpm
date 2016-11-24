@@ -92,14 +92,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, cons
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg, hpmquatf* out);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3dv, const hpmquatd* larg, const hpmquatd* rarg, hpmquatd* out);*/
 
 /**
  *	Compute direction of quaternion.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, const hpmquatf* rarg, const hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out);
 /*HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directiondv, const hpmquatd* larg, const hpmquatd* rarg, const hpmquatd* out);*/
 
 
@@ -204,7 +204,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axis_anglefv, hpmquatf* __restrict__ qua
  *	\mat
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4, hpmquatf* quat, const hpmvecf* mat);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat);
 
 
 /**

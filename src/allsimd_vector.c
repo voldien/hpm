@@ -6,8 +6,3 @@
 #	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #		include<x86intrin.h>
 #   endif
-
-
-
-
-
