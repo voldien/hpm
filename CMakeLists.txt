@@ -53,7 +53,7 @@ if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		MESSAGE(STATUS "Compile for release.")
 		ADD_DEFINITIONS(-DNDEBUG)
 		SET(CMAKE_RELEASE TRUE)
-		SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O3")
+		SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2")
 		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized") # -march=native
 	ELSE()
 		MESSAGE(STATUS "Compile for debug.")
@@ -146,6 +146,10 @@ ELSE()
 ENDIF()
 
 
+ADD_EXECUTABLE(hpmtest test/main.c)
+TARGET_LINK_LIBRARIES(hpmtest -lm -lhpm)
+
+
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
@@ -166,6 +170,7 @@ INSTALL (TARGETS hpmneon DESTINATION lib)
 ENDIF()
 INSTALL (FILES ${headers} DESTINATION include/hpm)
 
+INSTALL (TARGETS hpmtest DESTINATION bin)
 
 #	AND HPM_OPT_BUILD_PACKAGES
 if(CMAKE_CPACK_COMMAND AND UNIX AND HPM_OPT_BUILD_PACKAGES)
