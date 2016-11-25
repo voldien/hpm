@@ -1,9 +1,35 @@
 #include<hpm/hpm.h>
+#include<hpm/hpmmath.h>
+
 #include<string.h>
 #include<time.h>
 #include<unistd.h>
 #include<sys/time.h>
 #include<getopt.h>
+
+
+/*	*/
+extern void sse_nosimd(void);
+extern void sse_test(void);
+extern void sse2_test(void);
+extern void sse3_test(void);
+extern void sse41_test(void);
+extern void sse42_test(void);
+extern void avx_test(void);
+extern void avx2_test(void);
+
+
+/*	*/
+extern void performance_test(void);
+extern void performance_test_sp_vector(void);
+extern void performance_test_sp_matrix(void);
+extern void performance_test_sp_comparing(void);
+extern void performance_test_sp_transfer(void);
+extern void performance_test_sp_quat(void);
+extern void performance_test_sp_math(void);
+extern void integrity_sp_check(void);
+
+
 
 enum PerformanceTestType{
 	eMatrix = 0x1,
@@ -12,6 +38,7 @@ enum PerformanceTestType{
 	eIntegrity = 0x8,
 	eQuaternion = 0x10,
 	eMath = 0x20,
+	eVector = 0x40,
 	eAll = (unsigned int)(-1)
 };
 
@@ -23,15 +50,18 @@ enum PrecisionType{
 };
 
 
-
+/**
+ *
+ */
 int status = (unsigned int)(-1);
 int type = eAll;
 int precision = eFloat;
 
 
 
-
-
+/**
+ *
+ */
 void readArgument(int argc, char** argv){
 
 	static struct option longoption[] = {
@@ -52,7 +82,7 @@ void readArgument(int argc, char** argv){
 		case 's':
 			if(optarg){
 				if(strcmp(optarg, "all") == 0){
-					status = ~(0);
+					status = (unsigned int)(-1);
 				}
 				else if(strcmp(optarg,"sse") == 0){
 					status = HPM_SSE;
@@ -79,7 +109,7 @@ void readArgument(int argc, char** argv){
 					status = HPM_NOSIMD;
 				}
 				else{
-					status = atoi(optarg);
+					status = strtol(optarg, NULL, 0);
 				}
 			}
 			break;
@@ -118,24 +148,10 @@ void readArgument(int argc, char** argv){
 
 }
 
-extern void sse_nosimd(void);
-extern void sse_test(void);
-extern void sse2_test(void);
-extern void sse3_test(void);
-extern void sse41_test(void);
-extern void sse42_test(void);
-extern void avx_test(void);
-extern void avx2_test(void);
 
-
-extern void performance_test(void);
-extern void performance_test_sp_matrix(void);
-extern void performance_test_sp_comparing(void);
-extern void performance_test_sp_transfer(void);
-extern void performance_test_sp_quat(void);
-extern void performance_test_sp_math(void);
-extern void integrity_sp_check(void);
-
+/**
+ *
+ */
 long int get_time_nano(void){
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
@@ -222,7 +238,7 @@ void avx_test(void){
 }
 void avx2_test(void){
 	hpm_init(HPM_AVX2);
-	printf("Starting AVX extension test.\n");
+	printf("Starting AVX2 extension test.\n");
 	performance_test();
 	hpm_release();
 }
@@ -232,7 +248,7 @@ void performance_test(void){
 	long int ttime = 0;
 	long int ttotaltime = 0;
 
-	/*	*/
+
 	if(precision == eFloat){
 
 		if( type & eMatrix ){
@@ -275,6 +291,15 @@ void performance_test(void){
 			printf("%f seconds.\n", (float)ttotaltime / 1E9f);
 		}
 
+		if(type & eVector){
+			printf("Single precision vector.\n");
+			ttime = get_time_nano();
+			performance_test_sp_vector();
+			ttotaltime = get_time_nano() - ttime;
+			printf("%f seconds.\n", (float)ttotaltime / 1E9f);
+		}
+
+
 		if(type & eIntegrity){
 			printf("Integrity check.\n");
 			integrity_sp_check();
@@ -282,8 +307,26 @@ void performance_test(void){
 
 	}
 
+	printf("\n\n");
 }
 
+
+void performance_test_sp_vector(void){
+	int x = 0;
+	hpmvec4f vec1 = {1,2,1,1};
+	hpmvec4f vec2 = {1,0,6,1};
+	hpmvec4f vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7; x++){
+		hpm_vec4_dotfv(&vec1, &vec2);
+		hpm_vec4_lengthfv(&vec1);
+		hpm_vec4_lengthsqurefv(&vec1);
+		hpm_vec3_crossproductfv(&vec1, &vec2, &vec3);
+	}
+
+
+
+}
 
 void performance_test_sp_matrix(void){
 	int x;
@@ -314,7 +357,7 @@ void performance_test_sp_comparing(void){
 	hpmvec4f vec2 = {1,1,1,1};
 	hpmvec4i ivec;
 
-	for(x = 0; x < 1E6; x++){
+	for(x = 0; x < 1E7; x++){
 		ivec = hpm_vec4_eqfv(&vec2, &vec);
 		ivec = hpm_vec4_neqfv(&vec2, &vec);
 		ivec = hpm_vec4_gfv(&vec2, &vec);
@@ -332,7 +375,7 @@ void performance_test_sp_transfer(void){
 	hpmvec4f vec2;
 
 	for(x = 0; x < 1E7; x++){
-		hpm_vec4_copyf(&vec2, &vec);
+		hpm_vec4_copyfv(&vec2, &vec);
 		hpm_mat4x4_copyfv(mat1, mat2);
 	}
 }
@@ -340,20 +383,32 @@ void performance_test_sp_transfer(void){
 void performance_test_sp_quat(void){
 	int x = 0;
 	hpmquatf quat;
+	hpmquatf quat2;
+	hpmquatf quat3;
+	hpmvec3f v1 = {1,0,0};
+	hpmvec3f v2 = {1,0,0};
 
-
-	if(hpm_quat_lengthfv)
+	for(x = 0; x < 1E7; x++){
 		hpm_quat_lengthfv(&quat);
-	for(x = 0; x < 1E8; x++){
 		hpm_quat_axisf(&quat, 90, 40 ,30);
+		hpm_quat_multi_quatfv(&quat, &quat2, &quat3);
+		hpm_quat_multi_vec3fv(&quat3, &v1, &quat2);
+		hpm_quat_get_vectorfv(&quat2, &v1, &v2);
+
+		hpm_quat_pitchfv(&quat);
+		hpm_quat_yawfv(&quat);
+		hpm_quat_rollfv(&quat);
 	}
 }
 
 void performance_test_sp_math(void){
+
 	int x;
 	hpmvec4f v1 = {0,0,0,0};
 	hpmvec4f v2 = {1,1,1,1};
 	hpmvec4f v3 = {0};
+
+	/**/
 	for(x = 0; x < 1E8; x++){
 		v3 = hpm_vec4_maxfv(&v1, &v2);
 		v2 = hpm_vec4_minfv(&v3, &v1);
@@ -361,10 +416,15 @@ void performance_test_sp_math(void){
 }
 
 
+
 void integrity_sp_check(void){
 	hpmvec4x4f_t m1;
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
+	hpmvec4i eqtmp = {0};
+	hpmvec4i eq = {0};
+	eq = ~eq;
+
 	hpmvec4f v1 = {1};
 	hpmvec4f v2 = {1};
 	hpmvec4f v3 = {1};
@@ -372,8 +432,12 @@ void integrity_sp_check(void){
 	hpmquatf q2 = {1,1,1,1};
 	hpmquatf q3 = {1,1,1,1};
 	return;
+
 	/*	matrix	*/
 	hpm_mat4x4_copyfv(m1, m2);
+
+
+
 	hpm_mat4x4_multiply_mat4x4fv(m1, m2, m3);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	hpm_mat4x4_multiply_scalarf(m1, 1.0, m3);
@@ -406,12 +470,12 @@ void integrity_sp_check(void){
 	hpm_mat4x4_orthfv(m1, -10, 10,-10, 10,-10, 10);
 
 	/*	vector	*/
-	hpm_vec4_copyf(&v1, &v2);
-
+	hpm_vec4_copyfv(&v1, &v2);
+	eqtmp = hpm_vec4_eqfv(&v1, &v2) & eq;
 
 
 	/*	quat	*/
-	hpm_quat_copyf(&q1, &q1);
+	hpm_quat_copyfv(&q1, &q1);
 	hpm_quat_multi_quatfv(&q1, &q2, &q3);
 	hpm_quat_multi_vec3fv(&q1, &v2, &v3);
 
