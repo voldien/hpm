@@ -45,6 +45,7 @@ HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
 }
 
 
+/*	TODO fix these two function by fixing variable names.*/
 HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 
 	/*	return ( *this * ( Quaternion(0, vector.x(),vector.y(),-vector.z()) ) * conjugate() ).getVector();*/
@@ -61,6 +62,23 @@ HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 	(*out)[1] = tmpq[HPM_QUAT_Y];
 	(*out)[2] = tmpq[HPM_QUAT_Z];
 	(*out)[3] = 0;
+}
+
+HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* out){
+	hpmquatf tmpq = *vect;
+	hpmquatf tmpq1 = *out;
+	tmpq[HPM_QUAT_W] = 0;
+
+	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&tmpq1);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(quat, &tmpq, out);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &tmpq1, &tmpq);
+
+	/**/
+	(*out)[0] = tmpq[HPM_QUAT_X];
+	(*out)[1] = tmpq[HPM_QUAT_Y];
+	(*out)[2] = tmpq[HPM_QUAT_Z];
+	(*out)[3] = 0;
+
 }
 
 

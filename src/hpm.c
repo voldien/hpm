@@ -243,6 +243,7 @@ int hpm_init(unsigned int simd){
 
 	hpm_quat_directionfv = hpm_get_symbolfuncp(hpm_quat_directionfv);
 	//	hpm_quat_directiondv = hpm_get_symbolfuncp(hpm_quat_directiondv);
+	hpm_quat_get_vectorfv = hpm_get_symbolfuncp(hpm_quat_get_vectorfv);
 
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	//	hpm_quat_conjugatedv = hpm_get_symbolfuncp(hpm_quat_conjugatedv);
@@ -281,6 +282,10 @@ int hpm_init(unsigned int simd){
 	//	hpm_quat_lerpdv = hpm_get_symbolfuncp(hpm_quat_lerpdv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 	//	hpm_quat_slerpdv = hpm_get_symbolfuncp(hpm_quat_slerpdv);
+
+	hpm_quat_pitchfv = hpm_get_symbolfuncp(hpm_quat_pitchfv);
+	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
+	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
 
 
 
