@@ -1,6 +1,7 @@
-#include<hpm/hpm.h>
-#include<hpm/hpmmath.h>
+#include"hpm.h"
+#include"hpmmath.h"
 
+/*	*/
 #include<string.h>
 #include<time.h>
 #include<unistd.h>
