@@ -139,6 +139,7 @@ HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, 
 HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
 	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
 	hpmvecf k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+
 	if (k < 0.0f){
 		const hpmvec3f zero = {0,0,0,0};
 		*out = zero;

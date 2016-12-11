@@ -32,17 +32,6 @@ extern "C"{
 typedef hpmvecf hpmquatf HPM_VECTORALIGN(16);
 typedef hpmvecd hpmquatd HPM_VECTORALIGN(32);
 
-
-/**
- *
- */
-/*
-HPM_ALIGN(16)
-typedef union{
-	hpmquatf m;
-}hpmquatuf;
-*/
-
 /**
  *
  */
@@ -53,6 +42,7 @@ typedef union{
 }hpmquatud;
 
 
+
 /**
  *	Quaternion component subscript.
  */
@@ -60,6 +50,7 @@ typedef union{
 #define HPM_QUAT_X 1
 #define HPM_QUAT_Y 2
 #define HPM_QUAT_Z 3
+
 
 
 /**

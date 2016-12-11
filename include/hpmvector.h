@@ -24,6 +24,7 @@
 extern "C"{
 #endif
 
+
 /**
  *	Data types.
  */
@@ -118,6 +119,7 @@ typedef struct hpmvec8du_t{
 		hpmvec8d d;
 	};
 }hpmvec8du;
+
 
 
 
@@ -269,18 +271,26 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductd, const hpmvec3d* larg, const hpmvec3d* rarg, hpmvec3d* out);
 
-/**/
+/**
+ *	Compute triple product
+ *	(v1 x v2) * v3
+ *
+ *	@Return
+ */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_tripleProductd, const hpmvec3d* larg, const hpmvec3d* rarg, hpmvec3d* out);
 
+
 /**
+ *	Compute dot product.
+ *
  *	@Return
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg);
 //HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_dotd, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
- *
+ *	Compute length of vector.
  *
  *	@Return
  */
@@ -288,7 +298,7 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* larg, const h
 //HPM_EXPORT( double, HPMAPIENTRY, hpm_vec3_lengthd, const hpmvec3d* larg, const hpmvec3d* rarg);
 
 /**
- *
+ *	Compute square length of vector.
  *
  *	@Return
  */
@@ -297,12 +307,17 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, c
 
 
 /**
+ *	Compute reflective vector from normal and direction.
+ *
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out);
 //HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectd, const hpmvec3d* arg, const hpmvec3d* normal, hpmvec3d* out);
 
+
 /**
+ *	Compute refraction from normal and direction vector
+ *	in respect to refraction index.
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg, const hpmvec3f* normal, float index, hpmvec3f* out);
@@ -310,7 +325,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg, const hpmvec3
 
 
 /**
- *	Project vector onto vector.
+ *	Project vector a onto vector b.
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* larg);
