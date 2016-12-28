@@ -318,6 +318,7 @@ int hpm_init(unsigned int simd){
 	return ( libhandle != NULL) ;
 }
 
+/*	TODO Fix such that it gets independent from a single platform.	*/
 int hpm_release(void){
 	int status = dlclose(libhandle);
 	if(status < 0 ){
@@ -342,6 +343,7 @@ void* hpm_get_address(const char* cfunctionName){
 
 	return ( pfunc );
 }
+
 
 #define HPM_COMPILER_VERSION(major, minor, revision) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 const char* hpm_version(void){
