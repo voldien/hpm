@@ -1,6 +1,5 @@
 #include"hpmquaternion.h"
 #include"hpmmatrix.h"
-#include<math.h>
 
 #include<immintrin.h>
 #   ifdef HPM_VC
@@ -11,8 +10,6 @@
 
 
 
-
-/*	TODO fix for double.	*/
 HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
 	const hpmquatf conj = {-1.0, -1.0, -1.0, 1.0};
 	*larg *= conj;

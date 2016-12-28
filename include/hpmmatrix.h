@@ -37,7 +37,7 @@
  *	When using the matrix data types with e.g OpenGL
  *	Uniform matrix function. The 'transpose' parameter has to be
  *	GL_FALSE. Because hpm's matrix in system memory is allocated
- *	 with OpenGL's convention.
+ *	with OpenGL's convention.
  *
  *
  */
@@ -138,6 +138,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv, hpmvec4x4fp_t* __restrict__ des
 
 /**
  *	Multiply two matrices.
+ *
+ *	(larg) x (rarg) = (output)
  *
  *	\larg left side argument.
  *

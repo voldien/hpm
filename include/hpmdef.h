@@ -291,9 +291,11 @@
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
 
-/**/
+/**
+ *	Implementation macro.
+ */
 #define HPM_FLOATIMP
-#define HPM_DOUBLETIMP
+/*#define HPM_DOUBLETIMP	*/
 
 /**
  *	Internal.
