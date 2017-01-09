@@ -62,8 +62,9 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 #define HPM_AVX2		(1 << 9)	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
 #define HPM_AVX512		(1 << 10)	/*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
 #define HPM_NEON		(1 << 11)	/*	ARM	FPU (floating-point unit) feature.	*/
-#define HPM_SVML		(1 << 30)	/*	Future feature.	*/
-#define HPM_ACML		(1 << 31)	/*	Future feature.	*/
+#define HPM_SVML		(1 << 29)	/*	Not supported.	*/
+#define HPM_ACML		(1 << 30)	/*	Not supported.	*/
+#define HPM_DEFAULT		(1 << 31)	/*	Default ( Not supported ).	*/
 
 
 /**
