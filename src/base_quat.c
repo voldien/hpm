@@ -11,22 +11,13 @@
 
 
 HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
-	const hpmquatf conj = {-1.0, -1.0, -1.0, 1.0};
-	*larg *= conj;
-}
-HPM_IMP( void, hpm_quat_conjugatedv, hpmquatd* larg){
-	const hpmquatd conj = {-1.0, -1.0, -1.0, 1.0};
+	const hpmquatf conj = { 1.0f, -1.0f, -1.0f, -1.0};
 	*larg *= conj;
 }
 
 HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
-	hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsqurefv )(arg);
+	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsqurefv )(arg);
 	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
-	*arg *= sqrleng;
-}
-HPM_IMP( void, hpm_quat_inversedv, hpmquatd* arg){
-	hpmvecd sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsquredv )(arg);
-	HPM_CALLLOCALFUNC( hpm_quat_conjugatedv )(arg);
 	*arg *= sqrleng;
 }
 
@@ -35,23 +26,18 @@ HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
 	const hpmquatf iden = {1.0f, 0.0f, 0.0f, 0.0f};
 	*out = iden;
 }
-HPM_IMP( void, hpm_quat_identitydv, hpmquatd* out){
-	hpmquatud* pquat;
-	const hpmquatd iden = {1.0, 0.0, 0.0, 0.0};
-	*out = iden;
-}
 
 
 /*	TODO fix these two function by fixing variable names.*/
 HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 
 	/*	return ( *this * ( Quaternion(0, vector.x(),vector.y(),-vector.z()) ) * conjugate() ).getVector();*/
-	hpmquatf tmpq = *out;
-	hpmquatf tmpq1 = *out;
-	tmpq[HPM_QUAT_W] = 0;
+	hpmquatf tmpq = { 0, 0, 0, -1 };
+	hpmquatf tmpq1 = *larg;
+
 
 	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&tmpq1);
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(larg, &tmpq, out);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(&tmpq, &tmpq1, out);
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &tmpq1, &tmpq);
 
 	/**/
@@ -62,10 +48,16 @@ HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 }
 
 HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* out){
-	hpmquatf tmpq = *vect;
+
+	hpmquatf tmpq = *vect * -1.0f;
 	hpmquatf tmpq1 = *out;
+
+	tmpq[HPM_QUAT_X] = tmpq[0];
+	tmpq[HPM_QUAT_Y] = tmpq[1];
+	tmpq[HPM_QUAT_Z] = tmpq[2];
 	tmpq[HPM_QUAT_W] = 0;
 
+	/*	*/
 	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&tmpq1);
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(quat, &tmpq, out);
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &tmpq1, &tmpq);
@@ -82,20 +74,12 @@ HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect
 
 
 HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
-	const float half_angle = sinf(angle * 0.5f);
+	const hpmvecf half_angle = sinf(angle * 0.5f);
 	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
 	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
 	(*quat)[HPM_QUAT_Z] = (*axis)[2] * half_angle;
 	(*quat)[HPM_QUAT_W] = cosf(half_angle);
 }
-HPM_IMP( void, hpm_quat_axis_angledv, hpmquatd* __restrict__ quat, const hpmvec3d* __restrict__ axis, double angle){
-	const double half_angle = sin(angle * 0.5f);
-	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
-	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
-	(*quat)[HPM_QUAT_Z] = (*axis)[2] * half_angle;
-	(*quat)[HPM_QUAT_W] = cos(half_angle);
-}
-
 
 HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
 	const float num1 = roll_radian * 0.5f;
@@ -112,17 +96,6 @@ HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_rad
 	(*quat)[HPM_QUAT_Y] = (float)((float)num8 * (float)num6 * (float)num3 - (float)num9 * (float)num5 * (float)num2);
 	(*quat)[HPM_QUAT_Z] = (float)((float)num9 * (float)num6 * (float)num2 - (float)num8 * (float)num5 * (float)num3);
 	(*quat)[HPM_QUAT_W] = (float)((float)num9 * (float)num6 * (float)num3 + (float)num8 * (float)num6 * (float)num2);
-}
-HPM_IMP( void, hpm_quat_axisd, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
-	const hpmvecd num1 = roll_radian * 0.5f;
-	const hpmvecd num2 = (hpmvecd)sin((hpmvecd)num1);
-	const hpmvecd num3 = (hpmvecd)cos((hpmvecd)num1);
-	const hpmvecd num4 = pitch_radian * 0.5f;
-	const hpmvecd num5 = (hpmvecd)sin((hpmvecd)num4);
-	const hpmvecd num6 = (hpmvecd)cos((hpmvecd)num4);
-	const hpmvecd num7 = yaw_radian * 0.5f;
-	const hpmvecd num8 = (hpmvecd)sin((hpmvecd)num7);
-	const hpmvecd num9 = (hpmvecd)cos((hpmvecd)num7);
 }
 
 
@@ -210,29 +183,15 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, 
 
 
 
-
-
-
-
 HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
 	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));
-}
-HPM_IMP( double, hpm_quat_pitchdv, const hpmquatd* lf_quat){
-	return asin(-2.0 * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));
 }
 
 HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
 	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y]))));
 }
-HPM_IMP( double, hpm_quat_yawdv, const hpmquatd* lf_quat){
-	return atan2(2.0 * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y]))));
-}
 
 HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
 	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_Z] + (*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Z])));
 }
-HPM_IMP( double, hpm_quat_rolldv, const hpmquatd* lf_quat){
-	return atan2(2.0 * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_Z] + (*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Z])));
-}
-
 

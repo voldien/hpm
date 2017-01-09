@@ -220,16 +220,6 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 	mat[2] = row2;
 	mat[3] = row3;
 }
-HPM_IMP(void, hpm_mat4x4_identitydv, hpmvec4x4d_t d_mat4){
-	const hpmvec4d row0 = {1.0, 0.0, 0.0, 0.0};
-	const hpmvec4d row1 = {0.0, 1.0, 0.0, 0.0};
-	const hpmvec4d row2 = {0.0, 0.0, 1.0, 0.0};
-	const hpmvec4d row3 = {0.0, 0.0, 0.0, 1.0};
-	d_mat4[0] = row0;
-	d_mat4[1] = row1;
-	d_mat4[2] = row2;
-	d_mat4[3] = row3;
-}
 
 
 HPM_IMP( void, hpm_mat4x4_transposefv, hpmvec4x4f_t mat){

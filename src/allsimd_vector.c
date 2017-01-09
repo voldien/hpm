@@ -10,8 +10,6 @@
 
 
 
-
-
 HPM_IMP(float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 	const hpmvec4f lvMult = *larg * *rarg;
 
