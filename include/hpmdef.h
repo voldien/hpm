@@ -20,6 +20,7 @@
 #define _HPM_DEF_H_ 1
 #include<stdio.h>
 #include<stdlib.h>
+#include<limits.h>
 
 
 /**
@@ -268,9 +269,17 @@
  *	library declaration.
  */
 #ifdef HPM_GNUC
-	#define HPMDECLSPEC	/*__attribute__((__visibility__ ("default")))	*/
+	#if defined(HPM_UNIX)
+		#define HPMDECLSPEC	 __attribute__((__visibility__ ("default")))
+	#else
+		#define HPMDECLSPEC
+	#endif
 #elif defined(HPM_VC)
-	#define HPMDECLSPEC __declspec(dllexport)
+	#if HPM_INTERNAL
+		#define HPMDECLSPEC __declspec(dllexport)
+	#else
+		#define HPMDECLSPEC __declspec(dllimport)
+	#endif
 #endif
 
 
@@ -280,10 +289,10 @@
 
 
 /**
- *
+ *	String macros.
  */
-#define HPM_STR_HELPER(x) #x										/*	*/
-#define HPM_STR(x) HPM_STR_HELPER(x)								/*	String helper macro.	*/
+#define HPM_STR_HELPER(x) #x										/*	String helper macro.*/
+#define HPM_STR(x) HPM_STR_HELPER(x)								/*	Convert input to a double quoate string.	*/
 #define HPM_TEXT(quote) quote										/*	*/
 
 #define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare function internal symbol name.	*/
@@ -291,11 +300,13 @@
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
 
+
 /**
  *	Implementation macro.
  */
 #define HPM_FLOATIMP
 /*#define HPM_DOUBLETIMP	*/
+
 
 /**
  *	Internal.
@@ -321,13 +332,12 @@
 
 
 
-
-
 /**
- *
+ *	Define
  */
 #define HPM_IMP(ret, func, ...)					\
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
+
 
 
 /**
@@ -353,10 +363,11 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 
 
 /**
- *
+ *	Convert between radians and degrees.
  */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
 #define HPM_RAD2DEG( a ) ( ( (a) * 180.0 ) / HPM_PI )
+
 
 /**
  *
