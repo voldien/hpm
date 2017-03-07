@@ -295,7 +295,11 @@
 #define HPM_STR(x) HPM_STR_HELPER(x)								/*	Convert input to a double quoate string.	*/
 #define HPM_TEXT(quote) quote										/*	*/
 
-#define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare function internal symbol name.	*/
+#ifdef HPM_USE_SINGLE_LIBRARY
+#else
+	#define HPM_LOCALSYMBOL ""											/*	Namespace for local symbol. Use for creating single library file.	*/
+#endif
+#define HPM_FUNCSYMBOLNAME(func) HPM_LOCALSYMBOL##fimp##func		/*	Declare function internal symbol name.	*/
 #define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
@@ -310,6 +314,9 @@
 
 /**
  *	Internal.
+ *	Responsible for precompiling header
+ *	and declare function data type as well
+ *	for declaring and defining function variable.
  */
 #if defined(HPM_INTERNAL)
 #define HPM_EXPORT(ret, callback, func, ...)						\
