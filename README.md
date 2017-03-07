@@ -32,3 +32,7 @@ hpmtest
 ```
 The performance gain can be rather subtle for high end computer rig whereas low end more distinguishable.
 What should remark about the *hpmtest* program, is that everything is execute in a consecutive order. So it does not represent what the performance differences would be when each function is called in a randomly order.
+
+## Important ##
+---
+Because the library is still in development. That means that the symbol table hasn't been finalised. Thus it can be expected that it might change in till the init version.
