@@ -5,8 +5,7 @@ hpm is a matrix library that supports loading various SIMD version depending if 
 
 ## Examples ##
 1. The following code initialize hpm library to use SSE2 and create an identity matrix. The release function will close the loaded library which in succession will make each function pointer undefined.
-```
-#!c
+```c
 #include<hpm/hpm.h>
 
 int main(int argc, const char** argv){
@@ -25,9 +24,7 @@ gcc *.c -o hpmexample -lhpm
 ## Tests ##
 In order to evaluate if the library has any performance differences on the system. The following test program for *hpm* can be used. It will perform test for all SIMD feature if supported by the machine, when no argument has been set.
 
-```
-#!bash
-
+```bash
 hpmtest
 ```
 The performance gain can be rather subtle for high end computer rig whereas low end more distinguishable.
