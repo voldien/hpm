@@ -5,8 +5,8 @@ PROJECT(hpm)
 # Build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 IF(NOT BUILD_SHARED_LIBS)
-	set(CMAKE_EXE_LINKER_FLAGS "-static")
-	set(LINK_SEARCH_START_STATIC TRUE)
+	SET(CMAKE_EXE_LINKER_FLAGS "-static")
+	SET(LINK_SEARCH_START_STATIC TRUE)
 ENDIF()
 
 
