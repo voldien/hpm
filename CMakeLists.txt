@@ -171,4 +171,13 @@ ENDIF()
 INSTALL (FILES ${headers} DESTINATION include/hpm)
 INSTALL (TARGETS hpmtest DESTINATION bin)
 
+IF( UNIX )
+	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
+	ADD_CUSTOM_TARGET(	distribution
+				COMMAND mkdir -p ${TARGETDIR}
+				COMMAND cp -r src include CMakeLists.txt LICENSE README.md ${TARGETDIR}
+				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
+				COMMAND rm -r ${TARGETDIR} )
+ENDIF()
+
 
