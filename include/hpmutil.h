@@ -26,6 +26,8 @@ extern "C" {
 #endif
 
 
+HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookat);
+
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
