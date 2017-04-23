@@ -132,6 +132,13 @@ typedef struct hpmvec8du_t{
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
 
 /**
+ *	set vector.
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
+		const hpmvecf x, const hpmvecf y, const hpmvecf z, const hpmvecf w);
+
+/**
  *	Perform addition with two 1x4 vectors.
  *	larg = larg * rarg
  *
@@ -143,11 +150,29 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv, hpmvec4f* __restrict__ destinatio
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg, const hpmvecf rarg);
 
 /**
+ *	Perform addition with two 1x4 vectors.
+ *	larg = larg * rarg
+ *
+ *	\larg
+ *
+ *	\arg
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalefv, hpmvec4f* larg, const hpmvec4f* rarg);
+
+/**
  *	larg -= rarg;
  *
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg, const hpmvecf rarg);
+
+/**
+ *	larg -= rarg;
+ *
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractionfv, hpmvec4f* larg, const hpmvec4f* rarg);
 
 /**
  *	larg *= rarg

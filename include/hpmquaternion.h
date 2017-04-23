@@ -64,6 +64,17 @@ typedef union{
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyfv, hpmquatf* __restrict__ destination, const hpmquatf* __restrict__ source);
 
 /**
+ *	Set quaternion.
+ *
+ *	\destination
+ *
+ *	\source
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_setf, hpmquatf* destination,
+			const hpmvecf w, const hpmvecf x, const hpmvecf y, const hpmvecf z);
+
+/**
  *	Multiply two quaternion.
  *
  *	\larg
@@ -82,6 +93,14 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, cons
  *
  */
 HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg, hpmquatf* out);
+
+
+/**
+ *	Multiply quaternion with vector.
+ *
+ *
+ */
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg, const hpmvecf rarg);
 
 /**
  *	Compute direction of quaternion.
