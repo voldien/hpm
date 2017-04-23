@@ -33,3 +33,7 @@ What should remark about the *hpmtest* program, is that everything is execute in
 ## Important ##
 ---
 Because the library is still in development. That means that the symbol table hasn't been finalised. Thus it can be expected that it might change in till the init version.
+
+## Dependencies ##
+----------------
+The *hpm* project does not have any additional dependency other than the libraries provided with the standard *c* library.
