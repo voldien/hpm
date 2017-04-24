@@ -33,8 +33,10 @@ extern "C" {
  *
  *	@Return max value for each element of the vector data type.
  */
-HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __restrict__ b);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ c);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a,
+		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
 
 /**
@@ -43,8 +45,10 @@ HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a
  *
  *	@Return min value for each element of the vector data type.
  */
-HPM_EXPORT(hpmvec4f, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
-HPM_EXPORT(hpmvec8f, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __restrict__ b);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ c);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a,
+		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
 
 /**
