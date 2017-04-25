@@ -133,6 +133,9 @@ int hpm_init(unsigned int simd){
 
 	/*	vector4	*/
 	hpm_vec4_copyfv = hpm_get_symbolfuncp(hpm_vec4_copyfv);
+	hpm_vec4_setf = hpm_get_symbolfuncp(hpm_vec4_setf);
+	hpm_vec4_setsf = hpm_get_symbolfuncp(hpm_vec4_setsf);
+	hpm_vec4_addition_scalefv = hpm_get_symbolfuncp(hpm_vec4_addition_scalefv);
 	hpm_vec4_addition_scalef = hpm_get_symbolfuncp(hpm_vec4_addition_scalef);
 	hpm_vec4_subtractionf = hpm_get_symbolfuncp(hpm_vec4_subtractionf);
 	hpm_vec4_multifv = hpm_get_symbolfuncp(hpm_vec4_multifv);
