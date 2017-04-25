@@ -18,6 +18,12 @@ HPM_IMP(void, hpm_vec4_setf, hpmvec4f* destination, const hpmvecf x, const hpmve
 	*destination = row0;
 }
 
+HPM_IMP(void, hpm_vec4_setsf, hpmvec4f* destination,
+		const hpmvecf ss){
+	const hpmvec4f row0 = { ss, ss, ss, ss};
+	*destination = row0;
+}
+
 
 HPM_IMP( void, hpm_vec4_addition_scalef , hpmvec4f* larg, const hpmvecf rarg){
 	const hpmvec4f row0 = { rarg, rarg, rarg, rarg };

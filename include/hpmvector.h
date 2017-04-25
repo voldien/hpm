@@ -155,6 +155,12 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
 		const hpmvecf x, const hpmvecf y, const hpmvecf z, const hpmvecf w);
 
 /**
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setsf, hpmvec4f* destination,
+		const hpmvecf ss);
+
+/**
  *	Perform addition with two 1x4 vectors.
  *	larg = larg * rarg
  *
