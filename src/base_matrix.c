@@ -265,7 +265,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 
 
 HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
-	const hpmvecf angle = (f_fov * 0.5f);
+	const hpmvecf angle = f_fov;
 	const hpmvecf xScale = (1.0f / (tanf(angle) ) / f_aspect);
 	const hpmvecf yScale = 1.0f / tanf(angle);
 	const hpmvecf zScale = (f_near + f_far) / (f_near - f_far);

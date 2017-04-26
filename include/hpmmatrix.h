@@ -343,7 +343,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, c
  *
  *	\mat
  *
- *	\fov field of view in radian.
+ *	\fov field of view in radian (0,180).
  *
  *	\aspect view aspect.
  *
