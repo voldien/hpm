@@ -53,7 +53,7 @@ typedef union{
 
 
 /**
- *	Get individual element of vector.
+ *	Get individual element of quaternion.
  */
 #define hpm_quat_getwf(hpm_vec) (hpm_vec[HPM_QUAT_W])
 #define hpm_quat_getxf(hpm_vec) (hpm_vec[HPM_QUAT_X])
@@ -61,7 +61,7 @@ typedef union{
 #define hpm_quat_getzf(hpm_vec) (hpm_vec[HPM_QUAT_Z])
 
 /**
- *	Set individual element of vector.
+ *	Set individual element of quaternion.
  */
 #define hpm_quat_setwf(hpm_vec, w) (hpm_vec[HPM_QUAT_W] = w)
 #define hpm_quat_setxf(hpm_vec, x) (hpm_vec[HPM_QUAT_X] = x)
