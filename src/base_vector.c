@@ -143,14 +143,14 @@ HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
 	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1,&tmp2);
 }
 
-HPM_IMP( float, hpm_vec3_lengthfv, const hpmvec3f* larg, const hpmvec3f* rarg){
-	hpmvec3f tmp = *rarg;
+HPM_IMP( float, hpm_vec3_lengthfv, const hpmvec3f* arg){
+	hpmvec3f tmp = *arg;
 	tmp[3] = 0;
 	return HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )(&tmp);
 }
 
-HPM_IMP( float, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, const hpmvec3f* rarg){
-	hpmvec3f tmp = *rarg;
+HPM_IMP( float, hpm_vec3_lengthsquarefv, const hpmvec3f* arg){
+	hpmvec3f tmp = *arg;
 	tmp[3] = 0;
 	return HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(&tmp);
 }

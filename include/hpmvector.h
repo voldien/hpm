@@ -318,14 +318,14 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmv
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
 
 /**
  *	Compute square length of vector.
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 
 
 /**
