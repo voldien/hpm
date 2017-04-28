@@ -9,6 +9,13 @@
 #   endif
 
 
+HPM_IMP(void, hpm_quat_setf, hpmquatf* destination,
+			const hpmvecf w, const hpmvecf x, const hpmvecf y, const hpmvecf z){
+	const hpmquatf set = { w, x, y, z };
+	*destination = set;
+}
+
+
 HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
 	const hpmquatf conj = { 1.0f, -1.0f, -1.0f, -1.0f };
 	*larg *= conj;
