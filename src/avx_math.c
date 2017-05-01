@@ -40,3 +40,24 @@ HPM_IMP(hpmvec4i, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* 
 HPM_IMP(hpmvec4i, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
 	return (*a) < (*b);
 }
+
+HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+
+	hpmmat4uf* ufa = a;
+	hpmmat4uf* ufb = b;
+
+	return _mm256_testz_ps(
+			_mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OQ),
+			_mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OQ));
+}
+
+HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+
+	hpmmat4uf* ufa = a;
+	hpmmat4uf* ufb = b;
+
+	return _mm256_testz_ps(
+			_mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_OQ),
+			_mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_OQ));
+}
+

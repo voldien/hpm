@@ -18,9 +18,6 @@ HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __
 	(*c)[3] = (*a)[7] > (*b)[7] ? (*a)[7] : (*b)[7];
 }
 
-
-
-
 HPM_IMP(void, hpm_vec4_minfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ c){
 	(*c)[0] = (*a)[0] < (*b)[0] ? (*a)[0] : (*b)[0];
 	(*c)[1] = (*a)[1] < (*b)[1] ? (*a)[1] : (*b)[1];
@@ -86,5 +83,11 @@ HPM_IMP(hpmvec4i, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* 
 }
 
 
+HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+	return 0;
+}
 
+HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+	return 0;
+}
 

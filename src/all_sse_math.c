@@ -1,5 +1,6 @@
 #include"hpmmath.h"
 
+
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
@@ -58,3 +59,31 @@ HPM_IMP(hpmvec4i, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* 
 HPM_IMP(hpmvec4i, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b){
 	return (*a) < (*b);
 }
+
+
+HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+#if __SSE41__
+	const hpmv4si resrow0 = _mm_castps_si128( _mm_cmpeq_ps(a[0], b[0]) );
+	const hpmv4si resrow1 = _mm_castps_si128( _mm_cmpeq_ps(a[1], b[1]) );
+	const hpmv4si resrow2 = _mm_castps_si128( _mm_cmpeq_ps(a[2], b[2]) );
+	const hpmv4si resrow3 = _mm_castps_si128( _mm_cmpeq_ps(a[3], b[3]) );
+
+	return _mm_testc_si128(resrow0,resrow1) | _mm_testc_si128(resrow2,resrow3);
+#else
+	return 0;
+#endif
+}
+
+HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+#if __SSE41__
+	const hpmvec4i resrow0 = _mm_castps_si128( _mm_cmpneq_ps(a[0], b[0]) );
+	const hpmvec4i resrow1 = _mm_castps_si128( _mm_cmpneq_ps(a[1], b[1]) );
+	const hpmvec4i resrow2 = _mm_castps_si128( _mm_cmpneq_ps(a[2], b[2]) );
+	const hpmvec4i resrow3 = _mm_castps_si128( _mm_cmpneq_ps(a[3], b[3]) );
+
+	return _mm_testc_si128(resrow0,resrow1) | _mm_testc_si128(resrow2,resrow3);
+#else
+	return 0;
+#endif
+}
+

@@ -22,6 +22,7 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
+
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
@@ -79,10 +80,22 @@ HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a, 
  */
 HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
 
+/**
+ *
+ *	@Return
+ */
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv,
+		const hpmvec4x4f_t a, const hpmvec4x4f_t b);
+
+/**
+ *
+ *	@Return
+ */
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv,
+		const hpmvec4x4f_t a, const hpmvec4x4f_t b);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif
-
 
 #endif

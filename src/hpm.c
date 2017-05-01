@@ -216,6 +216,8 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_gfv = hpm_get_symbolfuncp(hpm_vec4_gfv);
 	hpm_vec4_lfv = hpm_get_symbolfuncp(hpm_vec4_lfv);
 
+	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
+	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
 	error:	/*	error.	*/
 
