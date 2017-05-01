@@ -71,17 +71,16 @@ ENDIF()
 
 # Source files.
 FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/base_* )
-FILE (GLOB nosimdsource src/nosimd_* )
-FILE (GLOB allsimdsource src/allsimd_* )
-FILE (GLOB all_sse_source src/all_sse_*)
-FILE (GLOB sse_source src/sse_*)
-FILE (GLOB sse2_source src/sse2_*)
-FILE (GLOB sse3_source src/sse3_*)
-FILE (GLOB sse41_source src/sse41_*)
-FILE (GLOB sse42_source src/sse42_*)
-FILE (GLOB avx_source src/avx_*)
-FILE (GLOB avx2_source src/avx2_*)
+FILE (GLOB basecore src/base/* )
+FILE (GLOB nosimdsource src/nosimd/* )
+FILE (GLOB all_sse_source src/sse/*)
+#FILE (GLOB sse_source src/sse_*)
+#FILE (GLOB sse2_source src/sse2_*)
+#FILE (GLOB sse3_source src/sse3_*)
+#FILE (GLOB sse41_source src/sse41_*)
+#FILE (GLOB sse42_source src/sse42_*)
+FILE (GLOB avx_source src/avx/*)
+#FILE (GLOB avx2_source src/avx2_*)
 INCLUDE_DIRECTORIES(include)
 
 
@@ -103,37 +102,37 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
 
 	# Target for AVX2
-	ADD_LIBRARY(hpmavx2 ${avx2_source}  ${basecore} ${allsimdsource})
+	ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
 	SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
 	# Target for AVX
-	ADD_LIBRARY(hpmavx ${avx_source} ${basecore} ${allsimdsource})
+	ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
 	SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmavx -lm)
 
 	# Target for SSE
-	ADD_LIBRARY(hpmsse ${basecore} ${allsimdsource} ${all_sse_source})
+	ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmsse -lm)
 
 	# Target for SSE2
-	ADD_LIBRARY(hpmsse2 ${basecore} ${allsimdsource} ${all_sse_source})
+	ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
 	# Target for SSE3
-	ADD_LIBRARY(hpmsse3 ${basecore} ${allsimdsource} ${all_sse_source})
+	ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
 	# Target for SSE4.1
-	ADD_LIBRARY(hpmsse41 ${basecore} ${allsimdsource} ${all_sse_source})
+	ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 	TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
 	# Target for SSE4.2
-	ADD_LIBRARY(hpmsse42 ${basecore} ${allsimdsource} ${all_sse_source})
+	ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
 	TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 ELSE()
@@ -141,7 +140,6 @@ ELSE()
 	ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
-
 
 # Executable hpm benchmark. 
 ADD_EXECUTABLE(hpmtest test/main.c)
@@ -175,7 +173,7 @@ IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
 	ADD_CUSTOM_TARGET(	distribution
 				COMMAND mkdir -p ${TARGETDIR}
-				COMMAND cp -r src include CMakeLists.txt LICENSE README.md ${TARGETDIR}
+				COMMAND cp -r src include test CMakeLists.txt LICENSE README.md ${TARGETDIR}
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()
