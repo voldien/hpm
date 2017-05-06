@@ -62,8 +62,14 @@ int hpm_init(unsigned int simd){
 	case HPM_NOSIMD:
 		libpath = "libhpmnosimd.so";
 		break;
-	case HPM_DEFAULT:
-		break;
+	case HPM_DEFAULT:{
+		unsigned int i;
+		for(i = HPM_NEON; i < HPM_DEFAULT; i >>= 1){
+			if(hpm_supportcpufeat(i)){
+				return hpm_init(i);
+			}
+		}
+	}break;
 	default:
 		fprintf(stderr, "Not a valid SIMD extension.\n");
 		return -2;
@@ -299,8 +305,8 @@ int hpm_supportcpufeat(unsigned int simd){
 		cpuid(cpuInfo, 7);
 		return (cpuInfo[0] & bit_AVX2);
 	case HPM_NEON:
-		return -1;
+		return 0;
 	default:
-		return -1;
+		return 0;
 	}
 }
