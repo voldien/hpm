@@ -74,15 +74,9 @@ FILE (GLOB headers "include/*.h")
 FILE (GLOB basecore src/base/* )
 FILE (GLOB nosimdsource src/nosimd/* )
 FILE (GLOB all_sse_source src/sse/*)
-#FILE (GLOB sse_source src/sse_*)
-#FILE (GLOB sse2_source src/sse2_*)
-#FILE (GLOB sse3_source src/sse3_*)
-#FILE (GLOB sse41_source src/sse41_*)
-#FILE (GLOB sse42_source src/sse42_*)
 FILE (GLOB avx_source src/avx/*)
-#FILE (GLOB avx2_source src/avx2_*)
+#FILE (GLOB avx512_source src/avx/*)
 INCLUDE_DIRECTORIES(include)
-
 
 # Main library target for initializing the library.
 ADD_LIBRARY(hpm src/hpm.c)
@@ -94,7 +88,7 @@ ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
 SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
-
+# X86 and amd64 CPU architecture.
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	# Will added later when AVX512 is more accessible.
 	#ADD_LIBRARY(${avx512_source} ${basecore} )
@@ -154,7 +148,6 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	#INSTALL (TARGETS hpmavx512 DESTINATION lib)
 	INSTALL (TARGETS hpmavx2 DESTINATION lib)
 	INSTALL (TARGETS hpmavx DESTINATION lib)
-	#INSTALL (TARGETS hpmmmx DESTINATION lib)
 	INSTALL (TARGETS hpmsse DESTINATION lib)
 	INSTALL (TARGETS hpmsse2 DESTINATION lib)
 	INSTALL (TARGETS hpmsse3 DESTINATION lib)
@@ -165,7 +158,7 @@ IF(__arm__)
 	INSTALL (TARGETS hpmneon DESTINATION lib)
 ENDIF()
 
-#
+# Non specific SIMD targets.
 INSTALL (FILES ${headers} DESTINATION include/hpm)
 INSTALL (TARGETS hpmtest DESTINATION bin)
 
@@ -177,5 +170,4 @@ IF( UNIX )
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()
-
 
