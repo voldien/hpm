@@ -30,8 +30,8 @@ extern "C"{
  */
 typedef float hpmvecf;			/*	*/
 typedef double hpmvecd;			/*	*/
-typedef int hpmveci;			/*	*/
-
+typedef long long hpmveci;		/*	*/
+typedef hpmveci hpmboolean;		/*	*/
 
 
 /**
@@ -118,6 +118,22 @@ typedef struct hpmvec8du_t{
 }hpmvec8du;
 
 
+/**
+ *	Get individual element of vector.
+ */
+#define hpm_vec4_getxf(hpm_vec) (hpm_vec[0])
+#define hpm_vec4_getyf(hpm_vec) (hpm_vec[1])
+#define hpm_vec4_getzf(hpm_vec) (hpm_vec[2])
+#define hpm_vec4_getwf(hpm_vec) (hpm_vec[3])
+
+/**
+ *	Set individual element of vector.
+ */
+#define hpm_vec4_setxf(hpm_vec, x) (hpm_vec[0] = x)
+#define hpm_vec4_setyf(hpm_vec, y) (hpm_vec[1] = y)
+#define hpm_vec4_setzf(hpm_vec, y) (hpm_vec[2] = y)
+#define hpm_vec4_setwf(hpm_vec, w) (hpm_vec[3] = w)
+
 
 
 /**
@@ -129,7 +145,22 @@ typedef struct hpmvec8du_t{
  *	\source source pointer.
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
+		hpmvec4f* __restrict__ destination,
+		const hpmvec4f* __restrict__ source);
+
+/**
+ *	set vector.
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
+		const hpmvecf x, const hpmvecf y, const hpmvecf z, const hpmvecf w);
+
+/**
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setsf, hpmvec4f* destination,
+		const hpmvecf ss);
 
 /**
  *	Perform addition with two 1x4 vectors.
@@ -140,14 +171,36 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv, hpmvec4f* __restrict__ destinatio
  *	\arg
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg, const hpmvecf rarg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg,
+		const hpmvecf rarg);
+
+/**
+ *	Perform addition with two 1x4 vectors.
+ *	larg = larg * rarg
+ *
+ *	\larg
+ *
+ *	\arg
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalefv, hpmvec4f* larg,
+		const hpmvec4f* rarg);
 
 /**
  *	larg -= rarg;
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg, const hpmvecf rarg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg,
+		const hpmvecf rarg);
+
+/**
+ *	larg -= rarg;
+ *
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_subtractionfv, hpmvec4f* larg,
+		const hpmvec4f* rarg);
 
 /**
  *	larg *= rarg
@@ -157,13 +210,15 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg, const hpmv
  *	\rarg
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multifv, hpmvec4f* larg,
+		const hpmvec4f* rarg);
 
 /**
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg,
+		const float rarg);
 
 /**
  *	Compute dot product of two 1x4 vectors.
@@ -177,7 +232,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg, const floa
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg);
+HPM_EXPORT(float, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg,
+		const hpmvec4f* rarg);
 
 /**
  *	Compute vector length.
@@ -226,7 +282,8 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negatefv, hpmvec4f* arg);
  *
  *	\out
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
+		const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
 
 /**
  *	Spherical interpolation between a and b in respect to t.
@@ -241,14 +298,16 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4
  *	\out
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
+		const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
 
 
 /**
  *	Compute cross product.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg, const hpmvec3f* rarg, hpmvec3f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg,
+		const hpmvec3f* rarg, hpmvec3f* out);
 
 /**
  *	Compute triple product
@@ -256,29 +315,30 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg, co
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3);
-
+HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
+		const hpmvec3f* v2, const hpmvec3f* v3);
 
 /**
  *	Compute dot product.
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
+		const hpmvec3f* rarg);
 
 /**
  *	Compute length of vector.
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
 
 /**
  *	Compute square length of vector.
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, const hpmvec3f* rarg);
+HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 
 
 /**
@@ -286,7 +346,8 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* larg, c
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg,
+		const hpmvec3f* normal, hpmvec3f* out);
 
 
 /**
@@ -294,14 +355,15 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg, const hp
  *	in respect to refraction index.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg, const hpmvec3f* normal, float index, hpmvec3f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg,
+		const hpmvec3f* normal, float index, hpmvec3f* out);
 
 /**
  *	Project vector a onto vector b.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* larg);
-
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_projfv, const hpmvec3f* a,
+		const hpmvec3f* b, hpmvec3f* larg);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

@@ -19,18 +19,18 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmve
 	int i;
 
 	for(i = 0; i < 4; i++){
-		const hpmv4sf brod1 = _mm_set1_ps(larg[i][0]);
-		const hpmv4sf brod2 = _mm_set1_ps(larg[i][1]);
-		const hpmv4sf brod3 = _mm_set1_ps(larg[i][2]);
-		const hpmv4sf brod4 = _mm_set1_ps(larg[i][3]);
+		const hpmv4sf brod1 = _mm_set1_ps(rarg[i][0]);
+		const hpmv4sf brod2 = _mm_set1_ps(rarg[i][1]);
+		const hpmv4sf brod3 = _mm_set1_ps(rarg[i][2]);
+		const hpmv4sf brod4 = _mm_set1_ps(rarg[i][3]);
 
 		const hpmv4sf row = _mm_add_ps(
 					_mm_add_ps(
-						_mm_mul_ps(brod1, rarg[0]),
-						_mm_mul_ps(brod2, rarg[1])),
+						_mm_mul_ps(brod1, larg[0]),
+						_mm_mul_ps(brod2, larg[1])),
 						_mm_add_ps(
-							_mm_mul_ps(brod3, rarg[2]),
-							_mm_mul_ps(brod4, rarg[3])));
+							_mm_mul_ps(brod3, larg[2]),
+							_mm_mul_ps(brod4, larg[3])));
 		out[i] = row;
 
 	}
@@ -38,20 +38,12 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmve
 
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
+	/*	Unfold later.	*/
 	(*output)[0] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[0], rarg);
 	(*output)[1] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[1], rarg);
 	(*output)[2] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[2], rarg);
 	(*output)[3] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[3], rarg);
 }
-
-
-
-
-
-
-
-
-
 
 
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){

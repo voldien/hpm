@@ -32,7 +32,8 @@ IF(EXISTS .git)
 			RESULT_VARIABLE _revision_version_failed)
 ENDIF()
 
-#	hpm version setup.
+
+# hpm version setup.
 SET(HPM_VERSION_MAJOR ${_hpm_major})
 SET(HPM_VERSION_MINOR ${_hpm_minor})
 SET(HPM_VERSION_REVISION ${_hpm_revision})
@@ -43,127 +44,107 @@ MESSAGE(STATUS "Version ${HPM_VERSION}")
 #ADD_DEFINITIONS(-DHPM_MAJOR_VERSION=${HPM_VERSION_MAJOR})
 #ADD_DEFINITIONS(-DHPM_MINOR_VERSION=${HPM_VERSION_MINOR})
 #ADD_DEFINITIONS(-DHPM_REVISION_VERSION=${HPM_VERSION_REVISION})
-if((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
+IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	IF(BUILD_SHARED_LIBS AND CMAKE_SIZEOF_VOID_P EQUAL 8)
 		ADD_DEFINITIONS(-fPIC)
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 	ENDIF()
 
+	# Compiling language.
 	ADD_DEFINITIONS(-std=c11)
 	ADD_DEFINITIONS(-w)
+
+	# Check build target.
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
-		ADD_DEFINITIONS(-DNDEBUG)
+		ADD_DEFINITIONS(-DNDEBUG -s -O2)
 		SET(CMAKE_RELEASE TRUE)
-		SET(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -s -O2")
-		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized") # -march=native
-	ELSE()
+		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized")
+	ELSEIF( CMAKE_BUILD_TYPE STREQUAL "Debug")
 		MESSAGE(STATUS "Compile for debug.")
 		ADD_DEFINITIONS(-D_DEBUG)
 		ADD_DEFINITIONS(-g3 -O0)
 		SET(CMAKE_DEBUG TRUE)
-		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized") # -march=native
+		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized")
 	ENDIF()
 
-
-elseif(MSVC)
-		# enable multi-core complication with MSVC
+ELSEIF(MSVC)
+		# Enable multi-core complication with MSVC
 		ADD_DEFINITIONS(/MP)
-endif()
+ENDIF()
 
-
-#	File source paths
+# Source files.
 FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/base_* )
-FILE (GLOB nosimdsource src/nosimd_* )
-FILE (GLOB allsimdsource src/allsimd_* )
-FILE (GLOB all_sse_source src/all_sse_*)
-FILE (GLOB sse_source src/sse_*)
-FILE (GLOB sse2_source src/sse2_*)
-FILE (GLOB sse3_source src/sse3_*)
-FILE (GLOB sse41_source src/sse41_*)
-FILE (GLOB sse42_source src/sse42_*)
-FILE (GLOB avx_source src/avx_*)
-FILE (GLOB avx2_source src/avx2_*)
+FILE (GLOB basecore src/base/* )
+FILE (GLOB nosimdsource src/nosimd/* )
+FILE (GLOB all_sse_source src/sse/*)
+FILE (GLOB avx_source src/avx/*)
+#FILE (GLOB avx512_source src/avx/*)
 INCLUDE_DIRECTORIES(include)
 
 
+# Main library target for initializing the library.
+ADD_LIBRARY(hpm src/hpm.c)
+SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
+TARGET_LINK_LIBRARIES(hpm -lm -ldl)
+
+# Target with no simd extensions requirements.
+ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1" )
+TARGET_LINK_LIBRARIES(hpmnosimd -lm)
+
+# X86 and amd64 CPU architecture.
 #
 IF(USE_SINGLE_LIBRARY)
 
 	ADD_LIBRARY(hpm src/hpm.c)
-
 ELSE()
-
-	ADD_LIBRARY(hpm src/hpm.c)
-	SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
-	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
-
-	#	Target for cpu with no supported simd extensions.
-	ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-	SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1" )
-	TARGET_LINK_LIBRARIES(hpmnosimd -lm)
-
-
 	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+		# Will added later when AVX512 is more accessible.
 		#ADD_LIBRARY(${avx512_source} ${basecore} )
 		#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
 		#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
 
 		# Target for AVX2
-		ADD_LIBRARY(hpmavx2 ${avx2_source}  ${basecore} ${allsimdsource})
+		ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
 		SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
 		# Target for AVX
-		ADD_LIBRARY(hpmavx ${avx_source} ${basecore} ${allsimdsource})
+		ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
 		SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmavx -lm)
 
-		# Target for MMX. But is not active because its old and most x86 supports SEE/SSE2 where MMX is subset.
-		#ADD_LIBRARY(hpmmmx src/mmx_matrix.c ${basecore} )
-		#SET_TARGET_PROPERTIES(hpmmmx PROPERTIES COMPILE_FLAGS "-mmmx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		#TARGET_LINK_LIBRARIES(hpmmmx -lm)
-
-		# Target for SSE1
-		ADD_LIBRARY(hpmsse ${basecore} ${allsimdsource} ${all_sse_source})
+		# Target for SSE
+		ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
 		SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmsse -lm)
 
 		# Target for SSE2
-		ADD_LIBRARY(hpmsse2 ${basecore} ${allsimdsource} ${all_sse_source})
+		ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
 		SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
-		# Target for SSE3 
-		ADD_LIBRARY(hpmsse3 ${basecore} ${allsimdsource} ${all_sse_source})
+		# Target for SSE3
+		ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
 		SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmsse3 -lm)
-	
-		# Target for SSSE3. Not active because there isn't so far any benificts of it.
-		#ADD_LIBRARY(hpmssse3 ${basecore} ${allsimdsource} ${all_sse_source})
-		#SET_TARGET_PROPERTIES(hpmssse3 PROPERTIES COMPILE_FLAGS "-mssse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
-		#TARGET_LINK_LIBRARIES(hpmssse3 -lm)
 
-		# Target for SSE41.
-		ADD_LIBRARY(hpmsse41 ${basecore} ${allsimdsource} ${all_sse_source})
+		# Target for SSE4.1
+		ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
 		SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
 		TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
-		# Target for SSE42
-		ADD_LIBRARY(hpmsse42 ${basecore} ${allsimdsource} ${all_sse_source})
+		# Target for SSE4.2
+		ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
 		SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
 		TARGET_LINK_LIBRARIES(hpmsse42 -lm)
-
-	ELSEIF(CMAKE_SYSTEM_PROCESSOR MATCHES "(arm)")
-		# Target for NEON.
+	ELSE()
+		# Target for Neon 
 		ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
 		SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 	ENDIF()
-
 ENDIF()
-
-
 # Executable hpm benchmark. 
 ADD_EXECUTABLE(hpmtest test/main.c)
 TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
@@ -181,7 +162,6 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	#INSTALL (TARGETS hpmavx512 DESTINATION lib)
 	INSTALL (TARGETS hpmavx2 DESTINATION lib)
 	INSTALL (TARGETS hpmavx DESTINATION lib)
-	#INSTALL (TARGETS hpmmmx DESTINATION lib)
 	INSTALL (TARGETS hpmsse DESTINATION lib)
 	INSTALL (TARGETS hpmsse2 DESTINATION lib)
 	INSTALL (TARGETS hpmsse3 DESTINATION lib)
@@ -194,8 +174,16 @@ ENDIF()
 
 # Include header for development.
 INSTALL (FILES ${headers} DESTINATION include/hpm)
-
 # Test binary.
 INSTALL (TARGETS hpmtest DESTINATION bin)
+
+IF( UNIX )
+	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
+	ADD_CUSTOM_TARGET(	distribution
+				COMMAND mkdir -p ${TARGETDIR}
+				COMMAND cp -r src include test CMakeLists.txt LICENSE README.md ${TARGETDIR}
+				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
+				COMMAND rm -r ${TARGETDIR} )
+ENDIF()
 
 

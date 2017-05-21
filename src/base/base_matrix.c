@@ -82,10 +82,10 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 
 
 HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, float x, float y, float z){
-	const hpmvec4f row0 = {1, 0, 0, 0};
-	const hpmvec4f row1 = {0, 1, 0, 0};
-	const hpmvec4f row2 = {0, 0, 1, 0};
-	const hpmvec4f row3 = {x, y, z, 1};
+	const hpmvec4f row0 = { 1, 0, 0, 0 };
+	const hpmvec4f row1 = { 0, 1, 0, 0 };
+	const hpmvec4f row2 = { 0, 0, 1, 0 };
+	const hpmvec4f row3 = { x, y, z, 1 };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -107,20 +107,20 @@ HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t mat, const hpmvec3f* trans
 }
 
 HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t mat, float x, float y, float z){
-	const hpmvec4f row0 = {x,0,0,0};
-	const hpmvec4f row1 = {0,y,0,0};
-	const hpmvec4f row2 = {0,0,z,0};
-	const hpmvec4f row3 = {0,0,0,1};
+	const hpmvec4f row0 = { x, 0, 0, 0 };
+	const hpmvec4f row1 = { 0, y, 0, 0 };
+	const hpmvec4f row2 = { 0, 0, z, 0 };
+	const hpmvec4f row3 = { 0, 0, 0, 1 };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
 	mat[3] = row3;
 }
 HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale){
-	const hpmvec4f row0 = {(*scale)[0],0,0,0};
-	const hpmvec4f row1 = {0, (*scale)[1],0,0};
-	const hpmvec4f row2 = {0, 0, (*scale)[2],0};
-	const hpmvec4f row3 = {0, 0, 0, 1};
+	const hpmvec4f row0 = { (*scale)[0], 0, 0, 0 };
+	const hpmvec4f row1 = { 0, (*scale)[1], 0, 0 };
+	const hpmvec4f row2 = { 0, 0, (*scale)[2], 0 };
+	const hpmvec4f row3 = { 0, 0, 0, 1 };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -137,10 +137,10 @@ HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmve
 HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
 	const hpmvecf ccos = cosf(angle);
 	const hpmvecf csin = sinf(angle);
-	const hpmvec4f row0 = {1,0,0,0};
-	const hpmvec4f row1 = {0,ccos,-csin,0};
-	const hpmvec4f row2 = {0,csin,ccos,0};
-	const hpmvec4f row3 = {0,0,0,1};
+	const hpmvec4f row0 = { 1, 0, 0, 0 };
+	const hpmvec4f row1 = { 0, ccos, -csin, 0 };
+	const hpmvec4f row2 = { 0, csin, ccos, 0 };
+	const hpmvec4f row3 = { 0, 0, 0, 1 };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -150,9 +150,9 @@ HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
 
 HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float angle){
 	const hpmvec4f row0 = {cosf(angle),0,sinf(angle),0};
-	const hpmvec4f row1 = {0,1,0,0};
+	const hpmvec4f row1 = { 0, 1, 0, 0 };
 	const hpmvec4f row2 = {-sinf(angle),0,cosf(angle),0};
-	const hpmvec4f row3 = {0,0,0,1};
+	const hpmvec4f row3 = { 0, 0, 0, 1 };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -220,6 +220,7 @@ HPM_IMP( void, hpm_mat4x4_multi_translationfv, hpmvec4x4f_t mat, const hpmvec3f*
 	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(trans, translate);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, trans, mat);
 }
+
 HPM_IMP( void, hpm_mat4x4_multi_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale){
 	hpmvec4x4fi_t scal;
 	hpmvec4x4fi_t tmp;
@@ -264,7 +265,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 
 
 HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
-	const hpmvecf angle = HPM_DEG2RAD(f_fov * 0.5f);
+	const hpmvecf angle = f_fov;
 	const hpmvecf xScale = (1.0f / (tanf(angle) ) / f_aspect);
 	const hpmvecf yScale = 1.0f / tanf(angle);
 	const hpmvecf zScale = (f_near + f_far) / (f_near - f_far);
@@ -289,7 +290,7 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, flo
 	const hpmvec4f row2 = {0.0, 0.0f,-2.0f/(zFar - zNear), 0.0 };
 	const hpmvec4f row3 = {-(right + left)/(right - left), -(top + bottom)/(top - bottom), -(zFar + zNear)/(zFar - zNear), 1.0};
 
-	/**/
+	/*	*/
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -308,8 +309,8 @@ HPM_IMP( void, hpm_mat4x4_unprojf, float winx, float winy, float winz, const hpm
 
 	invector[0] = (winx - viewport[0]) / (viewport[2] * 2.0 - 1.0);
 	invector[1] = (winy - viewport[1]) / (viewport[3] * 2.0 - 1.0);
-	invector[2] = 2.0 * winz - 1.0;
-	invector[3] = 1.0;
+	invector[2] = 2.0f * winz - 1.0f;
+	invector[3] = 1.0f;
 
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, tmp2 /*incvector*/, tmp2);
 

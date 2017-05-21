@@ -52,6 +52,23 @@ typedef union{
 #define HPM_QUAT_Z 3
 
 
+/**
+ *	Get individual element of quaternion.
+ */
+#define hpm_quat_getwf(hpm_vec) (hpm_vec[HPM_QUAT_W])
+#define hpm_quat_getxf(hpm_vec) (hpm_vec[HPM_QUAT_X])
+#define hpm_quat_getyf(hpm_vec) (hpm_vec[HPM_QUAT_Y])
+#define hpm_quat_getzf(hpm_vec) (hpm_vec[HPM_QUAT_Z])
+
+/**
+ *	Set individual element of quaternion.
+ */
+#define hpm_quat_setwf(hpm_vec, w) (hpm_vec[HPM_QUAT_W] = w)
+#define hpm_quat_setxf(hpm_vec, x) (hpm_vec[HPM_QUAT_X] = x)
+#define hpm_quat_setyf(hpm_vec, y) (hpm_vec[HPM_QUAT_Y] = y)
+#define hpm_quat_setzf(hpm_vec, y) (hpm_vec[HPM_QUAT_Z] = y)
+
+
 
 /**
  *	Copy quaternion.
@@ -61,7 +78,20 @@ typedef union{
  *	\source
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyfv, hpmquatf* __restrict__ destination, const hpmquatf* __restrict__ source);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_copyfv,
+		hpmquatf* __restrict__ destination,
+		const hpmquatf* __restrict__ source);
+
+/**
+ *	Set quaternion.
+ *
+ *	\destination
+ *
+ *	\source
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_setf, hpmquatf* destination,
+			const hpmvecf w, const hpmvecf x, const hpmvecf y, const hpmvecf z);
 
 /**
  *	Multiply two quaternion.
@@ -73,7 +103,16 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_copyfv, hpmquatf* __restrict__ destinati
  *	\out
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg,
+		const hpmquatf* rarg, hpmquatf* out);
+
+/**
+ *	Multiply quaternion with vector.
+ *
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
+		const hpmvec3f* rarg, hpmquatf* out);
 
 
 /**
@@ -81,7 +120,7 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg, cons
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg, hpmquatf* out);
+HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg, const hpmvecf rarg);
 
 /**
  *	Compute direction of quaternion.
@@ -100,7 +139,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, hpmve
  *	\quatdir the resulting vector direction normalized.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* quatdir);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_get_vectorfv, const hpmquatf* quat,
+		const hpmvec3f* vect, hpmvec3f* quatdir);
 
 /**
  *	Conjugate of quaternion. All the real component of
@@ -149,7 +189,8 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_inversefv, hpmquatf* arg);
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg, const hpmquatf* rarg);
+HPM_EXPORT(float, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg,
+		const hpmquatf* rarg);
 
 /**
  *	Copy quaternion identity to destination.
@@ -169,7 +210,9 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* destination);
  *	\angle
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
+		hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis,
+		float angle);
 
 
 /**
@@ -181,8 +224,8 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axis_anglefv, hpmquatf* __restrict__ qua
  *	\mat
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat);
-
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv,
+		hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat);
 
 /**
  *	Compute quaternion from eular.
@@ -196,7 +239,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ qua
  *	\roll_radian
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat,
+		float pitch_radian, float yaw_radian, float roll_radian);
 
 
 /**
@@ -211,15 +255,15 @@ HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat, float pitch_radia
  *	\out
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out);
-
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg,
+		const hpmquatf* rarg, float t, hpmquatf* out);
 
 /**
  *	Compute spherical interpolation between two quaternion.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg, const hpmquatf* rarg, float t, hpmquatf* out);
-
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg,
+		const hpmquatf* rarg, float t, hpmquatf* out);
 
 /**
  *	Compute quaternion pitch angle rotation in radian.
@@ -252,6 +296,5 @@ HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_rollfv, const hpmquatf* arg);
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif
-
 
 #endif

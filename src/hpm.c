@@ -27,7 +27,6 @@ int hpm_init(unsigned int simd){
 	int closestatus;
 	char* libpath;
 
-
 	/*	Check if argument is a power of two.	*/
 	if( ( simd && ((simd - 1) & simd) ) ){
 		fprintf(stderr, "Argument not a power of 2.\n");
@@ -67,8 +66,14 @@ int hpm_init(unsigned int simd){
 	case HPM_NOSIMD:
 		libpath = "libhpmnosimd.so";
 		break;
-	case HPM_DEFAULT:
-		break;
+	case HPM_DEFAULT:{
+		unsigned int i;
+		for(i = HPM_NEON; i < HPM_DEFAULT; i >>= 1){
+			if(hpm_supportcpufeat(i)){
+				return hpm_init(i);
+			}
+		}
+	}break;
 	default:
 		fprintf(stderr, "Not a valid SIMD extension.\n");
 		return -2;
@@ -142,6 +147,9 @@ int hpm_init(unsigned int simd){
 
 	/*	vector4	*/
 	hpm_vec4_copyfv = hpm_get_symbolfuncp(hpm_vec4_copyfv);
+	hpm_vec4_setf = hpm_get_symbolfuncp(hpm_vec4_setf);
+	hpm_vec4_setsf = hpm_get_symbolfuncp(hpm_vec4_setsf);
+	hpm_vec4_addition_scalefv = hpm_get_symbolfuncp(hpm_vec4_addition_scalefv);
 	hpm_vec4_addition_scalef = hpm_get_symbolfuncp(hpm_vec4_addition_scalef);
 	hpm_vec4_subtractionf = hpm_get_symbolfuncp(hpm_vec4_subtractionf);
 	hpm_vec4_multifv = hpm_get_symbolfuncp(hpm_vec4_multifv);
@@ -168,6 +176,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
 
 	/*	Quaternion	*/
+	hpm_quat_setf = hpm_get_symbolfuncp(hpm_quat_setf);
 	hpm_quat_multi_quatfv = hpm_get_symbolfuncp(hpm_quat_multi_quatfv);
 
 	hpm_quat_multi_vec3fv = hpm_get_symbolfuncp(hpm_quat_multi_vec3fv);
@@ -210,14 +219,20 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
 	hpm_vec8_minfv = hpm_get_symbolfuncp(hpm_vec8_minfv);
 
-	/*	Logic.	*/
+
+	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
+	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);
 	hpm_vec4_neqfv = hpm_get_symbolfuncp(hpm_vec4_neqfv);
+
+	hpm_vec4_com_gfv = hpm_get_symbolfuncp(hpm_vec4_com_gfv);
 	hpm_vec4_gfv = hpm_get_symbolfuncp(hpm_vec4_gfv);
+	hpm_vec4_com_lfv = hpm_get_symbolfuncp(hpm_vec4_com_lfv);
 	hpm_vec4_lfv = hpm_get_symbolfuncp(hpm_vec4_lfv);
 
 	/*	Utility.	*/
-
+	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
+	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
 	error:	/*	error.	*/
 
@@ -300,8 +315,8 @@ int hpm_supportcpufeat(unsigned int simd){
 		cpuid(cpuInfo, 7);
 		return (cpuInfo[0] & bit_AVX2);
 	case HPM_NEON:
-		return -1;
+		return 0;
 	default:
-		return -1;
+		return 0;
 	}
 }

@@ -287,6 +287,19 @@
 
 #endif
 
+/**
+ *	SIMD prefix.
+ */
+#define HPM_SIMD_NO_PREFIX		"nosimd"
+#define HPM_SIMD_SSE_PREFIX		"sse"
+#define HPM_SIMD_SEE2_PREFIX	"sse2"
+#define HPM_SIMD_SEE3_PREFIX	"sse3"
+#define HPM_SIMD_SEE41_PREFIX	"sse41"
+#define HPM_SIMD_SEE42_PREFIX	"sse42"
+#define HPM_SIMD_AVX_PREFIX		"avx"
+#define HPM_SIMD_AVX2_PREFIX	"avx2"
+
+
 
 /**
  *	String macros.

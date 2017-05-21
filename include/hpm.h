@@ -64,7 +64,7 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 #define HPM_NEON		(1 << 11)	/*	ARM	FPU (floating-point unit) feature.	*/
 #define HPM_SVML		(1 << 29)	/*	Not supported.	*/
 #define HPM_ACML		(1 << 30)	/*	Not supported.	*/
-#define HPM_DEFAULT		(1 << 31)	/*	Default ( Not supported ).	*/
+#define HPM_DEFAULT		(1 << 31)	/*	Default, makes attempt to take the best SIMD extension on the system.	*/
 
 
 /**
