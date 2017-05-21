@@ -287,19 +287,6 @@
 
 #endif
 
-/**
- *	SIMD prefix.
- */
-#define HPM_SIMD_NO_PREFIX		"nosimd"
-#define HPM_SIMD_SSE_PREFIX		"sse"
-#define HPM_SIMD_SEE2_PREFIX	"sse2"
-#define HPM_SIMD_SEE3_PREFIX	"sse3"
-#define HPM_SIMD_SEE41_PREFIX	"sse41"
-#define HPM_SIMD_SEE42_PREFIX	"sse42"
-#define HPM_SIMD_AVX_PREFIX		"avx"
-#define HPM_SIMD_AVX2_PREFIX	"avx2"
-
-
 
 /**
  *	String macros.
@@ -308,14 +295,75 @@
 #define HPM_STR(x) HPM_STR_HELPER(x)								/*	Convert input to a double quoate string.	*/
 #define HPM_TEXT(quote) quote										/*	*/
 
-#ifdef HPM_USE_SINGLE_LIBRARY
+
+/**
+ *	SIMD prefix symbol.
+ */
+#define HPM_SIMD_DEFAULT_PREFIX
+#define HPM_SIMD_NO_PREFIX			nosimd
+#define HPM_SIMD_SSE_PREFIX			sse
+#define HPM_SIMD_SEE2_PREFIX		sse2
+#define HPM_SIMD_SEE3_PREFIX		sse3
+#define HPM_SIMD_SEE41_PREFIX		sse41
+#define HPM_SIMD_SEE42_PREFIX		sse42
+#define HPM_SIMD_AVX_PREFIX			avx
+#define HPM_SIMD_AVX2_PREFIX		avx2
+#define HPM_SIMD_NEON_PREFIX		neon
+
+
+/**
+ *	SIMD prefix string.
+ */
+#define HPM_STR_SIMD_DEFAULT_PREFIX
+#define HPM_STR_SIMD_NO_PREFIX			HPM_STR(HPM_SIMD_NO_PREFIX)
+#define HPM_STR_SIMD_SSE_PREFIX			HPM_STR(HPM_SIMD_SSE_PREFIX)
+#define HPM_STR_SIMD_SEE2_PREFIX		HPM_STR(HPM_SIMD_SEE2_PREFIX)
+#define HPM_STR_SIMD_SEE3_PREFIX		HPM_STR(HPM_SIMD_SEE3_PREFIX)
+#define HPM_STR_SIMD_SEE41_PREFIX		HPM_STR(HPM_SIMD_SEE41_PREFIX)
+#define HPM_STR_SIMD_SEE42_PREFIX		HPM_STR(HPM_SIMD_SEE42_PREFIX)
+#define HPM_STR_SIMD_AVX_PREFIX			HPM_STR(HPM_SIMD_AVX_PREFIX)
+#define HPM_STR_SIMD_AVX2_PREFIX		HPM_STR(HPM_SIMD_AVX2_PREFIX)
+#define HPM_STR_SIMD_NEON_PREFIX		HPM_STR(HPM_SIMD_NEON_PREFIX)
+
+
+/**
+ *	Get current simd extension prefix.
+ */
+#if defined(__AVX2__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_AVX2_PREFIX)
+#elif defined(__AVX__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_AVX_PREFIX)
+#elif defined(__SSE42__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE42_PREFIX)
+#elif defined(__SSE41__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE41_PREFIX)
+#elif defined(__SSE3__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE3_PREFIX)
+#elif defined(__SSE2__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE2_PREFIX)
+#elif defined(__SSE__)
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SSE_PREFIX)
 #else
-	#define HPM_LOCALSYMBOL ""											/*	Namespace for local symbol. Use for creating single library file.	*/
+	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_NO_PREFIX)
 #endif
-#define HPM_FUNCSYMBOLNAME(func) HPM_LOCALSYMBOL##fimp##func		/*	Declare function internal symbol name.	*/
-#define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
-#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
-#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
+
+
+/**
+ *
+ */
+#ifdef HPM_USE_SINGLE_LIBRARY
+	#define HPM_LOCALSYMBOL HPM_TEXT(HPM_SIMD_PREFIX)					/*	Namespace for local symbol. Use for creating single library file.	*/
+	#define HPM_INTERNAL(func)	fimp##func##_
+	#define HPM_FUNCSYMBOL(func)	HPM_INTERNAL(func) HPM_TEXT(HPM_SIMD_PREFIX)
+
+#else
+	#define HPM_LOCALSYMBOL	""											/*	Namespace for local symbol. Use for creating single library file.	*/
+	#define HPM_FUNCSYMBOL(func)	fimp##func
+#endif
+#define HPM_FUNCSYMBOLNAME(func) fimp##func								/*	Declare function internal symbol name.	*/
+#define HPM_FUNCTYPE(func) func##_t										/*	Declare function data type.	*/
+#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func					/*	Declare function pointer.	*/
+#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOL(func)					/*	Call function by the declare pointer name.	*/
 
 
 /**
@@ -332,16 +380,16 @@
  *	for declaring and defining function variable.
  */
 #if defined(HPM_INTERNAL)
-#define HPM_EXPORT(ret, callback, func, ...)						\
+#define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func);										\
 		HPM_FUNCPOINTER(func) = NULL										\
 
 
 #elif defined(HPM_INTERNAL_IMP)	/**/
-#define HPM_EXPORT(ret, callback, func, ...)						\
-		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
+#define HPM_EXPORT(ret, callback, func, ...)										\
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 					\
+		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);		\
 
 #else	/**/
 #define HPM_EXPORT(ret, callback, func, ...)								\
@@ -356,8 +404,7 @@
  *	Define
  */
 #define HPM_IMP(ret, func, ...)					\
-ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
-
+ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 
 
 /**
