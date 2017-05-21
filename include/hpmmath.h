@@ -57,7 +57,9 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a,
  *
  *	@Return return a non 0 value for each element of the vector.
  */
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b);
 
 /**
@@ -65,23 +67,29 @@ HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
  *
  *	@Return
  */
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_neqfv,
-		const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_neqfv,
+		const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b,
+		hpmvec4f* __restrict__ res);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b);
 
 /**
  *	Determine if a is greater than b.
  *
  *	@Return
  */
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b);
-
 /**
  *	Determine if a is less than b.
  *
  *	@Return
  */
-HPM_EXPORT(hpmvec4i, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
+		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b);
 
 /**
