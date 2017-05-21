@@ -73,6 +73,11 @@ ELSEIF(MSVC)
 		ADD_DEFINITIONS(/MP)
 ENDIF()
 
+IF(USE_SINGLE_LIBRARY)
+	ADD_DEFINITIONS(-DHPM_USE_SINGLE_LIBRARY=1)
+ENDIF()
+
+
 # Source files.
 FILE (GLOB headers "include/*.h")
 FILE (GLOB basecore src/base/* )
@@ -85,8 +90,13 @@ INCLUDE_DIRECTORIES(include)
 
 # Main library target for initializing the library.
 ADD_LIBRARY(hpm src/hpm.c)
+IF(USE_SINGLE_LIBRARY)
+	SET(SIMD_FLAGS "${SIMD_FLAGS} -static")
+	TARGET_LINK_LIBRARIES(hpm -lm -ldl hpmavx2)
+ELSE()
+	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
+ENDIF()
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
-TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 
 # Target with no simd extensions requirements.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
@@ -94,56 +104,52 @@ SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNA
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 # X86 and amd64 CPU architecture.
-#
-IF(USE_SINGLE_LIBRARY)
+IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+	# Will added later when AVX512 is more accessible.
+	#ADD_LIBRARY(${avx512_source} ${basecore} )
+	#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
+	#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
 
-	ADD_LIBRARY(hpm src/hpm.c)
+	# Target for AVX2
+	ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
+	SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmavx2 -lm)
+
+	# Target for AVX
+	ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
+	SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmavx -lm)
+
+	# Target for SSE
+	ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
+	SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmsse -lm)
+
+	# Target for SSE2
+	ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
+	SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmsse2 -lm)
+
+	# Target for SSE3
+	ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
+	SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmsse3 -lm)
+
+	# Target for SSE4.1
+	ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
+	SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	TARGET_LINK_LIBRARIES(hpmsse41 -lm)
+
+	# Target for SSE4.2
+	ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
+	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
+	TARGET_LINK_LIBRARIES(hpmsse42 -lm)
+
+
 ELSE()
-	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-		# Will added later when AVX512 is more accessible.
-		#ADD_LIBRARY(${avx512_source} ${basecore} )
-		#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
-		#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
-
-		# Target for AVX2
-		ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
-		SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmavx2 -lm)
-
-		# Target for AVX
-		ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
-		SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmavx -lm)
-
-		# Target for SSE
-		ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
-		SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmsse -lm)
-
-		# Target for SSE2
-		ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
-		SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmsse2 -lm)
-
-		# Target for SSE3
-		ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
-		SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmsse3 -lm)
-
-		# Target for SSE4.1
-		ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
-		SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
-		TARGET_LINK_LIBRARIES(hpmsse41 -lm)
-
-		# Target for SSE4.2
-		ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
-		SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
-		TARGET_LINK_LIBRARIES(hpmsse42 -lm)
-	ELSE()
-		# Target for Neon 
-		ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
-		SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
-	ENDIF()
+	# Target for Neon 
+	ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
 # Executable hpm benchmark. 
 ADD_EXECUTABLE(hpmtest test/main.c)
@@ -157,19 +163,23 @@ SET_TARGET_PROPERTIES(hpmtest PROPERTIES COMPILE_FLAGS "-Iinclude" )
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
-INSTALL (TARGETS hpmnosimd DESTINATION lib)
-IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-	#INSTALL (TARGETS hpmavx512 DESTINATION lib)
-	INSTALL (TARGETS hpmavx2 DESTINATION lib)
-	INSTALL (TARGETS hpmavx DESTINATION lib)
-	INSTALL (TARGETS hpmsse DESTINATION lib)
-	INSTALL (TARGETS hpmsse2 DESTINATION lib)
-	INSTALL (TARGETS hpmsse3 DESTINATION lib)
-	INSTALL (TARGETS hpmsse41 DESTINATION lib)
-	INSTALL (TARGETS hpmsse42 DESTINATION lib)
-ENDIF()
-IF(__arm__)
-	INSTALL (TARGETS hpmneon DESTINATION lib)
+IF(USE_SINGLE_LIBRARY)
+
+ELSE()
+	INSTALL (TARGETS hpmnosimd DESTINATION lib)
+	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+		#INSTALL (TARGETS hpmavx512 DESTINATION lib)
+		INSTALL (TARGETS hpmavx2 DESTINATION lib)
+		INSTALL (TARGETS hpmavx DESTINATION lib)
+		INSTALL (TARGETS hpmsse DESTINATION lib)
+		INSTALL (TARGETS hpmsse2 DESTINATION lib)
+		INSTALL (TARGETS hpmsse3 DESTINATION lib)
+		INSTALL (TARGETS hpmsse41 DESTINATION lib)
+		INSTALL (TARGETS hpmsse42 DESTINATION lib)
+	ENDIF()
+	IF(__arm__)
+		INSTALL (TARGETS hpmneon DESTINATION lib)
+	ENDIF()
 ENDIF()
 
 # Include header for development.
