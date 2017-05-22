@@ -9,6 +9,7 @@
 /*	library handle.
  	NULL means that there is no library open.	*/
 void* libhandle = NULL;
+unsigned int g_simd;
 
 
 /**
@@ -228,6 +229,9 @@ int hpm_init(unsigned int simd){
 	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
+	/*	*/
+	g_simd = simd;
+
 	error:	/*	error.	*/
 
 	return ( libhandle != NULL) ;
@@ -240,11 +244,16 @@ int hpm_release(void){
 		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
 	}
 	libhandle = NULL;
+	g_simd = 0;
 	return status == 0;
 }
 
 int hpm_isinit(void){
 	return libhandle != NULL;
+}
+
+unsigned int hpm_get_simd(void){
+	return g_simd;
 }
 
 
