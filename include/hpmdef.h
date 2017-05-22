@@ -333,7 +333,8 @@
 
 
 /**
- *	Define
+ *	Define implementation header for
+ *	definining the function.
  */
 #define HPM_IMP(ret, func, ...)					\
 ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
@@ -363,6 +364,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 
 
 /**
+ *	Inline convertion functions.
  *	Convert between radians and degrees.
  */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
@@ -370,7 +372,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 
 
 /**
- *
+ *	Inline math functions.
  */
 #ifdef __SSE4__
 	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
