@@ -80,8 +80,6 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
 /**
  *	Determine if a is less than b.
  *
@@ -89,8 +87,6 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
 
 /**
  *
