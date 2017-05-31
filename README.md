@@ -37,3 +37,7 @@ Because the library is still in development. That means that the symbol table ha
 ## Dependencies ##
 ----------------
 The *hpm* project does not have any additional dependency other than the libraries provided with the standard *c* library.
+
+## License ##
+------
+This project is licensed under the GPL+3 License - see the [LICENSE](LICENSE) file for details
