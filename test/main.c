@@ -9,26 +9,6 @@
 #include<getopt.h>
 
 
-/*	*/
-extern void sse_nosimd(void);
-extern void sse_test(void);
-extern void sse2_test(void);
-extern void sse3_test(void);
-extern void sse41_test(void);
-extern void sse42_test(void);
-extern void avx_test(void);
-extern void avx2_test(void);
-
-
-/*	*/
-extern void performance_test(void);
-extern void performance_test_sp_vector(void);
-extern void performance_test_sp_matrix(void);
-extern void performance_test_sp_comparing(void);
-extern void performance_test_sp_transfer(void);
-extern void performance_test_sp_quat(void);
-extern void performance_test_sp_math(void);
-extern void integrity_sp_check(void);
 
 
 
@@ -57,6 +37,29 @@ enum PrecisionType{
 int status = (unsigned int)(-1);
 int type = eAll;
 int precision = eFloat;
+
+
+
+/*	*/
+extern void sse_nosimd(void);
+extern void sse_test(void);
+extern void sse2_test(void);
+extern void sse3_test(void);
+extern void sse41_test(void);
+extern void sse42_test(void);
+extern void avx_test(void);
+extern void avx2_test(void);
+
+
+/*	*/
+extern void performance_test(void);
+extern void performance_test_sp_vector(void);
+extern void performance_test_sp_matrix(void);
+extern void performance_test_sp_comparing(void);
+extern void performance_test_sp_transfer(void);
+extern void performance_test_sp_quat(void);
+extern void performance_test_sp_math(void);
+extern void integrity_sp_check(void);
 
 
 
@@ -357,12 +360,18 @@ void performance_test_sp_comparing(void){
 	hpmvec4f vec = {1,1,1,1};
 	hpmvec4f vec2 = {1,1,1,1};
 	hpmvec4i ivec;
+	hpmvec4x4f_t mat1;
+	hpmvec4x4f_t mat2;
+
+	hpm_quat_identityfv(mat1);
+	hpm_quat_identityfv(mat1);
 
 	for(x = 0; x < 1E7; x++){
-		ivec = hpm_vec4_eqfv(&vec2, &vec);
-		ivec = hpm_vec4_neqfv(&vec2, &vec);
-		ivec = hpm_vec4_gfv(&vec2, &vec);
-		ivec = hpm_vec4_lfv(&vec2, &vec);
+		hpm_vec4_com_eqfv(&vec2, &vec, &ivec);
+		hpm_vec4_com_neqfv(&vec2, &vec, &ivec);
+		hpm_vec4_com_gfv(&vec2, &vec, &ivec);
+		hpm_vec4_com_lfv(&vec2, &vec, &ivec);
+		hpm_mat4_eqfv(&mat1, &mat2);
 	}
 
 }
@@ -411,8 +420,9 @@ void performance_test_sp_math(void){
 
 	/**/
 	for(x = 0; x < 1E8; x++){
-		v3 = hpm_vec4_maxfv(&v1, &v2);
-		v2 = hpm_vec4_minfv(&v3, &v1);
+		hpm_vec4_maxfv(&v1, &v2, &v3);
+		hpm_vec4_minfv(&v3, &v1, &v2);
+
 	}
 }
 
