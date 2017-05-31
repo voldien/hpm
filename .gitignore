@@ -28,8 +28,11 @@
 *.x86_64
 *.hex
 
-#
+# Temp files.
 *~
+
+# Assembly code.
+*.s
 
 main	# sample binary files
 #
