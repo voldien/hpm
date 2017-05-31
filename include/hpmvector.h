@@ -31,7 +31,7 @@ extern "C"{
 typedef float hpmvecf;			/*	*/
 typedef double hpmvecd;			/*	*/
 typedef long long hpmveci;		/*	*/
-typedef hpmveci hpmboolean;		/*	*/
+typedef int hpmboolean;		/*	*/
 
 
 /**
