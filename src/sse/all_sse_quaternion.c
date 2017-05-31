@@ -48,12 +48,12 @@ HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg,
 
 HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg, hpmquatf* out){
 
+	const hpmquatf lxwww = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(1, 0, 0, 0));	/*	{ w, x, y, z } => { x, w, w, w }	*/
+	const hpmquatf rxxyz = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(1, 1, 2, 3));	/*	{ w, x, y, z } => { x, x, y, z }	*/
+	const hpmquatf lyyzx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(2, 2, 3, 1));	/*	{ w, x, y, z } => { y, y, z, x }	*/
+	const hpmquatf ryzxy = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2, 3, 1, 2));	/*	{ w, x, y, z } => { y, z, x, y }	*/
+	const hpmquatf lzzxy = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(3, 3, 1, 2));	/*	{ w, x, y, z } => { z, z, x, y }	*/
+	const hpmquatf rzyzx = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(3, 2, 3, 1));	/*	{ w, x, y, z } => { z, y, z, x }	*/
 
-
+	*out = (lxwww * rxxyz) + (lyyzx * ryzxy) + (lzzxy * rzyzx);
 }
-
-
-
-
-
-
