@@ -9,7 +9,6 @@
 #   endif
 
 
-
 HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;

@@ -24,7 +24,6 @@ HPM_IMP(void, hpm_vec4_setsf, hpmvec4f* destination,
 	*destination = row0;
 }
 
-
 HPM_IMP( void, hpm_vec4_addition_scalef , hpmvec4f* larg, const hpmvecf rarg){
 	const hpmvec4f row0 = { rarg, rarg, rarg, rarg };
 	*larg += row0;
@@ -44,23 +43,19 @@ HPM_IMP( void, hpm_vec4_subtractionfv, hpmvec4f* larg, const hpmvec4f* rarg){
 	*larg = *larg - *rarg;
 }
 
-
 HPM_IMP( void, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg){
 	*larg *= *rarg;
 }
-
 
 HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg){
 	const hpmvec4f row0 = { rarg, rarg, rarg, rarg };
 	*larg *= row0;
 }
 
-
 HPM_IMP(void, hpm_vec4_normalizefv, hpmvec4f* arg){
 	hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )( arg );
 	*arg *= l;
 }
-
 
 HPM_IMP(void, hpm_vec4_negatefv, hpmvec4f* arg){
 	const hpmvec4f row0 = { -1, -1, -1, -1 };
