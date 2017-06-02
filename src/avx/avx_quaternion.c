@@ -31,5 +31,6 @@ HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg
 	const hpmquatf lzzxy = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(3, 3, 1, 2));	/*	{ w, x, y, z } => { z, z, x, y }	*/
 	const hpmquatf rzyzx = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(3, 2, 3, 1));	/*	{ w, x, y, z } => { z, y, z, x }	*/
 
+	/*	{ x^2 + y^2 + z^2, x*x + y*z + z*y, w*y + z*x + x*z, w*z + x*y + y*x }.	*/
 	*out = (lxwww * rxxyz) + (lyyzx * ryzxy) + (lzzxy * rzyzx);
 }
