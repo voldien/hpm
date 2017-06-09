@@ -305,7 +305,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
  *	Get element in vector with greatest value.
  */
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
+
+/**
+ *	Get element in vector with minimum value.
+ */
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
+
+
 
 /**
  *	Compute cross product.
