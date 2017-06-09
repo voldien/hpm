@@ -9,16 +9,31 @@
 
 
 HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
-	/*	w	*/
-	out[0][HPM_QUAT_W] = (larg[0][HPM_QUAT_W] * rarg[0][HPM_QUAT_W]) - (larg[0][HPM_QUAT_X] * rarg[0][HPM_QUAT_X]) - (larg[0][HPM_QUAT_Y] * rarg[0][HPM_QUAT_Y]) - (larg[0][HPM_QUAT_Z] * rarg[0][HPM_QUAT_Z]);
-	/*	x	*/
-	out[0][HPM_QUAT_X] = (larg[0][HPM_QUAT_X] * rarg[0][HPM_QUAT_W]) + (larg[0][HPM_QUAT_W] * rarg[0][HPM_QUAT_X]) + (larg[0][HPM_QUAT_Y] * rarg[0][HPM_QUAT_Z]) - (larg[0][HPM_QUAT_Z] * rarg[0][HPM_QUAT_Y]);
-	/*	y	*/
-	out[0][HPM_QUAT_Y] = (larg[0][HPM_QUAT_Y] * rarg[0][HPM_QUAT_W]) + (larg[0][HPM_QUAT_W] * rarg[0][HPM_QUAT_Y]) + (larg[0][HPM_QUAT_Z] * rarg[0][HPM_QUAT_X]) - (larg[0][HPM_QUAT_X] * rarg[0][HPM_QUAT_Z]);
-	/*	z	*/
-	out[0][HPM_QUAT_Z] = (larg[0][HPM_QUAT_Z] * rarg[0][HPM_QUAT_W]) + (larg[0][HPM_QUAT_W] * rarg[0][HPM_QUAT_Z]) + (larg[0][HPM_QUAT_X] * rarg[0][HPM_QUAT_Y]) - (larg[0][HPM_QUAT_Y] * rarg[0][HPM_QUAT_X]);
+	const hpmquatf wzyx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,1,2,3) );		/*	{ w, x, y, z } => { w, z, y, x }	*/
+	const hpmquatf baba = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,0,1) );		/*	{ w, x, y, z } => { w, z, w, z }	*/
+	const hpmquatf dcdc = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2,3,2,3) );		/*	{ w, x, y, z } => { y, z, y, z }		*/
+	const hpmquatf row1 = {-1,  1, -1,  1};
+	const hpmquatf row2 = {-1,  1,  1, -1};
+	const hpmquatf row3 = {-1, -1,  1,  1};
 
-	return;
+
+	const hpmquatf qwwwwrwxyz = _mm_mul_ps(
+			_mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,0,0,0)),
+			_mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,2,3)));
+
+	const hpmquatf qxxxxrxwzy = _mm_mul_ps(
+			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(1,1,1,1)),
+			_mm_shuffle_ps(*rarg, *rarg,_MM_SHUFFLE(1,0,3,2))) * row1;
+
+	const hpmquatf qyyyyrxyzw = _mm_mul_ps(
+			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(2,2,2,2)),
+			_mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(1,2,0,1))) * row2;
+
+	const hpmquatf qzzzzrzyxw = _mm_mul_ps(
+			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(3,3,3,3)),
+			_mm_shuffle_ps(*rarg, *rarg,_MM_SHUFFLE(3,2,1,0))) * row3;
+
+	*out =  qwwwwrwxyz + qxxxxrxwzy + qyyyyrxyzw + qzzzzrzyxw;
 
 }
 
