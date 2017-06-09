@@ -66,3 +66,8 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){	/*	TODO fix if it can be
 	mat8->oc[0] = row0;
 	mat8->oc[1] = row1;
 }
+
+HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
+	_MM_TRANSPOSE4_PS(mat[0], mat[1], mat[2], mat[3]);
+}
+
