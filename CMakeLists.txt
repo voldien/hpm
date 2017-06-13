@@ -73,7 +73,9 @@ ELSEIF(MSVC)
 		ADD_DEFINITIONS(/MP)
 ENDIF()
 
+# Check if compile single library.
 IF(USE_SINGLE_LIBRARY)
+	MESSAGE(STATUS "Single Library Mode.")
 	ADD_DEFINITIONS(-DHPM_USE_SINGLE_LIBRARY=1)
 ENDIF()
 
@@ -84,23 +86,13 @@ FILE (GLOB basecore src/base/* )
 FILE (GLOB nosimdsource src/nosimd/* )
 FILE (GLOB all_sse_source src/sse/*)
 FILE (GLOB avx_source src/avx/*)
-#FILE (GLOB avx512_source src/avx/*)
+#FILE (GLOB avx512_source src/avx512/*)
+#FILE (GLOB neon_source src/neon/*)
 INCLUDE_DIRECTORIES(include)
-
-
-# Main library target for initializing the library.
-ADD_LIBRARY(hpm src/hpm.c)
-IF(USE_SINGLE_LIBRARY)
-	SET(SIMD_FLAGS "${SIMD_FLAGS} -static")
-	TARGET_LINK_LIBRARIES(hpm -lm -ldl hpmavx2)
-ELSE()
-	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
-ENDIF()
-SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1" )
 
 # Target with no simd extensions requirements.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1 -DHPM_SIMD_PREFIX=nosimd" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 # X86 and amd64 CPU architecture.
@@ -112,45 +104,56 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 
 	# Target for AVX2
 	ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
-	SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "-mavx2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=avx2" )
 	TARGET_LINK_LIBRARIES(hpmavx2 -lm)
 
 	# Target for AVX
 	ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
-	SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "-mavx -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=avx" )
 	TARGET_LINK_LIBRARIES(hpmavx -lm)
 
 	# Target for SSE
 	ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
-	SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "-msse -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=sse" )
 	TARGET_LINK_LIBRARIES(hpmsse -lm)
 
 	# Target for SSE2
 	ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
-	SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "-msse2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=sse2" )
 	TARGET_LINK_LIBRARIES(hpmsse2 -lm)
 
 	# Target for SSE3
 	ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
-	SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "-msse3 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=sse3" )
 	TARGET_LINK_LIBRARIES(hpmsse3 -lm)
 
 	# Target for SSE4.1
 	ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
-	SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} " )
+	SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "-msse4.1 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=sse41" )
 	TARGET_LINK_LIBRARIES(hpmsse41 -lm)
 
 	# Target for SSE4.2
 	ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
-	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ")
+	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "-msse4.2 -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} -DHPM_SIMD_PREFIX=sse42")
 	TARGET_LINK_LIBRARIES(hpmsse42 -lm)
-
 
 ELSE()
 	# Target for Neon 
 	ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
+
+
+# Main library target for initializing the library.
+ADD_LIBRARY(hpm SHARED src/hpm.c)
+IF(USE_SINGLE_LIBRARY)
+	SET(SIMD_FLAGS "${SIMD_FLAGS} -static")
+	TARGET_LINK_LIBRARIES(hpm -lm -ldl hpmavx2 hpmavx hpmsse hpmsse2 hpmsse3 hpmsse41 hpmsse42)
+ELSE()
+	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
+ENDIF()
+SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1 -DHPM_ENTRY" )
+
 # Executable hpm benchmark. 
 ADD_EXECUTABLE(hpmtest test/main.c)
 TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
