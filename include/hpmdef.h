@@ -329,22 +329,24 @@
 /**
  *	Get current simd extension prefix.
  */
-#if defined(__AVX2__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_AVX2_PREFIX)
-#elif defined(__AVX__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_AVX_PREFIX)
-#elif defined(__SSE42__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE42_PREFIX)
-#elif defined(__SSE41__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE41_PREFIX)
-#elif defined(__SSE3__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE3_PREFIX)
-#elif defined(__SSE2__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SEE2_PREFIX)
-#elif defined(__SSE__)
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_SSE_PREFIX)
-#else
-	#define HPM_SIMD_PREFIX HPM_TEXT(HPM_SIMD_NO_PREFIX)
+#ifndef HPM_SIMD_PREFIX
+	#if defined(__AVX2__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_AVX2_PREFIX)
+	#elif defined(__AVX__)
+		#define HPM_SIMD_PREFIX HPM_SIMD_AVX_PREFIX
+	#elif defined(__SSE42__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_SEE42_PREFIX)
+	#elif defined(__SSE41__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_SEE41_PREFIX)
+	#elif defined(__SSE3__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_SEE3_PREFIX)
+	#elif defined(__SSE2__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_SEE2_PREFIX)
+	#elif defined(__SSE__)
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_SSE_PREFIX)
+	#else
+		#define HPM_SIMD_PREFIX HPM_STR_HELPER(HPM_SIMD_NO_PREFIX)
+	#endif
 #endif
 
 
@@ -369,7 +371,7 @@
 /**
  *	Implementation macro.
  */
-#define HPM_FLOATIMP
+#define HPM_FLOATIMP			/*	Float implementation. */
 /*#define HPM_DOUBLETIMP	*/
 
 
@@ -380,18 +382,28 @@
  *	for declaring and defining function variable.
  */
 #if defined(HPM_INTERNAL)
+
+/**
+ *
+ */
+#if defined(HPM_ENTRY)
+	#define HPM_DEFINEFUNC(func) HPM_FUNCPOINTER(func) = NULL
+#else
+	#define HPM_DEFINEFUNC(func)
+#endif
+
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func);										\
-		HPM_FUNCPOINTER(func) = NULL										\
+		HPM_DEFINEFUNC(func)												\
 
 
-#elif defined(HPM_INTERNAL_IMP)	/**/
+#elif defined(HPM_INTERNAL_IMP)	/*	*/
 #define HPM_EXPORT(ret, callback, func, ...)										\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 					\
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);		\
 
-#else	/**/
+#else	/*	*/
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func)										\
