@@ -141,6 +141,11 @@ ADD_EXECUTABLE(hpmtest test/main.c)
 TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
 SET_TARGET_PROPERTIES(hpmtest PROPERTIES COMPILE_FLAGS "-Iinclude" )
 
+# Executable OpenGL hpm benchmark. 
+ADD_EXECUTABLE(hpmglbunny test/example.c)
+TARGET_LINK_LIBRARIES(hpmglbunny -lGL -lSDL2 hpm)
+SET_TARGET_PROPERTIES(hpmglbunny PROPERTIES COMPILE_FLAGS "-Itest" )
+
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
@@ -162,6 +167,7 @@ ENDIF()
 # Non specific SIMD targets.
 INSTALL (FILES ${headers} DESTINATION include/hpm)
 INSTALL (TARGETS hpmtest DESTINATION bin)
+INSTALL (TARGETS hpmglbunny DESTINATION bin)
 
 IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
