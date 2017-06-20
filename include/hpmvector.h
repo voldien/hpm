@@ -351,6 +351,15 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 
+/**
+ *	Normalize 1x3 vector with length 1.0. The direction of
+ *	the vector will remain as the same.
+ *	arg = arg / |arg|
+ *
+ *	\arg
+ *
+ */
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec3_normalizefv, hpmvec3f* arg);
 
 /**
  *	Compute reflective vector from normal and direction.

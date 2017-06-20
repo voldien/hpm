@@ -150,6 +150,11 @@ HPM_IMP( float, hpm_vec3_lengthsquarefv, const hpmvec3f* arg){
 	return HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(&tmp);
 }
 
+HPM_IMP( void, hpm_vec3_normalizefv, hpmvec3f* arg){
+	hpm_vec4_setwf((*arg), 0);
+	HPM_CALLLOCALFUNC( hpm_vec4_normalizefv )(arg);
+}
+
 HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* out){
 	hpmvec3f tmp1 = *a;
 	hpmvec3f tmp2 = *b;

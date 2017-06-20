@@ -165,6 +165,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
+	hpm_vec3_normalizefv = hpm_get_symbolfuncp(hpm_vec3_normalizefv);
 	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
 
