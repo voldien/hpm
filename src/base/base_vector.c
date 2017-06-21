@@ -72,7 +72,7 @@ HPM_IMP( void, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, h
 HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
 	float theta;
 	hpmvec4f relative;
-	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotf)(a,b);
+	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a,b);
 	const hpmvec4f time = {t,t,t,t};
 	const float vsintime = sinf(t);
 	dot = HPM_CLAMP(dot, -1.0, 1.0);
