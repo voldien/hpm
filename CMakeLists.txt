@@ -31,14 +31,15 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 	ENDIF()
 
-	# Compiling language.
+	# Compiling language standard.
 	ADD_DEFINITIONS(-std=c11)
+	# 
 	ADD_DEFINITIONS(-w)
 
 	# Check build target.
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
 		MESSAGE(STATUS "Compile for release.")
-		ADD_DEFINITIONS(-DNDEBUG -s -O2)
+		ADD_DEFINITIONS(-DNDEBUG -O2)
 		SET(CMAKE_RELEASE TRUE)
 		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized")
 	ELSEIF( CMAKE_BUILD_TYPE STREQUAL "Debug")
@@ -50,6 +51,7 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	ENDIF()
 
 ELSEIF(MSVC)
+
 		# Enable multi-core complication with MSVC
 		ADD_DEFINITIONS(/MP)
 ENDIF()
