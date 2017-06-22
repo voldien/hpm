@@ -290,6 +290,7 @@ int hpm_supportcpufeat(unsigned int simd){
 		return 1;
 	case HPM_MMX:
 		cpuid(cpuInfo, 1);
+		return 0;
 		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);
