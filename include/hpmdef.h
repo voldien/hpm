@@ -38,6 +38,10 @@
 	#define HPM_REVISION_VERSION 	0
 #endif	/*	Not HPM_REVISION_VERSION	*/
 
+/**
+ *	Compiler version macros.
+ */
+#define HPM_COMPILER_VERSION(major, minor, revision, state) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 
 /**
  *    Compiler
