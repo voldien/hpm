@@ -100,14 +100,14 @@ HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, 
 
 
 HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out){
-	const float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(arg, normal);
+	const float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(arg, normal);
 	const hpmvec3f row0 = { 2.0f, 2.0f, 2.0f, 2.0f };
 	const hpmvec3f vdot = { dot, dot, dot, dot };
 	*out = row0 * vdot * ( *normal ) - ( *arg );
 }
 
 HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
-	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotf)(normal, incidentVec);
+	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
 	hpmvecf k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
 
 	if (k < 0.0f){
