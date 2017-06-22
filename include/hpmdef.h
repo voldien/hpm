@@ -382,7 +382,7 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 #else
 	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+	#define HPM_CLAMP(a, min, max)	(HPM_MAX( ( max ) ,HPM_MIN( ( min ) , ( a ) )))
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #endif
 
