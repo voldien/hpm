@@ -78,7 +78,7 @@ HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, 
 	dot = HPM_CLAMP(dot, -1.0, 1.0);
 	theta = acosf(dot) * t;
 	relative = *b - *a * time;
-	HPM_CALLLOCALFUNC(hpm_vec4_normalizef)(&relative);
+	HPM_CALLLOCALFUNC(hpm_vec4_normalizefv)(&relative);
 	const hpmvec4f vtheta = {theta, theta, theta, theta};
 	const hpmvec4f vsint = {vsintime, vsintime, vsintime, vsintime};
 	*out = (*a * vtheta) + (relative *vsint);
