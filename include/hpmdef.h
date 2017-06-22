@@ -248,6 +248,19 @@
 	#define HPMAPIFASTENTRY __fastcall
 #endif
 
+/*
+ *	force inline.
+ */
+#if defined(HPM_MSVC)
+	#define HPM_ALWAYS_INLINE __forceinline
+#elif defined(HPM_LINUX)
+	#define HPM_ALWAYS_INLINE __attribute__((always_inline))
+#elif defined(HPM_GNUC) || defined(HPM_GHS)
+	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
+#else
+	/*#pragma message("Warning: You'd need to add HPM_ALWAYS_INLINE for this compiler.")*/
+#endif
+
 
 /**
  *	Alignment of data and vectors.
