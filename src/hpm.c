@@ -267,12 +267,9 @@ void* hpm_get_address(const char* cfunctionName){
 	return ( pfunc );
 }
 
-
-#define HPM_COMPILER_VERSION(major, minor, revision) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 const char* hpm_version(void){
-	return HPM_COMPILER_VERSION(HPM_MAJOR_VERSION, HPM_MINOR_VERSION, HPM_REVISION_VERSION);
+	return HPM_STR_VERSION;
 }
-
 
 /*	TODO resolve for non x86 and non x86_64 cpu*/
 #include<cpuid.h>
