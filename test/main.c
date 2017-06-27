@@ -30,6 +30,21 @@ enum PrecisionType{
 	eAllPrecision = (eFloat | eDouble)
 };
 
+const char* hpm_simd_symtable[] = {
+		"",
+		"nosimd",
+		"mmx",
+		"sse",
+		"sse2",
+		"see3",
+		"sse41",
+		"sse42",
+		"avx",
+		"avx2",
+		"avx512",
+		"neon",
+		NULL,
+};
 
 /**
  *
