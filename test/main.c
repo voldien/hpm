@@ -100,35 +100,28 @@ void readArgument(int argc, char** argv){
 		switch(c){
 		case 's':
 			if(optarg){
+
+				int i = 0;
+
 				if(strcmp(optarg, "all") == 0){
-					status = (unsigned int)(-1);
+					g_SIMD = (unsigned int)(-1);
 				}
-				else if(strcmp(optarg,"sse") == 0){
-					status = HPM_SSE;
-				}
-				else if(strcmp(optarg,"sse2") == 0){
-					status = HPM_SSE2;
-				}
-				else if(strcmp(optarg,"sse3") == 0){
-					status = HPM_SSE3;
-				}
-				else if(strcmp(optarg,"sse41") == 0){
-					status = HPM_SSE4_1;
-				}
-				else if(strcmp(optarg,"sse42") == 0){
-					status = HPM_SSE4_2;
-				}
-				else if(strcmp(optarg,"avx") == 0){
-					status = HPM_AVX;
-				}
-				else if(strcmp(optarg,"avx2") == 0){
-					status = HPM_AVX2;
-				}
-				else if(strcmp(optarg, "nosimd") == 0){
-					status = HPM_NOSIMD;
-				}
-				else{
-					status = strtol(optarg, NULL, 0);
+				do{
+					if(strcmp(hpm_simd_symtable[i], optarg) == 0){
+						break;
+					}
+					i++;
+					if(hpm_simd_symtable[i] == NULL){
+						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
+						exit(EXIT_FAILURE);
+					}
+				}while(hpm_simd_symtable[i]);
+				g_SIMD = (unsigned int)(1 << (i - 1));
+
+				/*	Check if supported.	*/
+				if(!hpm_supportcpufeat(g_SIMD)){
+					fprintf(stderr, "SIMD extension not supported.\n");
+					exit(EXIT_FAILURE);
 				}
 			}
 			break;
