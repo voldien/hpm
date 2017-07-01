@@ -228,6 +228,9 @@ int hpm_init(unsigned int simd){
 	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
+	/*	Utilities.	*/
+
+
 	/*	*/
 	g_simd = simd;
 
