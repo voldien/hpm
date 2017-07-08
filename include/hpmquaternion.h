@@ -120,14 +120,15 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
  *
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg, const hpmvecf rarg);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
+		const hpmvecf rarg);
 
 /**
  *	Compute direction of quaternion.
  *
  */
-HPM_EXPORT( void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out);
-
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg,
+		hpmvec3f* out);
 
 /**
  *	Compute vector direction of the quaternions orientation.

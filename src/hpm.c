@@ -10,6 +10,7 @@
 /*	library handle.
  	NULL means that there is no library open.	*/
 void* libhandle = NULL;
+unsigned int g_simd;
 
 
 /**
@@ -168,6 +169,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
+	hpm_vec3_normalizefv = hpm_get_symbolfuncp(hpm_vec3_normalizefv);
 	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
 
@@ -222,13 +224,17 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_neqfv = hpm_get_symbolfuncp(hpm_vec4_neqfv);
 
 	hpm_vec4_com_gfv = hpm_get_symbolfuncp(hpm_vec4_com_gfv);
-	hpm_vec4_gfv = hpm_get_symbolfuncp(hpm_vec4_gfv);
 	hpm_vec4_com_lfv = hpm_get_symbolfuncp(hpm_vec4_com_lfv);
-	hpm_vec4_lfv = hpm_get_symbolfuncp(hpm_vec4_lfv);
 
 	/*	Utility.	*/
 	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
+
+	/*	Utilities.	*/
+
+
+	/*	*/
+	g_simd = simd;
 
 	error:	/*	error.	*/
 
@@ -242,11 +248,16 @@ int hpm_release(void){
 		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
 	}
 	libhandle = NULL;
+	g_simd = 0;
 	return status == 0;
 }
 
 int hpm_isinit(void){
 	return libhandle != NULL;
+}
+
+unsigned int hpm_get_simd(void){
+	return g_simd;
 }
 
 static const char* hpm_get_simd_prefix(unsigned int simd){
@@ -294,12 +305,9 @@ void* hpm_get_address(const char* cfunctionName, unsigned int simd){
 	return ( pfunc );
 }
 
-
-#define HPM_COMPILER_VERSION(major, minor, revision) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 const char* hpm_version(void){
-	return HPM_COMPILER_VERSION(HPM_MAJOR_VERSION, HPM_MINOR_VERSION, HPM_REVISION_VERSION);
+	return HPM_STR_VERSION;
 }
-
 
 /*	TODO resolve for non x86 and non x86_64 cpu*/
 #include<cpuid.h>
@@ -317,6 +325,7 @@ int hpm_supportcpufeat(unsigned int simd){
 		return 1;
 	case HPM_MMX:
 		cpuid(cpuInfo, 1);
+		return 0;
 		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);

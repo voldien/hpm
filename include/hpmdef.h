@@ -38,6 +38,10 @@
 	#define HPM_REVISION_VERSION 	0
 #endif	/*	Not HPM_REVISION_VERSION	*/
 
+/**
+ *	Compiler version macros.
+ */
+#define HPM_COMPILER_VERSION(major, minor, revision, state) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 
 /**
  *    Compiler
@@ -248,6 +252,19 @@
 	#define HPMAPIFASTENTRY __fastcall
 #endif
 
+/*
+ *	force inline.
+ */
+#if defined(HPM_MSVC)
+	#define HPM_ALWAYS_INLINE __forceinline
+#elif defined(HPM_LINUX)
+	#define HPM_ALWAYS_INLINE __attribute__((always_inline))
+#elif defined(HPM_GNUC) || defined(HPM_GHS)
+	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
+#else
+	/*#pragma message("Warning: You'd need to add HPM_ALWAYS_INLINE for this compiler.")*/
+#endif
+
 
 /**
  *	Alignment of data and vectors.
@@ -413,7 +430,8 @@
 
 
 /**
- *	Define
+ *	Define implementation header for
+ *	definining the function.
  */
 #define HPM_IMP(ret, func, ...)					\
 ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
@@ -442,6 +460,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 
 
 /**
+ *	Inline convertion functions.
  *	Convert between radians and degrees.
  */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
@@ -449,7 +468,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 
 
 /**
- *
+ *	Inline math functions.
  */
 #ifdef __SSE4__
 	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
@@ -459,7 +478,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 #else
 	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+	#define HPM_CLAMP(a, min, max)	(HPM_MAX( ( max ) ,HPM_MIN( ( min ) , ( a ) )))
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #endif
 

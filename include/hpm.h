@@ -50,6 +50,7 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 /**
  *	SIMD extensions flags.
  */
+#define HPM_NONE		(0 << 0)	/*	No HPM SIMD exention flag.	*/
 #define HPM_NOSIMD		(1 << 0)	/*	No SIMD hardware feature, using the FPU and ALU.	*/
 #define HPM_MMX			(1 << 1)	/*	MMX. (Yet not supported)	*/
 #define HPM_SSE			(1 << 2)	/*	SSE (Streaming SIMD Extensions).	*/
@@ -88,9 +89,16 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 /**
  * 	Check if hpm has been initialized.
  *
- *	@Return non zero if initialized. Otherwise 0.
+ *	@Return none zero if initialized. Otherwise 0.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
+
+/**
+ *	Get current initialized SIMD exention.
+ *
+ *	@Return none zero if initialized.
+ */
+extern HPMDECLSPEC unsigned int HPMAPIENTRY hpm_get_simd(void);
 
 /**
  *	Get function pointer address by its symbol name

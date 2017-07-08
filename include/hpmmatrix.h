@@ -178,7 +178,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_subraction_mat4x4fv,
  *	\destination
  *
  */
-HPM_EXPORT(void, HPMAPIFASTENTRY, hpm_mat4x4_identityfv, hpmvec4x4f_t destination);
+HPM_EXPORT(void, HPMAPIFASTENTRY, hpm_mat4x4_identityfv,
+		hpmvec4x4f_t destination);
 
 /**
  *	Transpose matrix.
@@ -195,7 +196,8 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat);
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg);
+HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_determinantfv,
+		const hpmvec4x4f_t arg);
 
 /**
  *	Compute inverse

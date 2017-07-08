@@ -80,8 +80,6 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
 /**
  *	Determine if a is less than b.
  *
@@ -89,19 +87,21 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_gfv, const hpmvec4f* __restrict__ a
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_lfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
 
 /**
+ *	Compute if matrix a and b is equal to each other.
+ *	The compare is based on the values of each of the matrices.
  *
- *	@Return
+ *	@Return none zero if statemnt is true.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
 		const hpmvec4x4f_t b);
 
 /**
+ *	Compute if matrix a and b is not equal to each other.
+ *	The compare is based on the values of each of the matrices.
  *
- *	@Return
+ *	@Return none zero if statemnt is true.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv, const hpmvec4x4f_t a,
 		const hpmvec4x4f_t b);

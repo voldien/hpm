@@ -15,7 +15,6 @@ HPM_IMP(void, hpm_quat_setf, hpmquatf* destination,
 	*destination = set;
 }
 
-
 HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
 	const hpmquatf conj = { 1.0f, -1.0f, -1.0f, -1.0f };
 	*larg *= conj;
@@ -41,11 +40,9 @@ HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 	hpmquatf quatinvdir = { 0, 0, 0, -1 };
 	hpmquatf quatconj = *larg;
 
-
 	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(&quatinvdir, &quatconj, out);	/*	*/
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, larg, &quatinvdir);		/*	*/
-
 
 	/*	*/
 	(*out)[0] = quatinvdir[HPM_QUAT_X];

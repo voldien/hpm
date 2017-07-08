@@ -31,7 +31,7 @@ extern "C"{
 typedef float hpmvecf;			/*	*/
 typedef double hpmvecd;			/*	*/
 typedef long long hpmveci;		/*	*/
-typedef hpmveci hpmboolean;		/*	*/
+typedef int hpmboolean;		/*	*/
 
 
 /**
@@ -301,6 +301,17 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
 		const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
 
+/**
+ *	Get element in vector with greatest value.
+ */
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
+
+/**
+ *	Get element in vector with minimum value.
+ */
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
+
+
 
 /**
  *	Compute cross product.
@@ -340,6 +351,15 @@ HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
  */
 HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 
+/**
+ *	Normalize 1x3 vector with length 1.0. The direction of
+ *	the vector will remain as the same.
+ *	arg = arg / |arg|
+ *
+ *	\arg
+ *
+ */
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec3_normalizefv, hpmvec3f* arg);
 
 /**
  *	Compute reflective vector from normal and direction.
