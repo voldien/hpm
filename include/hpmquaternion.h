@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
