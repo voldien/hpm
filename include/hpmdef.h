@@ -22,22 +22,6 @@
 #include<stdlib.h>
 #include<limits.h>
 
-
-/**
- *	Version.
- */
-#ifndef HPM_MAJOR_VERSION
-	#define HPM_MAJOR_VERSION	0
-#endif	/*	Not HPM_MAJOR_VERSION	*/
-
-#ifndef HPM_MINOR_VERSION
-	#define HPM_MINOR_VERSION		5
-#endif	/*	Not HPM_MINOR_VERSION	*/
-
-#ifndef HPM_REVISION_VERSION
-	#define HPM_REVISION_VERSION 	0
-#endif	/*	Not HPM_REVISION_VERSION	*/
-
 /**
  *	Compiler version macros.
  */
