@@ -36,7 +36,11 @@ uint32_t hpmflag = HPM_SSE2;	/*	*/
 
 const char* vertexpolygone = ""
 "\n"
+"#if __VERSION__ >= 330\n"
 "layout(location = 0) in vec3 vertex;\n"
+"#else\n"
+"attribute vec3 vertex;\n"
+"#endif\n"
 "layout(location = 1) in vec3 normal;\n"
 "uniform mat4 mvp[128];\n"
 "uniform mat4 model[128];\n"
@@ -49,12 +53,18 @@ const char* vertexpolygone = ""
 
 const char* fragmentpolygone = ""
 "\n"
+"#if __VERSION__ >= 330\n"
 "layout(location = 0) out vec4 fragColor;\n"
+"#endif\n"
 "uniform mat4 proj;\n"
 "uniform float time;\n"
 "in vec3 Normal;\n"
 "void main(void){\n"
-"	fragColor = vec4(vec3(dot(Normal, vec3(0,-1,0) ) ), 1.0);\n"
+"#if __VERSION__ >= 330\n"
+"fragColor = vec4(vec3(dot(Normal, vec3(0,-1,0) ) ), 1.0);\n"
+"#else\n"
+"gl_FragColor = vec4(vec3(dot(Normal, vec3(0,-1,0) ) ), 1.0);\n"
+"#endif\n"
 "}\n";
 
 
