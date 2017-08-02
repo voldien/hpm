@@ -34,6 +34,9 @@
 
 uint32_t hpmflag = HPM_SSE2;	/*	*/
 
+/**
+ *  Vertex shader.
+ */
 const char* vertexpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
@@ -50,7 +53,9 @@ const char* vertexpolygone = ""
 "	Normal = ( model[gl_InstanceID] * vec4(normal, 0.0)).xyz;\n"
 "}\n";
 
-
+/**
+ *  Fragment shader.
+ */
 const char* fragmentpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
@@ -96,30 +101,36 @@ static GLint createShader(const char* __restrict__ vsource, const char* __restri
 	char* fsources[2];					/*	*/
 	int sourcecount = sizeof(vsources) / sizeof(vsources[0]);
 
+	/*  Get version string. */
 	sprintf(version, "#version %d\n", getGLSLVersion() );
 	vsources[0] = version;
 	fsources[0] = version;
+	/*  Assgin shader string.   */
 	vsources[1] = (char*)vsource;
 	fsources[1] = (char*)fsource;
 
 	/*	Create shader.	*/
 	prog = glCreateProgram();
 
+	/*  Create vertex shader object.    */
 	vs = glCreateShader(GL_VERTEX_SHADER);
 	glShaderSource(vs, sourcecount, vsources, NULL);
 	glCompileShader(vs);
 	glAttachShader(prog, vs);
 
+	/*  Create fragment shader object.  */
 	fs = glCreateShader(GL_FRAGMENT_SHADER);
 	glShaderSource(fs, sourcecount, fsources, NULL);
 	glCompileShader(fs);
 	glAttachShader(prog, fs);
 
+	/*  Link and validate shader program.   */
 	glLinkProgram(prog);
 	glValidateProgram(prog);
 	glGetProgramiv(prog, GL_LINK_STATUS, &lstatus);
 	glGetProgramiv(prog, GL_VALIDATE_STATUS, &vstatus);
 
+	/*  */
 	if(lstatus == GL_FALSE){
 		char errorlog[2048];
 		glGetProgramInfoLog(prog, sizeof(errorlog), NULL, &errorlog[0]);
@@ -128,7 +139,7 @@ static GLint createShader(const char* __restrict__ vsource, const char* __restri
 	}
 
 	/*	Release shader data.	*/
-	/*	detach shaderer object and release their resources.	*/
+	/*	detach shader object and release their resources.	*/
 	glDetachShader(prog, vs);
 	glDetachShader(prog);
 	glDeleteShader(vs);
@@ -155,7 +166,7 @@ void readargument(int argc, const char** argv){
 	int c;
 	const char* shortopt = "vV";
 
-	/**/
+	/*  */
 	while ( ( c = getopt_long(argc, ( char *const *)argv, shortopt, longoption, NULL)) != EOF){
 		switch(c){
 		case 'v':
@@ -359,7 +370,7 @@ int main(int argc, const char** argv){
 	}
 
 
-	/*	*/
+	/*	Enable program. */
 	glUseProgram(prog);
 	mvploc = glGetUniformLocation(prog, "mvp");
 	modeloc = glGetUniformLocation(prog, "model");
