@@ -28,18 +28,18 @@ extern "C"{
 /**
  *	Data types.
  */
-typedef float hpmvecf;			/*	*/
-typedef double hpmvecd;			/*	*/
-typedef long long hpmveci;		/*	*/
-typedef int hpmboolean;		/*	*/
+typedef float hpmvecf;          /*	*/
+typedef double hpmvecd;         /*	*/
+typedef long long hpmveci;      /*	*/
+typedef int hpmboolean;         /*	*/
 
 
 /**
  *	Single component vector data type.
  */
-typedef float hpmvecfv HPM_VECTORALIGN(4);		/*	*/
-typedef double hpmvecdv HPM_VECTORALIGN(8);		/*	*/
-typedef int hpmveciv HPM_VECTORALIGN(4);		/*	*/
+typedef float hpmvecfv HPM_VECTORALIGN(4);      /*	*/
+typedef double hpmvecdv HPM_VECTORALIGN(8);     /*	*/
+typedef int hpmveciv HPM_VECTORALIGN(4);        /*	*/
 
 /**
  *	Two component vector data type.
@@ -59,8 +59,8 @@ typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);	/*	*/
 /**
  *	SEE 128 bits data types.
  */
-typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);	/*	*/
+typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
 typedef struct hpm_vec4uf_t{
 	union{
 		hpmvec4f v;
