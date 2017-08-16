@@ -57,11 +57,11 @@ ELSEIF(MSVC)
 ENDIF()
 
 # Source files.
-FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/base/* )
-FILE (GLOB nosimdsource src/nosimd/* )
-FILE (GLOB all_sse_source src/sse/*)
-FILE (GLOB avx_source src/avx/*)
+FILE (GLOB headers ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+FILE (GLOB basecore ${CMAKE_CURRENT_SOURCE_DIR}/src/base/* )
+FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
+FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
+FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
 #FILE (GLOB avx512_source src/avx/*)
 INCLUDE_DIRECTORIES(include)
 
