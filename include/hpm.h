@@ -24,6 +24,7 @@
 #include"hpmquaternion.h"
 #include"hpmutil.h"
 #include"hpmmath.h"
+#include"hpmlogic.h"
 
 /**
  * 	The main hpm library header file.
