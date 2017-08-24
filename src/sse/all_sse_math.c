@@ -29,6 +29,34 @@ HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* __
 	min->d2[1] = _mm_min_ps(au->d2[1], bu->d2[1]);
 }
 
+
+HPM_IMP(void, hpm_vec4_sqrtfv, hpmvec4f* __restrict__ a,
+		hpmvec4f* __restrict__ out) {
+	*out = _mm_sqrt_ps(*a);
+}
+HPM_IMP(void, hpm_vec8_sqrtfv, hpmvec8f* __restrict__ a,
+		hpmvec8f* __restrict__ out) {
+	const hpmvec8fu* __restrict__ au = a;
+	hpmvec8fu* __restrict__ outu = out;
+
+	outu->d2[0] = _mm_sqrt_ps(au->d2[0]);
+	outu->d2[0] = _mm_sqrt_ps(au->d2[1]);
+}
+
+HPM_IMP(void, hpm_vec4_fast_sqrtfv, hpmvec4f* __restrict__ a,
+		hpmvec4f* __restrict__ out) {
+	*out = _mm_rsqrt_ps(*a);
+}
+HPM_IMP(void, hpm_vec8_fast_sqrtfv, hpmvec8f* __restrict__ a,
+		hpmvec8f* __restrict__ out) {
+	const hpmvec8fu* __restrict__ au = a;
+	hpmvec8fu* __restrict__ outu = out;
+
+	outu->d2[0] = _mm_rsqrt_ps(au->d2[0]);
+	outu->d2[0] = _mm_rsqrt_ps(au->d2[1]);
+}
+
+
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
 	*res = (*a) == (*b);
 }

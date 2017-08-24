@@ -21,6 +21,25 @@ HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __
 	_mm256_store_ps(c, _mm256_min_ps(*a, *b));
 }
 
+HPM_IMP(void, hpm_vec4_sqrtfv, hpmvec4f* __restrict__ a,
+		hpmvec4f* __restrict__ out) {
+	*out = _mm256_castps256_ps128(_mm256_sqrt_ps(_mm256_castps128_ps256(*a)));
+}
+HPM_IMP(void, hpm_vec8_sqrtfv, hpmvec8f* __restrict__ a,
+		hpmvec8f* __restrict__ out) {
+	*out = _mm256_sqrt_ps(*a);
+}
+
+HPM_IMP(void, hpm_vec4_fast_sqrtfv, hpmvec4f* __restrict__ a,
+		hpmvec4f* __restrict__ out) {
+	*out = _mm256_castps256_ps128(_mm256_rsqrt_ps(_mm256_castps128_ps256(*a)));
+}
+HPM_IMP(void, hpm_vec8_fast_sqrtfv, hpmvec8f* __restrict__ a,
+		hpmvec8f* __restrict__ out) {
+	*out = _mm256_rsqrt_ps(*a);
+}
+
+
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
 	*res = (*a) == (*b);
 }

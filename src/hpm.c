@@ -216,6 +216,11 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
 	hpm_vec8_minfv = hpm_get_symbolfuncp(hpm_vec8_minfv);
 
+	hpm_vec4_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_sqrtfv);
+	hpm_vec8_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_sqrtfv);
+
+	hpm_vec4_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_fast_sqrtfv);
+	hpm_vec8_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_fast_sqrtfv);
 
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
