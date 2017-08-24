@@ -23,7 +23,7 @@
 #include<limits.h>
 
 /**
- *	Compiler version macros.
+ *	Compiler version macro.
  */
 #define HPM_COMPILER_VERSION(major, minor, revision, state) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 
@@ -135,6 +135,7 @@
 		#define HPM_LINUX 1                       /**/
 		#if defined(__amd64) || defined(__x86_64__) || defined(__i386__)
             #define HPM_X86 1
+			#define HPM_X86_64 1
 		#endif
 		#if defined(__arm__)
               #define EX_ARM 1
@@ -241,8 +242,8 @@
  */
 #if defined(HPM_MSVC)
 	#define HPM_ALWAYS_INLINE __forceinline
-#elif defined(HPM_LINUX)
-	#define HPM_ALWAYS_INLINE __attribute__((always_inline))
+#elif defined(HPM_GNUC)
+	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #elif defined(HPM_GNUC) || defined(HPM_GHS)
 	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #else
@@ -269,7 +270,7 @@
 /**
  *	library declaration.
  */
-#ifdef HPM_GNUC
+#if defined(HPM_GNUC) || defined(HPM_CLANG)
 	#if defined(HPM_UNIX)
 		#define HPMDECLSPEC	 __attribute__((__visibility__ ("default")))
 	#else
