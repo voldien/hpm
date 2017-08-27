@@ -162,6 +162,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_crossproductfv = hpm_get_symbolfuncp(hpm_vec3_crossproductfv);
 
 	/**/
+	hpm_vec3_tripleProductfv = hpm_get_symbolfuncp(hpm_vec3_tripleProductfv);
 	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
