@@ -320,6 +320,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
 		hpmvec4x4f_t mat, const hpmquatf* quat);
 
 /**
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
+		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
+		const hpmvec4f* yaxis, const hpmvec4f* zaxis);
+
+/**
  *	Construct translation matrix and multiply
  *	it with mat on the right side of mat.
  *

@@ -209,7 +209,26 @@ HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat, const hpmquatf* quat){
 	mat[3][3] = 1.0;
 }
 
+HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
+		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
+		const hpmvec4f* yaxis, const hpmvec4f* zaxis){
 
+	const hpmvec4f row3 = {0,0,0,1};
+	hpm_vec4_copyfv(&mat[0], xaxis);
+	hpm_vec4_copyfv(&mat[1], yaxis);
+	hpm_vec4_copyfv(&mat[2], zaxis);
+	hpm_vec4_copyfv(&mat[3], row3);
+
+	/*
+	hpmvec4f orientation = {
+			{xaxis[0], yaxis[0], zaxis[0], 0 },
+			{xaxis[1], yaxis[1], zaxis[1], 0},
+			{xaxis[2], yaxis[2], zaxis[2], 0 },
+			{0,0,0,1},
+	};
+	*/
+
+}
 
 
 HPM_IMP( void, hpm_mat4x4_multi_translationfv, hpmvec4x4f_t mat, const hpmvec3f* translate){
