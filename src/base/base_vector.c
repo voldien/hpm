@@ -126,8 +126,8 @@ HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal
 
 HPM_IMP( float, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3){
 	hpmvec3f tmp;
-	hpm_vec3_crossproductfv(v1, v2, &tmp);
-	return hpm_vec3_dotfv(v3, &tmp);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(v1, v2, &tmp);
+	return HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(v3, &tmp);
 }
 
 HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
