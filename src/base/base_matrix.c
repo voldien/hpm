@@ -322,16 +322,20 @@ HPM_IMP( void, hpm_mat4x4_unprojf, float winx, float winy, float winz, const hpm
 	hpmvec4x4f_t tmp2;
 	hpmvec4f invector;
 	hpmvec4f result;
+
+	/*	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(modelview, projection, tmp);
 
-
+	/*	*/
 	invector[0] = (winx - viewport[0]) / (viewport[2] * 2.0 - 1.0);
 	invector[1] = (winy - viewport[1]) / (viewport[3] * 2.0 - 1.0);
 	invector[2] = 2.0f * winz - 1.0f;
 	invector[3] = 1.0f;
 
+	/*	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, tmp2 /*incvector*/, tmp2);
 
+	/*	*/
 	result[0] = tmp2[0][0];
 	result[1] = tmp2[0][1];
 	result[2] = tmp2[0][2];
