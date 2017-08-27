@@ -156,12 +156,9 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 
-
-
-	/*	vector 3.	*/
+	/*	Vector3.	*/
 	hpm_vec3_crossproductfv = hpm_get_symbolfuncp(hpm_vec3_crossproductfv);
-
-	/**/
+	hpm_vec3_tripleProductfv = hpm_get_symbolfuncp(hpm_vec3_tripleProductfv);
 	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
@@ -222,6 +219,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_fast_sqrtfv);
 	hpm_vec8_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_fast_sqrtfv);
 
+	/*	Logic conditions.	*/
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);
@@ -234,7 +232,7 @@ int hpm_init(unsigned int simd){
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
 	/*	Utilities.	*/
-
+	hpm_util_lookatfv = hpm_get_symbolfuncp(hpm_util_lookatfv);
 
 	/*	*/
 	g_simd = simd;

@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -16,11 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include"hpmtest.h"
+#include"hpmassert.h"
 #include"hpm.h"
 #include"hpmmath.h"
-#include<stdlib.h>
+
 /*	*/
+#include<stdlib.h>
 #include<string.h>
 #include<stdint.h>
 #include<time.h>
@@ -562,19 +563,19 @@ void htpIntegritySpCheck(void){
 	hpmquatf q2 = {1,1,1,1};
 	hpmquatf q3 = {1,1,1,1};
 
+	hpm_mat4x4_identityfv(&m1);
+	hpm_mat4x4_identityfv(&m2);
+	hpm_mat4x4_identityfv(&m3);
 
-	/*	matrix	*/
+	/*	Vector equality comparing.	*/
 	hpm_mat4x4_copyfv(m1, m2);
-	if(!hpm_vec4_eqfv(m1, m2)){
-		abort();
-	}
+	assert(hpm_vec4_eqfv(m1, m2) != 0);
+	assert(hpm_vec4_neqfv(m1, m2) == 0);
 
-
-	/*	vector.	*/
+	/*	Matric equality comparing.	*/
 	hpm_vec4_copyfv(&v1, &v2);
-	if(!hpm_mat4_eqfv(&v1,  &v2)){
-		fprintf(stderr, "hpm_mat4_eqfv and hpm_vec4_copyfv gave error.\n");
-	}
+	assert(hpm_mat4_eqfv(&v1,  &v2) != 0);
+	assert(hpm_mat4_neqfv(&v1,  &v2) == 0);
 
 	return;
 

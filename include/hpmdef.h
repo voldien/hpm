@@ -388,6 +388,31 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #endif
 
-
+/**
+ *	Swap register macros for enabling
+ *	higher performances.
+ */
+#if defined(HPM_X86_64)
+/*	#define HPM_SWAPF32(a, b)	__asm__("bswapq %0 %1" : "=r" (a) : "0" (a) : "=r" (b) : "1" (b))	*/
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#elif defined(HPM_X86)
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#elif defined(HPM_ARM)
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#else
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#endif
 
 #endif	/*	Not _HPM_DEF_H_*/

@@ -58,7 +58,8 @@ ENDIF()
 
 # Source files.
 FILE (GLOB headers ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-FILE (GLOB basecore ${CMAKE_CURRENT_SOURCE_DIR}/src/base/* )
+FILE (GLOB basecore ${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
+		    ${CMAKE_CURRENT_SOURCE_DIR}/src/utility.c )
 FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
 FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
 FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
@@ -122,10 +123,8 @@ ELSE()
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
 
-# Executable hpm benchmark. 
-ADD_EXECUTABLE(hpmtest test/main.c)
-TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
-SET_TARGET_PROPERTIES(hpmtest PROPERTIES COMPILE_FLAGS "-Iinclude" )
+# Non specific SIMD targets.
+INSTALL (FILES ${headers} DESTINATION include/hpm)
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
@@ -144,11 +143,8 @@ IF(__arm__)
 	INSTALL (TARGETS hpmneon DESTINATION lib)
 ENDIF()
 
+#
 ADD_SUBDIRECTORY(test)
-
-# Non specific SIMD targets.
-INSTALL (FILES ${headers} DESTINATION include/hpm)
-INSTALL (TARGETS hpmtest DESTINATION bin)
 
 IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
