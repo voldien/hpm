@@ -16,11 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include"hpmtest.h"
+#include"hpmassert.h"
 #include"hpm.h"
 #include"hpmmath.h"
-#include<stdlib.h>
+
 /*	*/
+#include<stdlib.h>
 #include<string.h>
 #include<stdint.h>
 #include<time.h>
