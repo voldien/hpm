@@ -415,15 +415,24 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_min_compfv){}
 HPM_BENCHMARK_FUNC_IMP(hpm_vec3_crossproductfv){
 
 	register int x;
-	hpmvec4f vec1 = {1,2,1,1};
-	hpmvec4f vec2 = {1,0,6,1};
-	hpmvec4f vec3 = {1,0,6,1};
+	hpmvec3f vec1 = {1,2,1,1};
+	hpmvec3f vec2 = {1,0,6,1};
+	hpmvec3f vec3 = {1,0,6,1};
 
 	for(x = 0; x < 1E7L; x++){
 		hpm_vec3_crossproductfv(&vec1, &vec2, &vec3);
 	}
 }
-HPM_BENCHMARK_FUNC_IMP(hpm_vec3_tripleProductfv){}
+HPM_BENCHMARK_FUNC_IMP(hpm_vec3_tripleProductfv){
+	register int x;
+	hpmvec3f vec1 = {1,2,1,1};
+	hpmvec3f vec2 = {1,0,6,1};
+	hpmvec3f vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_vec3_tripleProductfv(&vec1, &vec2, &vec3);
+	}
+}
 HPM_BENCHMARK_FUNC_IMP(hpm_vec3_dotfv){}
 HPM_BENCHMARK_FUNC_IMP(hpm_vec3_lengthfv){}
 HPM_BENCHMARK_FUNC_IMP(hpm_vec3_lengthsquarefv){}
@@ -457,12 +466,62 @@ HPM_BENCHMARK_FUNC_IMP(hpm_quat_rollfv){}
 /**
  *
  */
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_copyfv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat4x4fv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat1x4fv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_identityfv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_transposefv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_determinantfv){}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_copyfv){
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+	hpmvec4x4f_t vec2 = {1,0,6,1};
+	hpmvec4x4f_t vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_copyfv(&vec1, &vec2);
+	}
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat4x4fv){
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+	hpmvec4x4f_t vec2 = {1,0,6,1};
+	hpmvec4x4f_t vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_multiply_mat4x4fv(&vec1, &vec2, &vec3);
+	}
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat1x4fv){
+
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+	hpmvec4x4f_t vec2 = {1,0,6,1};
+	hpmvec4f vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_multiply_mat1x4fv(&vec1, &vec2, &vec3);
+	}
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_identityfv){
+
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_identityfv(&vec1);
+	}
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_transposefv){
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_transposefv(&vec1);
+	}
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_determinantfv){
+	register int x;
+	hpmvec4x4f_t vec1 = {1,2,1,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_mat4x4_transposefv(&vec1);
+	}
+}
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_inversefv){}
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_decomposefv){}
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_translationfv){}
@@ -530,7 +589,16 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_eqfv){
 		hpm_vec4_eqfv(&vec1, &vec2);
 	}
 }
-HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_neqfv){}
+HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_neqfv){
+	register int x;
+	hpmvec4f vec1 = {1,2,1,1};
+	hpmvec4f vec2 = {1,0,6,1};
+	hpmvec4i vec3 = {1,0,6,1};
+
+	for(x = 0; x < 1E7L; x++){
+		hpm_vec4_com_neqfv(&vec1, &vec2, &vec3);
+	}
+}
 HPM_BENCHMARK_FUNC_IMP(hpm_vec4_neqfv){
 	register int x;
 	hpmvec4f vec1 = {1,2,1,1};
@@ -540,10 +608,18 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_neqfv){
 		hpm_vec4_neqfv(&vec1, &vec2);
 	}
 }
-HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_gfv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_lfv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4_eqfv){}
-HPM_BENCHMARK_FUNC_IMP(hpm_mat4_neqfv){}
+HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_gfv){
+
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_vec4_com_lfv){
+
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4_eqfv){
+
+}
+HPM_BENCHMARK_FUNC_IMP(hpm_mat4_neqfv){
+
+}
 
 
 
