@@ -1,3 +1,5 @@
+# CMake file for setting up the hpm assert test
+# program.
 
 # gcc compiler options.
 IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
@@ -23,14 +25,16 @@ ELSEIF(MSVC)
 		ADD_DEFINITIONS(/MP)
 ENDIF()
 
+# Include directory for hpm declaration.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
-#
+# Source files for the gl bunny program.
 FILE(GLOB assertsrc ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 
 # Executable hpm assert program.
 ADD_EXECUTABLE(hpmassert ${assertsrc})
 TARGET_LINK_LIBRARIES(hpmassert -lm hpm)
 
-# Install target
+# Install target.
 INSTALL (TARGETS hpmassert DESTINATION bin)
+
