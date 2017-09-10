@@ -68,6 +68,7 @@ void readArgument(int argc, char** argv){
 	int optindex;
 	const char* shortarg = "s:vp:t:";
 
+	/*	Iterate through.	*/
 	while((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF){
 		switch(c){
 		case 's':

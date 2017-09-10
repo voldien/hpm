@@ -30,8 +30,9 @@ extern const char* fragmentpolygone;    /*	Fragment.	*/
 /**
  *	Global variable.
  */
-extern uint32_t g_hpmflag;				/*	*/
-extern FILE* g_outputfd;					/*	*/
+extern uint32_t g_hpmflag;      /*	*/
+extern FILE* g_outputfd;        /*	*/
+extern int g_fullscreen;        /*	*/
 
 /**
  *	Get GLSL version of current opengl context.

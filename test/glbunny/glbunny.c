@@ -15,6 +15,7 @@
 #include"Bunny.h"
 uint32_t g_hpmflag = HPM_SSE2;
 FILE* g_outputfd = NULL;
+int g_fullscreen = 0;
 
 
 /**
