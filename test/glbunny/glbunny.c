@@ -252,7 +252,25 @@ void readargument(int argc, const char** argv){
 			break;
 		case 's':
 			if(optarg){
-			    g_hpmflag = 0;
+				int i = 1;
+
+				do{
+					if(strcmp(hpm_get_simd_symbol(i), optarg) == 0){
+						break;
+					}
+					i <<= 1;
+					if(hpm_get_simd_symbol(i) == NULL){
+						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
+						exit(EXIT_FAILURE);
+					}
+				}while(hpm_get_simd_symbol(i));
+				g_hpmflag = i;
+
+				/*	Check if supported.	*/
+				if(!hpm_supportcpufeat(g_hpmflag)){
+					fprintf(stderr, "SIMD extension not supported.\n");
+					exit(EXIT_FAILURE);
+				}
 			}
 			break;
 		case 'o':
