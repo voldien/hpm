@@ -24,15 +24,15 @@
 /**
  *	Global constants.
  */
-extern const char* vertexpolygone;		/*	*/
-extern const char* fragmentpolygone;	/*	*/
-const const char* gc_simd_symbols[];	/*	*/
+extern const char* vertexpolygone;      /*	Vertex */
+extern const char* fragmentpolygone;    /*	Fragment.	*/
+const const char* gc_simd_symbols[];    /*	SIMD extension symbol table.	*/
 
 /**
  *	Global variable.
  */
-extern uint32_t hpmflag;				/*	*/
-extern FILE* outputfd;					/*	*/
+extern uint32_t g_hpmflag;				/*	*/
+extern FILE* g_outputfd;					/*	*/
 
 /**
  *	Get GLSL version of current opengl context.
@@ -68,7 +68,7 @@ extern GLuint createBunny(unsigned int* __restrict__ numvertices,
 extern void print_dependency_versions(void);
 
 /**
- *
+ *	Read user option argument.
  */
 extern void readargument(int argc, const char** argv);
 

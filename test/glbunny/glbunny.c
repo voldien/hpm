@@ -13,8 +13,8 @@
 
 #define BUNNY_IMPLEMENTATION
 #include"Bunny.h"
-uint32_t hpmflag = HPM_SSE2;
-FILE* outputfd = NULL;
+uint32_t g_hpmflag = HPM_SSE2;
+FILE* g_outputfd = NULL;
 
 const char* gc_simd_symbols[] = {
 		"",
@@ -252,12 +252,12 @@ void readargument(int argc, const char** argv){
 			break;
 		case 's':
 			if(optarg){
-			    hpmflag = 0;
+			    g_hpmflag = 0;
 			}
 			break;
 		case 'o':
 			if(optarg)
-				outputfd = fopen(optarg, "wb");
+				g_outputfd = fopen(optarg, "wb");
 			break;
 		default:
 			break;
@@ -265,8 +265,8 @@ void readargument(int argc, const char** argv){
 	}
 
 	/*	Default output.	*/
-	if(outputfd == NULL)
-		outputfd = stdout;
+	if(g_outputfd == NULL)
+		g_outputfd = stdout;
 
 	/*	Reset getopt.	*/
 	optind = 0;

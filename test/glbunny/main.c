@@ -66,8 +66,8 @@ int main(int argc, const char** argv){
 	print_dependency_versions();
 
 	/*	*/
-	if( hpm_init(hpmflag) == 0 ){
-		fprintf(stderr, "Failed to initialize HPM, %x.\n", hpmflag);
+	if( hpm_init(g_hpmflag) == 0 ){
+		fprintf(stderr, "Failed to initialize HPM, %x.\n", g_hpmflag);
 		return EXIT_FAILURE;
 	}
 
@@ -112,7 +112,7 @@ int main(int argc, const char** argv){
 
 	/*	Create window.	*/
 	char title[128];
-	sprintf(title, "hpm-benchmark-GL - %s", gc_simd_symbols[Log2MutExlusive32(hpmflag)]);
+	sprintf(title, "hpm-benchmark-GL - %s", gc_simd_symbols[Log2MutExlusive32(g_hpmflag)]);
 	window = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			dismode.w  / 2, dismode.h / 2,
@@ -304,7 +304,7 @@ int main(int argc, const char** argv){
 		/*	*/
 		float time = (SDL_GetPerformanceCounter() - pretime ) / (float)freq;
 		pretime = SDL_GetPerformanceCounter();
-		fprintf(outputfd, "%f\n", time);
+		fprintf(g_outputfd, "%f\n", time);
 
 		rot += time;
 
