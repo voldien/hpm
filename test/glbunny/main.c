@@ -303,7 +303,7 @@ int main(int argc, const char** argv){
 				case SDL_WINDOWEVENT_HIDDEN:
 					break;
 				case SDL_WINDOWEVENT_CLOSE:
-					break;
+					goto error;
 				default:
 					break;
 				}
