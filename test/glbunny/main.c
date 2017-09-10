@@ -112,7 +112,7 @@ int main(int argc, const char** argv){
 
 	/*	Create window.	*/
 	char title[128];
-	sprintf(title, "hpm-benchmark-GL - %s", gc_simd_symbols[Log2MutExlusive32(g_hpmflag)]);
+	sprintf(title, "hpm-benchmark-GL - %s", hpm_get_simd_symbol(g_hpmflag));
 	window = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			dismode.w  / 2, dismode.h / 2,
