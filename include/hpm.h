@@ -128,6 +128,15 @@ extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int SIMD);
 
+/**
+ *	Get symbol name for specified SIMD enumerator.
+ *
+ *	\SIMD SIMD enumerator.
+ *
+ *	@Return non-null terminated string.
+ */
+extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
+
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

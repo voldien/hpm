@@ -4,6 +4,7 @@
 #include"hpmvector.h"
 #include"hpmquaternion.h"
 #include <dlfcn.h>
+#include<assert.h>
 
 
 /*	library handle.
@@ -324,4 +325,40 @@ int hpm_supportcpufeat(unsigned int simd){
 	default:
 		return 0;
 	}
+}
+
+static int log2MutExlusive32(unsigned int a){
+
+	int i = 0;
+	int po = 0;
+	const int bitlen = 32;
+
+	if(a == 0)
+		return 0;
+
+	for(; i < bitlen; i++){
+		if((a >> i) & 0x1)
+			return (i + 1);
+	}
+
+	assert(0);
+}
+
+const char* hpm_get_simd_symbol(unsigned int SIMD){
+	static const char* gc_simd_symbols[] = {
+			"",
+			"nosimd",
+			"MMX",
+			"SSE",
+			"SSE2",
+			"SSE3",
+			"SSE41",
+			"SSE42",
+			"AVX",
+			"AVX2",
+			"AVX512",
+			"NEON",
+			NULL,
+	};
+	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
