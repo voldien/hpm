@@ -16,22 +16,6 @@
 uint32_t g_hpmflag = HPM_SSE2;
 FILE* g_outputfd = NULL;
 
-const char* gc_simd_symbols[] = {
-		"",
-		"nosimd",
-		"MMX",
-		"SSE",
-		"SSE2",
-		"SSE3",
-		"SSE41",
-		"SSE42",
-		"AVX",
-		"AVX2",
-		"AVX512",
-		"NEON",
-		NULL,
-};
-
 
 /**
  *  Vertex shader.

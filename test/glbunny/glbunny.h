@@ -26,7 +26,6 @@
  */
 extern const char* vertexpolygone;      /*	Vertex */
 extern const char* fragmentpolygone;    /*	Fragment.	*/
-const const char* gc_simd_symbols[];    /*	SIMD extension symbol table.	*/
 
 /**
  *	Global variable.
