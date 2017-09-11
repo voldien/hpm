@@ -17,8 +17,6 @@
 
 */
 #include"hpmassert.h"
-#include"hpm.h"
-#include"hpmmath.h"
 
 /*	*/
 #include<stdlib.h>
@@ -30,21 +28,9 @@
 #include<getopt.h>
 #include<assert.h>
 
-const char* hpm_simd_symtable[] = {
-		"",
-		"nosimd",
-		"mmx",
-		"sse",
-		"sse2",
-		"see3",
-		"sse41",
-		"sse42",
-		"avx",
-		"avx2",
-		"avx512",
-		"neon",
-		NULL,
-};
+extern int g_SIMD;
+extern int g_type;
+extern int g_precision;
 
 /**
  *	Global
@@ -73,23 +59,19 @@ void readArgument(int argc, char** argv){
 		switch(c){
 		case 's':
 			if(optarg){
+				int i = 1;
 
-				int i = 0;
-
-				if(strcmp(optarg, "all") == 0){
-					g_SIMD = (unsigned int)(-1);
-				}
 				do{
-					if(strcmp(hpm_simd_symtable[i], optarg) == 0){
+					if(strcmp(hpm_get_simd_symbol(i), optarg) == 0){
 						break;
 					}
-					i++;
-					if(hpm_simd_symtable[i] == NULL){
+					i <<= 1;
+					if(hpm_get_simd_symbol(i) == NULL){
 						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
 						exit(EXIT_FAILURE);
 					}
-				}while(hpm_simd_symtable[i]);
-				g_SIMD = (unsigned int)(1 << (i - 1));
+				}while(hpm_get_simd_symbol(i));
+				g_SIMD = i;
 
 				/*	Check if supported.	*/
 				if(!hpm_supportcpufeat(g_SIMD)){
@@ -168,12 +150,12 @@ int hptLog2MutExlusive32(unsigned int a){
 	assert(0);
 }
 
-
 void htpSimdExecute(unsigned int simd){
 	int res;
 
-	printf("Starting %s extension test.\n",  hpm_simd_symtable[hptLog2MutExlusive32(simd)]);
+	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
 
+	/*	Initilize the hpm library.	*/
 	if(!hpm_init(simd)){
 		fprintf(stderr, "hpm_failed.\n");
 		exit(EXIT_FAILURE);
@@ -236,12 +218,19 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_unprojf);
 		}
 
-		/*
 		if( g_type & eComparing ){
 			printf("single precision comparing.\n");
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
-		}*/
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_eqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_eqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_neqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_neqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_gfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_lfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_eqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_neqfv);
+		}
 
 		if(g_type & eQuaternion){
 			printf("single precision Quaternion.\n");
@@ -270,25 +259,17 @@ void htpBenchmarkPerformanceTest(void){
 		if(g_type & eMath){
 			printf("Single precision Math performance.\n"
 					"-----------------------------\n");
-
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_maxfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_minfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_minfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_neqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_neqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_gfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_lfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_neqfv);
 		}
 
 		if(g_type & eVector){
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
 
+			/*	Vector4*/
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_copyfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_dotfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lengthfv);
@@ -298,6 +279,7 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lerpfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_slerpfv);
 
+			/*	Vector3 */
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_max_compfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_min_compfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_crossproductfv);
