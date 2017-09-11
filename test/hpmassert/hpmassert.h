@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -20,6 +20,7 @@
 #define _HPM_TEST_H_ 1
 #include<hpm.h>
 #include<hpmmath.h>
+#include<assert.h>
 
 /**
  *	Function declaration.
@@ -75,7 +76,6 @@ HPM_BENCHMARK_FUNC_DECL(hpm_quat_pitchfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_yawfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_rollfv);
 
-
 /**
  *	Matrices.
  */
@@ -98,7 +98,6 @@ HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_projfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_orthfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_unprojf);
 
-
 /**
  * Math benchmark function declaration
  */
@@ -106,6 +105,10 @@ HPM_BENCHMARK_FUNC_DECL(hpm_vec4_maxfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec8_maxfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_minfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec8_minfv);
+
+/**
+ *	Compare logic benchmark function declaration.
+ */
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_com_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_com_neqfv);
@@ -138,10 +141,6 @@ enum PrecisionType{
 	eAllPrecision	= (eFloat | eDouble)
 };
 
-/**
- *
- */
-extern const char* hpm_simd_symtable[];
 
 /**
  *	Read user argument option.
