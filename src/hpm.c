@@ -194,7 +194,7 @@ int hpm_init(unsigned int simd){
 	/*	*/
 	hpm_quat_axis_anglefv = hpm_get_symbolfuncp(hpm_quat_axis_anglefv);
 	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
-	hpm_quat_lookat = hpm_get_symbolfuncp(hpm_quat_lookat);
+	hpm_quat_lookatfv = hpm_get_symbolfuncp(hpm_quat_lookatfv);
 	/*	*/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	/*	*/
