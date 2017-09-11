@@ -215,6 +215,15 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
 		hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis,
 		float angle);
 
+/**
+ *	Create look rotation oritention quaternion.
+ *
+ *	\lookat
+ *
+ *	\up
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
+		const hpmquatf* __restrict__* up, hpmquatf* __restrict__ out);
 
 /**
  *	TODO rename later.
