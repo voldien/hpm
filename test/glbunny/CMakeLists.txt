@@ -1,3 +1,5 @@
+# CMake file for setting up the hpmglbunny test
+# program.
 
 # gcc compiler options.
 IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
@@ -19,12 +21,14 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	ENDIF()
 
 ELSEIF(MSVC)
-		# Enable multi-core complication with MSVC
+		# Enable multi-core complication with MSVC.
 		ADD_DEFINITIONS(/MP)
 ENDIF()
 
+# Include directory for hpm declaration.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 
+# Source files for the gl bunny program.
 FILE(GLOB bunnysrc ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 
 # Executable OpenGL hpm benchmark.
@@ -32,5 +36,6 @@ ADD_EXECUTABLE(hpmglbunny ${bunnysrc})
 TARGET_LINK_LIBRARIES(hpmglbunny -lGL -lSDL2 hpm)
 SET_TARGET_PROPERTIES(hpmglbunny PROPERTIES COMPILE_FLAGS "" )
 
-# Install
+# Install target.
 INSTALL (TARGETS hpmglbunny DESTINATION bin)
+

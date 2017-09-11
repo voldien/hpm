@@ -66,8 +66,8 @@ int main(int argc, const char** argv){
 	print_dependency_versions();
 
 	/*	*/
-	if( hpm_init(hpmflag) == 0 ){
-		fprintf(stderr, "Failed to initialize HPM, %x.\n", hpmflag);
+	if( hpm_init(g_hpmflag) == 0 ){
+		fprintf(stderr, "Failed to initialize HPM, %x.\n", g_hpmflag);
 		return EXIT_FAILURE;
 	}
 
@@ -112,7 +112,7 @@ int main(int argc, const char** argv){
 
 	/*	Create window.	*/
 	char title[128];
-	sprintf(title, "hpm-benchmark-GL - %s", gc_simd_symbols[Log2MutExlusive32(hpmflag)]);
+	sprintf(title, "hpm-benchmark-GL - %s", hpm_get_simd_symbol(g_hpmflag));
 	window = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			dismode.w  / 2, dismode.h / 2,
@@ -189,6 +189,9 @@ int main(int argc, const char** argv){
 				isAlive = 0;
 				break;
 			case SDL_MOUSEWHEEL:
+				/*	Move forward and back based on
+				 *	the forward direction
+				 *	vector.*/
 				hpm_quat_directionfv(&camor, &dir);
 
 				position += dir * (float)event.wheel.y;
@@ -206,6 +209,7 @@ int main(int argc, const char** argv){
 				hpm_vec3_crossproductfv( &dir, &right, &up );
 
 				if(event.motion.state & SDL_BUTTON_LMASK){
+					/*	Rotate around point.	*/
 					hpmquatf tmpquat;
 					hpmquatf tmpquat2;
 					hpmquatf tmpcamrot;
@@ -222,6 +226,7 @@ int main(int argc, const char** argv){
 				}
 
 				if(event.motion.state & SDL_BUTTON_MMASK){
+					/*	Pan on the plane with camera direction as normal	.*/
 					hpmvec4f tmpdiff = { 0.0f };
 					tmpdiff += (float)event.motion.yrel  * ( 1.0f / 30.0f ) * up;
 					tmpdiff += (float)event.motion.xrel  * ( 1.0f / 30.0f ) * right;
@@ -229,48 +234,55 @@ int main(int argc, const char** argv){
 				}
 
 				if(event.motion.state & SDL_BUTTON_RMASK){
+					/*	Zoom forward/backward.	*/
 					position += dir * (float)event.motion.xrel * ( 1.0f / 30.0f );
 				}
 
-
+				/*	Update view matrix.	*/
 				hpm_mat4x4_translationfv(view, &position);
 				hpm_mat4x4_multi_rotationQfv(view, &camor);
 			}break;
 			case SDL_KEYDOWN:
+				/*	Set fullscreen.	*/
 				if( ( event.key.keysym.sym == SDLK_RETURN ) && (event.key.keysym.mod & SDLK_LCTRL ) ){
-					SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP );
+					g_fullscreen = ~g_fullscreen & 0x1;
+					SDL_SetWindowFullscreen(window, g_fullscreen ?  SDL_WINDOW_FULLSCREEN_DESKTOP : 0 );
 				}
+
 				if(event.key.keysym.sym == SDLK_f){
+
+					/*	Reset view.	*/
 					hpm_vec4_setf(&position,
 							-( bunny_model_centroid[0] + bunny_model_maxbounds[0] ),
 							-( bunny_model_centroid[1] + bunny_model_maxbounds[1] ),
 							-( bunny_model_centroid[2] + bunny_model_maxbounds[2] ), 0.0f);
 					hpm_quat_axisf(&camor, HPM_DEG2RAD( 30.0f ), 0, 0);
 
+					/*	Update view matrix.	*/
 					hpm_mat4x4_translationfv(view, &position);
 					hpm_mat4x4_multi_rotationQfv(view, &camor);
 				}
-				if(event.key.keysym.sym == SDLK_UP){
 
-					hpmvec3f up = { 0, 1, 0 , 0 };
-					hpmvec3f right;
+				/*	*/
+				const hpmvec3f cdir[] = {
+						{1, 0, 0, 0},
+						{-1,0, 0, 0},
+						{0, 0,-1, 0},
+						{0, 0, 1, 0}};
 
+				if(event.key.keysym.sym == SDLK_UP
+						|| event.key.keysym.sym == SDLK_LEFT
+						|| event.key.keysym.sym == SDLK_RIGHT
+						|| event.key.keysym.sym == SDLK_DOWN){
+
+					hpm_quat_get_vectorfv(&camor, &cdir[SDLK_RIGHT - event.key.keysym.sym], &dir);
+					/*
 					hpm_quat_directionfv(&camor, &dir);
 					hpm_vec3_crossproductfv(&up, &dir, &right );
 					hpm_vec3_crossproductfv( &dir, &right, &up );
+					*/
 
-					hpmvec4f tmpdiff = { 0.0f };
-					tmpdiff += ( 1.0f / 30.0f ) * up;
-					position += tmpdiff  * -1.0f;
-				}
-				if(event.key.keysym.sym == SDLK_DOWN){
-
-				}
-				if(event.key.keysym.sym == SDLK_LEFT){
-
-				}
-				if(event.key.keysym.sym == SDLK_RIGHT){
-
+					position += dir  * -1.0f * 1000.0f;
 				}
 
 				break;
@@ -291,7 +303,7 @@ int main(int argc, const char** argv){
 				case SDL_WINDOWEVENT_HIDDEN:
 					break;
 				case SDL_WINDOWEVENT_CLOSE:
-					break;
+					goto error;
 				default:
 					break;
 				}
@@ -301,10 +313,10 @@ int main(int argc, const char** argv){
 			}
 		}
 
-		/*	*/
+		/*	Update time uniform.	*/
 		float time = (SDL_GetPerformanceCounter() - pretime ) / (float)freq;
 		pretime = SDL_GetPerformanceCounter();
-		fprintf(outputfd, "%f\n", time);
+		fprintf(g_outputfd, "%f\n", time);
 
 		rot += time;
 
@@ -334,7 +346,6 @@ int main(int argc, const char** argv){
 		glUniformMatrix4fv(mvploc, numInstances, GL_FALSE, mvp);
 		glUniformMatrix4fv(modeloc, numInstances, GL_FALSE, model);
 		glDrawElementsInstanced(GL_TRIANGLES, numindices, GL_UNSIGNED_SHORT, NULL, numInstances);
-
 	}
 
 	error:	/*	Cleanup.	*/

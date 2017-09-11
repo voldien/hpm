@@ -13,24 +13,9 @@
 
 #define BUNNY_IMPLEMENTATION
 #include"Bunny.h"
-uint32_t hpmflag = HPM_SSE2;
-FILE* outputfd = NULL;
-
-const char* gc_simd_symbols[] = {
-		"",
-		"nosimd",
-		"MMX",
-		"SSE",
-		"SSE2",
-		"SSE3",
-		"SSE41",
-		"SSE42",
-		"AVX",
-		"AVX2",
-		"AVX512",
-		"NEON",
-		NULL,
-};
+uint32_t g_hpmflag = HPM_SSE2;
+FILE* g_outputfd = NULL;
+int g_fullscreen = 0;
 
 
 /**
@@ -252,12 +237,30 @@ void readargument(int argc, const char** argv){
 			break;
 		case 's':
 			if(optarg){
-			    hpmflag = 0;
+				int i = 1;
+
+				do{
+					if(strcmp(hpm_get_simd_symbol(i), optarg) == 0){
+						break;
+					}
+					i <<= 1;
+					if(hpm_get_simd_symbol(i) == NULL){
+						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
+						exit(EXIT_FAILURE);
+					}
+				}while(hpm_get_simd_symbol(i));
+				g_hpmflag = i;
+
+				/*	Check if supported.	*/
+				if(!hpm_supportcpufeat(g_hpmflag)){
+					fprintf(stderr, "SIMD extension not supported.\n");
+					exit(EXIT_FAILURE);
+				}
 			}
 			break;
 		case 'o':
 			if(optarg)
-				outputfd = fopen(optarg, "wb");
+				g_outputfd = fopen(optarg, "wb");
 			break;
 		default:
 			break;
@@ -265,8 +268,8 @@ void readargument(int argc, const char** argv){
 	}
 
 	/*	Default output.	*/
-	if(outputfd == NULL)
-		outputfd = stdout;
+	if(g_outputfd == NULL)
+		g_outputfd = stdout;
 
 	/*	Reset getopt.	*/
 	optind = 0;

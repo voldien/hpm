@@ -316,9 +316,15 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
 /**
  *	Compute cross product.
  *
+ *	\larg left
+ *
+ *	\rarg right
+ *
+ *	\out cross product.
+ *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg,
-		const hpmvec3f* rarg, hpmvec3f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* __restrict__ larg,
+		const hpmvec3f* __restrict__ rarg, hpmvec3f* __restrict__ out);
 
 /**
  *	Compute triple product
