@@ -222,8 +222,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
  *
  *	\up
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
-		const hpmquatf* __restrict__* up, hpmquatf* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
+		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out);
 
 /**
  *	TODO rename later.
