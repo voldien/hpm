@@ -220,6 +220,9 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_fast_sqrtfv);
 	hpm_vec8_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_fast_sqrtfv);
 
+	hpm_vec4_randomfv = hpm_get_symbolfuncp(hpm_vec4_randomfv);
+	hpm_vec8_randomfv = hpm_get_symbolfuncp(hpm_vec8_randomfv);
+
 	/*	Logic conditions.	*/
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
