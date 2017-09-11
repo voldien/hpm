@@ -50,3 +50,8 @@ HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg
 	/*	{ x^2 + y^2 + z^2, x*x + y*z + z*y, w*y + z*x + x*z, w*z + x*y + y*x }.	*/
 	*out = (lxwww * rxxyz) + (lyyzx * ryzxy) + (lzzxy * rzyzx);
 }
+
+HPM_IMP(void, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
+		const hpmquatf* __restrict__* up, hpmquatf* __restrict__ out){
+
+}
