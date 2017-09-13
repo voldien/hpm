@@ -28,11 +28,11 @@ extern "C" {
 /**
  *	Create look at matrix.
  *
- *	\eye
+ *	\eye the look at target.
  *
- *	\position
+ *	\position position in world space.
  *
- *	\up
+ *	\up up direction in respect to the viewer.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
         const hpmvec4f* __restrict__ position, const hpmvec4f* __restrict__ up,
@@ -42,6 +42,5 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* __restrict__ ey
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif
-
 
 #endif

@@ -68,8 +68,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, hpmvec8f* __restrict__ a,
         hpmvec8f* __restrict__ out);
 
 /**
- *	Create random vector, where each component is from
- *	[0,1].
+ *	Create random vector, where each component
+ *	is within the following range [0,1].
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_randomfv, hpmvec4f* out);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_randomfv, hpmvec8f* out);
