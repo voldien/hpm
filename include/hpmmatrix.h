@@ -137,12 +137,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
 		const hpmvec4x4f_t larg, const float rarg,
 		hpmvec4x4f_t output);
 
-
 /**
- *
+ *	Divide each element in matrix by factor.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f,
-		hpmvec4x4f_t larg, const float rarg);
+		hpmvec4x4f_t larg, const float factor);
 
 /**
  *	Perform addition with two matrices.
@@ -228,7 +227,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
 		hpmquatf* __restrict__ rotation,
 		hpmvec3f* __restrict__ scale);
 
-
 /**
  *	Construct translation matrix.
  *
@@ -248,7 +246,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationfv,
 		hpmvec4x4f_t mat, const hpmvec3f* translation);
-
 
 /**
  *	Construct scalar matrix.
@@ -312,15 +309,17 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
 		hpmvec4x4f_t mat, float zradian);
 
 /**
- *
+ *	Create matrix from quaternion orientation.
  *
  *	\mat
+ *
+ *	\quat
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
 		hpmvec4x4f_t mat, const hpmquatf* quat);
 
 /**
- *
+ *	Create rotation matrix from three bias vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
 		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
@@ -346,23 +345,34 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_scalefv,
 		hpmvec4x4f_t mat, const hpmvec4f* scale);
 
 /**
- *	Multiply
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotX(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in pitch.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationxf,
 		hpmvec4x4f_t mat, float xradian);
 
 /**
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotY(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in yaw.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationyf,
 		hpmvec4x4f_t mat, float yradian);
 
 /**
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotZ(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in roll.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationzf,
 		hpmvec4x4f_t mat, float zradian);
