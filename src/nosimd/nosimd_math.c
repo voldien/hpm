@@ -36,34 +36,31 @@ HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __
 	(*c)[7] = (*a)[7] < (*b)[7] ? (*a)[7] : (*b)[7];
 }
 
-HPM_IMP(void, hpm_vec4_sqrtfv, hpmvec4f* __restrict__ a,
+HPM_IMP(void, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ a,
 		hpmvec4f* __restrict__ out) {
 	int i;
 	for(i = 0; i < 4; i++)
 		(*out)[i] = sqrtf((*a)[i]);
-
 }
-HPM_IMP(void, hpm_vec8_sqrtfv, hpmvec8f* __restrict__ a,
+HPM_IMP(void, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ a,
 		hpmvec8f* __restrict__ out) {
 	int i;
 	for(i = 0; i < 8; i++)
 		(*out)[i] = sqrtf((*a)[i]);
 }
 
-HPM_IMP(void, hpm_vec4_fast_sqrtfv, hpmvec4f* __restrict__ a,
+HPM_IMP(void, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ a,
 		hpmvec4f* __restrict__ out) {
 	int i;
 	for(i = 0; i < 8; i++)
 		(*out)[i] = sqrtf((*a)[i]);
 }
-HPM_IMP(void, hpm_vec8_fast_sqrtfv, hpmvec8f* __restrict__ a,
+HPM_IMP(void, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ a,
 		hpmvec8f* __restrict__ out) {
 	int i;
 	for(i = 0; i < 8; i++)
 		(*out)[i] = sqrtf((*a)[i]);
 }
-
-
 
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
 
