@@ -1,6 +1,11 @@
 #include"hpmlogic.h"
 
-
+#include<immintrin.h>
+#   ifdef HPM_VC
+#      include<intrin.h>
+#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
+#		include<x86intrin.h>
+#   endif
 
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
 	*res = (*a) == (*b);
