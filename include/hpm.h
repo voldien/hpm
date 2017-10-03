@@ -46,7 +46,7 @@ typedef int (HPMAPIENTRY PHPMISINIT)(void);
 typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionname);
 typedef int (HPMAPIENTRY PHPMVERSION)(void);
 typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
-
+typedef int (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 /**
  *	SIMD extensions flags.

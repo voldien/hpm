@@ -3,7 +3,9 @@
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
-#include <dlfcn.h>
+#include"hpmlogic.h"
+#include"hpmutil.h"
+#include<dlfcn.h>
 #include<assert.h>
 
 
@@ -18,7 +20,6 @@ unsigned int g_simd;
  *	the function pointer.
  */
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
-
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -205,9 +206,6 @@ int hpm_init(unsigned int simd){
 	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
 	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
 
-
-
-
 	/*	Math	*/
 	hpm_vec4_maxfv = hpm_get_symbolfuncp(hpm_vec4_maxfv);
 	hpm_vec8_maxfv = hpm_get_symbolfuncp(hpm_vec8_maxfv);
@@ -295,10 +293,10 @@ int hpm_supportcpufeat(unsigned int simd){
 
 	switch(simd){
 	case HPM_NOSIMD:
-		return 1;
+		return 1;	/*	Always supported.	*/
 	case HPM_MMX:
 		cpuid(cpuInfo, 1);
-		return 0;
+		return 0;	/*	Not supported in the library.	*/
 		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);

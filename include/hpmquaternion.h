@@ -118,6 +118,9 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
 /**
  *	Multiply quaternion with vector.
  *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
@@ -125,6 +128,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
 
 /**
  *	Compute direction of quaternion.
+ *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg,

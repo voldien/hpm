@@ -91,6 +91,9 @@
 #endif
 
 
+/**
+ *
+ */
 #if defined(__GNUC__) && defined(__ARM_NEON__)
      /* GCC-compatible compiler, targeting ARM with NEON */
      #include <arm_neon.h>
