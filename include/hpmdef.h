@@ -334,6 +334,7 @@
 	#define HPM_LOCALSYMBOL	""											/*	Namespace for local symbol. Use for creating single library file.	*/
 	#define HPM_FUNCSYMBOL(func)	fimp##func
 #endif
+#define HPM_DEFFUNCSYMBOL(func)	fimp##func
 #define HPM_FUNCTYPE(func) func##_t										/*	Declare function data type.	*/
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func					/*	Declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOL(func)					/*	Call function by the declare pointer name.	*/

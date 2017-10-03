@@ -21,7 +21,7 @@ HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
 }
 
 HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
-	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_quat_lengthsqurefv )(arg);
+	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(arg);
 	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
 	*arg *= sqrleng;
 }

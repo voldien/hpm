@@ -19,7 +19,7 @@ unsigned int g_simd;
  *	Macro for getting function pointer by variable name of
  *	the function pointer.
  */
-#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOL( symbol )), simd)
+#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -268,38 +268,13 @@ unsigned int hpm_get_simd(void){
 	return g_simd;
 }
 
-static const char* hpm_get_simd_prefix(unsigned int simd){
-	switch(simd){
-	case HPM_NOSIMD:
-		return HPM_STR_SIMD_NO_PREFIX;
-	case HPM_SSE:
-		return HPM_STR_SIMD_SSE_PREFIX;
-	case HPM_SSE2:
-		return HPM_STR_SIMD_SEE2_PREFIX;
-	case HPM_SSE3:
-		return HPM_STR_SIMD_SEE3_PREFIX;
-	case HPM_SSE4_1:
-		return HPM_STR_SIMD_SEE41_PREFIX;
-	case HPM_SSE4_2:
-		return HPM_STR_SIMD_SEE42_PREFIX;
-	case HPM_AVX:
-		return HPM_STR_SIMD_AVX_PREFIX;
-	case HPM_AVX2:
-		return HPM_STR_SIMD_AVX2_PREFIX;
-	case HPM_NEON:
-		return HPM_STR_SIMD_NEON_PREFIX;
-	default:
-		return "";
-	}
-}
-
 void* hpm_get_address(const char* cfunctionName, unsigned int simd){
 
 	void* pfunc;
 
 #if defined(HPM_USE_SINGLE_LIBRARY)
 	char buf[128];
-	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_prefix(simd));
+	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
 
 	pfunc = dlsym(libhandle, buf);
 #else
