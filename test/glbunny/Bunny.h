@@ -10,7 +10,7 @@
 // an easy way to render a complex model, for sanity testing renderers and model loaders by using known good data.
 //
 //----------------------------------------------------------------------------------------------------------------
-
+#pragma once
 
 /********** INTERFACE **********/
 

@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -22,24 +22,8 @@
 #include<stdlib.h>
 #include<limits.h>
 
-
 /**
- *	Version.
- */
-#ifndef HPM_MAJOR_VERSION
-	#define HPM_MAJOR_VERSION	0
-#endif	/*	Not HPM_MAJOR_VERSION	*/
-
-#ifndef HPM_MINOR_VERSION
-	#define HPM_MINOR_VERSION		5
-#endif	/*	Not HPM_MINOR_VERSION	*/
-
-#ifndef HPM_REVISION_VERSION
-	#define HPM_REVISION_VERSION 	0
-#endif	/*	Not HPM_REVISION_VERSION	*/
-
-/**
- *	Compiler version macros.
+ *	Compiler version macro.
  */
 #define HPM_COMPILER_VERSION(major, minor, revision, state) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 
@@ -107,6 +91,9 @@
 #endif
 
 
+/**
+ *
+ */
 #if defined(__GNUC__) && defined(__ARM_NEON__)
      /* GCC-compatible compiler, targeting ARM with NEON */
      #include <arm_neon.h>
@@ -151,6 +138,7 @@
 		#define HPM_LINUX 1                       /**/
 		#if defined(__amd64) || defined(__x86_64__) || defined(__i386__)
             #define HPM_X86 1
+			#define HPM_X86_64 1
 		#endif
 		#if defined(__arm__)
               #define EX_ARM 1
@@ -257,8 +245,8 @@
  */
 #if defined(HPM_MSVC)
 	#define HPM_ALWAYS_INLINE __forceinline
-#elif defined(HPM_LINUX)
-	#define HPM_ALWAYS_INLINE __attribute__((always_inline))
+#elif defined(HPM_GNUC)
+	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #elif defined(HPM_GNUC) || defined(HPM_GHS)
 	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #else
@@ -285,7 +273,7 @@
 /**
  *	library declaration.
  */
-#ifdef HPM_GNUC
+#if defined(HPM_GNUC) || defined(HPM_CLANG)
 	#if defined(HPM_UNIX)
 		#define HPMDECLSPEC	 __attribute__((__visibility__ ("default")))
 	#else
@@ -443,19 +431,19 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 #define _HPM_MATH_H_
 #include<math.h>
 #ifdef _HPM_MATH_H_
-	#define HPM_PI				3.14159265358979323846  	/* pi */
-	#define HPM_PI_2			1.57079632679489661923  	/* pi/2 */
-	#define HPM_PI_4			0.78539816339744830962  	/* pi/4 */
-	#define HPM_E				2.7182818284590452354   	/* e */
-	#define HPM_LOG2E			1.4426950408889634074   	/* log_2 e */
-	#define HPM_LOG10E			0.43429448190325182765  	/* log_10 e */
-	#define HPM_LN2           	0.69314718055994530942  	/* log_e 2 */
-	#define HPM_LN10          	2.30258509299404568402  	/* log_e 10 */
-	#define HPM_1_PI          	0.31830988618379067154  	/* 1/pi */
-	#define HPM_2_PI          	0.63661977236758134308  	/* 2/pi */
-	#define HPM_2_SQRTPI      	1.12837916709551257390  	/* 2/sqrt(pi) */
-	#define HPM_SQRT2         	1.41421356237309504880  	/* sqrt(2) */
-	#define HPM_SQRT1_2       	0.70710678118654752440  	/* 1/sqrt(2) */
+	#define HPM_PI              3.14159265358979323846  	/* pi */
+	#define HPM_PI_2            1.57079632679489661923  	/* pi/2 */
+	#define HPM_PI_4            0.78539816339744830962  	/* pi/4 */
+	#define HPM_E               2.7182818284590452354   	/* e */
+	#define HPM_LOG2E           1.4426950408889634074   	/* log_2 e */
+	#define HPM_LOG10E          0.43429448190325182765  	/* log_10 e */
+	#define HPM_LN2             0.69314718055994530942  	/* log_e 2 */
+	#define HPM_LN10            2.30258509299404568402  	/* log_e 10 */
+	#define HPM_1_PI            0.31830988618379067154  	/* 1/pi */
+	#define HPM_2_PI            0.63661977236758134308  	/* 2/pi */
+	#define HPM_2_SQRTPI        1.12837916709551257390  	/* 2/sqrt(pi) */
+	#define HPM_SQRT2           1.41421356237309504880  	/* sqrt(2) */
+	#define HPM_SQRT1_2         0.70710678118654752440  	/* 1/sqrt(2) */
 #endif	/*	_HPM_MATH_H_	*/
 
 
@@ -482,6 +470,31 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #endif
 
-
+/**
+ *	Swap register macros for enabling
+ *	higher performances.
+ */
+#if defined(HPM_X86_64)
+/*	#define HPM_SWAPF32(a, b)	__asm__("bswapq %0 %1" : "=r" (a) : "0" (a) : "=r" (b) : "1" (b))	*/
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#elif defined(HPM_X86)
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#elif defined(HPM_ARM)
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#else
+	#define HPM_SWAPF32(a, b)	\
+		{ float tmp = ( a );	\
+		( a ) = ( b );			\
+		( b ) = tmp; }
+#endif
 
 #endif	/*	Not _HPM_DEF_H_*/

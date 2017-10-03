@@ -29,3 +29,7 @@ HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* lf_quat, const hpmquatf* r
 
 
 
+HPM_IMP(void, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
+		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out){
+
+}

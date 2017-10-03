@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -118,6 +118,9 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
 /**
  *	Multiply quaternion with vector.
  *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
@@ -125,6 +128,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
 
 /**
  *	Compute direction of quaternion.
+ *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg,
@@ -215,6 +222,15 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
 		hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis,
 		float angle);
 
+/**
+ *	Create look rotation oritention quaternion.
+ *
+ *	\lookat
+ *
+ *	\up
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
+		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out);
 
 /**
  *	TODO rename later.

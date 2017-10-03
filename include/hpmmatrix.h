@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -137,12 +137,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
 		const hpmvec4x4f_t larg, const float rarg,
 		hpmvec4x4f_t output);
 
-
 /**
- *
+ *	Divide each element in matrix by factor.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f,
-		hpmvec4x4f_t larg, const float rarg);
+		hpmvec4x4f_t larg, const float factor);
 
 /**
  *	Perform addition with two matrices.
@@ -228,15 +227,14 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
 		hpmquatf* __restrict__ rotation,
 		hpmvec3f* __restrict__ scale);
 
-
 /**
  *	Construct translation matrix.
  *
- *	\x
+ *	\x position in x axis.
  *
- *	\y
+ *	\y position in y axis.
  *
- *	\z
+ *	\z position in z axis.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
@@ -248,7 +246,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationfv,
 		hpmvec4x4f_t mat, const hpmvec3f* translation);
-
 
 /**
  *	Construct scalar matrix.
@@ -312,12 +309,21 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
 		hpmvec4x4f_t mat, float zradian);
 
 /**
- *
+ *	Create matrix from quaternion orientation.
  *
  *	\mat
+ *
+ *	\quat
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
 		hpmvec4x4f_t mat, const hpmquatf* quat);
+
+/**
+ *	Create rotation matrix from three bias vector.
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
+		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
+		const hpmvec4f* yaxis, const hpmvec4f* zaxis);
 
 /**
  *	Construct translation matrix and multiply
@@ -332,40 +338,61 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_translationfv,
 		hpmvec4x4f_t mat, const hpmvec4f* translation);
 
 /**
- *	Multiply mat by translation matrix.
+ *	Multiply mat by scalar matrix.
+ *	mat = mat * scale
+ *
+ *	\mat
+ *
+ *	\scale
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_scalefv,
 		hpmvec4x4f_t mat, const hpmvec4f* scale);
 
 /**
- *	Multiply
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotX(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in pitch.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationxf,
 		hpmvec4x4f_t mat, float xradian);
 
 /**
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotY(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in yaw.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationyf,
 		hpmvec4x4f_t mat, float yradian);
 
 /**
+ *	Multiple left matrix with Eular rotation matrix.
+ *	mat = mat * eularRotZ(radian).
  *
- *	\mat
+ *	\mat left sided matrix.
+ *
+ *	\yradian eular radian rotation in roll.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationzf,
 		hpmvec4x4f_t mat, float zradian);
 
 /**
+ *	Multiply quaternion rotation matrix.
+ *	mat = mat * fquat;
  *
- *	\mat
+ *	\mat 4x4 matrix.
+ *
+ *	\fquat normalized quaternion.
+ *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv,
-		hpmvec4x4f_t mat, const hpmquatf* f_quat);
+		hpmvec4x4f_t mat, const hpmquatf* fquat);
 
 /**
  *	Construct projection matrix.

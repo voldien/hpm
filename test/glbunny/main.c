@@ -1,4 +1,5 @@
-#include<hpm/hpm.h>
+#include<hpm.h>
+#include"glbunny.h"
 #include<assert.h>
 #include<getopt.h>
 #include<SDL2/SDL.h>
@@ -9,152 +10,19 @@
 	#include<GL/glext.h>
 #endif
 
-
-#define BUNNY_IMPLEMENTATION
 #include"Bunny.h"
-
-
-uint32_t hpmflag = HPM_SSE2;	/*	*/
-
-const char* vertexpolygone = ""
-"\n"
-"layout(location = 0) in vec3 vertex;\n"
-"layout(location = 1) in vec3 normal;\n"
-"uniform mat4 mvp[128];\n"
-"uniform mat4 model[128];\n"
-"out vec3 Normal;\n"
-"void main(void){\n"
-"	gl_Position = mvp[gl_InstanceID] * vec4(vertex, 1.0);\n"
-"	Normal = ( model[gl_InstanceID] * vec4(normal, 0.0)).xyz;\n"
-"}\n";
-
-
-const char* fragmentpolygone = ""
-"\n"
-"layout(location = 0) out vec4 fragColor;\n"
-"uniform mat4 proj;\n"
-"uniform float time;\n"
-"in vec3 Normal;\n"
-"void main(void){\n"
-"	fragColor = vec4(vec3(dot(Normal, vec3(0,-1,0) ) ), 1.0);\n"
-"}\n";
-
-
-static unsigned int getGLSLVersion(void){
-
-	unsigned int version;
-	char glstring[128] = {0};
-	char* wspac;
-
-	/*	Extract version number.	*/
-	strcpy(glstring, (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
-	wspac = strstr(glstring, " ");
-	if(wspac){
-		*wspac = '\0';
-	}
-	version = strtof(glstring, NULL) * 100;
-
-	return version;
-}
-
-static GLint createShader(const char* __restrict__ vsource, const char* __restrict__ fsource){
-
-	GLuint prog;
-	GLuint vs, fs;
-	GLuint vstatus, lstatus;
-
-	char version[128];					/*	*/
-	char* vsources[2];					/*	*/
-	char* fsources[2];					/*	*/
-	int sourcecount = sizeof(vsources) / sizeof(vsources[0]);
-
-	sprintf(version, "#version %d\n", getGLSLVersion() );
-	vsources[0] = version;
-	fsources[0] = version;
-	vsources[1] = (char*)vsource;
-	fsources[1] = (char*)fsource;
-
-	/*	Create shader.	*/
-	prog = glCreateProgram();
-
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, sourcecount, vsources, NULL);
-	glCompileShader(vs);
-	glAttachShader(prog, vs);
-
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, sourcecount, fsources, NULL);
-	glCompileShader(fs);
-	glAttachShader(prog, fs);
-
-	glLinkProgram(prog);
-	glValidateProgram(prog);
-	glGetProgramiv(prog, GL_LINK_STATUS, &lstatus);
-	glGetProgramiv(prog, GL_VALIDATE_STATUS, &vstatus);
-
-	if(lstatus == GL_FALSE){
-		char errorlog[2048];
-		glGetProgramInfoLog(prog, sizeof(errorlog), NULL, &errorlog[0]);
-		fprintf(stderr, errorlog);
-		return -1;
-	}
-
-	/*	Release shader data.	*/
-	/*	detach shaderer object and release their resources.	*/
-	glDetachShader(prog, vs);
-	glDetachShader(prog);
-	glDeleteShader(vs);
-	glDeleteShader(fs);
-	return prog;
-}
-
-static void print_dependency_versions(void){
-	SDL_version sdl_version;
-	printf("------- Version ------\n");
-	printf("hpm version %s.\n", hpm_version());
-	SDL_GetVersion(&sdl_version);
-	printf("SDL version %d.%d.%d.\n", sdl_version.major, sdl_version.minor, sdl_version.patch);
-	printf("------------------\n\n");
-}
-
-void readargument(int argc, const char** argv){
-
-	static struct option longoption[] = {
-			{"version",	0,	NULL, 'v'},
-			{"simd",	0,	NULL, 's'},
-	};
-
-	int c;
-	const char* shortopt = "vV";
-
-	/**/
-	while ( ( c = getopt_long(argc, ( char *const *)argv, shortopt, longoption, NULL)) != EOF){
-		switch(c){
-		case 'v':
-			break;
-		case 's':
-			if(optarg){
-
-			}
-			break;
-		default:
-			break;
-		}
-	}
-
-}
 
 int main(int argc, const char** argv){
 
 	int status = EXIT_SUCCESS;
 
 	/*	*/
-	int result = 0;						/*	*/
-	int isAlive = 1;					/*	*/
-	int i,j,z;							/*	*/
-	int glflag;							/*	*/
-	SDL_Event event = {0};				/*	*/
-	SDL_Window* window = NULL;			/*	*/
+	int result = 0;                         /*	*/
+	int isAlive = 1;                        /*	*/
+	int i,j,z;                              /*	*/
+	int glflag;                             /*	*/
+	SDL_Event event = {0};                  /*	*/
+	SDL_Window* window = NULL;              /*	*/
 	SDL_GLContext* glc = NULL;			/*	*/
 	SDL_DisplayMode dismode = {0};		/*	*/
 	Uint64 freq;						/*	*/
@@ -178,7 +46,6 @@ int main(int argc, const char** argv){
 	hpmquatf* quat = NULL;					/*	*/
 	float rot = 0.0f;						/*	*/
 	float fov = 40.0f;						/*	*/
-	float near,far;							/*	*/
 
 	/*	*/
 	unsigned int numindices;				/*	*/
@@ -199,8 +66,8 @@ int main(int argc, const char** argv){
 	print_dependency_versions();
 
 	/*	*/
-	if( hpm_init(hpmflag) == 0 ){
-		fprintf(stderr, "Failed to initialize HPM, %x.\n", hpmflag);
+	if( hpm_init(g_hpmflag) == 0 ){
+		fprintf(stderr, "Failed to initialize HPM, %x.\n", g_hpmflag);
 		return EXIT_FAILURE;
 	}
 
@@ -225,7 +92,6 @@ int main(int argc, const char** argv){
 	hpm_mat4x4_identityfv(proj);
 	hpm_quat_identityfv(&camor);
 
-
 	/*	Initialize SDL.	*/
 	result = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_EVENTS);
 	if( result != 0){
@@ -245,7 +111,9 @@ int main(int argc, const char** argv){
 	}
 
 	/*	Create window.	*/
-	window = SDL_CreateWindow("hpm-benchmark-GL",
+	char title[128];
+	sprintf(title, "hpm-benchmark-GL - %s", hpm_get_simd_symbol(g_hpmflag));
+	window = SDL_CreateWindow(title,
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 			dismode.w  / 2, dismode.h / 2,
 			SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE );
@@ -295,32 +163,8 @@ int main(int argc, const char** argv){
 			(float)(dismode.w / 2) / (float)(dismode.h / 2),
 			0.15f, 1000.0f);
 
-
 	/*	Create bunny geometry.	*/
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
-
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &nbo);
-	glGenBuffers(1, &ibo);
-	numindices = BUNNY_NUM_INDICES;
-	numvertices = BUNNY_NUM_VERTS;
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_vertices, GL_STATIC_DRAW);
-
-	/**/
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12, NULL);
-
-	glBindBuffer(GL_ARRAY_BUFFER, nbo);
-	glBufferData(GL_ARRAY_BUFFER, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_normals, GL_STATIC_DRAW);
-
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12, NULL);
-
+	vao = createBunny(&numvertices, &numindices);
 
 	/*	Create shader.	*/
 	prog = createShader(vertexpolygone, fragmentpolygone);
@@ -330,12 +174,10 @@ int main(int argc, const char** argv){
 		goto error;
 	}
 
-
-	/*	*/
+	/*	Enable program. */
 	glUseProgram(prog);
 	mvploc = glGetUniformLocation(prog, "mvp");
 	modeloc = glGetUniformLocation(prog, "model");
-
 
 	/*	Main loop.	*/
 	pretime = SDL_GetPerformanceCounter();
@@ -347,6 +189,9 @@ int main(int argc, const char** argv){
 				isAlive = 0;
 				break;
 			case SDL_MOUSEWHEEL:
+				/*	Move forward and back based on
+				 *	the forward direction
+				 *	vector.*/
 				hpm_quat_directionfv(&camor, &dir);
 
 				position += dir * (float)event.wheel.y;
@@ -364,6 +209,7 @@ int main(int argc, const char** argv){
 				hpm_vec3_crossproductfv( &dir, &right, &up );
 
 				if(event.motion.state & SDL_BUTTON_LMASK){
+					/*	Rotate around point.	*/
 					hpmquatf tmpquat;
 					hpmquatf tmpquat2;
 					hpmquatf tmpcamrot;
@@ -380,6 +226,7 @@ int main(int argc, const char** argv){
 				}
 
 				if(event.motion.state & SDL_BUTTON_MMASK){
+					/*	Pan on the plane with camera direction as normal	.*/
 					hpmvec4f tmpdiff = { 0.0f };
 					tmpdiff += (float)event.motion.yrel  * ( 1.0f / 30.0f ) * up;
 					tmpdiff += (float)event.motion.xrel  * ( 1.0f / 30.0f ) * right;
@@ -387,48 +234,55 @@ int main(int argc, const char** argv){
 				}
 
 				if(event.motion.state & SDL_BUTTON_RMASK){
+					/*	Zoom forward/backward.	*/
 					position += dir * (float)event.motion.xrel * ( 1.0f / 30.0f );
 				}
 
-
+				/*	Update view matrix.	*/
 				hpm_mat4x4_translationfv(view, &position);
 				hpm_mat4x4_multi_rotationQfv(view, &camor);
 			}break;
 			case SDL_KEYDOWN:
+				/*	Set fullscreen.	*/
 				if( ( event.key.keysym.sym == SDLK_RETURN ) && (event.key.keysym.mod & SDLK_LCTRL ) ){
-					SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN_DESKTOP );
+					g_fullscreen = ~g_fullscreen & 0x1;
+					SDL_SetWindowFullscreen(window, g_fullscreen ?  SDL_WINDOW_FULLSCREEN_DESKTOP : 0 );
 				}
+
 				if(event.key.keysym.sym == SDLK_f){
+
+					/*	Reset view.	*/
 					hpm_vec4_setf(&position,
 							-( bunny_model_centroid[0] + bunny_model_maxbounds[0] ),
 							-( bunny_model_centroid[1] + bunny_model_maxbounds[1] ),
 							-( bunny_model_centroid[2] + bunny_model_maxbounds[2] ), 0.0f);
 					hpm_quat_axisf(&camor, HPM_DEG2RAD( 30.0f ), 0, 0);
 
+					/*	Update view matrix.	*/
 					hpm_mat4x4_translationfv(view, &position);
 					hpm_mat4x4_multi_rotationQfv(view, &camor);
 				}
-				if(event.key.keysym.sym == SDLK_UP){
 
-					hpmvec3f up = { 0, 1, 0 , 0 };
-					hpmvec3f right;
+				/*	*/
+				const hpmvec3f cdir[] = {
+						{1, 0, 0, 0},
+						{-1,0, 0, 0},
+						{0, 0,-1, 0},
+						{0, 0, 1, 0}};
 
+				if(event.key.keysym.sym == SDLK_UP
+						|| event.key.keysym.sym == SDLK_LEFT
+						|| event.key.keysym.sym == SDLK_RIGHT
+						|| event.key.keysym.sym == SDLK_DOWN){
+
+					hpm_quat_get_vectorfv(&camor, &cdir[SDLK_RIGHT - event.key.keysym.sym], &dir);
+					/*
 					hpm_quat_directionfv(&camor, &dir);
 					hpm_vec3_crossproductfv(&up, &dir, &right );
 					hpm_vec3_crossproductfv( &dir, &right, &up );
+					*/
 
-					hpmvec4f tmpdiff = { 0.0f };
-					tmpdiff += ( 1.0f / 30.0f ) * up;
-					position += tmpdiff  * -1.0f;
-				}
-				if(event.key.keysym.sym == SDLK_DOWN){
-
-				}
-				if(event.key.keysym.sym == SDLK_LEFT){
-
-				}
-				if(event.key.keysym.sym == SDLK_RIGHT){
-
+					position += dir  * -1.0f * 1000.0f;
 				}
 
 				break;
@@ -449,7 +303,7 @@ int main(int argc, const char** argv){
 				case SDL_WINDOWEVENT_HIDDEN:
 					break;
 				case SDL_WINDOWEVENT_CLOSE:
-					break;
+					goto error;
 				default:
 					break;
 				}
@@ -459,10 +313,10 @@ int main(int argc, const char** argv){
 			}
 		}
 
-		/*	*/
+		/*	Update time uniform.	*/
 		float time = (SDL_GetPerformanceCounter() - pretime ) / (float)freq;
 		pretime = SDL_GetPerformanceCounter();
-		printf("%f\n", time);
+		fprintf(g_outputfd, "%f\n", time);
 
 		rot += time;
 
@@ -492,7 +346,6 @@ int main(int argc, const char** argv){
 		glUniformMatrix4fv(mvploc, numInstances, GL_FALSE, mvp);
 		glUniformMatrix4fv(modeloc, numInstances, GL_FALSE, model);
 		glDrawElementsInstanced(GL_TRIANGLES, numindices, GL_UNSIGNED_SHORT, NULL, numInstances);
-
 	}
 
 	error:	/*	Cleanup.	*/

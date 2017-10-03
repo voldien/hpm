@@ -3,8 +3,10 @@
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
-#include <dlfcn.h>
-#include<string.h>
+#include"hpmlogic.h"
+#include"hpmutil.h"
+#include<dlfcn.h>
+#include<assert.h>
 
 
 /*	library handle.
@@ -18,7 +20,6 @@ unsigned int g_simd;
  *	the function pointer.
  */
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOL( symbol )), simd)
-
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -161,11 +162,9 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 
-
-	/*	vector 3.	*/
+	/*	Vector3.	*/
 	hpm_vec3_crossproductfv = hpm_get_symbolfuncp(hpm_vec3_crossproductfv);
-
-	/**/
+	hpm_vec3_tripleProductfv = hpm_get_symbolfuncp(hpm_vec3_tripleProductfv);
 	hpm_vec3_dotfv = hpm_get_symbolfuncp(hpm_vec3_dotfv);
 	hpm_vec3_lengthfv = hpm_get_symbolfuncp(hpm_vec3_lengthfv);
 	hpm_vec3_lengthsquarefv = hpm_get_symbolfuncp(hpm_vec3_lengthsquarefv);
@@ -200,6 +199,7 @@ int hpm_init(unsigned int simd){
 	/*	*/
 	hpm_quat_axis_anglefv = hpm_get_symbolfuncp(hpm_quat_axis_anglefv);
 	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
+	hpm_quat_lookatfv = hpm_get_symbolfuncp(hpm_quat_lookatfv);
 	/*	*/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	/*	*/
@@ -210,14 +210,22 @@ int hpm_init(unsigned int simd){
 	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
 	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
 
-
 	/*	Math	*/
 	hpm_vec4_maxfv = hpm_get_symbolfuncp(hpm_vec4_maxfv);
 	hpm_vec8_maxfv = hpm_get_symbolfuncp(hpm_vec8_maxfv);
 	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
 	hpm_vec8_minfv = hpm_get_symbolfuncp(hpm_vec8_minfv);
 
+	hpm_vec4_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_sqrtfv);
+	hpm_vec8_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_sqrtfv);
 
+	hpm_vec4_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec4_fast_sqrtfv);
+	hpm_vec8_fast_sqrtfv = hpm_get_symbolfuncp(hpm_vec8_fast_sqrtfv);
+
+	hpm_vec4_randomfv = hpm_get_symbolfuncp(hpm_vec4_randomfv);
+	hpm_vec8_randomfv = hpm_get_symbolfuncp(hpm_vec8_randomfv);
+
+	/*	Logic conditions.	*/
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);
@@ -231,7 +239,7 @@ int hpm_init(unsigned int simd){
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
 	/*	Utilities.	*/
-
+	hpm_util_lookatfv = hpm_get_symbolfuncp(hpm_util_lookatfv);
 
 	/*	*/
 	g_simd = simd;
@@ -322,10 +330,10 @@ int hpm_supportcpufeat(unsigned int simd){
 
 	switch(simd){
 	case HPM_NOSIMD:
-		return 1;
+		return 1;	/*	Always supported.	*/
 	case HPM_MMX:
 		cpuid(cpuInfo, 1);
-		return 0;
+		return 0;	/*	Not supported in the library.	*/
 		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);
@@ -356,4 +364,40 @@ int hpm_supportcpufeat(unsigned int simd){
 	default:
 		return 0;
 	}
+}
+
+static int log2MutExlusive32(unsigned int a){
+
+	int i = 0;
+	int po = 0;
+	const int bitlen = 32;
+
+	if(a == 0)
+		return 0;
+
+	for(; i < bitlen; i++){
+		if((a >> i) & 0x1)
+			return (i + 1);
+	}
+
+	assert(0);
+}
+
+const char* hpm_get_simd_symbol(unsigned int SIMD){
+	static const char* gc_simd_symbols[] = {
+			"",
+			"nosimd",
+			"MMX",
+			"SSE",
+			"SSE2",
+			"SSE3",
+			"SSE41",
+			"SSE42",
+			"AVX",
+			"AVX2",
+			"AVX512",
+			"NEON",
+			NULL,
+	};
+	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }

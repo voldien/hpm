@@ -221,15 +221,13 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 	mat[3] = row3;
 }
 
-
 HPM_IMP( void, hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
 	hpmmat4uf* umat = mat;
 
-	//umat->
+	HPM_SWAPF32(mat[0][1], mat[1][0]);
+	HPM_SWAPF32(mat[0][2], mat[2][0]);
+	HPM_SWAPF32(mat[0][3], mat[3][0]);
+	HPM_SWAPF32(mat[0][1], mat[1][0]);
+	HPM_SWAPF32(mat[0][1], mat[1][0]);
 
 }
-
-
-
-
-

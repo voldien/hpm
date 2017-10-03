@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -25,14 +25,22 @@
 extern "C" {
 #endif
 
-
-HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookat);
-
+/**
+ *	Create look at matrix.
+ *
+ *	\eye the look at target.
+ *
+ *	\position position in world space.
+ *
+ *	\up up direction in respect to the viewer.
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
+        const hpmvec4f* __restrict__ position, const hpmvec4f* __restrict__ up,
+        hpmvec4x4f_t mat);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif
-
 
 #endif

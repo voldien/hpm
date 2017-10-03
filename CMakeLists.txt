@@ -64,13 +64,14 @@ ENDIF()
 
 
 # Source files.
-FILE (GLOB headers "include/*.h")
-FILE (GLOB basecore src/base/* )
-FILE (GLOB nosimdsource src/nosimd/* )
-FILE (GLOB all_sse_source src/sse/*)
-FILE (GLOB avx_source src/avx/*)
-#FILE (GLOB avx512_source src/avx512/*)
-#FILE (GLOB neon_source src/neon/*)
+FILE (GLOB headers ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+FILE (GLOB basecore ${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
+		    ${CMAKE_CURRENT_SOURCE_DIR}/src/utility.c )
+FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
+FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
+FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
+#FILE (GLOB avx512_source src/avx/*)
+
 INCLUDE_DIRECTORIES(include)
 
 # Target with no simd extensions requirements.
@@ -126,7 +127,6 @@ ELSE()
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
 
-
 # Main library target for initializing the library.
 ADD_LIBRARY(hpm SHARED src/hpm.c)
 IF(USE_SINGLE_LIBRARY)
@@ -137,16 +137,8 @@ ELSE()
 ENDIF()
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS "-DHPM_INTERNAL=1 -DHPM_ENTRY" )
 
-# Executable hpm benchmark. 
-ADD_EXECUTABLE(hpmtest test/main.c)
-TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
-SET_TARGET_PROPERTIES(hpmtest PROPERTIES COMPILE_FLAGS "-Iinclude" )
-
-# Executable OpenGL hpm benchmark. 
-ADD_EXECUTABLE(hpmglbunny test/example.c)
-TARGET_LINK_LIBRARIES(hpmglbunny -lGL -lSDL2 hpm)
-SET_TARGET_PROPERTIES(hpmglbunny PROPERTIES COMPILE_FLAGS "-Itest" )
-
+# Non specific SIMD targets.
+INSTALL (FILES ${headers} DESTINATION include/hpm)
 
 #ADD_EXECUTABLE(hpmtest2 test/main2.c)
 #TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
@@ -173,11 +165,8 @@ ELSE()
 	ENDIF()
 ENDIF()
 
-# Include header for development.
-INSTALL (FILES ${headers} DESTINATION include/hpm)
-# Test binary.
-INSTALL (TARGETS hpmtest DESTINATION bin)
-INSTALL (TARGETS hpmglbunny DESTINATION bin)
+#
+ADD_SUBDIRECTORY(test)
 
 IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
