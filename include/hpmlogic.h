@@ -99,15 +99,11 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec2_neqfv, const hpmvec2f* __restrict__
 
 /**
  *	Determine if a is greater than b.
- *
- *	@Return
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_gfv, const hpmvec2f* __restrict__ a,
 		const hpmvec2f* __restrict__ b, hpmvec2f* __restrict__ res);
 /**
  *	Determine if a is less than b.
- *
- *	@Return
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_lfv, const hpmvec2f* __restrict__ a,
 		const hpmvec2f* __restrict__ b, hpmvec2f* __restrict__ res);

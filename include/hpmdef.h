@@ -214,8 +214,6 @@
 	#   define HPM_UNIX 1
 #endif
 
-
-
 /**
  *	Calling function convention.
  */
@@ -240,8 +238,8 @@
 	#define HPMAPIFASTENTRY __fastcall
 #endif
 
-/*
- *	force inline.
+/**
+ *	Force inline.
  */
 #if defined(HPM_MSVC)
 	#define HPM_ALWAYS_INLINE __forceinline
@@ -292,7 +290,6 @@
 
 #endif
 
-
 /**
  *	String macros.
  */
@@ -304,7 +301,6 @@
 #define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
 #define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
-
 
 /**
  *	Implementation macro.
@@ -367,14 +363,12 @@ ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
 	#define HPM_SQRT1_2         0.70710678118654752440  	/* 1/sqrt(2) */
 #endif	/*	_HPM_MATH_H_	*/
 
-
 /**
  *	Inline convertion functions.
  *	Convert between radians and degrees.
  */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
 #define HPM_RAD2DEG( a ) ( ( (a) * 180.0 ) / HPM_PI )
-
 
 /**
  *	Inline math functions.

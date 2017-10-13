@@ -39,7 +39,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a,
 		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
-
 /**
  *	Compute min value of a and b.
  *	min = a < b ? a : b
@@ -53,18 +52,26 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a,
 
 /**
  *	Computer square root.
+ *
+ *	\arg
+ *
+ *	\out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ arg,
         hpmvec4f* __restrict__ out);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ arg,
         hpmvec8f* __restrict__ out);
 
 /**
  *	Computer approximate square root.
+ *
+ *	\arg
+ *
+ *	\out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ arg,
         hpmvec4f* __restrict__ out);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ arg,
         hpmvec8f* __restrict__ out);
 
 /**
