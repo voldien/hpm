@@ -210,14 +210,15 @@ HPM_IMP( void, hpm_mat4x4_rotationQf, hpmvec4x4f_t mat, const hpmquatf* quat){
 }
 
 HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
-		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
-		const hpmvec4f* yaxis, const hpmvec4f* zaxis){
+		hpmvec4x4f_t mat, const hpmvec4f* __restrict__ xaxis,
+		const hpmvec4f* __restrict__ yaxis, const hpmvec4f* __restrict__ zaxis){
 
 	const hpmvec4f row3 = {0,0,0,1};
-	hpm_vec4_copyfv(&mat[0], xaxis);
-	hpm_vec4_copyfv(&mat[1], yaxis);
-	hpm_vec4_copyfv(&mat[2], zaxis);
-	hpm_vec4_copyfv(&mat[3], row3);
+	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[0], xaxis);
+	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[1], yaxis);
+	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[2], zaxis);
+	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[3], &row3);
+
 
 	/*
 	hpmvec4f orientation = {
