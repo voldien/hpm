@@ -300,23 +300,24 @@
 /**
  *	Get current simd extension prefix.
  */
-#ifdef HPM_USE_SINGLE_LIBRARY
+#if defined(HPM_USE_SINGLE_LIBRARY)
+
 	#if defined(__AVX2__)
-		#define HPM_INTERNAL(func)	fimp##func##_AVX2
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX2
 	#elif defined(__AVX__)
-		#define HPM_INTERNAL(func)	fimp##func##_AVX
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX
 	#elif defined(__SSE42__)
-		#define HPM_INTERNAL(func)	fimp##func##_SSE42
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE42
 	#elif defined(__SSE41__)
-		#define HPM_INTERNAL(func)	fimp##func##_SSE41
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE41
 	#elif defined(__SSE3__)
-		#define HPM_INTERNAL(func)	fimp##func##_SSE3
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE3
 	#elif defined(__SSE2__)
-		#define HPM_INTERNAL(func)	fimp##func##_SSE2
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE2
 	#elif defined(__SSE__)
-		#define HPM_INTERNAL(func)	fimp##func##_SSE
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE
 	#else
-		#define HPM_INTERNAL(func)	fimp##func##_NOSIMD
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_NOSIMD
 	#endif
 #endif
 
@@ -326,7 +327,7 @@
  */
 #ifdef HPM_USE_SINGLE_LIBRARY
 	#define HPM_LOCALSYMBOL ""
-	#define HPM_FUNCSYMBOL(func)	HPM_INTERNAL(func)
+	#define HPM_FUNCSYMBOL(func)	HPM_INTERNAL_FUNCSYM(func)
 #else
 	#define HPM_LOCALSYMBOL	""											/*	Namespace for local symbol. Use for creating single library file.	*/
 	#define HPM_FUNCSYMBOL(func)	fimp##func
