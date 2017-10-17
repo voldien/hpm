@@ -322,8 +322,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
  *	Create rotation matrix from three bias vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
-		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
-		const hpmvec4f* yaxis, const hpmvec4f* zaxis);
+		hpmvec4x4f_t mat, const hpmvec4f* __restrict__ xaxis,
+		const hpmvec4f* __restrict__ yaxis, const hpmvec4f* __restrict__ zaxis);
 
 /**
  *	Construct translation matrix and multiply

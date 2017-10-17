@@ -341,7 +341,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
  *	@Return
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
-		const hpmvec3f* rarg);
+        const hpmvec3f* rarg);
 
 /**
  *	Compute length of vector.
