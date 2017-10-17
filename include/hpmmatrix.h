@@ -230,11 +230,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
 /**
  *	Construct translation matrix.
  *
- *	\x
+ *	\x position in x axis.
  *
- *	\y
+ *	\y position in y axis.
  *
- *	\z
+ *	\z position in z axis.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
@@ -322,8 +322,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
  *	Create rotation matrix from three bias vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
-		hpmvec4x4f_t mat, const hpmvec4f* xaxis,
-		const hpmvec4f* yaxis, const hpmvec4f* zaxis);
+		hpmvec4x4f_t mat, const hpmvec4f* __restrict__ xaxis,
+		const hpmvec4f* __restrict__ yaxis, const hpmvec4f* __restrict__ zaxis);
 
 /**
  *	Construct translation matrix and multiply
@@ -338,7 +338,12 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_translationfv,
 		hpmvec4x4f_t mat, const hpmvec4f* translation);
 
 /**
- *	Multiply mat by translation matrix.
+ *	Multiply mat by scalar matrix.
+ *	mat = mat * scale
+ *
+ *	\mat
+ *
+ *	\scale
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_scalefv,
@@ -378,11 +383,16 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationzf,
 		hpmvec4x4f_t mat, float zradian);
 
 /**
+ *	Multiply quaternion rotation matrix.
+ *	mat = mat * fquat;
  *
- *	\mat
+ *	\mat 4x4 matrix.
+ *
+ *	\fquat normalized quaternion.
+ *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv,
-		hpmvec4x4f_t mat, const hpmquatf* f_quat);
+		hpmvec4x4f_t mat, const hpmquatf* fquat);
 
 /**
  *	Construct projection matrix.

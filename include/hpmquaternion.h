@@ -68,8 +68,6 @@ typedef union{
 #define hpm_quat_setyf(hpm_vec, y) (hpm_vec[HPM_QUAT_Y] = y)
 #define hpm_quat_setzf(hpm_vec, y) (hpm_vec[HPM_QUAT_Z] = y)
 
-
-
 /**
  *	Copy quaternion.
  *
@@ -114,10 +112,12 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
 		const hpmvec3f* rarg, hpmquatf* out);
 
-
 /**
  *	Multiply quaternion with vector.
  *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
@@ -125,6 +125,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
 
 /**
  *	Compute direction of quaternion.
+ *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg,

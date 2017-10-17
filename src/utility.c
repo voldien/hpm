@@ -23,7 +23,7 @@ HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
 	hpm_vec3_crossproductfv(&xaxis, &xaxis, &yaxis);
 
 	/*	Create orientation matrix.	*/
-	hpm_mat4x4_rotationAxisfv(orientation, xaxis, yaxis, zaxis);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationAxisfv)(orientation, &xaxis, &yaxis, &zaxis);
 
 	/*	Create transformation matrix.	.	*/
 	hpm_vec4_negatefv(&eye);
