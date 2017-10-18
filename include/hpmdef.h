@@ -302,19 +302,19 @@
  */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 
-	#if defined(__AVX2__)
+	#if defined(HPM_AVX2_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX2
-	#elif defined(__AVX__)
+	#elif defined(HPM_AVX_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX
-	#elif defined(__SSE42__)
+	#elif defined(HPM_SSE42_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE42
-	#elif defined(__SSE41__)
+	#elif defined(HPM_SSE41_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE41
-	#elif defined(__SSE3__)
+	#elif defined(HPM_SSE3_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE3
-	#elif defined(__SSE2__)
+	#elif defined(HPM_SSE2_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE2
-	#elif defined(__SSE__)
+	#elif defined(HPM_SSE_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE
 	#else
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_NOSIMD
