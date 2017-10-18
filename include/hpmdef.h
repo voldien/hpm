@@ -297,34 +297,82 @@
 #define HPM_STR(x) HPM_STR_HELPER(x)								/*	Convert input to a double quoate string.	*/
 #define HPM_TEXT(quote) quote										/*	*/
 
-#define HPM_FUNCSYMBOLNAME(func) fimp##func							/*	Declare function internal symbol name.	*/
-#define HPM_FUNCTYPE(func) func##_t									/*	Declare function data type.	*/
-#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func				/*	Declare function pointer.	*/
-#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOLNAME(func)			/*	Call function by the declare pointer name.	*/
+/**
+ *	Get current simd extension prefix.
+ */
+#if defined(HPM_USE_SINGLE_LIBRARY)
+
+	#if defined(HPM_AVX2_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX2
+	#elif defined(HPM_AVX_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX
+	#elif defined(HPM_SSE42_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE42
+	#elif defined(HPM_SSE41_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE41
+	#elif defined(HPM_SSE3_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE3
+	#elif defined(HPM_SSE2_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE2
+	#elif defined(HPM_SSE_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE
+	#else
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_NOSIMD
+	#endif
+#endif
+
+
+/**
+ *
+ */
+#ifdef HPM_USE_SINGLE_LIBRARY
+	#define HPM_LOCALSYMBOL ""
+	#define HPM_FUNCSYMBOL(func)	HPM_INTERNAL_FUNCSYM(func)
+#else
+	#define HPM_LOCALSYMBOL	""											/*	Namespace for local symbol. Use for creating single library file.	*/
+	#define HPM_FUNCSYMBOL(func)	fimp##func
+#endif
+#define HPM_DEFFUNCSYMBOL(func)	fimp##func
+#define HPM_FUNCTYPE(func) func##_t										/*	Declare function data type.	*/
+#define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func					/*	Declare function pointer.	*/
+#define HPM_CALLLOCALFUNC(func) HPM_FUNCSYMBOL(func)					/*	Call function by the declare pointer name.	*/
 
 /**
  *	Implementation macro.
  */
-#define HPM_FLOATIMP
+#define HPM_FLOATIMP			/*	Float implementation. */
 /*#define HPM_DOUBLETIMP	*/
 
 
 /**
  *	Internal.
+ *	Responsible for precompiling header
+ *	and declare function data type as well
+ *	for declaring and defining function variable.
  */
 #if defined(HPM_INTERNAL)
-#define HPM_EXPORT(ret, callback, func, ...)						\
+
+/**
+ *
+ */
+#if defined(HPM_ENTRY)
+	#define HPM_DEFINEFUNC(func) HPM_FUNCPOINTER(func) = NULL
+#else
+	#define HPM_DEFINEFUNC(func)
+#endif
+
+#define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func);										\
-		HPM_FUNCPOINTER(func) = NULL										\
+		HPM_DEFINEFUNC(func)												\
 
 
-#elif defined(HPM_INTERNAL_IMP)	/**/
-#define HPM_EXPORT(ret, callback, func, ...)						\
-		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__);		\
+#elif defined(HPM_INTERNAL_IMP)	/*	*/
+#define HPM_EXPORT(ret, callback, func, ...)										\
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 					\
+		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);		\
 
-#else	/**/
+#else	/*	*/
 #define HPM_EXPORT(ret, callback, func, ...)								\
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
 		extern HPM_FUNCPOINTER(func)										\
@@ -338,8 +386,7 @@
  *	definining the function.
  */
 #define HPM_IMP(ret, func, ...)					\
-ret HPM_FUNCSYMBOLNAME(func)(__VA_ARGS__)		\
-
+ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 
 
 /**

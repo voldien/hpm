@@ -219,7 +219,6 @@ HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[2], zaxis);
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[3], &row3);
 
-
 	/*
 	hpmvec4f orientation = {
 			{xaxis[0], yaxis[0], zaxis[0], 0 },

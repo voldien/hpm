@@ -110,7 +110,7 @@ extern HPMDECLSPEC unsigned int HPMAPIENTRY hpm_get_simd(void);
  *
  *	@Return func pointer to the function. if NULL then the cfunctionName was valid.
  */
-extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
+extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName, unsigned int simd);
 
 /**
  *	Get hpm version.

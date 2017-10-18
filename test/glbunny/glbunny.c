@@ -4,12 +4,8 @@
 #include<getopt.h>
 #include<unistd.h>
 #include<SDL2/SDL.h>
-#ifdef HPM_WINDOWS	/*	This is done because Windows supports only OpenGL1.1 natively so yeah....*/
-	#include<GL/glew.h>
-#else
-	#include<GL/gl.h>
-	#include<GL/glext.h>
-#endif
+#include<GL/glew.h>
+
 
 #define BUNNY_IMPLEMENTATION
 #include"Bunny.h"
@@ -21,7 +17,7 @@ int g_fullscreen = 0;
 /**
  *  Vertex shader.
  */
-const char* vertexpolygone = ""
+const char* gc_vertexpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
 "layout(location = 0) in vec3 vertex;\n"
@@ -51,7 +47,7 @@ const char* vertexpolygone = ""
 /**
  *  Fragment shader.
  */
-const char* fragmentpolygone = ""
+const char* gc_fragmentpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
 "layout(location = 0) out vec4 fragColor;\n"

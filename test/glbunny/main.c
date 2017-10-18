@@ -3,13 +3,9 @@
 #include<assert.h>
 #include<getopt.h>
 #include<SDL2/SDL.h>
-#ifdef HPM_WINDOWS	/*	This is done because Windows supports only OpenGL1.1 natively so yeah....*/
-	#include<GL/glew.h>
-#else
-	#include<GL/gl.h>
-	#include<GL/glext.h>
-#endif
+#include<GL/glew.h>
 
+/*	TODO relocate.	*/
 #include"Bunny.h"
 
 int main(int argc, const char** argv){
@@ -142,9 +138,10 @@ int main(int argc, const char** argv){
 	}
 
 	/*	Initialize glslview.	*/
-#ifdef HPM_WINDOWS
-
-#endif
+	if(glewInit() != GLEW_OK){
+		fprintf(stderr, "Failed init glew.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	/*	Set OpenGL state.	*/
 	SDL_GL_SetSwapInterval(0);
@@ -167,7 +164,7 @@ int main(int argc, const char** argv){
 	vao = createBunny(&numvertices, &numindices);
 
 	/*	Create shader.	*/
-	prog = createShader(vertexpolygone, fragmentpolygone);
+	prog = createShader(gc_vertexpolygone, gc_fragmentpolygone);
 	if(prog < 0){
 		fprintf(stderr, "Failed create shader.\n");
 		status = EXIT_FAILURE;
