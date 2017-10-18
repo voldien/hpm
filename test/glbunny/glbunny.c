@@ -4,12 +4,8 @@
 #include<getopt.h>
 #include<unistd.h>
 #include<SDL2/SDL.h>
-#ifdef HPM_WINDOWS	/*	This is done because Windows supports only OpenGL1.1 natively so yeah....*/
-	#include<GL/glew.h>
-#else
-	#include<GL/gl.h>
-	#include<GL/glext.h>
-#endif
+#include<GL/glew.h>
+
 
 #define BUNNY_IMPLEMENTATION
 #include"Bunny.h"

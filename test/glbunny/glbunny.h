@@ -18,9 +18,9 @@
 */
 #ifndef _HPM_GL_BUNNY_H_
 #define _HPM_GL_BUNNY_H_ 1
+#include<hpm.h>
 #include<stdio.h>
-#include<GL/gl.h>
-
+#include<GL/glew.h>
 /**
  *	Global constants.
  */
