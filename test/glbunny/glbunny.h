@@ -24,8 +24,8 @@
 /**
  *	Global constants.
  */
-extern const char* vertexpolygone;      /*	Vertex */
-extern const char* fragmentpolygone;    /*	Fragment.	*/
+extern const char* gc_vertexpolygone;      /*	Vertex */
+extern const char* gc_fragmentpolygone;    /*	Fragment.	*/
 
 /**
  *	Global variable.

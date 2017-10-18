@@ -164,7 +164,7 @@ int main(int argc, const char** argv){
 	vao = createBunny(&numvertices, &numindices);
 
 	/*	Create shader.	*/
-	prog = createShader(vertexpolygone, fragmentpolygone);
+	prog = createShader(gc_vertexpolygone, gc_fragmentpolygone);
 	if(prog < 0){
 		fprintf(stderr, "Failed create shader.\n");
 		status = EXIT_FAILURE;

@@ -17,7 +17,7 @@ int g_fullscreen = 0;
 /**
  *  Vertex shader.
  */
-const char* vertexpolygone = ""
+const char* gc_vertexpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
 "layout(location = 0) in vec3 vertex;\n"
@@ -47,7 +47,7 @@ const char* vertexpolygone = ""
 /**
  *  Fragment shader.
  */
-const char* fragmentpolygone = ""
+const char* gc_fragmentpolygone = ""
 "\n"
 "#if __VERSION__ >= 330\n"
 "layout(location = 0) out vec4 fragColor;\n"
