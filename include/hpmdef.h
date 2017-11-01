@@ -341,7 +341,7 @@
  *	Implementation macro.
  */
 #define HPM_FLOATIMP			/*	Float implementation. */
-/*#define HPM_DOUBLETIMP	*/
+/*#define HPM_DOUBLETIMP	*/	/*	Double implementation.	*/
 
 
 /**
