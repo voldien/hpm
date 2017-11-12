@@ -129,20 +129,20 @@ GLint createShader(const char* __restrict__ vsource,
 	prog = glCreateProgram();
 
 	/*  Create vertex shader object.    */
-	vs = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vs, sourcecount, vsources, NULL);
-	glCompileShader(vs);
+	vs = glCreateShader(GL_VERTEX_SHADER_ARB);
+	glShaderSourceARB(vs, sourcecount, vsources, NULL);
+	glCompileShaderARB(vs);
 	glAttachShader(prog, vs);
 
 	/*  Create fragment shader object.  */
-	fs = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fs, sourcecount, fsources, NULL);
-	glCompileShader(fs);
+	fs = glCreateShader(GL_FRAGMENT_SHADER_ARB);
+	glShaderSourceARB(fs, sourcecount, fsources, NULL);
+	glCompileShaderARB(fs);
 	glAttachShader(prog, fs);
 
 	/*  Link and validate shader program.   */
-	glLinkProgram(prog);
-	glValidateProgram(prog);
+	glLinkProgramARB(prog);
+	glValidateProgramARB(prog);
 	glGetProgramiv(prog, GL_LINK_STATUS, &lstatus);
 	glGetProgramiv(prog, GL_VALIDATE_STATUS, &vstatus);
 
@@ -156,10 +156,14 @@ GLint createShader(const char* __restrict__ vsource,
 
 	/*	Release shader data.	*/
 	/*	detach shader object and release their resources.	*/
-	glDetachShader(prog, vs);
-	glDetachShader(prog);
-	glDeleteShader(vs);
-	glDeleteShader(fs);
+	if(glIsShader(vs)){
+		glDetachShader(prog, vs);
+		glDeleteShader(vs);
+	}
+	if(glIsShader(fs)){
+		glDetachShader(prog, fs);
+		glDeleteShader(fs);
+	}
 	return prog;
 }
 
@@ -182,21 +186,21 @@ GLuint createBunny(unsigned int* __restrict__ numvertices,
 	*numindices = BUNNY_NUM_INDICES;
 	*numvertices = BUNNY_NUM_VERTS;
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_vertices, GL_STATIC_DRAW);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_vertices, GL_STATIC_DRAW_ARB);
 
 	/*	*/
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices, GL_STATIC_DRAW);
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo);
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices, GL_STATIC_DRAW_ARB);
 
-	glEnableVertexAttribArray(0);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 12, NULL);
+	glEnableVertexAttribArrayARB(0);
+	glVertexAttribPointerARB(0, 3, GL_FLOAT, GL_FALSE, 12, NULL);
 
-	glBindBuffer(GL_ARRAY_BUFFER, nbo);
-	glBufferData(GL_ARRAY_BUFFER, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_normals, GL_STATIC_DRAW);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, nbo);
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_normals, GL_STATIC_DRAW_ARB);
 
-	glEnableVertexAttribArray(1);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 12, NULL);
+	glEnableVertexAttribArrayARB(1);
+	glVertexAttribPointerARB(1, 3, GL_FLOAT, GL_FALSE, 12, NULL);
 
 	return vao;
 }

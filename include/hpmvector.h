@@ -24,15 +24,13 @@
 extern "C"{
 #endif
 
-
 /**
- *	Data types.
+ *	Primitive data types.
  */
 typedef float hpmvecf;          /*	*/
 typedef double hpmvecd;         /*	*/
 typedef long long hpmveci;      /*	*/
 typedef int hpmboolean;         /*	*/
-
 
 /**
  *	Single component vector data type.
