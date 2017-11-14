@@ -23,8 +23,8 @@
 #include<string.h>
 #include<stdint.h>
 #include<time.h>
-#include<unistd.h>
 #include<sys/time.h>
+#include<unistd.h>
 #include<getopt.h>
 #include<assert.h>
 
@@ -33,12 +33,11 @@ extern int g_type;
 extern int g_precision;
 
 /**
- *	Global
+ *	Global variables.
  */
 int g_SIMD = (~0x0);
 int g_type = eAll;
 int g_precision = eFloat;
-
 
 void readArgument(int argc, char** argv){
 
@@ -110,7 +109,6 @@ void readArgument(int argc, char** argv){
 		default:
 			break;
 		}
-
 	}
 }
 
@@ -129,7 +127,7 @@ int main(int argc, char** argv){
 		}
 	}
 
-	printf("End of the test.\n");
+	/*	End of test.	*/
 	return EXIT_SUCCESS;
 }
 
@@ -191,7 +189,7 @@ void htpBenchmarkPerformanceTest(void){
 	uint64_t ttime = 0;			/*	*/
 	uint64_t ttotaltime = 0;	/*	*/
 
-	if(g_precision == eFloat){
+	if(g_precision & eFloat){
 
 		/*	*/
 		if( g_type & eMatrix ){
@@ -263,6 +261,11 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_minfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_minfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_fast_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_fast_sqrtfv);
+
 		}
 
 		if(g_type & eVector){
@@ -297,6 +300,9 @@ void htpBenchmarkPerformanceTest(void){
 			printf("Integrity check.\n");
 			htpIntegritySpCheck();
 		}
+	}
+	else if(g_precision & eDouble){
+
 	}
 
 	printf("\n\n");

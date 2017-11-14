@@ -158,7 +158,10 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	hpm_vec4_negatefv = hpm_get_symbolfuncp(hpm_vec4_negatefv);
 
-	/**/
+	hpm_vec4_max_compfv = hpm_get_symbolfuncp(hpm_vec4_max_compfv);
+	hpm_vec4_min_compfv = hpm_get_symbolfuncp(hpm_vec4_min_compfv);
+
+	/*	*/
 	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 
@@ -171,6 +174,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_normalizefv = hpm_get_symbolfuncp(hpm_vec3_normalizefv);
 	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
+	hpm_vec3_projfv = hpm_get_symbolfuncp(hpm_vec3_projfv);
 
 	/*	Quaternion	*/
 	hpm_quat_setf = hpm_get_symbolfuncp(hpm_quat_setf);

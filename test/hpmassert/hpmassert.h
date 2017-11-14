@@ -99,12 +99,16 @@ HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_orthfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_unprojf);
 
 /**
- * Math benchmark function declaration
+ * Math benchmark function declaration.
  */
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_maxfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec8_maxfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_minfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec8_minfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_vec4_sqrtfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_vec8_sqrtfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_vec4_fast_sqrtfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_vec8_fast_sqrtfv);
 
 /**
  *	Compare logic benchmark function declaration.
