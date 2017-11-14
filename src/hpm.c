@@ -158,7 +158,10 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	hpm_vec4_negatefv = hpm_get_symbolfuncp(hpm_vec4_negatefv);
 
-	/**/
+	hpm_vec4_max_compfv = hpm_get_symbolfuncp(hpm_vec4_max_compfv);
+	hpm_vec4_min_compfv = hpm_get_symbolfuncp(hpm_vec4_min_compfv);
+
+	/*	*/
 	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 

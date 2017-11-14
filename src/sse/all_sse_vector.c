@@ -70,6 +70,24 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 #endif
 }
 
+HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
+
+	hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) ); /*	{ x , y, z , w} => { y, x, w, z }	*/
+	hpmvec4f cevmax = _mm_max_ps(*vec, cev);	/*	{	}*/
+
+	return _mm_max_ss(cevmax,_mm_shuffle_ps(cevmax, cevmax, _MM_SHUFFLE(0, 1, 3, 2) ));
+}
+
+HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
+
+	hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) ); /*	{ x , y, z , w} => { y, x, w, z }	*/
+	hpmvec4f cevmax = _mm_min_ps(*vec, cev);	/*	{	}*/
+
+	return _mm_min_ss(cevmax,_mm_shuffle_ps(cevmax, cevmax, _MM_SHUFFLE(0, 1, 3, 2) ));
+}
+
+
+
 
 HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* v1, const hpmvec3f* v2, hpmvec3f* out){
 
