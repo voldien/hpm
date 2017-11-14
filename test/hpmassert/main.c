@@ -23,8 +23,8 @@
 #include<string.h>
 #include<stdint.h>
 #include<time.h>
-#include<unistd.h>
 #include<sys/time.h>
+#include<unistd.h>
 #include<getopt.h>
 #include<assert.h>
 
@@ -33,12 +33,11 @@ extern int g_type;
 extern int g_precision;
 
 /**
- *	Global
+ *	Global variables.
  */
 int g_SIMD = (~0x0);
 int g_type = eAll;
 int g_precision = eFloat;
-
 
 void readArgument(int argc, char** argv){
 
@@ -110,7 +109,6 @@ void readArgument(int argc, char** argv){
 		default:
 			break;
 		}
-
 	}
 }
 
@@ -129,7 +127,7 @@ int main(int argc, char** argv){
 		}
 	}
 
-	printf("End of the test.\n");
+	/*	End of test.	*/
 	return EXIT_SUCCESS;
 }
 
