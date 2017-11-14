@@ -189,7 +189,7 @@ void htpBenchmarkPerformanceTest(void){
 	uint64_t ttime = 0;			/*	*/
 	uint64_t ttotaltime = 0;	/*	*/
 
-	if(g_precision == eFloat){
+	if(g_precision & eFloat){
 
 		/*	*/
 		if( g_type & eMatrix ){
@@ -261,6 +261,11 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_minfv);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_minfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_fast_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_fast_sqrtfv);
+
 		}
 
 		if(g_type & eVector){
@@ -295,6 +300,9 @@ void htpBenchmarkPerformanceTest(void){
 			printf("Integrity check.\n");
 			htpIntegritySpCheck();
 		}
+	}
+	else if(g_precision & eDouble){
+
 	}
 
 	printf("\n\n");
