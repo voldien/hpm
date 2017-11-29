@@ -179,9 +179,9 @@ GLuint createBunny(unsigned int* __restrict__ numvertices,
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
 
-	glGenBuffers(1, &vbo);
-	glGenBuffers(1, &nbo);
-	glGenBuffers(1, &ibo);
+	glGenBuffersARB(1, &vbo);
+	glGenBuffersARB(1, &nbo);
+	glGenBuffersARB(1, &ibo);
 
 	*numindices = BUNNY_NUM_INDICES;
 	*numvertices = BUNNY_NUM_VERTS;
@@ -232,7 +232,7 @@ void readargument(int argc, const char** argv){
 	while ( ( c = getopt_long(argc, ( char *const *)argv, shortopt, longoption, &indexopt)) != EOF){
 		switch(c){
 		case 'v':
-			printf("version.\n");
+			printf("version %s.\n", hpm_version());
 			exit(EXIT_SUCCESS);
 			break;
 		case 's':

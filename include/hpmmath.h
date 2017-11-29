@@ -22,7 +22,6 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
-
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
