@@ -166,8 +166,17 @@ void htpSimdExecute(unsigned int simd){
 	hpm_release();
 }
 
+long int hptGetTimeResolution(void){
+#if defined(HPM_UNIX)
+	struct timespec spec;
+	clock_getres(1, &spec);	/*	CLOCK_MONOTONIC	*/
+	return (1E9 / spec.tv_nsec);
+#else
+	return 1E9;
+#endif
+}
 
-long int hptGetTimeNano(void){
+long int hptGetTime(void){
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
     return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1000;
