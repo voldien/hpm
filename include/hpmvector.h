@@ -42,16 +42,28 @@ typedef int hpmveciv HPM_VECTORALIGN(4);        /*	*/
 /**
  *	Two component vector data type.
  */
-typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);	/*	*/
-typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);	/*	*/
-typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);	/*	*/
+typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);    /*	*/
+typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);    /*	*/
+typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);   /*	*/
+typedef struct hpm_vec2uf_t{
+	union{
+		hpmvec2f v;
+		struct{hpmvecf x, y;};
+	};
+};
 
 /**
- *
+ *	SSE 128 bit data types.
  */
-typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);	/*	*/
+typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);   /*	*/
+typedef struct hpm_vec3uf_t{
+	union{
+		hpmvec3f v;
+		struct{hpmvecf x, y, z;};
+	};
+};
 
 
 /**
@@ -65,6 +77,7 @@ typedef struct hpm_vec4uf_t{
 		struct{hpmvecf x, y, z, w;};
 	};
 };
+
 /**
  * 	Internal SSE 128 bit  data types
  *	for implementing the intrinsics.
