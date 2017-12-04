@@ -24,15 +24,13 @@
 extern "C"{
 #endif
 
-
 /**
- *	Data types.
+ *	Primitive data types.
  */
 typedef float hpmvecf;          /*	*/
 typedef double hpmvecd;         /*	*/
 typedef long long hpmveci;      /*	*/
 typedef int hpmboolean;         /*	*/
-
 
 /**
  *	Single component vector data type.
@@ -74,8 +72,6 @@ typedef struct hpm_vec4uf_t{
 typedef hpmveci hpmv4si HPM_VECTORALIGNI(16);
 typedef hpmvecf hpmv4sf HPM_VECTORALIGNI(16);
 
-
-
 /**
  * 	AVX	256 bits data types.
  */
@@ -100,8 +96,6 @@ typedef struct hpmvec4du_t{
 		hpmvec4d d;
 	};
 }hpmvec4du;
-
-
 
 /**
  *	AVX 512 bits data types.
@@ -135,7 +129,6 @@ typedef struct hpmvec8du_t{
 #define hpm_vec4_setwf(hpm_vec, w) (hpm_vec[3] = w)
 
 
-
 /**
  *	Copy vector4 source to destination.
  *	destination = source
@@ -150,7 +143,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
 		const hpmvec4f* __restrict__ source);
 
 /**
- *	set vector.
+ *	Set vector by each component individually.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
@@ -304,12 +297,12 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
 /**
  *	Get element in vector with greatest value.
  */
-HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
+HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
 
 /**
  *	Get element in vector with minimum value.
  */
-HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
+HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
 
 
 
@@ -341,7 +334,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
  *	@Return
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
-		const hpmvec3f* rarg);
+        const hpmvec3f* rarg);
 
 /**
  *	Compute length of vector.

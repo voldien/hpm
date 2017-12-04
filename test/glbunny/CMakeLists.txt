@@ -33,7 +33,7 @@ FILE(GLOB bunnysrc ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
 
 # Executable OpenGL hpm benchmark.
 ADD_EXECUTABLE(hpmglbunny ${bunnysrc})
-TARGET_LINK_LIBRARIES(hpmglbunny -lGL -lSDL2 hpm)
+TARGET_LINK_LIBRARIES(hpmglbunny -lGL -lSDL2 hpm -lGLEW)
 SET_TARGET_PROPERTIES(hpmglbunny PROPERTIES COMPILE_FLAGS "" )
 
 # Install target.

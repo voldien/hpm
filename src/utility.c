@@ -11,25 +11,25 @@ HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
 	hpmvec4x4f_t orientation;
 
 	/*	Create Z axis vector.	*/
-	hpm_vec4_copyfv(&zaxis, eye);
-	hpm_vec4_subtractionfv(&zaxis, position);
-	hpm_vec3_normalizefv(&zaxis);
+	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&zaxis, eye);
+	HPM_CALLLOCALFUNC(hpm_vec4_subtractionfv)(&zaxis, position);
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&zaxis);
 
 	/*	Create X axis vector.	*/
-	hpm_vec3_crossproductfv(up, &zaxis, &xaxis);
-	hpm_vec3_normalizefv(&xaxis);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(up, &zaxis, &xaxis);
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&xaxis);
 
 	/*	Create y axis vector.	*/
-	hpm_vec3_crossproductfv(&xaxis, &xaxis, &yaxis);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&xaxis, &xaxis, &yaxis);
 
 	/*	Create orientation matrix.	*/
-	hpm_mat4x4_rotationAxisfv(orientation, xaxis, yaxis, zaxis);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationAxisfv)(orientation, &xaxis, &yaxis, &zaxis);
 
 	/*	Create transformation matrix.	.	*/
-	hpm_vec4_negatefv(&eye);
-	hpm_mat4x4_translationfv(translation, &eye);
+	HPM_CALLLOCALFUNC(hpm_vec4_negatefv)(&eye);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(translation, &eye);
 
 	/*	Create final view oritention matrix.	*/
-	hpm_mat4x4_multiply_mat4x4fv(orientation, translation, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(orientation, translation, mat);
 
 }

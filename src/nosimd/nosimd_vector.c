@@ -1,4 +1,5 @@
 #include"hpmvector.h"
+#include<float.h>
 #include<math.h>
 
 HPM_IMP( float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
@@ -9,11 +10,35 @@ HPM_IMP( float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	return sqrtf( (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3] );
 }
 
+HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
+	int i;
+	const int nelements = sizeof(vec) / sizeof(vec[0]);
+	hpmvecf max = FLT_MAX;
+
+	for(i = 0; i < nelements; i++){
+		if(max < (*vec)[i])
+			max = (*vec)[i];
+	}
+
+	return max;
+}
+
+HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
+	int i;
+	const int nelements = sizeof(vec) / sizeof(vec[0]);
+	hpmvecf min = FLT_MIN;
+
+	for(i = 0; i < nelements; i++){
+		if(min > (*vec)[i])
+			min = (*vec)[i];
+	}
+
+	return min;
+}
 
 HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 	return (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3] ;
 }
-
 
 HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* v1, const hpmvec3f* v2, hpmvec3f* out){
 

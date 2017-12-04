@@ -76,41 +76,4 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv, const hpmvec4x4f_t a,
 		const hpmvec4x4f_t b);
 
-/**
- *	Determine if a and b is equal.
- *
- *	@Return return a non 0 value for each element of the vector.
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_eqfv, const hpmvec2f* __restrict__ a,
-		const hpmvec2f* __restrict__ b, hpmvec2f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec2_eqfv, const hpmvec2f* __restrict__ a,
-		const hpmvec2f* __restrict__ b);
-
-/**
- *	Determine if a and b is not equal.
- *
- *	@Return
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_neqfv,
-		const hpmvec2f* __restrict__ a, const hpmvec2f* __restrict__ b,
-		hpmvec2f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec2_neqfv, const hpmvec2f* __restrict__ a,
-		const hpmvec2f* __restrict__ b);
-
-/**
- *	Determine if a is greater than b.
- *
- *	@Return
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_gfv, const hpmvec2f* __restrict__ a,
-		const hpmvec2f* __restrict__ b, hpmvec2f* __restrict__ res);
-/**
- *	Determine if a is less than b.
- *
- *	@Return
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec2_com_lfv, const hpmvec2f* __restrict__ a,
-		const hpmvec2f* __restrict__ b, hpmvec2f* __restrict__ res);
-
-
 #endif

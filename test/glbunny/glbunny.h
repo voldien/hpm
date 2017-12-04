@@ -18,14 +18,14 @@
 */
 #ifndef _HPM_GL_BUNNY_H_
 #define _HPM_GL_BUNNY_H_ 1
+#include<hpm.h>
 #include<stdio.h>
-#include<GL/gl.h>
-
+#include<GL/glew.h>
 /**
  *	Global constants.
  */
-extern const char* vertexpolygone;      /*	Vertex */
-extern const char* fragmentpolygone;    /*	Fragment.	*/
+extern const char* gc_vertexpolygone;      /*	Vertex */
+extern const char* gc_fragmentpolygone;    /*	Fragment.	*/
 
 /**
  *	Global variable.

@@ -3,7 +3,9 @@
 #include"hpmmatrix.h"
 #include"hpmvector.h"
 #include"hpmquaternion.h"
-#include <dlfcn.h>
+#include"hpmlogic.h"
+#include"hpmutil.h"
+#include<dlfcn.h>
 #include<assert.h>
 
 
@@ -17,8 +19,7 @@ unsigned int g_simd;
  *	Macro for getting function pointer by variable name of
  *	the function pointer.
  */
-#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_FUNCSYMBOLNAME( symbol )))
-
+#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
 	int closestatus;
@@ -77,14 +78,18 @@ int hpm_init(unsigned int simd){
 	}
 
 	/*	load library.	*/
+#ifndef HPM_USE_SINGLE_LIBRARY
 	if(libhandle == NULL){
 		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
 	}else{
 		/*	if library has only been initialized.	*/
 		return 0;
 	}
+#else
+	libhandle = dlopen(NULL, RTLD_LAZY);
+#endif
 
-	/*	error checks.	*/
+	/*	Error checks.	*/
 	if(libhandle == NULL){
 		fprintf(stderr, "%s\n", dlerror());
 		goto error;
@@ -153,7 +158,10 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	hpm_vec4_negatefv = hpm_get_symbolfuncp(hpm_vec4_negatefv);
 
-	/**/
+	hpm_vec4_max_compfv = hpm_get_symbolfuncp(hpm_vec4_max_compfv);
+	hpm_vec4_min_compfv = hpm_get_symbolfuncp(hpm_vec4_min_compfv);
+
+	/*	*/
 	hpm_vec4_lerpfv = hpm_get_symbolfuncp(hpm_vec4_lerpfv);
 	hpm_vec4_slerpfv = hpm_get_symbolfuncp(hpm_vec4_slerpfv);
 
@@ -166,6 +174,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_normalizefv = hpm_get_symbolfuncp(hpm_vec3_normalizefv);
 	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
+	hpm_vec3_projfv = hpm_get_symbolfuncp(hpm_vec3_projfv);
 
 	/*	Quaternion	*/
 	hpm_quat_setf = hpm_get_symbolfuncp(hpm_quat_setf);
@@ -194,7 +203,7 @@ int hpm_init(unsigned int simd){
 	/*	*/
 	hpm_quat_axis_anglefv = hpm_get_symbolfuncp(hpm_quat_axis_anglefv);
 	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
-	hpm_quat_lookat = hpm_get_symbolfuncp(hpm_quat_lookat);
+	hpm_quat_lookatfv = hpm_get_symbolfuncp(hpm_quat_lookatfv);
 	/*	*/
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	/*	*/
@@ -205,13 +214,9 @@ int hpm_init(unsigned int simd){
 	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
 	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
 
-
-
-
 	/*	Math	*/
 	hpm_vec4_maxfv = hpm_get_symbolfuncp(hpm_vec4_maxfv);
 	hpm_vec8_maxfv = hpm_get_symbolfuncp(hpm_vec8_maxfv);
-
 	hpm_vec4_minfv = hpm_get_symbolfuncp(hpm_vec4_minfv);
 	hpm_vec8_minfv = hpm_get_symbolfuncp(hpm_vec8_minfv);
 
@@ -233,6 +238,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_com_gfv = hpm_get_symbolfuncp(hpm_vec4_com_gfv);
 	hpm_vec4_com_lfv = hpm_get_symbolfuncp(hpm_vec4_com_lfv);
 
+	/*	Utility.	*/
 	hpm_mat4_eqfv = hpm_get_symbolfuncp(hpm_mat4_eqfv);
 	hpm_mat4_neqfv = hpm_get_symbolfuncp(hpm_mat4_neqfv);
 
@@ -247,7 +253,7 @@ int hpm_init(unsigned int simd){
 	return ( libhandle != NULL) ;
 }
 
-/*	TODO Fix such that it gets independent from a single platform.	*/
+/*	TODO Fix later to make it platform indepdent.	*/
 int hpm_release(void){
 	int status = dlclose(libhandle);
 	if(status < 0 ){
@@ -266,10 +272,18 @@ unsigned int hpm_get_simd(void){
 	return g_simd;
 }
 
+void* hpm_get_address(const char* cfunctionName, unsigned int simd){
 
-void* hpm_get_address(const char* cfunctionName){
-	void* pfunc = dlsym(libhandle, cfunctionName);
+	void* pfunc;
 
+#if defined(HPM_USE_SINGLE_LIBRARY)
+	char buf[128];
+	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
+
+	pfunc = dlsym(libhandle, buf);
+#else
+	pfunc = dlsym(libhandle, cfunctionName);
+#endif
 	/*	*/
 	if(pfunc == NULL){
 		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
@@ -295,10 +309,10 @@ int hpm_supportcpufeat(unsigned int simd){
 
 	switch(simd){
 	case HPM_NOSIMD:
-		return 1;
+		return 1;	/*	Always supported.	*/
 	case HPM_MMX:
 		cpuid(cpuInfo, 1);
-		return 0;
+		return 0;	/*	Not supported in the library.	*/
 		return (cpuInfo[2] & bit_MMX);
 	case HPM_SSE:
 		cpuid(cpuInfo, 1);
@@ -351,7 +365,7 @@ static int log2MutExlusive32(unsigned int a){
 const char* hpm_get_simd_symbol(unsigned int SIMD){
 	static const char* gc_simd_symbols[] = {
 			"",
-			"nosimd",
+			"NOSIMD",
 			"MMX",
 			"SSE",
 			"SSE2",

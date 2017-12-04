@@ -22,7 +22,6 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
-
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
@@ -39,7 +38,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a,
 		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
-
 /**
  *	Compute min value of a and b.
  *	min = a < b ? a : b
@@ -53,23 +51,31 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a,
 
 /**
  *	Computer square root.
+ *
+ *	\arg
+ *
+ *	\out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ arg,
         hpmvec4f* __restrict__ out);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, hpmvec8f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ arg,
         hpmvec8f* __restrict__ out);
 
 /**
  *	Computer approximate square root.
+ *
+ *	\arg
+ *
+ *	\out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, hpmvec4f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ arg,
         hpmvec4f* __restrict__ out);
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, hpmvec8f* __restrict__ a,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ arg,
         hpmvec8f* __restrict__ out);
 
 /**
- *	Create random vector, where each component is from
- *	[0,1].
+ *	Create random vector, where each component
+ *	is within the following range [0,1].
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_randomfv, hpmvec4f* out);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_randomfv, hpmvec8f* out);

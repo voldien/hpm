@@ -1,10 +1,9 @@
 #include"hpmvector.h"
 #include<math.h>
 
-#include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
-#	elif defined(HPM_GNUC)
+#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #		include<x86intrin.h>
 #   endif
 
@@ -135,7 +134,7 @@ HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
 	hpmvec3f tmp2 = *rarg;
 	tmp1[3] = 0;
 	tmp2[3] = 0;
-	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1,&tmp2);
+	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1, &tmp2);
 }
 
 HPM_IMP( float, hpm_vec3_lengthfv, const hpmvec3f* arg){
@@ -162,9 +161,8 @@ HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* 
 	tmp2[3] = 0;
 
 	/*	*/
-	hpmvecf s = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1,&tmp1);
-	hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1,&tmp2);
+	hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp1);
+	hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp2);
 
-	*out = *b * s1 * s;
-
+	*out = *b * s1 * dotinv;
 }

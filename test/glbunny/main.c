@@ -3,13 +3,9 @@
 #include<assert.h>
 #include<getopt.h>
 #include<SDL2/SDL.h>
-#ifdef HPM_WINDOWS	/*	This is done because Windows supports only OpenGL1.1 natively so yeah....*/
-	#include<GL/glew.h>
-#else
-	#include<GL/gl.h>
-	#include<GL/glext.h>
-#endif
+#include<GL/glew.h>
 
+/*	TODO relocate.	*/
 #include"Bunny.h"
 
 int main(int argc, const char** argv){
@@ -65,7 +61,7 @@ int main(int argc, const char** argv){
 	/*	Print dependency library versions.*/
 	print_dependency_versions();
 
-	/*	*/
+	/*	Initialize hpm library.	*/
 	if( hpm_init(g_hpmflag) == 0 ){
 		fprintf(stderr, "Failed to initialize HPM, %x.\n", g_hpmflag);
 		return EXIT_FAILURE;
@@ -123,7 +119,6 @@ int main(int argc, const char** argv){
 		goto error;
 	}
 
-
 	/*	Create OpenGL display.	*/
 	SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &glflag);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, glflag | SDL_GL_CONTEXT_DEBUG_FLAG);
@@ -142,9 +137,10 @@ int main(int argc, const char** argv){
 	}
 
 	/*	Initialize glslview.	*/
-#ifdef HPM_WINDOWS
-
-#endif
+	if(glewInit() != GLEW_OK){
+		fprintf(stderr, "Failed init glew.\n");
+		exit(EXIT_FAILURE);
+	}
 
 	/*	Set OpenGL state.	*/
 	SDL_GL_SetSwapInterval(0);
@@ -167,7 +163,7 @@ int main(int argc, const char** argv){
 	vao = createBunny(&numvertices, &numindices);
 
 	/*	Create shader.	*/
-	prog = createShader(vertexpolygone, fragmentpolygone);
+	prog = createShader(gc_vertexpolygone, gc_fragmentpolygone);
 	if(prog < 0){
 		fprintf(stderr, "Failed create shader.\n");
 		status = EXIT_FAILURE;
@@ -338,7 +334,7 @@ int main(int argc, const char** argv){
 			}
 		}
 
-		/*	*/
+		/*	Display image.	*/
 		SDL_GL_SwapWindow(window);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
@@ -350,7 +346,7 @@ int main(int argc, const char** argv){
 
 	error:	/*	Cleanup.	*/
 
-	/*	Release matrix memory chunk.	*/
+	/*	Release matrice memory chunk.	*/
 	free(mvp);
 	free(model);
 	free(modelview);
@@ -359,15 +355,16 @@ int main(int argc, const char** argv){
 	/*	Release OpenGL Resources.	*/
 	if(window && glc){
 		glDeleteVertexArrays(1, &vao);
-		glDeleteBuffers(1, &vbo);
-		glDeleteBuffers(1, &ibo);
+		glDeleteBuffersARB(1, &vbo);
+		glDeleteBuffersARB(1, &ibo);
 		glDeleteProgram(prog);
 
-		/*	*/
+		/*	Release context and window.*/
 		SDL_GL_MakeCurrent(window, NULL);
 		SDL_GL_DeleteContext(glc);
 		SDL_DestroyWindow(window);
 	}
+
 	SDL_Quit();
 	hpm_release();
 
