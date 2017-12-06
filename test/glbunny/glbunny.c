@@ -12,7 +12,7 @@
 uint32_t g_hpmflag = HPM_SSE2;
 FILE* g_outputfd = NULL;
 int g_fullscreen = 0;
-
+int g_debug = 0;
 
 /**
  *  Vertex shader.
@@ -67,7 +67,9 @@ const char* gc_fragmentpolygone = ""
 "	#endif\n"
 "}\n";
 
-
+const char* get_glbunny_version(void){
+	return hpm_version();
+}
 
 unsigned int getGLSLVersion(void){
 
@@ -118,7 +120,7 @@ GLint createShader(const char* __restrict__ vsource,
 	int sourcecount = sizeof(vsources) / sizeof(vsources[0]);
 
 	/*  Get version string. */
-	sprintf(version, "#version %d\n", getGLSLVersion() );
+	sprintf(version, "#version %d %s \n", getGLSLVersion(), "");
 	vsources[0] = version;
 	fsources[0] = version;
 	/*  Assgin shader string.   */
@@ -202,6 +204,8 @@ GLuint createBunny(unsigned int* __restrict__ numvertices,
 	glEnableVertexAttribArrayARB(1);
 	glVertexAttribPointerARB(1, 3, GL_FLOAT, GL_FALSE, 12, NULL);
 
+	glBindVertexArray(0);
+
 	return vao;
 }
 
@@ -226,13 +230,13 @@ void readargument(int argc, const char** argv){
 
 	int c;
 	int indexopt;
-	const char* shortopt = "vVo:s:";
+	const char* shortopt = "vVdo:s:";
 
 	/*  Iterate through all argument.	*/
 	while ( ( c = getopt_long(argc, ( char *const *)argv, shortopt, longoption, &indexopt)) != EOF){
 		switch(c){
 		case 'v':
-			printf("version %s.\n", hpm_version());
+			printf("version %s.\n", get_glbunny_version());
 			exit(EXIT_SUCCESS);
 			break;
 		case 's':
@@ -261,6 +265,9 @@ void readargument(int argc, const char** argv){
 		case 'o':
 			if(optarg)
 				g_outputfd = fopen(optarg, "wb");
+			break;
+		case 'd':
+			g_debug = 1;
 			break;
 		default:
 			break;

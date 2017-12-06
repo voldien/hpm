@@ -48,18 +48,39 @@ extern unsigned int getGLSLVersion(void);
 extern int Log2MutExlusive32(unsigned int a);
 
 /**
- *	Create shader.
- *	@Return
+ *
+ */
+extern void enableGLDebug(void);
+
+/**
+ *	Create shader object from shader source
+ *	string.
+ *
+ *	@Return shader program unique id.
  */
 extern GLint createShader(const char* __restrict__ vsource,
         const char* __restrict__ fsource);
 
 /**
  *	Create bunny.
- *	@Return
+ *
+ *	@Return non-negative if succesfully.
  */
 extern GLuint createBunny(unsigned int* __restrict__ numvertices,
         unsigned int* __restrict__ numindices);
+
+/**
+ *	Create grid object.
+ *
+ *	@Return
+ */
+extern GLuint createGrid(unsigned int* __restrict__ numvertices,
+        unsigned int* __restrict__* numindices);
+/**
+ *	@Return
+ */
+extern GLuint createCube(unsigned int* __restrict__ nVertices,
+        unsigned int* __restrict__ nIndices);
 
 /**
  *	Print verbose information about the
