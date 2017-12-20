@@ -300,13 +300,12 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect,
 	mat[3] = row3;
 }
 
-/*	TODO improve later with computing some variable priopr.*/
 HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, float bottom, float top, float zNear, float zFar){
 	/**/
 	const hpmvec4f row0 = {2.0f/(right - left), 0.0f, 0.0f, 0.0f};
-	const hpmvec4f row1 = {0.0, 2.0f/(top - bottom), 0.0f, 0.0};
-	const hpmvec4f row2 = {0.0, 0.0f,-2.0f/(zFar - zNear), 0.0 };
-	const hpmvec4f row3 = {-(right + left)/(right - left), -(top + bottom)/(top - bottom), -(zFar + zNear)/(zFar - zNear), 1.0};
+	const hpmvec4f row1 = {0.0f, 2.0f/(top - bottom), 0.0f, 0.0f};
+	const hpmvec4f row2 = {0.0f, 0.0f,-2.0f/(zFar - zNear), 0.0f };
+	const hpmvec4f row3 = {-( (right + left)/(right - left)), -( (top + bottom)/(top - bottom) ), -( (zFar + zNear)/(zFar - zNear)), 1.0f};
 
 	/*	*/
 	mat[0] = row0;
