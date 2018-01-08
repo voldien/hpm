@@ -91,7 +91,8 @@ TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 # X86 and amd64 CPU architecture.
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-	# Will added later when AVX512 is more accessible.
+
+	# Will added later once AVX512 is more accessible.
 	#ADD_LIBRARY(${avx512_source} ${basecore} )
 	#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
 	#TARGET_LINK_LIBRARIES(hpmavx512 -lm)
