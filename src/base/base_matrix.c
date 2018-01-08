@@ -281,7 +281,6 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, mat_quat, mat);
 }
 
-
 HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
 	const hpmvecf angle = f_fov;
 	const hpmvecf xScale = (1.0f / (tanf(angle) ) / f_aspect);
@@ -301,7 +300,7 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect,
 }
 
 HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, float bottom, float top, float zNear, float zFar){
-	/**/
+	/*	*/
 	const hpmvec4f row0 = {2.0f/(right - left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0f, 2.0f/(top - bottom), 0.0f, 0.0f};
 	const hpmvec4f row2 = {0.0f, 0.0f,-2.0f/(zFar - zNear), 0.0f };
@@ -314,6 +313,10 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, flo
 	mat[3] = row3;
 }
 
+HPM_IMP( void, hpm_mat4x4_unprojf, float winx,
+		float winy, float winz, const hpmvec4x4f_t projection,
+		const hpmvec4x4f_t modelview, const int* viewport,
+		hpmvec3f* pos){
 
 
 HPM_IMP( void, hpm_mat4x4_unprojf, float winx, float winy, float winz, const hpmvec4x4f_t projection, const hpmvec4x4f_t modelview, const int* viewport, hpmvec3f* pos){
