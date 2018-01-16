@@ -64,7 +64,7 @@ HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 	return _mm_cvtsi128_si32( _mm_abs_epi32(_mm_castps_si128(row0123)) );
 #else
 	const hpmvec4i resrow = _mm_castps_si128(row0123);
-	return resrow[0] | resrow[1] | resrow[2] | resrow[3];
+	return resrow[0] | resrow[1];
 #endif
 
 #endif
@@ -86,7 +86,7 @@ HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 	return _mm_cvtsi128_si32( _mm_abs_epi32(_mm_castps_si128(row0123)) );
 #else
 	const hpmvec4i resrow = _mm_castps_si128(row0123);
-	return resrow[0] | resrow[1] | resrow[2] | resrow[3];
+	return (resrow[0] | resrow[1]) != 0;
 #endif
 
 #endif
