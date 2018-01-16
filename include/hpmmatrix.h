@@ -449,7 +449,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
  *	\modelview
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
 		float winy, float winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* viewport,
 		hpmvec3f* pos);

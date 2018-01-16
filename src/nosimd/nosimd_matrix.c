@@ -43,27 +43,27 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmv
 }
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
-	/*	X	*/
-	(*output)[0] = larg[0][1] * (*rarg)[0] +
-				larg[0][1] * (*rarg)[1] +
-				larg[0][2] * (*rarg)[2] +
-				larg[0][3] * (*rarg)[3];
-	/*	Y	*/
-	(*output)[1] = larg[1][0] * (*rarg)[0] +
-				larg[1][1] * (*rarg)[1] +
-				larg[1][2] * (*rarg)[2] +
-				larg[1][3] * (*rarg)[3];
-	/*	Z	*/
-	(*output)[2] = larg[2][0] * (*rarg)[0] +
-				larg[2][1] * (*rarg)[1] +
-				larg[2][2] * (*rarg)[2] +
-				larg[2][3] * (*rarg)[3];
-	/*	W	*/
-	(*output)[3] = larg[3][0] * (*rarg)[0] +
-				larg[3][1] * (*rarg)[1] +
-				larg[3][2] * (*rarg)[2] +
-				larg[3][3] * (*rarg)[3];
 
+	/*	X	*/
+	(*output)[0] =	larg[0][0] * (*rarg)[0] +
+					larg[1][0] * (*rarg)[1] +
+					larg[2][0] * (*rarg)[2] +
+					larg[3][0] * (*rarg)[3];
+	/*	Y	*/
+	(*output)[1] =	larg[0][1] * (*rarg)[0] +
+					larg[1][1] * (*rarg)[1] +
+					larg[2][1] * (*rarg)[2] +
+					larg[3][1] * (*rarg)[3];
+	/*	Z	*/
+	(*output)[2] =	larg[0][2] * (*rarg)[0] +
+					larg[1][2] * (*rarg)[1] +
+					larg[2][2] * (*rarg)[2] +
+					larg[3][2] * (*rarg)[3];
+	/*	W	*/
+	(*output)[3] =	larg[0][3] * (*rarg)[0] +
+					larg[1][3] * (*rarg)[1] +
+					larg[2][3] * (*rarg)[2] +
+					larg[3][3] * (*rarg)[3];
 }
 
 

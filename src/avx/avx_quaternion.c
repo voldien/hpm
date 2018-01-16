@@ -50,7 +50,7 @@ HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* larg, const hpmvec3f* rarg
 	*out = (lxwww * rxxyz) + (lyyzx * ryzxy) + (lzzxy * rzyzx);
 }
 
-HPM_IMP(void, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
+HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
 		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out){
 
 }
