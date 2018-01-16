@@ -313,37 +313,35 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, flo
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_unprojf, float winx,
+HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 		float winy, float winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* viewport,
 		hpmvec3f* pos){
 
-
-HPM_IMP( void, hpm_mat4x4_unprojf, float winx, float winy, float winz, const hpmvec4x4f_t projection, const hpmvec4x4f_t modelview, const int* viewport, hpmvec3f* pos){
-	hpmvec4x4f_t tmp;
-	hpmvec4x4f_t tmp2;
-	hpmvec4f invector;
+	hpmvec4x4f_t mvp;
+	hpmvec4x4f_t inverseMVP;
+	hpmvec4f tmp;
 	hpmvec4f result;
 
-	/*	*/
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(modelview, projection, tmp);
+	/*	create mvp matrix.	*/
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);
+	if(HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP) == 0.0f)
+		return 0;
+
 
 	/*	*/
-	invector[0] = (winx - viewport[0]) / (viewport[2] * 2.0 - 1.0);
-	invector[1] = (winy - viewport[1]) / (viewport[3] * 2.0 - 1.0);
-	invector[2] = 2.0f * winz - 1.0f;
-	invector[3] = 1.0f;
+	const hpmvecf x = 2.0f * ((winx - viewport[0]) / viewport[2]) - 1.0f;
+	const hpmvecf y = 2.0f * ((winy - viewport[1]) / viewport[3]) - 1.0
+	const hpmvecf z = (2.0f * winz) - 1.0f;
 
 	/*	*/
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, tmp2 /*incvector*/, tmp2);
+	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&tmp, x, y, z, 1.0f);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat1x4fv)(inverseMVP, &tmp, &result);
+	if(result[3] == 0.0f)
+		return 0;
 
 	/*	*/
-	result[0] = tmp2[0][0];
-	result[1] = tmp2[0][1];
-	result[2] = tmp2[0][2];
-	result[3] = tmp2[0][3];
-	result[3] = 1.0f / result[3];
-
-	(*pos) = result * result[3];
-
+	const hpmvecf wInv = (1.0f / result[3]);
+	(*pos) = result * wInv;
+	return 1;
 }
