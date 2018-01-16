@@ -331,7 +331,7 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 
 	/*	*/
 	const hpmvecf x = 2.0f * ((winx - viewport[0]) / viewport[2]) - 1.0f;
-	const hpmvecf y = 2.0f * ((winy - viewport[1]) / viewport[3]) - 1.0
+	const hpmvecf y = 2.0f * ((winy - viewport[1]) / viewport[3]) - 1.0f;
 	const hpmvecf z = (2.0f * winz) - 1.0f;
 
 	/*	*/
