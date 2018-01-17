@@ -1,6 +1,5 @@
 #include"hpmassert.h"
 
-
 /*	Vector4 asserts.	*/
 HPM_BENCHMARK_FUNC_IMP(hpm_vec4_copyfv) {
 	register int x;

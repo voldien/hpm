@@ -1,12 +1,12 @@
 #include"hpmassert.h"
 
-void htpIntegritySpCheck(void){
+void htpIntegritySpCheck(void) {
 
 	hpmvec4x4f_t m1;
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
-	hpmvec4i eqtmp = {0};
-	hpmvec4i eq = {0};
+	hpmvec4i eqtmp = { 0 };
+	hpmvec4i eq = { 0 };
 	eq = ~eq;
 
 	hpmvec4f v1 = { 1, 2, 3, 4 };
@@ -27,8 +27,8 @@ void htpIntegritySpCheck(void){
 
 	/*	Matric equality comparing.	*/
 	hpm_mat4x4_copyfv(&m1, &m2);
-	assert(hpm_mat4_eqfv(&m1,  &m2) == 1);
-	assert(hpm_mat4_neqfv(&m1,  &m2) == 0);
+	assert(hpm_mat4_eqfv(&m1, &m2) == 1);
+	assert(hpm_mat4_neqfv(&m1, &m2) == 0);
 
 	/*	Compare */
 	hpm_mat4x4_translationfv(m1, &v1);
@@ -50,7 +50,7 @@ void htpIntegritySpCheck(void){
 
 	hpm_mat4x4_translationf(m1, 1, 1, 1);
 	hpm_mat4x4_translationfv(m1, &v1);
-	hpm_mat4x4_scalef(m1, 1,1,1);
+	hpm_mat4x4_scalef(m1, 1, 1, 1);
 	hpm_mat4x4_scalefv(m1, &v1);
 	hpm_mat4x4_rotationfv(m1, 2.0, &v1);
 	hpm_mat4x4_rotationXf(m1, 3);
@@ -66,7 +66,7 @@ void htpIntegritySpCheck(void){
 	hpm_mat4x4_multi_rotationQfv(m1, &q1);
 
 	hpm_mat4x4_projfv(m1, 30, 1.3333, 0.15, 1000.0f);
-	hpm_mat4x4_orthfv(m1, -10, 10,-10, 10,-10, 10);
+	hpm_mat4x4_orthfv(m1, -10, 10, -10, 10, -10, 10);
 
 	/*	vector	*/
 	hpm_vec4_copyfv(&v1, &v2);
