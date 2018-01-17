@@ -1,3 +1,4 @@
+#include"hpmassert.h"
 
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_copyfv){
 	register int x;
