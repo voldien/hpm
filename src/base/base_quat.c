@@ -183,7 +183,7 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, 
 		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
 	}
 	else
-		return hpm_quat_lerpfv(a, b, t, out);
+		return HPM_CALLLOCALFUNC(hpm_quat_lerpfv)(a, b, t, out);
 
 }
 
