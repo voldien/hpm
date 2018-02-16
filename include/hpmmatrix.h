@@ -329,7 +329,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
  *
  *	\quat
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQfv,
 		hpmvec4x4f_t mat, const hpmquatf* quat);
 
 /**
