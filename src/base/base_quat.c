@@ -108,7 +108,8 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
 
 	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
 	if(fabsf(dot - (-1.0f)) < 0.00001f){
-		hpm_quat_setf(HPM_1_PI, hpm_vec4_getxf(up), hpm_vec4_getyf(up),hpm_vec4_getzf(up));
+		hpm_quat_setf(out, HPM_1_PI, hpm_vec4_getxf(up), hpm_vec4_getyf(up),hpm_vec4_getzf(up));
+		return;
 	}
 	if(fabsf(dot - (1.0f)) < 0.00001f){
 		HPM_CALLLOCALFUNC(hpm_quat_identityfv)(out);
