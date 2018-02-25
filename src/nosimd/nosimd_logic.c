@@ -27,10 +27,10 @@ HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f
 }
 HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b){
-	return (*a)[0] != (*b)[0] ||
+	return ((*a)[0] != (*b)[0] ||
 			(*a)[1] != (*b)[1] ||
 			(*a)[2] != (*b)[2] ||
-			(*a)[3] != (*b)[3];
+			(*a)[3] != (*b)[3] );
 }
 
 HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
@@ -52,6 +52,7 @@ HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* 
 HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 	int x, y;
 
+	/*	Compare each elements.	*/
 	for(x = 0; x < 4 ; x++){
 		for(y = 0; y < 4; y++){
 			if(a[x][y] != b[x][y])

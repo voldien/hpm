@@ -80,6 +80,20 @@ typedef union{
 
 
 /**
+ *	Matrix2x2 float
+ *
+ */
+HPM_ALIGN(32)
+typedef hpmvec2f hpmvec2x2f_t[2];
+typedef struct hpmvec2x2f_s{float m11,m21,m12,m22;}hpmmat2f;
+typedef hpmvec2f hpmvec2x2fp_t;
+HPM_ALIGN(16)
+typedef union{
+	hpmvec2x2f_t m;
+}hpmmat2uf;
+
+
+/**
  *	Copy source matrix destination matrix.
  *
  *	\destination
@@ -315,7 +329,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
  *
  *	\quat
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQf,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQfv,
 		hpmvec4x4f_t mat, const hpmquatf* quat);
 
 /**
@@ -435,7 +449,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
  *	\modelview
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
 		float winy, float winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* viewport,
 		hpmvec3f* pos);

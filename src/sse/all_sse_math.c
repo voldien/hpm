@@ -22,7 +22,7 @@ HPM_IMP(void, hpm_vec4_minfv, const hpmvec4f* a, const hpmvec4f* b, hpmvec4f* c)
 	_mm_store_ps(c, (hpmvec4f)_mm_min_ps(*a, *b));
 }
 HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* __restrict__ c){
-	hpmvec8fu* __restrict__ min;
+	hpmvec8fu* __restrict__ min = c;
 	const hpmvec8fu* __restrict__ au = a;
 	const hpmvec8fu* __restrict__ bu = b;
 	min->d2[0] = _mm_min_ps(au->d2[0], bu->d2[0]);

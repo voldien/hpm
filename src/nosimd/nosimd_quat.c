@@ -25,11 +25,3 @@ HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* lf_quat, const hpmquatf* r
 
 	out_quat[0][HPM_QUAT_Z] =  (lf_quat[0][HPM_QUAT_W] * (*rf_vec)[HPM_QUAT_Z]) + (lf_quat[0][HPM_QUAT_X] * (*rf_vec)[HPM_QUAT_Y]) - (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_X]);
 }
-
-
-
-
-HPM_IMP(void, hpm_quat_lookat, const hpmquatf* __restrict__ lookat,
-		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out){
-
-}

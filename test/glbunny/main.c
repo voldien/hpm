@@ -142,6 +142,9 @@ int main(int argc, const char** argv){
 		exit(EXIT_FAILURE);
 	}
 
+	if(g_debug)
+		enableGLDebug();
+
 	/*	Set OpenGL state.	*/
 	SDL_GL_SetSwapInterval(0);
 	glDepthMask(GL_TRUE);

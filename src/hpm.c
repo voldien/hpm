@@ -126,7 +126,7 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_rotationXf = hpm_get_symbolfuncp(hpm_mat4x4_rotationXf);
 	hpm_mat4x4_rotationYf = hpm_get_symbolfuncp(hpm_mat4x4_rotationYf);
 	hpm_mat4x4_rotationZf = hpm_get_symbolfuncp(hpm_mat4x4_rotationZf);
-	hpm_mat4x4_rotationQf = hpm_get_symbolfuncp(hpm_mat4x4_rotationQf);
+	hpm_mat4x4_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_rotationQfv);
 
 	/**/
 	hpm_mat4x4_multi_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationfv);
