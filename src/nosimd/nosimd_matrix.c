@@ -8,7 +8,6 @@ HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t so
 	destination[3] = source[3];
 }
 
-
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
 
 	const hpmvecf a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
