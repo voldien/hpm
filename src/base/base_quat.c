@@ -76,9 +76,6 @@ HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect
 
 }
 
-
-
-
 HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
 	const hpmvecf half_angle = sinf(angle * 0.5f);
 	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
@@ -168,21 +165,13 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4
 	}
 }
 
-
-
-
-
-
-
-HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out){
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
 	/*	(from * (1.0f - time) + to * time);	*/
 	hpmvecf ht = (1.0f - t);
 	*out = *a * ht + *b * t;
 }
 
-
-
-HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out){
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
 
 	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
 	hpmquatf q3;
