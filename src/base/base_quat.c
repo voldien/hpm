@@ -107,18 +107,18 @@ HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_rad
 HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
 		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out){
 
-	hpmvec3f forward = {0,0,1, 0};
+	hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
 	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
-	if(fabsf(dot - (-1.0f)) < 0.00000f){
+	if(fabsf(dot - (-1.0f)) < 0.00001f){
 		hpm_quat_setf(HPM_1_PI, hpm_vec4_getxf(up), hpm_vec4_getyf(up),hpm_vec4_getzf(up));
 	}
-	if(fabsf(dot - (1.0f)) < 0.00000f){
+	if(fabsf(dot - (1.0f)) < 0.00001f){
 		HPM_CALLLOCALFUNC(hpm_quat_identityfv)(out);
 		return;
 	}
 
-	float rotAngle = acos(dot);
+	hpmvecf rotAngle = acos(dot);
 	hpmvec3f rotAxis = {0.0f, 0.0f, 0.0f, 0.0f};
 	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&forward, &forward, &rotAxis);
 	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&rotAxis);
