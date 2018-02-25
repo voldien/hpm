@@ -18,12 +18,14 @@ HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4fp_t* __restrict__ destination, const
 HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t out ){
 	int i;
 
+	/*	*/
 	for(i = 0; i < 4; i++){
 		const hpmv4sf brod1 = _mm_set1_ps(rarg[i][0]);
 		const hpmv4sf brod2 = _mm_set1_ps(rarg[i][1]);
 		const hpmv4sf brod3 = _mm_set1_ps(rarg[i][2]);
 		const hpmv4sf brod4 = _mm_set1_ps(rarg[i][3]);
 
+		/*	*/
 		const hpmv4sf row = _mm_add_ps(
 					_mm_add_ps(
 						_mm_mul_ps(brod1, larg[0]),

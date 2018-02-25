@@ -69,14 +69,19 @@ HPM_IMP( void, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, h
 }
 
 HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+
 	float theta;
 	hpmvec4f relative;
+
+	/*	*/
 	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a,b);
 	const hpmvec4f time = {t,t,t,t};
 	const float vsintime = sinf(t);
 	dot = HPM_CLAMP(dot, -1.0, 1.0);
 	theta = acosf(dot) * t;
 	relative = *b - *a * time;
+
+	/*	*/
 	HPM_CALLLOCALFUNC(hpm_vec4_normalizefv)(&relative);
 	const hpmvec4f vtheta = {theta, theta, theta, theta};
 	const hpmvec4f vsint = {vsintime, vsintime, vsintime, vsintime};
@@ -107,7 +112,7 @@ HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, 
 
 HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
 	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
-	hpmvecf k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+	hpmvecf k = 1.0f - index * index * (1.0f - N_dot_I * N_dot_I);
 
 	if (k < 0.0f){
 		const hpmvec3f zero = { 0, 0, 0, 0 };

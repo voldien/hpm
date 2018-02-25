@@ -71,5 +71,6 @@ HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 				return 1;
 		}
 	}
+
 	return 0;
 }

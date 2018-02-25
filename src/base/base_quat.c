@@ -37,7 +37,7 @@ HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
 HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 
 	/*	return ( *this * ( Quaternion(0, vector.x(),vector.y(),-vector.z()) ) * conjugate() ).getVector();*/
-	hpmquatf quatinvdir = { 0, 0, 0, -1 };
+	hpmquatf quatinvdir = { 0.0f, 0.0f, 0.0f, -1.0f };
 	hpmquatf quatconj = *larg;
 
 	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);
@@ -48,7 +48,7 @@ HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
 	(*out)[0] = quatinvdir[HPM_QUAT_X];
 	(*out)[1] = quatinvdir[HPM_QUAT_Y];
 	(*out)[2] = quatinvdir[HPM_QUAT_Z];
-	(*out)[3] = 0;
+	(*out)[3] = 0.0f;
 }
 
 HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* out){
@@ -60,19 +60,18 @@ HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect
 	quatinvdir[HPM_QUAT_X] = quatinvdir[0];
 	quatinvdir[HPM_QUAT_Y] = quatinvdir[1];
 	quatinvdir[HPM_QUAT_Z] = quatinvdir[2];
-	quatinvdir[HPM_QUAT_W] = 0;
+	quatinvdir[HPM_QUAT_W] = 0.0f;
 
 	/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);					/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(quat, &quatinvdir, out);	/*	*/
+	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);						/*	*/
+	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(quat, &quatinvdir, out);		/*	*/
 	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &quatconj, &quatinvdir);	/*	*/
-
 
 	/**/
 	(*out)[0] = quatinvdir[HPM_QUAT_X];
 	(*out)[1] = quatinvdir[HPM_QUAT_Y];
 	(*out)[2] = quatinvdir[HPM_QUAT_Z];
-	(*out)[3] = 0;
+	(*out)[3] = 0.0f;
 
 }
 
@@ -108,7 +107,8 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
 
 	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
 	if(fabsf(dot - (-1.0f)) < 0.00001f){
-		hpm_quat_setf(out, HPM_1_PI, hpm_vec4_getxf(up), hpm_vec4_getyf(up),hpm_vec4_getzf(up));
+		hpm_quat_setf(out, HPM_1_PI, hpm_vec4_getxf(up), hpm_vec4_getyf(up),
+		        hpm_vec4_getzf(up));
 		return;
 	}
 	if(fabsf(dot - (1.0f)) < 0.00001f){
@@ -183,15 +183,12 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, 
 	else q3 = *b;
 
 	if(fdot <0.95f){
-		float angle = acosf(fdot);
+		hpmvecf angle = acosf(fdot);
 		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
 	}
 	else
 		return HPM_CALLLOCALFUNC(hpm_quat_lerpfv)(a, b, t, out);
-
 }
-
-
 
 HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
 	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));

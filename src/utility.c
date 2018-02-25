@@ -19,7 +19,7 @@ HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
 	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(up, &zaxis, &xaxis);
 	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&xaxis);
 
-	/*	Create y axis vector.	*/
+	/*	Create Y axis vector.	*/
 	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&xaxis, &xaxis, &yaxis);
 
 	/*	Create orientation matrix.	*/
@@ -31,5 +31,4 @@ HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
 
 	/*	Create final view oritention matrix.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(orientation, translation, mat);
-
 }
