@@ -50,9 +50,11 @@ HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 	const hpmmat4uf* __restrict__ ufa = a;
 	const hpmmat4uf* __restrict__ ufb = b;
 
-	return (hpmboolean)_mm256_testz_ps(
-			_mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OQ),
-			_mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OQ));
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_US);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_US);
+
+	/*	*/
+	return (hpmboolean)_mm256_testz_ps(lb, rb);
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
@@ -60,8 +62,10 @@ HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 	const hpmmat4uf* __restrict__ ufa = a;
 	const hpmmat4uf* __restrict__ ufb = b;
 
-	return (hpmboolean)_mm256_testz_ps(
-			_mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_OQ),
-			_mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_OQ));
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OS);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OS);
+
+	/*	*/
+	return (hpmboolean)!_mm256_testz_ps(lb, rb);
 }
 

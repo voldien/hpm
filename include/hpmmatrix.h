@@ -309,14 +309,19 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationXf,
  *	Construct rotation matrix.
  *
  *	\mat
+ *
+ *	\zradian rotation in radian.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationYf,
 		hpmvec4x4f_t mat, float yradian);
 
 /**
- *	Construct
+ *	Construct eular rotation matrix
+ *	rotating along the Z axis.
  *
  *	\mat
+ *
+ *	\zradian rotation in radian.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
@@ -438,15 +443,19 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
 /**
  *	Unproject matrix.
  *
- *	\winz
+ *	\winz z
  *
- *	\winx
+ *	\winx x coordinate poisition
  *
- *	\winy
+ *	\winy y coordinate position.
  *
- *	\projection
+ *	\projection project matrix.
  *
- *	\modelview
+ *	\modelview model-view matrix.
+ *
+ *	\viewport viewport of the screen (x, y, width, height)
+ *
+ *	\pos position inside the projection space.
  *
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
