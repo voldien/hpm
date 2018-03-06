@@ -157,8 +157,8 @@ START_TEST(math){
 	ck_assert_int_eq(v3[2], 0);
 	ck_assert_int_eq(v3[3], 0);
 
-	hpm_vec4_minfv(hpm_vec4_max_compfv(&v1), 1);
-	hpm_vec4_maxfv(hpm_vec4_max_compfv(&v1), 4);
+	ck_assert_int_eq(hpm_vec4_max_compfv(&v1), 1);
+	ck_assert_int_eq(hpm_vec4_max_compfv(&v1), 4);
 
 }
 END_TEST
