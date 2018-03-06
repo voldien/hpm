@@ -15,9 +15,9 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 }
 
 HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
-	int i;
-	const int nelements = sizeof(vec) / sizeof(vec[0]);
-	hpmvecf max = FLT_MAX;
+	unsigned int i;
+	const unsigned int nelements = sizeof((*vec)) / sizeof((*vec)[0]);
+	hpmvecf max = FLT_MIN;
 
 	/*	Iterate through each elements.	*/
 	for(i = 0; i < nelements; i++){
@@ -29,9 +29,9 @@ HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
 }
 
 HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
-	int i;
-	const int nelements = sizeof(vec) / sizeof(vec[0]);
-	hpmvecf min = FLT_MIN;
+	unsigned int i;
+	const unsigned int nelements = sizeof((*vec)) / sizeof((*vec)[0]);
+	hpmvecf min = FLT_MAX;
 
 	/*	Iterate through each elements.	*/
 	for(i = 0; i < nelements; i++){
