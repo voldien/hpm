@@ -26,54 +26,50 @@
 #include<sys/time.h>
 #include<unistd.h>
 #include<getopt.h>
-#include<assert.h>
-
-extern int g_SIMD;
-extern int g_type;
-extern int g_precision;
 
 /**
  *	Global variables.
  */
-int g_SIMD = (~0x0);
+int g_SIMD = (unsigned int)(-1);
 int g_type = eAll;
 int g_precision = eFloat;
 
-void readArgument(int argc, char** argv){
+void htpReadArgument(int argc, char** argv) {
 
 	static struct option longoption[] = {
-			{"version", 	no_argument, 		NULL, 'v'},
-			{"type", 		required_argument, 	NULL, 't'},
-			{"simd", 		required_argument, 	NULL, 's'},
-			{"precision", 	required_argument, 	NULL, 'p'},
-			{NULL, 0, NULL, 0},
+		{"version",     no_argument, 		NULL, 'v'},	/*	*/
+		{"assert",      no_argument, 		NULL, 'A'},	/*	*/
+		{"type",        required_argument, 	NULL, 't'},	/*	*/
+		{"simd",        required_argument, 	NULL, 's'},	/*	*/
+		{"precision",   required_argument, 	NULL, 'p'},	/*	*/
+		{NULL, 0, NULL, 0},
 	};
 
 	int c;
 	int optindex;
-	const char* shortarg = "s:vp:t:";
+	const char* shortarg = "As:vp:t:";
 
-	/*	Iterate through.	*/
-	while((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF){
-		switch(c){
+	/*	Iterate through options.	*/
+	while ((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF) {
+		switch (c) {
 		case 's':
-			if(optarg){
+			if (optarg) {
 				int i = 1;
 
-				do{
-					if(strcmp(hpm_get_simd_symbol(i), optarg) == 0){
+				do {
+					if (strcmp(hpm_get_simd_symbol(i), optarg) == 0) {
 						break;
 					}
 					i <<= 1;
-					if(hpm_get_simd_symbol(i) == NULL){
+					if (hpm_get_simd_symbol(i) == NULL) {
 						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
 						exit(EXIT_FAILURE);
 					}
-				}while(hpm_get_simd_symbol(i));
+				} while (hpm_get_simd_symbol(i));
 				g_SIMD = i;
 
 				/*	Check if supported.	*/
-				if(!hpm_supportcpufeat(g_SIMD)){
+				if (!hpm_supportcpufeat(g_SIMD)) {
 					fprintf(stderr, "SIMD extension not supported.\n");
 					exit(EXIT_FAILURE);
 				}
@@ -84,27 +80,29 @@ void readArgument(int argc, char** argv){
 			exit(EXIT_SUCCESS);
 			break;
 		case 'p':
-			if(optarg){
-				if(strchr(optarg,'d') == 0 || strstr(optarg, "double") == 0){
+			if (optarg) {
+				if (strchr(optarg, 'd') == 0 || strstr(optarg, "double") == 0) {
 					g_precision |= eDouble;
-				}
-				else if(strchr(optarg, 'f') == 0 || strstr(optarg, "float") == 0){
+				} else if (strchr(optarg, 'f') == 0
+				        || strstr(optarg, "float") == 0) {
 					g_precision |= eFloat;
-				}
-				else if(strchr(optarg, 'a') == 0 || strstr(optarg, "all") == 0){
+				} else if (strchr(optarg, 'a') == 0
+				        || strstr(optarg, "all") == 0) {
 					g_precision |= eAllPrecision;
 				}
 			}
 			break;
 		case 't':
-			if(optarg){
-				if(strchr(optarg, 'a') == 0 || strstr(optarg, "all") == 0){
+			if (optarg) {
+				if (strchr(optarg, 'a') == 0 || strstr(optarg, "all") == 0) {
 					g_type |= eAll;
-				}
-				else if(strstr(optarg, "matrix") == 0){
+				} else if (strstr(optarg, "matrix") == 0) {
 					g_type |= eMatrix;
 				}
 			}
+			break;
+		case 'A':
+			g_type = eIntegrity;
 			break;
 		default:
 			break;
@@ -112,17 +110,18 @@ void readArgument(int argc, char** argv){
 	}
 }
 
-int main(int argc, char** argv){
+int main(int argc, char** argv) {
 
 	int i;
 	const unsigned int nenum = sizeof(uint32_t) * 4;
 
 	/*	Read argument.	*/
-	readArgument(argc, argv);
+	htpReadArgument(argc, argv);
 
 	/*	Iterate through each possible SIMD options.	*/
-	for(i = 0; i < nenum; i++){
-		if(( g_SIMD & (1 << i) ) && hpm_supportcpufeat(1 << i)){
+	for (i = 0; i < nenum; i++) {
+		/*	Check if simd is specified and supported.	*/
+		if ((g_SIMD & (1 << i)) && hpm_supportcpufeat(1 << i)) {
 			htpSimdExecute(1 << i);
 		}
 	}
@@ -131,17 +130,19 @@ int main(int argc, char** argv){
 	return EXIT_SUCCESS;
 }
 
-int hptLog2MutExlusive32(unsigned int a){
+int hptLog2MutExlusive32(unsigned int a) {
 
 	int i = 0;
 	int po = 0;
 	const int bitlen = 32;
 
-	if(a == 0)
+	/*	Special case.	*/
+	if (a == 0)
 		return 0;
 
-	for(; i < bitlen; i++){
-		if((a >> i) & 0x1)
+	/*	Iterate through each bits.	*/
+	for (; i < bitlen; i++) {
+		if ((a >> i) & 0x1)
 			return (i + 1);
 	}
 
@@ -179,12 +180,11 @@ long int hptGetTimeResolution(void){
 long int hptGetTime(void){
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
-    return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1000;
+    return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3;
 }
 
-
 /**
- *	Invoked benchmark.
+ *	Invoked benchmark function.
  */
 #define HPM_BENCHMARK_FUNC_CALL(func)								\
 		ttime = hptGetTimeNano();									\
@@ -197,10 +197,11 @@ void htpBenchmarkPerformanceTest(void){
 
 	uint64_t ttime = 0;			/*	*/
 	uint64_t ttotaltime = 0;	/*	*/
+	uint64_t res = hptGetTimeResolution();
 
 	if(g_precision & eFloat){
 
-		/*	*/
+		/*	Matrix mode.	*/
 		if( g_type & eMatrix ){
 			printf("single precision matrix.\n");
 			printf("Single precision vector performance.\n"
@@ -225,6 +226,7 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_unprojf);
 		}
 
+		/*	Comparing mode.	*/
 		if( g_type & eComparing ){
 			printf("single precision comparing.\n");
 			printf("Single precision vector performance.\n"
@@ -239,6 +241,7 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_neqfv);
 		}
 
+		/*	Quaternion mode.	*/
 		if(g_type & eQuaternion){
 			printf("single precision Quaternion.\n");
 			printf("Single precision vector performance.\n"
@@ -263,6 +266,7 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_quat_rollfv);
 		}
 
+		/*	Math mode.	*/
 		if(g_type & eMath){
 			printf("Single precision Math performance.\n"
 					"-----------------------------\n");
@@ -277,6 +281,7 @@ void htpBenchmarkPerformanceTest(void){
 
 		}
 
+		/*	Vector mode.	*/
 		if(g_type & eVector){
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
@@ -305,9 +310,10 @@ void htpBenchmarkPerformanceTest(void){
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_projfv);
 		}
 
+		/**/
 		if(g_type & eIntegrity){
 			printf("Integrity check.\n");
-			htpIntegritySpCheck();
+			htpIntegritySpCheckf();
 		}
 	}
 	else if(g_precision & eDouble){
