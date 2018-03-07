@@ -52,11 +52,12 @@ HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmve
 
 HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
 	/*	Unfold later.	*/
+	const hpmv4sf brod1 = _mm_set1_ps((*rarg)[0]);
+	const hpmv4sf brod2 = _mm_set1_ps((*rarg)[1]);
+	const hpmv4sf brod3 = _mm_set1_ps((*rarg)[2]);
+	const hpmv4sf brod4 = _mm_set1_ps((*rarg)[3]);
 
-	(*output)[0] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[0], rarg);
-	(*output)[1] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[1], rarg);
-	(*output)[2] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[2], rarg);
-	(*output)[3] = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&larg[3], rarg);
+	*output = brod1 * larg[0] + brod2 * larg[1] + brod3 * larg[2] + brod4 * larg[3];
 }
 
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){	/*	TODO fix if it can be optimized even further.*/

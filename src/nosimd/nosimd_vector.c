@@ -11,7 +11,7 @@ HPM_IMP( float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 }
 
 HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
-	return (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3] ;
+	return (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3];
 }
 
 HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
