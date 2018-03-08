@@ -1,5 +1,5 @@
 #include"hpmlogic.h"
-
+#include<limits.h>
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
