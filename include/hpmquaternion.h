@@ -55,18 +55,18 @@ typedef union{
 /**
  *	Get individual element of quaternion.
  */
-#define hpm_quat_getwf(hpm_vec) (hpm_vec[HPM_QUAT_W])
-#define hpm_quat_getxf(hpm_vec) (hpm_vec[HPM_QUAT_X])
-#define hpm_quat_getyf(hpm_vec) (hpm_vec[HPM_QUAT_Y])
-#define hpm_quat_getzf(hpm_vec) (hpm_vec[HPM_QUAT_Z])
+#define hpm_quat_getwf(hpm_vec) ((hpm_vec)[HPM_QUAT_W])
+#define hpm_quat_getxf(hpm_vec) ((hpm_vec)[HPM_QUAT_X])
+#define hpm_quat_getyf(hpm_vec) ((hpm_vec)[HPM_QUAT_Y])
+#define hpm_quat_getzf(hpm_vec) ((hpm_vec)[HPM_QUAT_Z])
 
 /**
  *	Set individual element of quaternion.
  */
-#define hpm_quat_setwf(hpm_vec, w) (hpm_vec[HPM_QUAT_W] = w)
-#define hpm_quat_setxf(hpm_vec, x) (hpm_vec[HPM_QUAT_X] = x)
-#define hpm_quat_setyf(hpm_vec, y) (hpm_vec[HPM_QUAT_Y] = y)
-#define hpm_quat_setzf(hpm_vec, y) (hpm_vec[HPM_QUAT_Z] = y)
+#define hpm_quat_setwf(hpm_vec, w) ((hpm_vec)[HPM_QUAT_W] = w)
+#define hpm_quat_setxf(hpm_vec, x) ((hpm_vec)[HPM_QUAT_X] = x)
+#define hpm_quat_setyf(hpm_vec, y) ((hpm_vec)[HPM_QUAT_Y] = y)
+#define hpm_quat_setzf(hpm_vec, y) ((hpm_vec)[HPM_QUAT_Z] = y)
 
 /**
  *	Copy quaternion.
