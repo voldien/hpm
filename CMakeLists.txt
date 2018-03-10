@@ -41,6 +41,7 @@ ELSE()
 	MESSAGE(STATUS "")
 ENDIF()
 
+
 # gcc compiler options.
 IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	ADD_DEFINITIONS(-fPIC)
@@ -70,7 +71,6 @@ ELSEIF(MSVC)
 		# Enable multi-core complication with MSVC
 		ADD_DEFINITIONS(/MP)
 ENDIF()
-
 
 
 # Source files.
@@ -186,9 +186,10 @@ ELSE()
 	ENDIF()
 ENDIF()
 
-#
+# Invoke cmake file from the test directory.
 ADD_SUBDIRECTORY(test)
 
+# Create distrubtion archive file.
 IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
 	ADD_CUSTOM_TARGET(	distribution
