@@ -339,7 +339,11 @@ int hpm_supportcpufeat(unsigned int simd){
 		cpuid(cpuInfo, 7);
 		return (cpuInfo[0] & bit_AVX2);
 	case HPM_NEON:
+#if defined(HPM_ARM_NEON)
+		return 1;
+#else
 		return 0;
+#endif
 	default:
 		return 0;
 	}

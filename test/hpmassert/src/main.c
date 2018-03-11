@@ -33,12 +33,14 @@
 int g_SIMD = (unsigned int)(-1);
 int g_type = eAll;
 int g_precision = eFloat;
+const unsigned int g_it = 1E7;
 
 void htpReadArgument(int argc, char** argv) {
 
 	static struct option longoption[] = {
 		{"version",     no_argument, 		NULL, 'v'},	/*	*/
 		{"assert",      no_argument, 		NULL, 'A'},	/*	*/
+		{"performance", no_argument, 		NULL, 'P'},	/*	*/
 		{"type",        required_argument, 	NULL, 't'},	/*	*/
 		{"simd",        required_argument, 	NULL, 's'},	/*	*/
 		{"precision",   required_argument, 	NULL, 'p'},	/*	*/
@@ -47,7 +49,7 @@ void htpReadArgument(int argc, char** argv) {
 
 	int c;
 	int optindex;
-	const char* shortarg = "As:vp:t:";
+	const char* shortarg = "APs:vp:t:";
 
 	/*	Iterate through options.	*/
 	while ((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF) {
@@ -103,6 +105,8 @@ void htpReadArgument(int argc, char** argv) {
 			break;
 		case 'A':
 			g_type = eIntegrity;
+			break;
+		case 'P':
 			break;
 		default:
 			break;

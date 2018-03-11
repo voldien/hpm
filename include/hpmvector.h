@@ -128,18 +128,18 @@ typedef struct hpmvec8du_t{
 /**
  *	Get individual element of vector.
  */
-#define hpm_vec4_getxf(hpm_vec) (hpm_vec[0])
-#define hpm_vec4_getyf(hpm_vec) (hpm_vec[1])
-#define hpm_vec4_getzf(hpm_vec) (hpm_vec[2])
-#define hpm_vec4_getwf(hpm_vec) (hpm_vec[3])
+#define hpm_vec4_getxf(hpm_vec) ((hpm_vec)[0])
+#define hpm_vec4_getyf(hpm_vec) ((hpm_vec)[1])
+#define hpm_vec4_getzf(hpm_vec) ((hpm_vec)[2])
+#define hpm_vec4_getwf(hpm_vec) ((hpm_vec)[3])
 
 /**
  *	Set individual element of vector.
  */
-#define hpm_vec4_setxf(hpm_vec, x) (hpm_vec[0] = x)
-#define hpm_vec4_setyf(hpm_vec, y) (hpm_vec[1] = y)
-#define hpm_vec4_setzf(hpm_vec, y) (hpm_vec[2] = y)
-#define hpm_vec4_setwf(hpm_vec, w) (hpm_vec[3] = w)
+#define hpm_vec4_setxf(hpm_vec, x) ((hpm_vec)[0] = x)
+#define hpm_vec4_setyf(hpm_vec, y) ((hpm_vec)[1] = y)
+#define hpm_vec4_setzf(hpm_vec, y) ((hpm_vec)[2] = y)
+#define hpm_vec4_setwf(hpm_vec, w) ((hpm_vec)[3] = w)
 
 
 /**

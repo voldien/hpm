@@ -1,6 +1,56 @@
 #include"hpmassert.h"
 #include<check.h>
 
+START_TEST(equality){
+
+	const hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
+	const hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
+	const hpmvec4f v3 = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const hpmvec4f v4 = { 0.0f, 0.0f, 0.0f, 0.0f };
+	hpmvec4i res;
+
+	hpmvec4x4f_t m1;
+	hpmvec4x4f_t m2;
+	hpmvec4x4f_t m3;
+
+	/*	*/
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v2), 0);
+	ck_assert_int_eq(hpm_vec4_neqfv(&v1, &v2), 1);
+
+	/*	*/
+	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &v4), 1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v4), 0);
+
+	/*	*/
+	hpm_vec4_com_eqfv(&v1, &v2, &res);
+	ck_assert_int_eq(res[0], 0);
+	ck_assert_int_eq(res[1], 0);
+
+	/*	*/
+	hpm_vec4_com_neqfv(&v1, &v2, &res);
+	ck_assert_int_ne(res[0], 0);
+	ck_assert_int_ne(res[1], 0);
+
+	/*	*/
+	hpm_quat_identityfv(&v1);
+	hpm_quat_identityfv(&v2);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v2), 1);
+
+	/*	*/
+	hpm_mat4x4_translationf(m1, 1, 1, 1);
+	hpm_mat4x4_translationf(m2, 3, 5, 7);
+
+	/*	Matrix equality.	*/
+	ck_assert_int_eq(hpm_mat4_neqfv(m1, m2), 1);
+	hpm_mat4x4_identityfv(m1);
+	ck_assert_int_eq(hpm_mat4_neqfv(m1, m2), 1);
+	hpm_mat4x4_identityfv(m2);
+	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+	ck_assert_int_eq(hpm_mat4_neqfv(m1, m2), 0);
+
+}
+END_TEST
+
 START_TEST (vector4){
 
 	hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
@@ -66,11 +116,13 @@ START_TEST (quaternion){
 	/*	Direction.	*/
 	hpmvec4f direction;
 	const hpmvec4f expdir = { 0.0f, 0.0f, 1.0f, 0.0f };
+	const hpmvec4f nexpdir = { 0.0f, 0.0f, -1.0f, 0.0f };
 	hpm_quat_identityfv(&q1);
 	hpm_quat_directionfv(&q1, &direction);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
+
 	/*	Check direction.	*/
-	hpm_quat_get_vectorfv(&q1, &expdir, &direction);
+	hpm_quat_directionfv(&q1, &direction);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
 	/*	Check multiplication.	*/
@@ -269,6 +321,7 @@ Suite* htpCreateSuite(void){
 
 	/*	Create suite and test cases.	*/
 	Suite* suite = suite_create("hpm");
+	TCase* testEquCase = tcase_create("equality");
 	TCase* testVec4Case = tcase_create("vector4");
 	TCase* testQuatCase = tcase_create("quaternion");
 	TCase* testMat4Case = tcase_create("matrix4x4");
@@ -276,6 +329,7 @@ Suite* htpCreateSuite(void){
 	TCase* testMathCase = tcase_create("math");
 
 	/*	Link test cases with functions.	*/
+	tcase_add_test(testEquCase, equality);
 	tcase_add_test(testVec4Case, vector4);
 	tcase_add_test(testQuatCase, quaternion);
 	tcase_add_test(testMat4Case, matrix4x4);
@@ -283,6 +337,7 @@ Suite* htpCreateSuite(void){
 	tcase_add_test(testMathCase, math);
 
 	/*	Add test cases to test suite.	*/
+	suite_add_tcase(suite, testEquCase);
 	suite_add_tcase(suite, testVec4Case);
 	suite_add_tcase(suite, testQuatCase);
 	suite_add_tcase(suite, testMat4Case);
