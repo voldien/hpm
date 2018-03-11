@@ -113,6 +113,19 @@ START_TEST (quaternion){
 			&& hpm_quat_getyf(q2) == -hpm_quat_getyf(q1)
 			&& hpm_quat_getzf(q2) == -hpm_quat_getzf(q1), "quaternion conjugation failed");
 
+	/*	Inverse simple check.	*/
+	hpm_quat_identityfv(&q1);
+	hpm_quat_inversefv(&q2);
+	ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q2), 1);
+
+	/*	Check multiplication.	*/
+	hpm_quat_axisf(&q1, HPM_PI / 4.0f, HPM_PI / 2.0f, HPM_PI / 6.0f);
+	hpm_quat_copyfv(&q2, &q1);
+	hpm_quat_inversefv(&q2);
+	hpm_quat_multi_quatfv(&q2, &q1, &q3);
+	hpm_quat_identityfv(&q1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q3), 1);
+
 	/*	Direction.	*/
 	hpmvec4f direction;
 	const hpmvec4f expdir = { 0.0f, 0.0f, 1.0f, 0.0f };
@@ -125,13 +138,10 @@ START_TEST (quaternion){
 	hpm_quat_directionfv(&q1, &direction);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
-	/*	Check multiplication.	*/
-	hpm_quat_axisf(&q1, HPM_PI / 4.0f, HPM_PI / 2.0f, HPM_PI / 6.0f);
-	hpm_quat_copyfv(&q2, &q1);
-	hpm_quat_inversefv(&q2);
-	hpm_quat_multi_quatfv(&q2, &q1, &q3);
-	hpm_mat4x4_identityfv(&q1);
-	ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q3), 1);
+	/*	Check direction rotated 180 degrees around yaw.	*/
+	hpm_quat_axisf(&q1, 0.0f, HPM_PI, 0.0f);
+	hpm_quat_get_vectorfv(&q1, &expdir, &direction);
+	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &nexpdir), 1);
 
 	/*	Quaternion Angle	*/
 	const hpmvecf pitch = 0;
