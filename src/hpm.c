@@ -384,3 +384,61 @@ const char* hpm_get_simd_symbol(unsigned int SIMD){
 	};
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
+
+
+void hpm_vec4_print(const hpmvec4f* vec) {
+	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+}
+
+void hpm_vec4_sprint(char* text, const hpmvec4f* vec){
+	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+}
+
+void hpm_vec3_print(const hpmvec3f* vec) {
+	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+}
+
+void hpm_vec3_sprint(char* text, const hpmvec3f* vec){
+	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+}
+
+void hpm_quat_print(const hpmquatf* quat) {
+	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
+	        hpm_quat_getwf(*quat));
+}
+
+void hpm_quat_sprint(char* text, const hpmquatf* quat){
+	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
+	        hpm_quat_getwf(*quat));
+}
+
+void hpm_mat4x4_print(const hpmvec4x4f_t mat){
+    printf(
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
+		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
+		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
+		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+}
+
+void hpm_mat4x4_sprint(char* text, const hpmvec4x4f_t mat){
+    sprintf(text,
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n"
+		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
+		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
+		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
+		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+}
+
