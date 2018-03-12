@@ -25,6 +25,7 @@
 #include"hpmutil.h"
 #include"hpmmath.h"
 #include"hpmlogic.h"
+#include"hpmprint.h"
 
 /**
  * 	The main hpm library header file.
