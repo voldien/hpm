@@ -13,7 +13,7 @@ START_TEST(equality){
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
 
-	/*	*/
+	/*	Compare vector equal and non equal.	*/
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v2), 0);
 	ck_assert_int_eq(hpm_vec4_neqfv(&v1, &v2), 1);
 
@@ -21,22 +21,26 @@ START_TEST(equality){
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &v4), 1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v4), 0);
 
-	/*	*/
+	/*	Compare components equal.	*/
 	hpm_vec4_com_eqfv(&v1, &v2, &res);
-	ck_assert_int_eq(res[0], 0);
-	ck_assert_int_eq(res[1], 0);
+	ck_assert_int_eq(hpm_vec4_getxf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getyf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getzf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getwf(res), 0);
 
-	/*	*/
+	/*	Compare components non-equal.	*/
 	hpm_vec4_com_neqfv(&v1, &v2, &res);
-	ck_assert_int_ne(res[0], 0);
-	ck_assert_int_ne(res[1], 0);
+	ck_assert_int_ne(hpm_vec4_getxf(res), 1);
+	ck_assert_int_ne(hpm_vec4_getyf(res), 1);
+	ck_assert_int_ne(hpm_vec4_getzf(res), 1);
+	ck_assert_int_ne(hpm_vec4_getwf(res), 1);
 
-	/*	*/
+	/*	Compare vector equal.	*/
 	hpm_quat_identityfv(&v1);
 	hpm_quat_identityfv(&v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v2), 1);
 
-	/*	*/
+	/*	Translation.	*/
 	hpm_mat4x4_translationf(m1, 1, 1, 1);
 	hpm_mat4x4_translationf(m2, 3, 5, 7);
 
@@ -225,6 +229,8 @@ START_TEST (transformation){
 	hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f };
+	const hpmvec4f w = {0.0f, 0.0f, 0.0f, 1.0f};
+	const hpmvec4f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
 	hpmvec4x4f_t m1;
 	hpmvec4x4f_t m2;
@@ -240,23 +246,32 @@ START_TEST (transformation){
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m3), 1);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
 
-
+	/*	*/
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
-	hpm_mat4x4_multiply_scalarf(m1, 1.0, m3);
-	//hpm_mat4x4_division_mat4x4f(m1, 1.0, m3);
-	hpm_mat4x4_additition_mat4x4fv(m1, m2, m3);
-	hpm_mat4x4_subraction_mat4x4fv(m1, m2, m3);
-	hpm_mat4x4_identityfv(m1);
-	hpm_mat4x4_translationf(m1, 1, 1, 1);
+	hpm_mat4x4_multiply_scalarf(m1, 1.0f, m3);
+	ck_assert_int_eq(hpm_mat4_eqfv(m1, m3), 1);
 
-	hpm_mat4x4_translationf(m1, 1, 1, 1);
-	hpm_mat4x4_translationfv(m1, &v1);
-	hpm_mat4x4_scalef(m1, 1, 1, 1);
-	hpm_mat4x4_scalefv(m1, &v1);
+	/*	Check rotation transformation in X axis.	*/
+	const hpmvec4f exXrot = {0.0f, 0.0f, -1.0f, 0.0f};
+	hpm_mat4x4_rotationXf(m1, HPM_PI);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	ck_assert_int_eq(hpm_vec4_eqfv(&exXrot, &v3), 1);
+
+	/*	Check rotation transformation in Y axis.	*/
+	const hpmvec4f exYrot = {0.0f, 0.0f, -1.0f, 0.0f};
+	hpm_mat4x4_rotationYf(m1, HPM_PI);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	ck_assert_int_eq(hpm_vec4_eqfv(&exYrot, &v3), 1);
+
+	/*	Check rotation transformation in Z axis.	*/
+	const hpmvec4f exZrot = {0.0f, 0.0f, 1.0f, 0.0f};
+	hpm_mat4x4_rotationZf(m1, HPM_PI);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	ck_assert_int_eq(hpm_vec4_eqfv(&exZrot, &v3), 1);
+
+
 	hpm_mat4x4_rotationfv(m1, 2.0, &v1);
-	hpm_mat4x4_rotationXf(m1, 3);
-	hpm_mat4x4_rotationYf(m1, 3);
-	hpm_mat4x4_rotationZf(m1, 3);
+
 	//hpm_mat4x4_rotationQfv(m1, &q1);
 
 	/*	*/
