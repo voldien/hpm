@@ -74,9 +74,9 @@ ENDIF()
 
 
 # Source files.
-FILE (GLOB headers ${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
-FILE (GLOB basecore ${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
-		    ${CMAKE_CURRENT_SOURCE_DIR}/src/utility.c )
+FILE (GLOB headers 	${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
+FILE (GLOB basecore 	${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
+			${CMAKE_CURRENT_SOURCE_DIR}/src/utility.c)
 FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
 FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
 FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
@@ -139,7 +139,7 @@ ELSE()
 ENDIF()
 
 # Main library target for initializing the library. The libhpm is always a shared library.
-ADD_LIBRARY(hpm SHARED src/hpm.c)
+ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c )
 IF(USE_SINGLE_LIBRARY)
 
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl )
@@ -160,10 +160,6 @@ SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL=1 -DHPM_ENTR
 
 # Non specific SIMD targets.
 INSTALL (FILES ${headers} DESTINATION include/hpm)
-
-#ADD_EXECUTABLE(hpmtest2 test/main2.c)
-#TARGET_LINK_LIBRARIES(hpmtest -lm hpm)
-#SET_TARGET_PROPERTIES(hpmtest PROPERTIES COMPILE_FLAGS "-Iinclude" )
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
