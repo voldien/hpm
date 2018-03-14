@@ -205,7 +205,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat);
 /**
  *	Compute determine of a 4x4 matrix.
  *
- *	\arg
+ *	\arg valid matrix memory pointer.
  *
  *	@Return
  */
@@ -219,7 +219,8 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_determinantfv,
  *
  *	\out
  *
- *	@Return Computed determinant of mat. if 0 then there exist no inverse of mat.
+ *	@Return Computed determinant of mat. if 0 then there exist no inverse of mat and
+ *	out is undefined.
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_inversefv,
 		const hpmvec4x4f_t mat, hpmvec4x4f_t out);
@@ -284,7 +285,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalefv, hpmvec4x4f_t mat,
  *
  *	\mat
  *
- *	\angle
+ *	\angle in radian.
  *
  *	\axis
  *
@@ -435,6 +436,18 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
  *
  *	\mat
  *
+ *	\left
+ *
+ *	\right
+ *
+ *	\bottom
+ *
+ *	\top
+ *
+ *	\zNear
+ *
+ *	\zFar
+ *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
 		float left, float right, float bottom, float top,
@@ -445,7 +458,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
  *
  *	\winz z
  *
- *	\winx x coordinate poisition
+ *	\winx x coordinate position.
  *
  *	\winy y coordinate position.
  *
