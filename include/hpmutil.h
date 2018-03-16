@@ -38,7 +38,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* __restrict__ ey
         const hpmvec4f* __restrict__ position, const hpmvec4f* __restrict__ up,
         hpmvec4x4f_t mat);
 
-
 #ifdef __cplusplus /*	C++ Environment	*/
 }
 #endif

@@ -23,8 +23,9 @@ The main motivation of this project is to create a single library header interfa
 
 int main(int argc, const char** argv){
 	hpm_init(HPM_SSE2);
-	hpmvec4x4 mat4x4;
-	hpm_mat4x4_identitiy(mat4x4);
+	hpmvec4x4f_t mat4;
+	hpm_mat4x4_identitiy(mat4);
+	hpm_mat4x4_print(mat4);
 	hpm_release();
 }
 
