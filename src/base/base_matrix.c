@@ -277,7 +277,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 	hpmvec4x4f_t mat_quat;
 	hpmvec4x4f_t tmp;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationQf)(mat_quat, quat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationQfv)(mat_quat, quat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, mat_quat, mat);
 }
 

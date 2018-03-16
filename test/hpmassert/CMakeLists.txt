@@ -27,13 +27,14 @@ ENDIF()
 
 # Include directory for hpm declaration.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files for the gl bunny program.
-FILE(GLOB assertsrc ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+FILE(GLOB assertsrc ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 
 # Executable hpm assert program.
 ADD_EXECUTABLE(hpmassert ${assertsrc})
-TARGET_LINK_LIBRARIES(hpmassert -lm hpm)
+TARGET_LINK_LIBRARIES(hpmassert -lm -lcheck -lpthread -lrt -lsubunit hpm)
 
 # Install target.
 INSTALL (TARGETS hpmassert DESTINATION bin)

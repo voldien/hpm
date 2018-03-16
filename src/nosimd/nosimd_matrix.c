@@ -8,7 +8,6 @@ HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t so
 	destination[3] = source[3];
 }
 
-
 HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
 
 	const hpmvecf a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
@@ -65,11 +64,6 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 					larg[2][3] * (*rarg)[2] +
 					larg[3][3] * (*rarg)[3];
 }
-
-
-
-
-
 
 /*	TODO add where its based from.	*/
 HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
@@ -208,7 +202,6 @@ HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat, hpmvec4x4f_t out
 
 	return det;
 }
-
 
 HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
