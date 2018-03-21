@@ -12,8 +12,7 @@
 /*	library handle.
  	NULL means that there is no library open.	*/
 void* libhandle = NULL;
-unsigned int g_simd;
-
+unsigned int g_simd = HPM_NONE;
 
 /**
  *	Macro for getting function pointer by variable name of
@@ -24,6 +23,10 @@ unsigned int g_simd;
 int hpm_init(unsigned int simd){
 	int closestatus;
 	char* libpath;
+
+	/*	*/
+	if(simd == HPM_NONE)
+		return 0;
 
 	/*	Check if argument is a power of two.	*/
 	if( ( simd && ((simd - 1) & simd) ) ){
@@ -96,7 +99,7 @@ int hpm_init(unsigned int simd){
 	}
 
 
-	/*	matrix	*/
+	/*	Matrices.	*/
 	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
@@ -128,17 +131,17 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_rotationZf = hpm_get_symbolfuncp(hpm_mat4x4_rotationZf);
 	hpm_mat4x4_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_rotationQfv);
 
-	/**/
+	/*	*/
 	hpm_mat4x4_multi_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationfv);
 	hpm_mat4x4_multi_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scalefv);
 
-	/**/
+	/*	*/
 	hpm_mat4x4_multi_rotationxf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationxf);
 	hpm_mat4x4_multi_rotationyf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationyf);
 	hpm_mat4x4_multi_rotationzf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationzf);
 	hpm_mat4x4_multi_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQfv);
 
-	/**/
+	/*	*/
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_orthfv = hpm_get_symbolfuncp(hpm_mat4x4_orthfv);
 	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
@@ -245,7 +248,7 @@ int hpm_init(unsigned int simd){
 	/*	Utilities.	*/
 	hpm_util_lookatfv = hpm_get_symbolfuncp(hpm_util_lookatfv);
 
-	/*	*/
+	/*	Store current SIMD extension.	*/
 	g_simd = simd;
 
 	error:	/*	error.	*/
@@ -253,7 +256,7 @@ int hpm_init(unsigned int simd){
 	return ( libhandle != NULL) ;
 }
 
-/*	TODO Fix later to make it platform indepdent.	*/
+/*	TODO Fix later to make it platform independent.	*/
 int hpm_release(void){
 	int status = dlclose(libhandle);
 	if(status < 0 ){
@@ -296,7 +299,7 @@ const char* hpm_version(void){
 	return HPM_STR_VERSION;
 }
 
-/*	TODO resolve for non x86 and non x86_64 cpu*/
+/*	TODO resolve for non x86 and non x86_64 CPUS*/
 #include<cpuid.h>
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
 	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
@@ -384,7 +387,6 @@ const char* hpm_get_simd_symbol(unsigned int SIMD){
 	};
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
-
 
 void hpm_vec4_print(const hpmvec4f* vec) {
 	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
