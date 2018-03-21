@@ -80,9 +80,9 @@ FILE (GLOB basecore 	${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
 FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
 FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
 FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
-#FILE (GLOB avx512_source src/avx/*)
+#FILE (GLOB avx512_source src/avx512/*)
 
-INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Target with no simd extensions requirements.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
