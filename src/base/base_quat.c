@@ -166,13 +166,12 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4
 	}
 }
 
-HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
-	/*	(from * (1.0f - time) + to * time);	*/
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
 	hpmvecf ht = (1.0f - t);
 	*out = *a * ht + *b * t;
 }
 
-HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
 
 	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
 	hpmquatf q3;
