@@ -166,13 +166,12 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4
 	}
 }
 
-HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
-	/*	(from * (1.0f - time) + to * time);	*/
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
 	hpmvecf ht = (1.0f - t);
 	*out = *a * ht + *b * t;
 }
 
-HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, hpmquatf* out) {
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
 
 	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
 	hpmquatf q3;
@@ -191,14 +190,29 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, float t, 
 }
 
 HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
-	return (float)asinf(-2.0f * ((*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X]));
+	const hpmvecf w = hpm_quat_getwf(*lf_quat);
+	const hpmvecf x = hpm_quat_getxf(*lf_quat);
+	const hpmvecf y = hpm_quat_getyf(*lf_quat);
+	const hpmvecf z = hpm_quat_getzf(*lf_quat);
+
+	return (float)asinf(2.0f * (w * y - z * x));
 }
 
 HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
-	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_W]),( 1.0f - ( 2.0f * ((*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_X] + (*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y]))));
+	const hpmvecf w = hpm_quat_getwf(*lf_quat);
+	const hpmvecf x = hpm_quat_getxf(*lf_quat);
+	const hpmvecf y = hpm_quat_getyf(*lf_quat);
+	const hpmvecf z = hpm_quat_getzf(*lf_quat);
+
+	return (float)atan2f(2.0f * (w * z + x * y), 1.0f - (2.0f * (y * y + z * z)));
 }
 
 HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
-	return (float)atan2f(2.0f * ((*lf_quat)[HPM_QUAT_W] * (*lf_quat)[HPM_QUAT_Z] + (*lf_quat)[HPM_QUAT_X] * (*lf_quat)[HPM_QUAT_Y]), 1.0f - (2.0f * ((*lf_quat)[HPM_QUAT_Y] * (*lf_quat)[HPM_QUAT_Y] + (*lf_quat)[HPM_QUAT_Z] * (*lf_quat)[HPM_QUAT_Z])));
+	const hpmvecf w = hpm_quat_getwf(*lf_quat);
+	const hpmvecf x = hpm_quat_getxf(*lf_quat);
+	const hpmvecf y = hpm_quat_getyf(*lf_quat);
+	const hpmvecf z = hpm_quat_getzf(*lf_quat);
+
+	return (float)atan2f(2.0f * (w * x + y * z),( 1.0f - ( 2.0f * (x * x + y * y))));
 }
 

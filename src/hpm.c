@@ -8,6 +8,19 @@
 #include<dlfcn.h>
 #include<assert.h>
 
+/**
+ * Macro for adding cross platform
+ * for loading external libraries.
+ */
+#ifdef __unix__
+	#define HPM_LOAD_LIBRARY(path) dlopen(path, RTLD_LAZY)
+	#define HPM_LOAD_SYM(lib, func) dlsym(lib, func);
+	#define HPM_CLOSE(lib) dlclose(lib)
+#else
+	#define HPM_LOAD_LIBRARY(path) LoadLibrary(path)
+	#define HPM_LOAD_SYM(lib, func) GetProcAddress( (lib), func)
+	#define HPM_CLOSE(lib) FreeLibrary(lib)
+#endif
 
 /*	library handle.
  	NULL means that there is no library open.	*/

@@ -47,7 +47,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 	const hpmv4sf brod3 = _mm_set1_ps((*rarg)[2]);
 	const hpmv4sf brod4 = _mm_set1_ps((*rarg)[3]);
 
-	*output = brod1 * larg[0] + brod2 * larg[1] + brod3 * larg[2] + brod4 * larg[3];
+	*output = (brod1 * larg[0]) + (brod2 * larg[1]) + (brod3 * larg[2]) + (brod4 * larg[3]);
 }
 
 
@@ -134,8 +134,6 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
 	return det[0];
 }
-
-
 
 /*	Cramer's rule	*/
 HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){
