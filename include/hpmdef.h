@@ -285,6 +285,19 @@
 	#endif
 #endif
 
+/**
+ *	restrict decleration.
+ */
+#ifndef HPM_RESTRICT
+	#if defined(HPM_GNUC)
+		#define HPM_RESTRICT __restrict__
+	#elif defined(HPM_VC) || defined(HPM_CLANG)
+		#define HPM_RESTRICT __restrict
+    #else
+	    #define HPM_RESTRICT
+	#endif
+#endif
+
 
 #if defined(HPM_ARM) || defined(HPM_I386)
 
