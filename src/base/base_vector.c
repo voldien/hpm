@@ -8,7 +8,7 @@
 #   endif
 
 
-HPM_IMP(void, hpm_vec4_copyfv, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source){
+HPM_IMP(void, hpm_vec4_copyfv, hpmvec4f* HPM_RESTRICT destination, const hpmvec4f* HPM_RESTRICT source){
 	*destination = *source;
 }
 

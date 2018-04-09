@@ -7,11 +7,11 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) == (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
 	const hpmvec4i mask = {~0, ~0, ~0, ~0};
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
@@ -23,11 +23,11 @@ HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 }
 
 
-HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) != (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
 	const hpmvec4i mask = {~0, ~0, ~0, ~0};
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
@@ -38,17 +38,17 @@ HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
 #endif
 }
 
-HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) > (*b);
 }
-HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) < (*b);
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* __restrict__ ufa = a;
-	const hpmmat4uf* __restrict__ ufb = b;
+	const hpmmat4uf* HPM_RESTRICT ufa = a;
+	const hpmmat4uf* HPM_RESTRICT ufb = b;
 
 	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_US);
 	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_US);
@@ -59,8 +59,8 @@ HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* __restrict__ ufa = a;
-	const hpmmat4uf* __restrict__ ufb = b;
+	const hpmmat4uf* HPM_RESTRICT ufa = a;
+	const hpmmat4uf* HPM_RESTRICT ufb = b;
 
 	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OS);
 	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OS);

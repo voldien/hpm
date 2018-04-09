@@ -75,7 +75,7 @@ HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect
 
 }
 
-HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis, float angle){
+HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis, float angle){
 	const hpmvecf half_angle = sinf(angle * 0.5f);
 	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
 	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
@@ -100,8 +100,8 @@ HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_rad
 	(*quat)[HPM_QUAT_Z] = (float)((float)sy * (float)cr * (float)cp - (float)cy * (float)sr * (float)sp);
 }
 
-HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
-		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out){
+HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
+		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out){
 
 	hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
@@ -124,8 +124,8 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
 }
 
 
-HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat){
-	const hpmmat4uf* __restrict__ umat = mat;
+HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4f* HPM_RESTRICT mat){
+	const hpmmat4uf* HPM_RESTRICT umat = mat;
 
 	float trace = umat->s.m11 + umat->s.m22 + umat->s.m33;
 
