@@ -7,11 +7,11 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) == (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
 
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
@@ -24,7 +24,7 @@ HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 }
 
 
-HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* __restrict__ res){
 	*res = (*a) != (*b);
 }
 HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,

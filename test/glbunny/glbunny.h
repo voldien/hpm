@@ -58,29 +58,29 @@ extern void enableGLDebug(void);
  *
  *	@Return shader program unique id.
  */
-extern GLint createShader(const char* __restrict__ vsource,
-        const char* __restrict__ fsource);
+extern GLint createShader(const char* HPM_RESTRICT vsource,
+        const char* HPM_RESTRICT fsource);
 
 /**
  *	Create bunny.
  *
  *	@Return non-negative if succesfully.
  */
-extern GLuint createBunny(unsigned int* __restrict__ numvertices,
-        unsigned int* __restrict__ numindices);
+extern GLuint createBunny(unsigned int* HPM_RESTRICT numvertices,
+        unsigned int* HPM_RESTRICT numindices);
 
 /**
  *	Create grid object.
  *
  *	@Return
  */
-extern GLuint createGrid(unsigned int* __restrict__ numvertices,
-        unsigned int* __restrict__* numindices);
+extern GLuint createGrid(unsigned int* HPM_RESTRICT numvertices,
+        unsigned int* HPM_RESTRICT* numindices);
 /**
  *	@Return
  */
-extern GLuint createCube(unsigned int* __restrict__ nVertices,
-        unsigned int* __restrict__ nIndices);
+extern GLuint createCube(unsigned int* HPM_RESTRICT nVertices,
+        unsigned int* HPM_RESTRICT nIndices);
 
 /**
  *	Print verbose information about the

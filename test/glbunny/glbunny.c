@@ -107,8 +107,8 @@ int Log2MutExlusive32(unsigned int a){
 	assert(0);
 }
 
-GLint createShader(const char* __restrict__ vsource,
-        const char* __restrict__ fsource) {
+GLint createShader(const char* HPM_RESTRICT vsource,
+        const char* HPM_RESTRICT fsource) {
 
 	GLuint prog;
 	GLuint vs, fs;
@@ -169,8 +169,8 @@ GLint createShader(const char* __restrict__ vsource,
 	return prog;
 }
 
-GLuint createBunny(unsigned int* __restrict__ numvertices,
-        unsigned int* __restrict__ numindices){
+GLuint createBunny(unsigned int* HPM_RESTRICT numvertices,
+        unsigned int* HPM_RESTRICT numindices){
 
 	GLuint vao;
 	GLuint vbo;

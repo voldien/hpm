@@ -76,8 +76,8 @@ typedef union{
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_copyfv,
-		hpmquatf* __restrict__ destination,
-		const hpmquatf* __restrict__ source);
+		hpmquatf* HPM_RESTRICT destination,
+		const hpmquatf* HPM_RESTRICT source);
 
 /**
  *	Set quaternion, component wise.
@@ -221,7 +221,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* destination);
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
-		hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis,
+		hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis,
 		float angle);
 
 /**
@@ -231,8 +231,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
  *
  *	\up
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* __restrict__ lookat,
-		const hpmquatf* __restrict__ up, hpmquatf* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
+		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out);
 
 /**
  *	TODO rename later.
@@ -244,7 +244,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* __restrict__ lo
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv,
-		hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat);
+		hpmquatf* HPM_RESTRICT quat, const hpmvec4f* HPM_RESTRICT mat);
 
 /**
  *	Compute quaternion from eular.

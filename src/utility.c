@@ -1,7 +1,7 @@
 #include"hpmutil.h"
 
-HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
-		const hpmvec4f* __restrict__ position, const hpmvec4f* __restrict__ up,
+HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
+		const hpmvec4f* HPM_RESTRICT position, const hpmvec4f* HPM_RESTRICT up,
 		hpmvec4x4f_t mat) {
 
 	hpmvec3f zaxis;

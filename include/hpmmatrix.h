@@ -103,8 +103,8 @@ typedef union{
  *	@@Return
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv,
-		hpmvec4x4fp_t* __restrict__ destination,
-		const hpmvec4x4fp_t* __restrict__ source);
+		hpmvec4x4fp_t* HPM_RESTRICT destination,
+		const hpmvec4x4fp_t* HPM_RESTRICT source);
 
 
 /**
@@ -238,9 +238,9 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_inversefv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
-		const hpmvec4x4f_t mat, hpmvec3f* __restrict__ position,
-		hpmquatf* __restrict__ rotation,
-		hpmvec3f* __restrict__ scale);
+		const hpmvec4x4f_t mat, hpmvec3f* HPM_RESTRICT position,
+		hpmquatf* HPM_RESTRICT rotation,
+		hpmvec3f* HPM_RESTRICT scale);
 
 /**
  *	Construct translation matrix.
@@ -342,8 +342,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQfv,
  *	Create rotation matrix from three bias vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
-		hpmvec4x4f_t mat, const hpmvec4f* __restrict__ xaxis,
-		const hpmvec4f* __restrict__ yaxis, const hpmvec4f* __restrict__ zaxis);
+		hpmvec4x4f_t mat, const hpmvec4f* HPM_RESTRICT xaxis,
+		const hpmvec4f* HPM_RESTRICT yaxis, const hpmvec4f* HPM_RESTRICT zaxis);
 
 /**
  *	Construct translation matrix and multiply

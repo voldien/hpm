@@ -41,9 +41,9 @@ HPM_IMP( void, hpm_mat4x4_subraction_mat4x4fv, const hpmvec4x4f_t larg, const hp
 }
 
 HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
-		hpmvec3f* __restrict__ position,
-		hpmquatf* __restrict__ rotation,
-		hpmvec3f* __restrict__ scale){
+		hpmvec3f* HPM_RESTRICT position,
+		hpmquatf* HPM_RESTRICT rotation,
+		hpmvec3f* HPM_RESTRICT scale){
 
 	const hpmmat4uf* umat = mat;
 	hpmmat4uf m1;
@@ -210,8 +210,8 @@ HPM_IMP( void, hpm_mat4x4_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* quat){
 }
 
 HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
-		hpmvec4x4f_t mat, const hpmvec4f* __restrict__ xaxis,
-		const hpmvec4f* __restrict__ yaxis, const hpmvec4f* __restrict__ zaxis){
+		hpmvec4x4f_t mat, const hpmvec4f* HPM_RESTRICT xaxis,
+		const hpmvec4f* HPM_RESTRICT yaxis, const hpmvec4f* HPM_RESTRICT zaxis){
 
 	const hpmvec4f row3 = {0,0,0,1};
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[0], xaxis);

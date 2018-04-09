@@ -10,8 +10,8 @@
 
 
 HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
-	hpmmat4uf* __restrict__ d = destination;
-	const hpmmat4uf* __restrict__ s = source;
+	hpmmat4uf* HPM_RESTRICT d = destination;
+	const hpmmat4uf* HPM_RESTRICT s = source;
 	 _mm256_storeu_ps(&d->oc[0], s->oc[0]);
 	 _mm256_storeu_ps(&d->oc[1], s->oc[1]);
 }
