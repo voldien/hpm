@@ -130,33 +130,34 @@ HPM_BENCHMARK_FUNC_DECL(hpm_mat4_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4_neqfv);
 
 /**
- *	Perforamance type.
+ *	Performance type.
  */
 enum PerformanceTestType{
-	eMatrix 		= 0x1,						/*	Matrices.	*/
-	eTransfering 	= 0x2,						/*	Data transfer.	*/
-	eComparing 		= 0x4,						/*	*/
-	eIntegrity 		= 0x8,						/*	*/
-	eQuaternion 	= 0x10,						/*	*/
-	eMath 			= 0x20,						/*	*/
-	eVector 		= 0x40,						/*	*/
-	eAll 			= (unsigned int)(-1)		/*	*/
+	eMatrix         = 0x1,                      /*	Matrices.	*/
+	eTransfering    = 0x2,                      /*	Data transfer.	*/
+	eComparing      = 0x4,                      /*	Equality test.	*/
+	eIntegrity      = 0x8,                      /*	Integrity test.	*/
+	eQuaternion     = 0x10,                     /*	Quaternion test.	*/
+	eMath           = 0x20,                     /*	Math functions test.	*/
+	eVector         = 0x40,                     /*	Vector function test.	*/
+	eAll            = (unsigned int)(-1)        /*	Perform all tests.	*/
 };
 
 /**
  *	Precision type.
  */
 enum PrecisionType{
-	eFloat			= 1,					/**/
-	eDouble 		= 2,					/**/
-	eAllPrecision	= (eFloat | eDouble)
+	eFloat          = 1,                    /*	Single precision floating points.	*/
+	eDouble         = 2,                    /*	Dobule precision floating points.	*/
+	eAllPrecision   = (eFloat | eDouble)    /*	Perform all precision types.	*/
 };
 
-
 /**
- *	Read user argument option.
+ *
  */
-extern void readArgument(int argc, char** argv);
+typedef struct result_t{
+	
+}Result;
 
 extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
 extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
