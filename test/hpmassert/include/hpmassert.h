@@ -23,13 +23,20 @@
 #include<assert.h>
 
 /**
- *	Function declaration.
+ *	Global variable decleration.
+ */
+extern int g_SIMD;
+extern int g_type;
+extern int g_precision;
+extern const unsigned int g_it;
+
+/**
+ *	Macro function declaration.
  */
 #define HPM_BENCHMARK_FUNC_DECL(func)	\
 extern void func##sp_test(void);
 #define HPM_BENCHMARK_FUNC_IMP(func)	\
 void func##sp_test(void)
-
 
 /**
  * Vector benchmark function declaration
