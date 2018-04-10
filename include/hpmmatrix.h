@@ -47,7 +47,6 @@ extern "C" {
 #endif
 
 
-
 /**
  *	Matrix4x4 float
  *

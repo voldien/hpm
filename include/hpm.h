@@ -96,7 +96,7 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
 
 /**
- *	Get current initialized SIMD exention.
+ *	Get current initialized SIMD extension.
  *
  *	@Return none zero if initialized.
  */
@@ -116,7 +116,7 @@ extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName, 
 /**
  *	Get hpm version.
  *
- *	@Return non NULL pointer.
+ *	@Return non NULL terminated string pointer.
  */
 extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
 
