@@ -6,7 +6,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_copyfv) {
 	hpmvec4x4f_t vec2 = { 1, 0, 6, 1 };
 	hpmvec4x4f_t vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_copyfv(&vec1, &vec2);
 	}
 }
@@ -16,7 +16,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat4x4fv) {
 	hpmvec4x4f_t vec2 = { 1, 0, 6, 1 };
 	hpmvec4x4f_t vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_multiply_mat4x4fv(&vec1, &vec2, &vec3);
 	}
 }
@@ -27,7 +27,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_multiply_mat1x4fv) {
 	hpmvec4x4f_t vec2 = { 1, 0, 6, 1 };
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_multiply_mat1x4fv(&vec1, &vec2, &vec3);
 	}
 }
@@ -36,7 +36,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_identityfv) {
 	register int x;
 	hpmvec4x4f_t vec1 = { 1, 2, 1, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_identityfv(&vec1);
 	}
 }
@@ -44,7 +44,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_transposefv) {
 	register int x;
 	hpmvec4x4f_t vec1 = { 1, 2, 1, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_transposefv(&vec1);
 	}
 }
@@ -52,7 +52,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_determinantfv) {
 	register int x;
 	hpmvec4x4f_t vec1 = { 1, 2, 1, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_transposefv(&vec1);
 	}
 }
@@ -62,7 +62,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_inversefv) {
 	hpmvec4x4f_t vec1 = { 1, 2, 1, 1 };
 	hpmvec4x4f_t inv = { 1, 2, 1, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_mat4x4_inversefv(vec1, inv);
 	}
 }
