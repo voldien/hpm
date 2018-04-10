@@ -153,9 +153,11 @@ enum PrecisionType{
 };
 
 /**
- *	Read user argument option.
+ *
  */
-extern void readArgument(int argc, char** argv);
+typedef struct result_t{
+	
+}Result;
 
 extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
 extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
