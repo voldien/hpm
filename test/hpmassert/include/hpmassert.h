@@ -158,14 +158,13 @@ enum PrecisionType{
  */
 extern void readArgument(int argc, char** argv);
 
-/**
- *	Function forward declaration.
- */
-extern long int hptGetTimeNano(void);				/*	*/
-extern long int hptGetTimeResolution(void);			/*	*/
+extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
+extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
+extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
 extern int hptLog2MutExlusive32(unsigned int a);	/*	*/
 extern void htpSimdExecute(unsigned int simd);		/*	*/
 extern void htpBenchmarkPerformanceTest(void);		/*	*/
-extern void htpIntegritySpCheck(void);				/*	Check each function is working as accordinly.	*/
+extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordinly.	*/
+extern void htpFormatResult(unsigned int numResults, const Result* results);
 
 #endif
