@@ -33,6 +33,28 @@ extern const char* gc_fragmentpolygone;    /*	Fragment.	*/
 extern uint32_t g_hpmflag;      /*	*/
 extern FILE* g_outputfd;        /*	*/
 extern int g_fullscreen;        /*	*/
+extern int g_debug;				/*	*/
+
+/**
+ *
+ */
+typedef struct geometry_t{
+	GLint vao;
+	GLint vbo;
+	GLint ibo;
+	GLint numVertices;
+	GLint numIndices;
+	hpmvec4f minBound;
+	hpmvec4f maxBound;
+	hpmvec4f centerBound;
+}Geometry;
+
+/**
+ *	Get version of hpmglbunny program
+ *	version.
+ *	@Return non-null terminated string.
+ */
+extern const char* get_glbunny_version(void);
 
 /**
  *	Get GLSL version of current opengl context.
