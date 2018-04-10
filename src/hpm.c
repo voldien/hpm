@@ -111,7 +111,6 @@ int hpm_init(unsigned int simd){
 		goto error;
 	}
 
-
 	/*	Matrices.	*/
 	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
 
@@ -263,35 +262,34 @@ int hpm_init(unsigned int simd){
 
 	/*	Store current SIMD extension.	*/
 	g_simd = simd;
-
 	error:	/*	error.	*/
 
 	return ( libhandle != NULL) ;
 }
 
 /*	TODO Fix later to make it platform independent.	*/
-int hpm_release(void){
-	int status = dlclose(libhandle);
-	if(status < 0 ){
-		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
-	}
-	libhandle = NULL;
-	g_simd = 0;
-	return status == 0;
+int hpm_release(void) {
+    int status = dlclose(libhandle);
+    if (status < 0)
+        fprintf(stderr, "Failed to close library. | %s\n", dlerror());
+    libhandle = NULL;
+    g_simd = 0;
+    return status == 0;
 }
 
-int hpm_isinit(void){
+int hpm_isinit(void) {
 	return libhandle != NULL;
 }
 
-unsigned int hpm_get_simd(void){
+unsigned int hpm_get_simd(void) {
 	return g_simd;
 }
 
-void* hpm_get_address(const char* cfunctionName, unsigned int simd){
+void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
 
 	void* pfunc;
 
+    /*  Load function from main library.    */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 	char buf[128];
 	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
@@ -300,15 +298,15 @@ void* hpm_get_address(const char* cfunctionName, unsigned int simd){
 #else
 	pfunc = dlsym(libhandle, cfunctionName);
 #endif
-	/*	*/
-	if(pfunc == NULL){
-		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
-	}
 
-	return ( pfunc );
+    /*	Check error.    */
+    if (pfunc == NULL)
+        fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
+
+    return (pfunc);
 }
 
-const char* hpm_version(void){
+const char* hpm_version(void) {
 	return HPM_STR_VERSION;
 }
 
@@ -320,41 +318,45 @@ const char* hpm_version(void){
 	#define cpuid(regs, i)
 #endif
 
-int hpm_supportcpufeat(unsigned int simd){
-	int cpuInfo[4] = {0};
+int hpm_supportcpufeat(unsigned int simd) {
+    int cpuInfo[4] = {0};
 
-	switch(simd){
-	case HPM_NOSIMD:
-		return 1;	/*	Always supported.	*/
-	case HPM_MMX:
-		cpuid(cpuInfo, 1);
-		return 0;	/*	Not supported in the library.	*/
-		return (cpuInfo[2] & bit_MMX);
-	case HPM_SSE:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[3] & bit_SSE);
-	case HPM_SSE2:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[3] & bit_SSE2);
-	case HPM_SSE3:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE3);
-	case HPM_SSSE3:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSSE3);
-	case HPM_SSE4_1:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE4_1);
-	case HPM_SSE4_2:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE4_2);
-	case HPM_AVX:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_AVX);
-	case HPM_AVX2:
-		cpuid(cpuInfo, 7);
-		return (cpuInfo[0] & bit_AVX2);
-	case HPM_NEON:
+    switch (simd) {
+        case HPM_NOSIMD:
+            return 1;    /*	Always supported.	*/
+        case HPM_MMX:
+            cpuid(cpuInfo, 1);
+            return 0;    /*	Not supported in the library.	*/
+            return (cpuInfo[2] & bit_MMX);
+        case HPM_SSE:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[3] & bit_SSE);
+        case HPM_SSE2:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[3] & bit_SSE2);
+        case HPM_SSE3:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE3);
+        case HPM_SSSE3:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSSE3);
+        case HPM_SSE4_1:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE4_1);
+        case HPM_SSE4_2:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE4_2);
+        case HPM_AVX:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_AVX);
+        case HPM_AVX2:
+            cpuid(cpuInfo, 7);
+            return (cpuInfo[0] & bit_AVX2);
+        case HPM_AVX512:
+            cpuid(cpuInfo, 7);
+            return 0;   /*  Not supported yet!  */
+            return (cpuInfo[0] & (bit_AVX512F | bit_AVX512DQ | bit_AVX512BW));
+        case HPM_NEON:
 #if defined(HPM_ARM_NEON)
 		return 1;
 #else
@@ -368,7 +370,6 @@ int hpm_supportcpufeat(unsigned int simd){
 static int log2MutExlusive32(unsigned int a){
 
 	int i = 0;
-	int po = 0;
 	const int bitlen = 32;
 
 	if(a == 0)
@@ -382,7 +383,7 @@ static int log2MutExlusive32(unsigned int a){
 	assert(0);
 }
 
-const char* hpm_get_simd_symbol(unsigned int SIMD){
+const char* hpm_get_simd_symbol(unsigned int SIMD) {
 	static const char* gc_simd_symbols[] = {
 			"",
 			"NOSIMD",

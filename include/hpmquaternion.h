@@ -294,7 +294,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg,
 /**
  *	Compute quaternion pitch angle rotation in radian.
  *
- *	\arg
+ *	\arg quaternion.
  *
  *	@Return pitch (X axis) angle in radian.
  */
@@ -303,7 +303,7 @@ HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_pitchfv, const hpmquatf* arg);
 /**
  *	Compute quaternion yaw angle rotation in radian.
  *
- *	\arg
+ *	\arg quaternion.
  *
  *	@Return yaw (Y axis) angle in radian.
  */
@@ -312,7 +312,7 @@ HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_yawfv, const hpmquatf* arg);
 /**
  *	Compute quaternion roll angle rotation in radian.
  *
- *	\arg quaternion
+ *	\arg quaternion.
  *
  *	@Return roll (Z axis) angle in radian.
  */

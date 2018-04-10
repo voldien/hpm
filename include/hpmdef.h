@@ -311,7 +311,7 @@
 #define HPM_TEXT(quote) quote										/*	*/
 
 /**
- *	Get current simd extension prefix.
+ *	Get current SIMD extension prefix.
  */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 
