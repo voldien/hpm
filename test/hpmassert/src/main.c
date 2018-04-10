@@ -37,6 +37,7 @@ const unsigned int g_it = 1E7;
 
 void htpReadArgument(int argc, char** argv) {
 
+	/*	*/
 	static struct option longoption[] = {
 		{"version",     no_argument, 		NULL, 'v'},	/*	*/
 		{"assert",      no_argument, 		NULL, 'A'},	/*	*/
@@ -107,6 +108,8 @@ void htpReadArgument(int argc, char** argv) {
 			g_type = eIntegrity;
 			break;
 		case 'P':
+			break;
+		case 'r':
 			break;
 		default:
 			break;
@@ -190,12 +193,11 @@ long int hptGetTime(void){
 /**
  *	Invoked benchmark function.
  */
-#define HPM_BENCHMARK_FUNC_CALL(func)								\
-		ttime = hptGetTimeNano();									\
-		func##sp_test();											\
-		ttotaltime = hptGetTimeNano() - ttime;						\
-		printf("%s %f seconds.\n", HPM_STR(func), (float)ttotaltime / 1E9f);		\
-
+#define HPM_BENCHMARK_FUNC_CALL(func)											\
+		ttime = hptGetTime();													\
+		func##sp_test();														\
+		ttotaltime = hptGetTime() - ttime;										\
+		printf("%s %f seconds.\n", HPM_STR(func), (float)ttotaltime / res);		\
 
 void htpBenchmarkPerformanceTest(void){
 
