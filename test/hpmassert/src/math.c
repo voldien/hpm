@@ -7,7 +7,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_maxfv) {
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec4_maxfv(&vec1, &vec2, &vec3);
 	}
 }
@@ -17,7 +17,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec8_maxfv) {
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec8_maxfv(&vec1, &vec2, &vec3);
 	}
 }
@@ -27,7 +27,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_minfv) {
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec4_minfv(&vec1, &vec2, &vec3);
 	}
 }
@@ -37,7 +37,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec8_minfv) {
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec8_minfv(&vec1, &vec2, &vec3);
 	}
 }
@@ -47,7 +47,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_sqrtfv) {
 	hpmvec4f vec1 = { 1, 2, 1, 1 };
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec4_sqrtfv(&vec1, &vec2);
 	}
 }
@@ -56,7 +56,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec8_sqrtfv) {
 	hpmvec8f vec1 = { 1, 2, 1, 1 };
 	hpmvec8f vec2 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec8_sqrtfv(&vec1, &vec2);
 	}
 }
@@ -65,7 +65,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_fast_sqrtfv) {
 	hpmvec4f vec1 = { 1, 2, 1, 1 };
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec4_fast_sqrtfv(&vec1, &vec2);
 	}
 }
@@ -74,7 +74,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec8_fast_sqrtfv) {
 	hpmvec8f vec1 = { 1, 2, 1, 1 };
 	hpmvec8f vec2 = { 1, 0, 6, 1 };
 
-	for (x = 0; x < it; x++) {
+	for (x = 0; x < g_it; x++) {
 		hpm_vec8_fast_sqrtfv(&vec1, &vec2);
 	}
 }

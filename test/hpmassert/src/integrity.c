@@ -119,6 +119,7 @@ START_TEST (quaternion){
 
 	/*	Inverse simple check.	*/
 	hpm_quat_identityfv(&q1);
+	hpm_quat_identityfv(&q2);
 	hpm_quat_inversefv(&q2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q2), 1);
 
@@ -147,26 +148,17 @@ START_TEST (quaternion){
 	hpm_quat_get_vectorfv(&q1, &expdir, &direction);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &nexpdir), 1);
 
-	/*	Quaternion Angle	*/
-	const hpmvecf pitch = 0;
-	const hpmvecf yaw = 1;
-	const hpmvecf roll = 3;
-	hpm_quat_axisf(&q2, pitch, yaw, roll);
-	ck_assert_int_eq((int)round(hpm_quat_pitchfv(&q2)), pitch);
-	ck_assert_int_eq((int)round(hpm_quat_yawfv(&q2)), yaw);
-	ck_assert_int_eq((int)round(hpm_quat_rollfv(&q2)), roll);
-
 	/*	Axis rotation.	*/
 	const hpmvec4f axisDir = { 0.0f, 0.0f, 1.0f, 0.0f };
-	const hpmvecf angle = HPM_PI / 6.0f;
+	const hpmvecf angle = (hpmvecf)HPM_PI / 6.0f;
 	hpm_quat_axis_anglefv(&q1, &axisDir, angle);
 	ck_assert_msg(hpm_quat_rollfv(&q1) == angle, "quaternion axis rotation failed.");
 
 	/*	Linear interpolation.	*/
-	hpm_quat_axisf(&q1, HPM_PI / 4.0f, HPM_PI / 4.0f, HPM_PI / 6.0f);
-	hpm_quat_axisf(&q2, HPM_PI / 2.0f, HPM_PI / 1.0f, HPM_PI / 1.0f);
+	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 4.0f, (hpmvecf)HPM_PI / 4.0f, (hpmvecf)HPM_PI / 6.0f);
+	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI / 2.0f, (hpmvecf)HPM_PI / 1.0f, (hpmvecf)HPM_PI / 1.0f);
 	hpm_quat_lerpfv(&q1, &q2, 0.5f, &q3);
-	ck_assert_msg(hpm_quat_rollfv(&q3) == HPM_PI / 3.0f, "quaternion linear interpolation failed.");
+	ck_assert_msg(hpm_quat_rollfv(&q3) == (hpmvecf)HPM_PI / 3.0f, "quaternion linear interpolation failed.");
 
 	/*	Spherical interpolation.	*/
 	hpm_quat_slerpfv(&q1, &q2, 0.5f, &q3);
@@ -216,7 +208,7 @@ START_TEST (matrix4x4){
 	ck_assert_int_eq(hpm_mat4_eqfv(m3, m2), 1);
 
 	/*	Transpose.	*/
-	hpm_mat4x4_rotationXf(m2, HPM_PI / 3.5f);
+	hpm_mat4x4_rotationXf(m2, (hpmvecf)HPM_PI / 3.5f);
 	hpm_mat4x4_copyfv(m1, m2);
 	hpm_mat4x4_transposefv(m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
@@ -253,21 +245,29 @@ START_TEST (transformation){
 
 	/*	Check rotation transformation in X axis.	*/
 	const hpmvec4f exXrot = {0.0f, 0.0f, -1.0f, 0.0f};
-	hpm_mat4x4_rotationXf(m1, HPM_PI);
+	hpm_mat4x4_rotationXf(m1, (hpmvecf)HPM_PI);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	ck_assert_int_eq(hpm_vec4_eqfv(&exXrot, &v3), 1);
 
 	/*	Check rotation transformation in Y axis.	*/
 	const hpmvec4f exYrot = {0.0f, 0.0f, -1.0f, 0.0f};
-	hpm_mat4x4_rotationYf(m1, HPM_PI);
+	hpm_mat4x4_rotationYf(m1, (hpmvecf)HPM_PI);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	ck_assert_int_eq(hpm_vec4_eqfv(&exYrot, &v3), 1);
 
 	/*	Check rotation transformation in Z axis.	*/
 	const hpmvec4f exZrot = {0.0f, 0.0f, 1.0f, 0.0f};
-	hpm_mat4x4_rotationZf(m1, HPM_PI);
+	hpm_mat4x4_rotationZf(m1, (hpmvecf)HPM_PI);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	ck_assert_int_eq(hpm_vec4_eqfv(&exZrot, &v3), 1);
+
+	/*  */
+	hpm_mat4x4_orthfv(m1, -10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);
+	ck_assert_int_eq(m1[3][3], 1);
+
+	/*  */
+	hpm_mat4x4_projfv(m1, 30.0f, 1.3333f, 0.15f, 1000.0f);
+	ck_assert_int_eq(m1[3][3], 1);
 
 
 	hpm_mat4x4_rotationfv(m1, 2.0, &v1);
@@ -295,7 +295,6 @@ START_TEST(math){
 	hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f };
-
 
 	/*	*/
 	hpm_vec4_maxfv(&v1, &v2, &v3);
@@ -334,6 +333,7 @@ START_TEST(math){
 	ck_assert_int_ne((int)hpm_vec4_max_compfv(&v1), cvyf);
 	ck_assert_int_ne((int)hpm_vec4_max_compfv(&v1), cvzf);
 
+	/*  */
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvwf);
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvzf);
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvyf);
