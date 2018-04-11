@@ -26,6 +26,7 @@
 #include<sys/time.h>
 #include<unistd.h>
 #include<getopt.h>
+#include"hpmparser.h"
 
 /**
  *	Global variables.
@@ -35,22 +36,42 @@ int g_type = eAll;
 int g_precision = eFloat;
 const unsigned int g_it = 1E7;
 
+static const char *gs_type[] = {
+		"",
+		"matrix",
+		"transfer",
+		"compare",
+		"integrity",
+		"quaternion",
+		"math",
+		"vector",
+		NULL,
+};
+
+static const char *gs_precision[] = {
+		"",
+		"float",
+		"double",
+		NULL
+};
+
 void htpReadArgument(int argc, char** argv) {
 
 	/*	*/
 	static struct option longoption[] = {
-		{"version",     no_argument, 		NULL, 'v'},	/*	*/
-		{"assert",      no_argument, 		NULL, 'A'},	/*	*/
-		{"performance", no_argument, 		NULL, 'P'},	/*	*/
-		{"type",        required_argument, 	NULL, 't'},	/*	*/
-		{"simd",        required_argument, 	NULL, 's'},	/*	*/
-		{"precision",   required_argument, 	NULL, 'p'},	/*	*/
+		{"version",         no_argument, 		NULL, 'v'},	/*	Print hpm version that the program uses.	*/
+		{"assert",          no_argument, 		NULL, 'A'},	/*	Assert only integrity.	*/
+		{"performance",     no_argument, 		NULL, 'P'},	/*	Assert only performance.	*/
+		{"type",            required_argument, 	NULL, 't'},	/*	Specify type to assert.	*/
+		{"simd",            required_argument, 	NULL, 's'},	/*	select SIMD for assertion.	*/
+		{"precision",       required_argument, 	NULL, 'p'},	/*	Select precision for assertion.	*/
+		{"format-result",   required_argument, 	NULL, 'r'},	/*	Format the result to a more readable format.	*/
 		{NULL, 0, NULL, 0},
 	};
 
 	int c;
 	int optindex;
-	const char* shortarg = "APs:vp:t:";
+	const char* shortarg = "APs:vp:t:r";
 
 	/*	Iterate through options.	*/
 	while ((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF) {
@@ -81,33 +102,19 @@ void htpReadArgument(int argc, char** argv) {
 		case 'v':
 			printf("HPM version %s\n", hpm_version());
 			exit(EXIT_SUCCESS);
-			break;
 		case 'p':
-			if (optarg) {
-				if (strchr(optarg, 'd') == 0 || strstr(optarg, "double") == 0) {
-					g_precision |= eDouble;
-				} else if (strchr(optarg, 'f') == 0
-				        || strstr(optarg, "float") == 0) {
-					g_precision |= eFloat;
-				} else if (strchr(optarg, 'a') == 0
-				        || strstr(optarg, "all") == 0) {
-					g_precision |= eAllPrecision;
-				}
-			}
+			if (optarg)
+				g_precision = hpmParserBitWiseMultiParam(optarg, gs_precision);
 			break;
 		case 't':
-			if (optarg) {
-				if (strchr(optarg, 'a') == 0 || strstr(optarg, "all") == 0) {
-					g_type |= eAll;
-				} else if (strstr(optarg, "matrix") == 0) {
-					g_type |= eMatrix;
-				}
-			}
+			if (optarg)
+                g_type = hpmParserBitWiseMultiParam(optarg, gs_type);
 			break;
 		case 'A':
 			g_type = eIntegrity;
 			break;
 		case 'P':
+		    g_type = eAll & ~(eIntegrity);
 			break;
 		case 'r':
 			break;
@@ -127,37 +134,16 @@ int main(int argc, char** argv) {
 
 	/*	Iterate through each possible SIMD options.	*/
 	for (i = 0; i < nenum; i++) {
-		/*	Check if simd is specified and supported.	*/
-		if ((g_SIMD & (1 << i)) && hpm_supportcpufeat(1 << i)) {
+		/*	Check if SIMD is specified and supported.	*/
+		if ((g_SIMD & (1 << i)) && hpm_supportcpufeat(1 << i))
 			htpSimdExecute(1 << i);
-		}
 	}
 
 	/*	End of test.	*/
 	return EXIT_SUCCESS;
 }
 
-int hptLog2MutExlusive32(unsigned int a) {
-
-	int i = 0;
-	int po = 0;
-	const int bitlen = 32;
-
-	/*	Special case.	*/
-	if (a == 0)
-		return 0;
-
-	/*	Iterate through each bits.	*/
-	for (; i < bitlen; i++) {
-		if ((a >> i) & 0x1)
-			return (i + 1);
-	}
-
-	assert(0);
-}
-
 void htpSimdExecute(unsigned int simd){
-	int res;
 
 	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
 
@@ -185,9 +171,13 @@ long int hptGetTimeResolution(void){
 }
 
 long int hptGetTime(void){
+#if defined(HPM_UNIX)
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
     return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3;
+#else
+	return 1;
+#endif
 }
 
 /**
