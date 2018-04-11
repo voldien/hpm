@@ -36,7 +36,7 @@ int g_type = eAll;
 int g_precision = eFloat;
 const unsigned int g_it = 1E7;
 
-const char *gs_type[] = {
+static const char *gs_type[] = {
 		"",
 		"matrix",
 		"transfer",
@@ -46,6 +46,13 @@ const char *gs_type[] = {
 		"math",
 		"vector",
 		NULL,
+};
+
+static const char *gs_precision[] = {
+		"",
+		"float",
+		"double",
+		NULL
 };
 
 void htpReadArgument(int argc, char** argv) {
@@ -96,17 +103,8 @@ void htpReadArgument(int argc, char** argv) {
 			printf("HPM version %s\n", hpm_version());
 			exit(EXIT_SUCCESS);
 		case 'p':
-			if (optarg) {
-				if (strchr(optarg, 'd') == 0 || strstr(optarg, "double") == 0) {
-					g_precision |= eDouble;
-				} else if (strchr(optarg, 'f') == 0
-				        || strstr(optarg, "float") == 0) {
-					g_precision |= eFloat;
-				} else if (strchr(optarg, 'a') == 0
-				        || strstr(optarg, "all") == 0) {
-					g_precision |= eAllPrecision;
-				}
-			}
+			if (optarg)
+				g_precision = hpmParserBitWiseMultiParam(optarg, gs_precision);
 			break;
 		case 't':
 			if (optarg)
