@@ -26,6 +26,7 @@
 #include<sys/time.h>
 #include<unistd.h>
 #include<getopt.h>
+#include"hpmparser.h"
 
 /**
  *	Global variables.
@@ -34,6 +35,18 @@ int g_SIMD = (unsigned int)(-1);
 int g_type = eAll;
 int g_precision = eFloat;
 const unsigned int g_it = 1E7;
+
+const char *gs_type[] = {
+		"",
+		"matrix",
+		"transfer",
+		"compare",
+		"integrity",
+		"quaternion",
+		"math",
+		"vector",
+		NULL,
+};
 
 void htpReadArgument(int argc, char** argv) {
 
@@ -96,18 +109,14 @@ void htpReadArgument(int argc, char** argv) {
 			}
 			break;
 		case 't':
-			if (optarg) {
-				if (strchr(optarg, 'a') == 0 || strstr(optarg, "all") == 0) {
-					g_type |= eAll;
-				} else if (strstr(optarg, "matrix") == 0) {
-					g_type |= eMatrix;
-				}
-			}
+			if (optarg)
+                g_type = hpmParserBitWiseMultiParam(optarg, gs_type);
 			break;
 		case 'A':
 			g_type = eIntegrity;
 			break;
 		case 'P':
+		    g_type = eAll & ~(eIntegrity);
 			break;
 		case 'r':
 			break;
