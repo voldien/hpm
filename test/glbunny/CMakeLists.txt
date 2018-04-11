@@ -27,9 +27,10 @@ ENDIF()
 
 # Include directory for hpm declaration.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files for the gl bunny program.
-FILE(GLOB bunnysrc ${CMAKE_CURRENT_SOURCE_DIR}/*.c)
+FILE(GLOB bunnysrc ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
 
 # Executable OpenGL hpm benchmark.
 ADD_EXECUTABLE(hpmglbunny ${bunnysrc})
@@ -38,4 +39,3 @@ SET_TARGET_PROPERTIES(hpmglbunny PROPERTIES COMPILE_FLAGS "" )
 
 # Install target.
 INSTALL (TARGETS hpmglbunny DESTINATION bin)
-
