@@ -30,7 +30,8 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files for the gl bunny program.
-FILE(GLOB assertsrc ${CMAKE_CURRENT_SOURCE_DIR}/src/*.c)
+FILE(GLOB assertsrc	${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
+			${CMAKE_CURRENT_SOURCE_DIR}/src/assert/*.c)
 
 # Executable hpm assert program.
 ADD_EXECUTABLE(hpmassert ${assertsrc})
