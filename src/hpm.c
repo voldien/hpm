@@ -1,11 +1,4 @@
 #include"hpm.h"
-#include"hpmmath.h"
-#include"hpmmatrix.h"
-#include"hpmvector.h"
-#include"hpmquaternion.h"
-#include"hpmlogic.h"
-#include"hpmutil.h"
-#include<dlfcn.h>
 #include<assert.h>
 
 /**
@@ -40,7 +33,6 @@ unsigned int g_simd = HPM_NONE;
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
-	int closestatus;
 	char* libpath;
 
 	/*	*/
