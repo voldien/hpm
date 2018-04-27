@@ -12,14 +12,20 @@
  * Macro for adding cross platform
  * for loading external libraries.
  */
-#ifdef __unix__
-	#define HPM_LOAD_LIBRARY(path) dlopen(path, RTLD_LAZY)
-	#define HPM_LOAD_SYM(lib, func) dlsym(lib, func);
-	#define HPM_CLOSE(lib) dlclose(lib)
+#ifdef HPM_UNIX
+	#include<dlfcn.h>
+	#define HPM_LOAD_LIBRARY(path) dlopen( ( path ), RTLD_LAZY)
+	#define HPM_LOAD_SYM(lib, func) dlsym( ( lib ), ( func ) );
+	#define HPM_CLOSE(lib) dlclose( ( lib ) )
+    #define HPM_LIB_ERROR() dlerror()
+#elif defined(HPM_WINDOWS)
+	#include<Winbase.h>
+	#define HPM_LOAD_LIBRARY(path) LoadLibrary( ( path ) )
+	#define HPM_LOAD_SYM(lib, func) GetProcAddress( ( lib ), ( func ) )
+	#define HPM_CLOSE(lib) FreeLibrary( ( lib ) )
+    #define HPM_LIB_ERROR() GetLastError()
 #else
-	#define HPM_LOAD_LIBRARY(path) LoadLibrary(path)
-	#define HPM_LOAD_SYM(lib, func) GetProcAddress( (lib), func)
-	#define HPM_CLOSE(lib) FreeLibrary(lib)
+    #pragma message("Warning: None supported platform!")
 #endif
 
 /*	library handle.
@@ -96,18 +102,18 @@ int hpm_init(unsigned int simd){
 	/*	load library.	*/
 #ifndef HPM_USE_SINGLE_LIBRARY
 	if(libhandle == NULL){
-		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
+		libhandle = HPM_LOAD_LIBRARY((const char*)libpath);
 	}else{
 		/*	if library has only been initialized.	*/
 		return 0;
 	}
 #else
-	libhandle = dlopen(NULL, RTLD_LAZY);
+	libhandle = HPM_LOAD_LIBRARY((const char*)NULL);
 #endif
 
 	/*	Error checks.	*/
 	if(libhandle == NULL){
-		fprintf(stderr, "%s\n", dlerror());
+		fprintf(stderr, "%s\n", HPM_LIB_ERROR());
 		goto error;
 	}
 
@@ -269,9 +275,9 @@ int hpm_init(unsigned int simd){
 
 /*	TODO Fix later to make it platform independent.	*/
 int hpm_release(void) {
-    int status = dlclose(libhandle);
+    int status = HPM_CLOSE(libhandle);
     if (status < 0)
-        fprintf(stderr, "Failed to close library. | %s\n", dlerror());
+        fprintf(stderr, "Failed to close library. | %s\n", HPM_LIB_ERROR());
     libhandle = NULL;
     g_simd = 0;
     return status == 0;
@@ -294,14 +300,14 @@ void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
 	char buf[128];
 	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
 
-	pfunc = dlsym(libhandle, buf);
+	pfunc = HPM_LOAD_SYM(libhandle, buf);
 #else
-	pfunc = dlsym(libhandle, cfunctionName);
+	pfunc = HPM_LOAD_SYM(libhandle, cfunctionName);
 #endif
 
     /*	Check error.    */
     if (pfunc == NULL)
-        fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
+        fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, HPM_LIB_ERROR());
 
     return (pfunc);
 }
