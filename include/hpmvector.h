@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -24,57 +24,66 @@
 extern "C"{
 #endif
 
-
 /**
- *	Data types.
+ *	Primitive data types.
  */
-typedef float hpmvecf;			/*	*/
-typedef double hpmvecd;			/*	*/
-typedef long long hpmveci;		/*	*/
-typedef int hpmboolean;		/*	*/
-
+typedef float hpmvecf;          /*	*/
+typedef double hpmvecd;         /*	*/
+typedef long long hpmveci;      /*	*/
+typedef int hpmboolean;         /*	*/
 
 /**
  *	Single component vector data type.
  */
-typedef float hpmvecfv HPM_VECTORALIGN(4);		/*	*/
-typedef double hpmvecdv HPM_VECTORALIGN(8);		/*	*/
-typedef int hpmveciv HPM_VECTORALIGN(4);		/*	*/
+typedef float hpmvecfv HPM_VECTORALIGN(4);      /*	*/
+typedef double hpmvecdv HPM_VECTORALIGN(8);     /*	*/
+typedef int hpmveciv HPM_VECTORALIGN(4);        /*	*/
 
 /**
  *	Two component vector data type.
  */
-typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);	/*	*/
-typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);	/*	*/
-typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);	/*	*/
+typedef hpmveci hpmvec2i HPM_VECTORALIGN(8);    /*	*/
+typedef hpmvecf hpmvec2f HPM_VECTORALIGN(8);    /*	*/
+typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);   /*	*/
+typedef struct hpm_vec2uf_t{
+	union{
+		hpmvec2f v;
+		struct{hpmvecf x, y;};
+	};
+};
 
 /**
- *
+ *	SSE 128 bit data types.
  */
-typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);	/*	*/
+typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);   /*	*/
+typedef struct hpm_vec3uf_t{
+	union{
+		hpmvec3f v;
+		struct{hpmvecf x, y, z;};
+	};
+};
 
 
 /**
  *	SEE 128 bits data types.
  */
-typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);	/*	*/
-typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);	/*	*/
+typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
+typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
 typedef struct hpm_vec4uf_t{
 	union{
 		hpmvec4f v;
 		struct{hpmvecf x, y, z, w;};
 	};
 };
+
 /**
  * 	Internal SSE 128 bit  data types
  *	for implementing the intrinsics.
  */
 typedef hpmveci hpmv4si HPM_VECTORALIGNI(16);
 typedef hpmvecf hpmv4sf HPM_VECTORALIGNI(16);
-
-
 
 /**
  * 	AVX	256 bits data types.
@@ -101,8 +110,6 @@ typedef struct hpmvec4du_t{
 	};
 }hpmvec4du;
 
-
-
 /**
  *	AVX 512 bits data types.
  */
@@ -121,19 +128,18 @@ typedef struct hpmvec8du_t{
 /**
  *	Get individual element of vector.
  */
-#define hpm_vec4_getxf(hpm_vec) (hpm_vec[0])
-#define hpm_vec4_getyf(hpm_vec) (hpm_vec[1])
-#define hpm_vec4_getzf(hpm_vec) (hpm_vec[2])
-#define hpm_vec4_getwf(hpm_vec) (hpm_vec[3])
+#define hpm_vec4_getxf(hpm_vec) ((hpm_vec)[0])
+#define hpm_vec4_getyf(hpm_vec) ((hpm_vec)[1])
+#define hpm_vec4_getzf(hpm_vec) ((hpm_vec)[2])
+#define hpm_vec4_getwf(hpm_vec) ((hpm_vec)[3])
 
 /**
  *	Set individual element of vector.
  */
-#define hpm_vec4_setxf(hpm_vec, x) (hpm_vec[0] = x)
-#define hpm_vec4_setyf(hpm_vec, y) (hpm_vec[1] = y)
-#define hpm_vec4_setzf(hpm_vec, y) (hpm_vec[2] = y)
-#define hpm_vec4_setwf(hpm_vec, w) (hpm_vec[3] = w)
-
+#define hpm_vec4_setxf(hpm_vec, x) ((hpm_vec)[0] = x)
+#define hpm_vec4_setyf(hpm_vec, y) ((hpm_vec)[1] = y)
+#define hpm_vec4_setzf(hpm_vec, y) ((hpm_vec)[2] = y)
+#define hpm_vec4_setwf(hpm_vec, w) ((hpm_vec)[3] = w)
 
 
 /**
@@ -150,7 +156,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
 		const hpmvec4f* __restrict__ source);
 
 /**
- *	set vector.
+ *	Set vector by each component individually.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
@@ -304,21 +310,27 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
 /**
  *	Get element in vector with greatest value.
  */
-HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
+HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
 
 /**
  *	Get element in vector with minimum value.
  */
-HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
+HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
 
 
 
 /**
  *	Compute cross product.
  *
+ *	\larg left
+ *
+ *	\rarg right
+ *
+ *	\out cross product.
+ *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* larg,
-		const hpmvec3f* rarg, hpmvec3f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* __restrict__ larg,
+		const hpmvec3f* __restrict__ rarg, hpmvec3f* __restrict__ out);
 
 /**
  *	Compute triple product
@@ -335,7 +347,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
  *	@Return
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
-		const hpmvec3f* rarg);
+        const hpmvec3f* rarg);
 
 /**
  *	Compute length of vector.

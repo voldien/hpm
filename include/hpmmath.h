@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -22,7 +22,6 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
-
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
@@ -39,7 +38,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a,
 		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
-
 /**
  *	Compute min value of a and b.
  *	min = a < b ? a : b
@@ -51,60 +49,37 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* __restrict__ a,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* __restrict__ a,
 		const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c);
 
+/**
+ *	Computer square root.
+ *
+ *	\arg
+ *
+ *	\out
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ arg,
+        hpmvec4f* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ arg,
+        hpmvec8f* __restrict__ out);
 
 /**
- *	Determine if a and b is equal.
+ *	Computer approximate square root.
  *
- *	@Return return a non 0 value for each element of the vector.
+ *	\arg
+ *
+ *	\out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ arg,
+        hpmvec4f* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ arg,
+        hpmvec8f* __restrict__ out);
 
 /**
- *	Determine if a and b is not equal.
- *
- *	@Return
+ *	Create random vector, where each component
+ *	is within the following range [0,1].
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_neqfv,
-		const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b,
-		hpmvec4f* __restrict__ res);
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_randomfv, hpmvec4f* out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_randomfv, hpmvec8f* out);
 
-/**
- *	Determine if a is greater than b.
- *
- *	@Return
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-/**
- *	Determine if a is less than b.
- *
- *	@Return
- */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
-
-/**
- *	Compute if matrix a and b is equal to each other.
- *	The compare is based on the values of each of the matrices.
- *
- *	@Return none zero if statemnt is true.
- */
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
-		const hpmvec4x4f_t b);
-
-/**
- *	Compute if matrix a and b is not equal to each other.
- *	The compare is based on the values of each of the matrices.
- *
- *	@Return none zero if statemnt is true.
- */
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv, const hpmvec4x4f_t a,
-		const hpmvec4x4f_t b);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

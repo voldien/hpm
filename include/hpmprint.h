@@ -16,27 +16,57 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_UTIL_H_
-#define _HPM_UTIL_H_ 1
+#ifndef _HPM_PRINT_H_
+#define _HPM_PRINT_H_ 1
+#include"hpmdef.h"
 #include"hpmmatrix.h"
 #include"hpmquaternion.h"
+#include"hpmvector.h"
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
 
 /**
- *	Create look at matrix.
  *
- *	\eye the look at target.
- *
- *	\position position in world space.
- *
- *	\up up direction in respect to the viewer.
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* __restrict__ eye,
-        const hpmvec4f* __restrict__ position, const hpmvec4f* __restrict__ up,
-        hpmvec4x4f_t mat);
+extern HPMDECLSPEC void hpm_vec4_print(const hpmvec4f* vec);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_vec4_sprint(char* text, const hpmvec4f* vec);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_vec3_print(const hpmvec3f* vec);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_vec3_sprint(char* text, const hpmvec3f* vec);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_quat_print(const hpmquatf* quat);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_quat_sprint(char* text, const hpmquatf* vec);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_mat4x4_print(const hpmvec4x4f_t mat);
+
+/**
+ *
+ */
+extern HPMDECLSPEC void hpm_mat4x4_sprint(char* text, const hpmvec4x4f_t mat);
+
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

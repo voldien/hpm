@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -24,6 +24,8 @@
 #include"hpmquaternion.h"
 #include"hpmutil.h"
 #include"hpmmath.h"
+#include"hpmlogic.h"
+#include"hpmprint.h"
 
 /**
  * 	The main hpm library header file.
@@ -45,27 +47,27 @@ typedef int (HPMAPIENTRY PHPMISINIT)(void);
 typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionname);
 typedef int (HPMAPIENTRY PHPMVERSION)(void);
 typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
-
+typedef int (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 /**
  *	SIMD extensions flags.
  */
-#define HPM_NONE		(0 << 0)	/*	No HPM SIMD exention flag.	*/
-#define HPM_NOSIMD		(1 << 0)	/*	No SIMD hardware feature, using the FPU and ALU.	*/
-#define HPM_MMX			(1 << 1)	/*	MMX. (Yet not supported)	*/
-#define HPM_SSE			(1 << 2)	/*	SSE (Streaming SIMD Extensions).	*/
-#define HPM_SSE2		(1 << 3)	/*	SSE2 (Streaming SIMD Extensions).	*/
-#define HPM_SSE3		(1 << 4)	/*	SSE3 (Streaming SIMD Extensions).	*/
-#define HPM_SSSE3		(1 << 5)	/*	SSSE3 (Streaming SIMD Extensions).	*/
-#define HPM_SSE4_1		(1 << 6)	/*	SSE4.1 (Streaming SIMD Extensions).	*/
-#define HPM_SSE4_2		(1 << 7)	/*	SSE4.2 (Streaming SIMD Extensions).	*/
-#define HPM_AVX			(1 << 8)	/*	AVX Version 1 (Advanced Vector Extension).	*/
-#define HPM_AVX2		(1 << 9)	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
-#define HPM_AVX512		(1 << 10)	/*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
-#define HPM_NEON		(1 << 11)	/*	ARM	FPU (floating-point unit) feature.	*/
-#define HPM_SVML		(1 << 29)	/*	Not supported.	*/
-#define HPM_ACML		(1 << 30)	/*	Not supported.	*/
-#define HPM_DEFAULT		(1 << 31)	/*	Default, makes attempt to take the best SIMD extension on the system.	*/
+#define HPM_NONE        (0 << 0)	/*	No HPM SIMD exention flag.	*/
+#define HPM_NOSIMD      (1 << 0)	/*	No SIMD hardware feature, using the FPU and ALU.	*/
+#define HPM_MMX         (1 << 1)	/*	MMX. (Yet not supported)	*/
+#define HPM_SSE         (1 << 2)	/*	SSE (Streaming SIMD Extensions).	*/
+#define HPM_SSE2        (1 << 3)	/*	SSE2 (Streaming SIMD Extensions).	*/
+#define HPM_SSE3        (1 << 4)	/*	SSE3 (Streaming SIMD Extensions).	*/
+#define HPM_SSSE3       (1 << 5)	/*	SSSE3 (Streaming SIMD Extensions).	*/
+#define HPM_SSE4_1      (1 << 6)	/*	SSE4.1 (Streaming SIMD Extensions).	*/
+#define HPM_SSE4_2      (1 << 7)	/*	SSE4.2 (Streaming SIMD Extensions).	*/
+#define HPM_AVX         (1 << 8)	/*	AVX Version 1 (Advanced Vector Extension).	*/
+#define HPM_AVX2        (1 << 9)	/*	AVX Version 2 (Advanced Vector Extension).	(Not tested)*/
+#define HPM_AVX512      (1 << 10)	/*	AVX512 (Advanced Vector Extension). (Yet not supported)	*/
+#define HPM_NEON        (1 << 11)	/*	ARM	FPU (floating-point unit) feature.	*/
+#define HPM_SVML        (1 << 29)	/*	Not supported.	*/
+#define HPM_ACML        (1 << 30)	/*	Not supported.	*/
+#define HPM_DEFAULT     (1 << 31)	/*	Default, makes attempt to take the best SIMD extension on the system.	*/
 
 
 /**
@@ -94,7 +96,7 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
 
 /**
- *	Get current initialized SIMD exention.
+ *	Get current initialized SIMD extension.
  *
  *	@Return none zero if initialized.
  */
@@ -109,12 +111,12 @@ extern HPMDECLSPEC unsigned int HPMAPIENTRY hpm_get_simd(void);
  *
  *	@Return func pointer to the function. if NULL then the cfunctionName was valid.
  */
-extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName);
+extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName, unsigned int simd);
 
 /**
  *	Get hpm version.
  *
- *	@Return non NULL pointer.
+ *	@Return non NULL terminated string pointer.
  */
 extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
 
@@ -126,6 +128,15 @@ extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
  *	@Return 1 if supported. 0 if not supported.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int SIMD);
+
+/**
+ *	Get symbol name for specified SIMD enumerator.
+ *
+ *	\SIMD SIMD enumerator.
+ *
+ *	@Return non-null terminated string.
+ */
+extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/

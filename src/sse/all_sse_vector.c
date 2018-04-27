@@ -70,6 +70,34 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 #endif
 }
 
+HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
+
+	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );	/*	{ x , y, z , w} => { y, x, w, z }	*/
+	const hpmvec4f cevmax = _mm_max_ps(*vec, cev);								/*	=> { max(x,y), max(y,x), max(z,w), max(w,z) }*/
+
+	const hpmvec4f commax = _mm_shuffle_ps(cevmax, cevmax, _MM_SHUFFLE(0, 1, 2, 3));	/* => { max(z,w), max(z,w), max(x,y), max(x,y) }*/
+	const hpmvec4f compfv = _mm_max_ss(cevmax, commax);								/*	{ max(max(x,y), max(z,w)), n/a, n/a, n/a} */
+#ifdef defined(__SSE3__)
+	return _mm_cvtss_f32(compfv);
+#else
+	return compfv[0];
+#endif
+}
+
+HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
+
+	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );	/*	{ x , y, z , w} => { y, x, w, z }	*/
+	const hpmvec4f cevmin = _mm_min_ps(*vec, cev);								/*	=> { min(x,y), min(y,x), min(z,w), min(w,z) }*/
+
+	const hpmvec4f commin = _mm_shuffle_ps(cevmin, cevmin, _MM_SHUFFLE(0, 1, 2, 3));	/* => { min(z,w), min(z,w), min(x,y), max(x,y) }*/
+	const hpmvec4f compfv = _mm_min_ss(cevmin, commin);									/*	{ min(min(x,y), min(z,w)), n/a, n/a, n/a} */
+#ifdef defined(__SSE3__)
+	return _mm_cvtss_f32(compfv);
+#else
+	return compfv[0];
+#endif
+}
+
 
 HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* v1, const hpmvec3f* v2, hpmvec3f* out){
 

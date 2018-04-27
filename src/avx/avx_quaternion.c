@@ -11,10 +11,10 @@
 HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
 	const hpmquatf wzyx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,1,2,3) );		/*	{ w, x, y, z } => { w, z, y, x }	*/
 	const hpmquatf baba = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,0,1) );		/*	{ w, x, y, z } => { w, z, w, z }	*/
-	const hpmquatf dcdc = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2,3,2,3) );		/*	{ w, x, y, z } => { y, z, y, z }		*/
-	const hpmquatf row1 = {-1,  1, -1,  1};
-	const hpmquatf row2 = {-1,  1,  1, -1};
-	const hpmquatf row3 = {-1, -1,  1,  1};
+	const hpmquatf dcdc = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2,3,2,3) );		/*	{ w, x, y, z } => { y, z, y, z }	*/
+	const hpmquatf row1 = {-1.0f,  1.0f, -1.0f,  1.0f};
+	const hpmquatf row2 = {-1.0f,  1.0f,  1.0f, -1.0f};
+	const hpmquatf row3 = {-1.0f, -1.0f,  1.0f,  1.0f};
 
 
 	const hpmquatf qwwwwrwxyz = _mm_mul_ps(

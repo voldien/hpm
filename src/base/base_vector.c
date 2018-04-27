@@ -1,15 +1,14 @@
 #include"hpmvector.h"
 #include<math.h>
 
-#include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
-#	elif defined(HPM_GNUC)
+#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #		include<x86intrin.h>
 #   endif
 
 
-HPM_IMP(void, hpm_vec4_copyfv, hpmvec4f* __restrict__ destination, const hpmvec4f* __restrict__ source){
+HPM_IMP(void, hpm_vec4_copyfv, hpmvec4f* HPM_RESTRICT destination, const hpmvec4f* HPM_RESTRICT source){
 	*destination = *source;
 }
 
@@ -70,14 +69,19 @@ HPM_IMP( void, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, h
 }
 
 HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+
 	float theta;
 	hpmvec4f relative;
+
+	/*	*/
 	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a,b);
 	const hpmvec4f time = {t,t,t,t};
 	const float vsintime = sinf(t);
 	dot = HPM_CLAMP(dot, -1.0, 1.0);
 	theta = acosf(dot) * t;
 	relative = *b - *a * time;
+
+	/*	*/
 	HPM_CALLLOCALFUNC(hpm_vec4_normalizefv)(&relative);
 	const hpmvec4f vtheta = {theta, theta, theta, theta};
 	const hpmvec4f vsint = {vsintime, vsintime, vsintime, vsintime};
@@ -108,7 +112,7 @@ HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, 
 
 HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
 	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
-	hpmvecf k = 1.f - index * index * (1.f - N_dot_I * N_dot_I);
+	hpmvecf k = 1.0f - index * index * (1.0f - N_dot_I * N_dot_I);
 
 	if (k < 0.0f){
 		const hpmvec3f zero = { 0, 0, 0, 0 };
@@ -126,8 +130,8 @@ HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal
 
 HPM_IMP( float, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* v2, const hpmvec3f* v3){
 	hpmvec3f tmp;
-	hpm_vec3_crossproductfv(v1, v2, &tmp);
-	return hpm_vec3_dotfv(v3, &tmp);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(v1, v2, &tmp);
+	return HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(v3, &tmp);
 }
 
 HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
@@ -135,7 +139,7 @@ HPM_IMP( float, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
 	hpmvec3f tmp2 = *rarg;
 	tmp1[3] = 0;
 	tmp2[3] = 0;
-	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1,&tmp2);
+	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1, &tmp2);
 }
 
 HPM_IMP( float, hpm_vec3_lengthfv, const hpmvec3f* arg){
@@ -162,9 +166,8 @@ HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* 
 	tmp2[3] = 0;
 
 	/*	*/
-	hpmvecf s = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1,&tmp1);
-	hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1,&tmp2);
+	hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp1);
+	hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp2);
 
-	*out = *b * s1 * s;
-
+	*out = *b * s1 * dotinv;
 }

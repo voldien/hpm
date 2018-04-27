@@ -1,5 +1,5 @@
 /**
-	High performance matrix library utilizing SIMD extensions.
+    High performance matrix library utilizing SIMD extensions.
     Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
@@ -42,7 +42,6 @@ typedef union{
 }hpmquatud;
 
 
-
 /**
  *	Quaternion component subscript.
  */
@@ -55,39 +54,43 @@ typedef union{
 /**
  *	Get individual element of quaternion.
  */
-#define hpm_quat_getwf(hpm_vec) (hpm_vec[HPM_QUAT_W])
-#define hpm_quat_getxf(hpm_vec) (hpm_vec[HPM_QUAT_X])
-#define hpm_quat_getyf(hpm_vec) (hpm_vec[HPM_QUAT_Y])
-#define hpm_quat_getzf(hpm_vec) (hpm_vec[HPM_QUAT_Z])
+#define hpm_quat_getwf(hpm_vec) ((hpm_vec)[HPM_QUAT_W])
+#define hpm_quat_getxf(hpm_vec) ((hpm_vec)[HPM_QUAT_X])
+#define hpm_quat_getyf(hpm_vec) ((hpm_vec)[HPM_QUAT_Y])
+#define hpm_quat_getzf(hpm_vec) ((hpm_vec)[HPM_QUAT_Z])
 
 /**
  *	Set individual element of quaternion.
  */
-#define hpm_quat_setwf(hpm_vec, w) (hpm_vec[HPM_QUAT_W] = w)
-#define hpm_quat_setxf(hpm_vec, x) (hpm_vec[HPM_QUAT_X] = x)
-#define hpm_quat_setyf(hpm_vec, y) (hpm_vec[HPM_QUAT_Y] = y)
-#define hpm_quat_setzf(hpm_vec, y) (hpm_vec[HPM_QUAT_Z] = y)
-
-
+#define hpm_quat_setwf(hpm_vec, w) ((hpm_vec)[HPM_QUAT_W] = w)
+#define hpm_quat_setxf(hpm_vec, x) ((hpm_vec)[HPM_QUAT_X] = x)
+#define hpm_quat_setyf(hpm_vec, y) ((hpm_vec)[HPM_QUAT_Y] = y)
+#define hpm_quat_setzf(hpm_vec, y) ((hpm_vec)[HPM_QUAT_Z] = y)
 
 /**
  *	Copy quaternion.
  *
- *	\destination
+ *	\destination quaternion memory pointer location.
  *
- *	\source
+ *	\source quaternion memory pointer location.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_copyfv,
-		hpmquatf* __restrict__ destination,
-		const hpmquatf* __restrict__ source);
+		hpmquatf* HPM_RESTRICT destination,
+		const hpmquatf* HPM_RESTRICT source);
 
 /**
- *	Set quaternion.
+ *	Set quaternion, component wise.
  *
  *	\destination
  *
- *	\source
+ *	\w component.
+ *
+ *	\x component.
+ *
+ *	\y component.
+ *
+ *	\z component.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_setf, hpmquatf* destination,
@@ -96,11 +99,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_setf, hpmquatf* destination,
 /**
  *	Multiply two quaternion.
  *
- *	\larg
+ *	\larg left side quaternion.
  *
- *	\rarg
+ *	\rarg right side quaternion.
  *
- *	\out
+ *	\out resulted quaternion product.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg,
@@ -114,10 +117,12 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_quatfv, const hpmquatf* larg,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_vec3fv, const hpmquatf* larg,
 		const hpmvec3f* rarg, hpmquatf* out);
 
-
 /**
  *	Multiply quaternion with vector.
  *
+ *	\larg
+ *
+ *	\out
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
@@ -125,6 +130,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_multi_scalef, hpmquatf* larg,
 
 /**
  *	Compute direction of quaternion.
+ *
+ *	\larg
+ *
+ *	\out result direction vector.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_directionfv, const hpmquatf* larg,
@@ -188,7 +197,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_inversefv, hpmquatf* arg);
  *
  *	\rarg
  *
- *	@Return
+ *	@Return inner dot product.
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg,
 		const hpmquatf* rarg);
@@ -196,7 +205,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg,
 /**
  *	Copy quaternion identity to destination.
  *
- *	\destination
+ *	\destination quaternion pointer.
  *
  */
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* destination);
@@ -206,15 +215,24 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_identityfv, hpmquatf* destination);
  *
  *	\quat
  *
- *	\axis
+ *	\axis normalized direction vector.
  *
- *	\angle
+ *	\angle in radius.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
-		hpmquatf* __restrict__ quat, const hpmvec3f* __restrict__ axis,
+		hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis,
 		float angle);
 
+/**
+ *	Create look rotation oritention quaternion.
+ *
+ *	\lookat
+ *
+ *	\up
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
+		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out);
 
 /**
  *	TODO rename later.
@@ -226,18 +244,18 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv,
-		hpmquatf* __restrict__ quat, const hpmvec4f* __restrict__ mat);
+		hpmquatf* HPM_RESTRICT quat, const hpmvec4f* HPM_RESTRICT mat);
 
 /**
  *	Compute quaternion from eular.
  *
  *	\quat
  *
- *	\pitch_radian
+ *	\pitch_radian angle in radian for rotation around x axis.
  *
- *	\yaw_radian
+ *	\yaw_radian angle in radian for rotation around y axis.
  *
- *	\roll_radian
+ *	\roll_radian angle in radian for rotation around z axis.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat,
@@ -251,45 +269,52 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat,
  *
  *	\rarg
  *
- *	\t
+ *	\t within the range [0,1]
  *
- *	\out
+ *	\out resulted interpolated quaternion.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg,
-		const hpmquatf* rarg, float t, hpmquatf* out);
+		const hpmquatf* rarg, const float t, hpmquatf* out);
 
 /**
  *	Compute spherical interpolation between two quaternion.
  *
+ *	\larg
+ *
+ *	\rarg
+ *
+ *	\t within the range [0,1]
+ *
+ *	\out resulted interpolated quaternion.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg,
-		const hpmquatf* rarg, float t, hpmquatf* out);
+		const hpmquatf* rarg, const float t, hpmquatf* out);
 
 /**
  *	Compute quaternion pitch angle rotation in radian.
  *
- *	\arg
+ *	\arg quaternion.
  *
- *	@Return
+ *	@Return pitch (X axis) angle in radian.
  */
 HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_pitchfv, const hpmquatf* arg);
 
 /**
  *	Compute quaternion yaw angle rotation in radian.
  *
- *	\arg
+ *	\arg quaternion.
  *
- *	@Return
+ *	@Return yaw (Y axis) angle in radian.
  */
 HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_yawfv, const hpmquatf* arg);
 
 /**
  *	Compute quaternion roll angle rotation in radian.
  *
- *	\arg quaternion
+ *	\arg quaternion.
  *
- *	@Return angle in radian.
+ *	@Return roll (Z axis) angle in radian.
  */
 HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_quat_rollfv, const hpmquatf* arg);
 
