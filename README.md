@@ -68,6 +68,16 @@ Because the library is still in development. That means that the symbol table ha
 ## Dependencies ##
 ----------------
 The *hpm* project does not have any additional dependency other than the libraries provided with the standard *c* library.
+However, it is recommended that the following Debian packages has to be installed prior, see following . If a higher version is already installed this
+is not required.
+```bash
+apt-get install gcc-6
+```
+The following command will display current version of gcc.
+```bash
+gcc --version
+```
+
 
 ## License ##
 ------
