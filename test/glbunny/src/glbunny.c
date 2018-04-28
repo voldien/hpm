@@ -1,5 +1,5 @@
 #include"glbunny.h"
-#include<hpm/hpm.h>
+#include<hpm.h>
 #include<assert.h>
 #include<getopt.h>
 #include<unistd.h>
