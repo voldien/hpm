@@ -66,6 +66,13 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized")
 	ENDIF()
 
+ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	# Compiling language standard.
+	ADD_DEFINITIONS(-std=c11)
+	#
+	ADD_DEFINITIONS(-w)
+
+	SET(SIMD_FLAGS "${SIMD_FLAGS}")
 ELSEIF(MSVC)
 
 		# Enable multi-core complication with MSVC
