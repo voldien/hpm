@@ -260,9 +260,9 @@
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
 	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
 #elif defined(HPM_VC)
-	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
-	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
-	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
+	#define HPM_ALIGN(alignment) __declspec(align(alignment))
+	#define HPM_VECTORALIGN(alignment) __declspec(align(alignment))
+	#define HPM_VECTORALIGNI(alignment) __declspec(align(alignment))
 #elif defined(HPM_)
 #endif
 
@@ -291,8 +291,10 @@
 #ifndef HPM_RESTRICT
 	#if defined(HPM_GNUC)
 		#define HPM_RESTRICT __restrict__
-	#elif defined(HPM_VC) || defined(HPM_CLANG)
-		#define HPM_RESTRICT __restrict
+    #if defined(defined(HPM_CLANG))
+	    #define HPM_RESTRICT __restrict
+	#elif defined(HPM_VC)
+		#define HPM_RESTRICT __declspec(restrict)
     #else
 	    #define HPM_RESTRICT
 	#endif
