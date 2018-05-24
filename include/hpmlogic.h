@@ -25,35 +25,47 @@
 /**
  *	Determine if a and b is equal.
  *
- *	@Return return a non 0 value for each element of the vector.
+ *	@param res return a non 0 value for each element of the vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+
+/**
+ *	Determine if a and b is equal.
+ *
+ *	@Return non-zero if equal, zero otherwise.
+ */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b);
 
 /**
  *	Determine if a and b is not equal.
  *
- *	@Return
+ *	@param res return a non 0 value for each element of the vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_neqfv,
 		const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b,
 		hpmvec4f* __restrict__ res);
+
+/**
+ *	Determine if a and b is not equal.
+ *
+ *	@Return non-zero if not equal, zero otherwise.
+ */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b);
 
 /**
  *	Determine if a is greater than b.
  *
- *	@Return
+ *	@param res
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
 /**
  *	Determine if a is less than b.
  *
- *	@Return
+ *	@param res
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
 		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
@@ -62,7 +74,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
  *	Compute if matrix a and b is equal to each other.
  *	The compare is based on the values of each of the matrices.
  *
- *	@Return none zero if statemnt is true.
+ *	@Return none zero if statement is true.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
 		const hpmvec4x4f_t b);
@@ -71,7 +83,7 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
  *	Compute if matrix a and b is not equal to each other.
  *	The compare is based on the values of each of the matrices.
  *
- *	@Return none zero if statemnt is true.
+ *	@Return none zero if statement is true.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv, const hpmvec4x4f_t a,
 		const hpmvec4x4f_t b);
