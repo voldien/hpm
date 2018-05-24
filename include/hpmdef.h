@@ -291,7 +291,7 @@
 #ifndef HPM_RESTRICT
 	#if defined(HPM_GNUC)
 		#define HPM_RESTRICT __restrict__
-    #if defined(defined(HPM_CLANG))
+	#elif defined(HPM_CLANG)
 	    #define HPM_RESTRICT __restrict
 	#elif defined(HPM_VC)
 		#define HPM_RESTRICT __declspec(restrict)
