@@ -152,8 +152,8 @@ typedef struct hpmvec8du_t{
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
-		hpmvec4f* __restrict__ destination,
-		const hpmvec4f* __restrict__ source);
+		hpmvec4f* HPM_RESTRICT destination,
+		const hpmvec4f* HPM_RESTRICT source);
 
 /**
  *	Set vector by each component individually.
@@ -289,7 +289,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negatefv, hpmvec4f* arg);
  *	\out
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
-		const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
+		const hpmvec4f* b, float t, hpmvec4f* HPM_RESTRICT out);
 
 /**
  *	Spherical interpolation between a and b in respect to t.
@@ -305,7 +305,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
-		const hpmvec4f* b, float t, hpmvec4f* __restrict__ out);
+		const hpmvec4f* b, float t, hpmvec4f* HPM_RESTRICT out);
 
 /**
  *	Get element in vector with greatest value.
@@ -329,8 +329,8 @@ HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
  *	\out cross product.
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* __restrict__ larg,
-		const hpmvec3f* __restrict__ rarg, hpmvec3f* __restrict__ out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* HPM_RESTRICT larg,
+		const hpmvec3f* HPM_RESTRICT rarg, hpmvec3f* HPM_RESTRICT out);
 
 /**
  *	Compute triple product

@@ -27,16 +27,16 @@
  *
  *	@param res return a non 0 value for each element of the vector.
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res);
 
 /**
  *	Determine if a and b is equal.
  *
  *	@Return non-zero if equal, zero otherwise.
  */
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b);
 
 /**
  *	Determine if a and b is not equal.
@@ -44,31 +44,31 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f* __restrict__ 
  *	@param res return a non 0 value for each element of the vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_neqfv,
-		const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b,
-		hpmvec4f* __restrict__ res);
+		const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b,
+		hpmvec4f* HPM_RESTRICT res);
 
 /**
  *	Determine if a and b is not equal.
  *
  *	@Return non-zero if not equal, zero otherwise.
  */
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b);
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b);
 
 /**
  *	Determine if a is greater than b.
  *
  *	@param res
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res);
 /**
  *	Determine if a is less than b.
  *
  *	@param res
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res);
 
 /**
  *	Compute if matrix a and b is equal to each other.
