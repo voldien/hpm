@@ -26,7 +26,8 @@ ELSEIF(MSVC)
 ENDIF()
 
 # Include directory for hpm declaration.
-INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/../../include)
+INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/../../include)
+# Include header directory for this program.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Source files for the gl bunny program.
