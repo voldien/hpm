@@ -1,6 +1,11 @@
 #include"hpmassert.h"
 #include<check.h>
 
+/**
+ * Compare all equality function
+ * in order to determine that all the other
+ * test is tested with integrity.
+ */
 START_TEST(equality){
 
 	const hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
@@ -223,6 +228,7 @@ START_TEST (transformation){
 	hpmvec4f v3 = { 1.0f };
 	const hpmvec4f w = {0.0f, 0.0f, 0.0f, 1.0f};
 	const hpmvec4f forward = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f one = {1.0f, 1.0f, 1.0f, 1.0f};
 
 	hpmvec4x4f_t m1;
 	hpmvec4x4f_t m2;
@@ -262,12 +268,15 @@ START_TEST (transformation){
 	ck_assert_int_eq(hpm_vec4_eqfv(&exZrot, &v3), 1);
 
 	/*  */
+	const hpmvec4f orthRes = { 0.0f };
 	hpm_mat4x4_orthfv(m1, -10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);
 	ck_assert_int_eq(m1[3][3], 1);
 
 	/*  */
-	hpm_mat4x4_projfv(m1, 30.0f, 1.3333f, 0.15f, 1000.0f);
-	ck_assert_int_eq(m1[3][3], 1);
+	const hpmvec4f projRes = { 0.8f, 1.0f, -1.3f, -1.0f };
+	hpm_mat4x4_projfv(m1, (hpmvecf)HPM_DEG2RAD(45.0f), 1.3333f, 0.15f, 1000.0f);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &one, &v1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &projRes), 1);
 
 
 	hpm_mat4x4_rotationfv(m1, 2.0, &v1);
@@ -283,10 +292,14 @@ START_TEST (transformation){
 	//hpm_mat4x4_multi_rotationQfv(m1, &q1);
 
 	/*	*/
-	hpm_mat4x4_projfv(m1, 30, 1.3333, 0.15, 1000.0f);
-	hpm_mat4x4_orthfv(m1, -10, 10, -10, 10, -10, 10);
+	const int viewport[4] = {0, 0, 400, 400};
+	hpmvec3f pos;
 
-	//hpm_mat4x4_unprojf
+	const hpmvec4f unprojRes = { 0.0f };
+	hpm_mat4x4_orthfv(m1, -10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);
+	hpm_mat4x4_translationf(m1, 0.0f, 0.0f, 0.0f);
+	const hpmveci unprojSuccess = hpm_mat4x4_unprojf(350, 350, 0, m1, m2, viewport, &pos);
+	ck_assert_int_eq(unprojSuccess, 1);
 }
 END_TEST
 
