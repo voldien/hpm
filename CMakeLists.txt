@@ -1,7 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(hpm)
 
-
 #	build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 IF(NOT BUILD_SHARED_LIBS)
@@ -38,11 +37,11 @@ IF(USE_SINGLE_LIBRARY)
 	SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	SET(SIMD_FLAGS "${SIMD_FLAGS} -static")
 ELSE()
-	MESSAGE(STATUS "")
+	MESSAGE(STATUS "Individual SIMD Library Mode.")
 ENDIF()
 
 
-# gcc compiler options.
+# GCC compiler options.
 IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	ADD_DEFINITIONS(-fPIC)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
@@ -141,18 +140,22 @@ ENDIF()
 # Main library target for initializing the library. The libhpm is always a shared library.
 ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c )
 IF(USE_SINGLE_LIBRARY)
-
+	
+	# Instruction for building the single library.
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl )
 	FILE(GLOB staticlib ${CMAKE_CURRENT_SOURCE_DIR}/*.a)
 	STRING(REPLACE ".a/" ".a /" LIB_PATHS ${staticlib})
 	SET_TARGET_PROPERTIES(hpm PROPERTIES LINK_FLAGS "-Wl,--whole-archive ${LIB_PATHS} -Wl,--no-whole-archive")
 	SET(BUILD_SHARED_LIBS TRUE)
+
+	#
 	IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 
 	ENDIF()
 
-	set(LINK_SEARCH_START_STATIC FALSE)
-	set(CMAKE_EXE_LINKER_FLAGS "-shared")
+	# 
+	SET(LINK_SEARCH_START_STATIC FALSE)
+	SET(CMAKE_EXE_LINKER_FLAGS "-shared")
 ELSE()
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 ENDIF()
@@ -163,9 +166,9 @@ INSTALL (FILES ${headers} DESTINATION include/hpm)
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
-IF(USE_SINGLE_LIBRARY)
+IF(NOT USE_SINGLE_LIBRARY)
 
-ELSE()
+	# Install each individual SIMD library extensions.
 	INSTALL (TARGETS hpmnosimd DESTINATION lib)
 	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 		#INSTALL (TARGETS hpmavx512 DESTINATION lib)
@@ -177,6 +180,8 @@ ELSE()
 		INSTALL (TARGETS hpmsse41 DESTINATION lib)
 		INSTALL (TARGETS hpmsse42 DESTINATION lib)
 	ENDIF()
+	
+	# Install NEON SIMD extension if on an ARM platform.
 	IF(__arm__)
 		INSTALL (TARGETS hpmneon DESTINATION lib)
 	ENDIF()
@@ -190,7 +195,12 @@ IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
 	ADD_CUSTOM_TARGET(	distribution
 				COMMAND mkdir -p ${TARGETDIR}
-				COMMAND cp -r src include test CMakeLists.txt LICENSE README.md ${TARGETDIR}
+				COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/src
+						${CMAKE_CURRENT_SOURCE_DIR}/include 
+						${CMAKE_CURRENT_SOURCE_DIR}/test
+						${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+						${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+						${CMAKE_CURRENT_SOURCE_DIR}/README.md ${TARGETDIR}
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()
