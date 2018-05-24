@@ -1,5 +1,7 @@
 # hpm #
 ------
+[![Travis Build Status](https://travis-ci.org/voldien/hpm.svg?branch=master)](https://travis-ci.org/voldien/hpm)
+
 The *hpm* is a matrix library that supports multiple SIMD implementation that can be loaded in rune-time. Furthermore, the program can load the most appropriated implementation on its own and as well explicit load a specific SIMD extension through the SIMD enumerator.
 
 The number of features are relative low as a result of the same function as to be implemented multiple time for multiple SIMD extension.
