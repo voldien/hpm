@@ -206,7 +206,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat);
  *
  *	\arg valid matrix memory pointer.
  *
- *	@Return
+ *	@Return computed determinet
  */
 HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_determinantfv,
 		const hpmvec4x4f_t arg);
@@ -418,7 +418,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv,
  *
  *	\mat
  *
- *	\fov field of view in radian (0,180).
+ *	\fov field of view in radian (0, pi).
  *
  *	\aspect view aspect.
  *
