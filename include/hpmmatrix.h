@@ -472,8 +472,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
 		float winy, float winz, const hpmvec4x4f_t projection,
-		const hpmvec4x4f_t modelview, const int* viewport,
-		hpmvec3f* pos);
+		const hpmvec4x4f_t modelview, const int* HPM_RESTRICT viewport,
+		hpmvec3f* HPM_RESTRICT pos);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/
