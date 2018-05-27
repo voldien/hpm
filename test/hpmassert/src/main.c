@@ -1,30 +1,7 @@
-/**
-    High performance matrix library utilizing SIMD extensions.
-    Copyright (C) 2016  Valdemar Lindberg
-
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-*/
 #include"hpmassert.h"
-
-/*	*/
-#include<stdlib.h>
 #include<string.h>
-#include<stdint.h>
 #include<time.h>
 #include<sys/time.h>
-#include<unistd.h>
 #include<getopt.h>
 #include"hpmparser.h"
 
@@ -35,6 +12,7 @@ int g_SIMD = (unsigned int)(-1);
 int g_type = eAll;
 int g_precision = eFloat;
 const unsigned int g_it = 1E7;
+long int res = 0;
 
 static const char *gs_type[] = {
 		"",
@@ -59,14 +37,14 @@ void htpReadArgument(int argc, char** argv) {
 
 	/*	*/
 	static struct option longoption[] = {
-		{"version",         no_argument, 		NULL, 'v'},	/*	Print hpm version that the program uses.	*/
-		{"assert",          no_argument, 		NULL, 'A'},	/*	Assert only integrity.	*/
-		{"performance",     no_argument, 		NULL, 'P'},	/*	Assert only performance.	*/
-		{"type",            required_argument, 	NULL, 't'},	/*	Specify type to assert.	*/
-		{"simd",            required_argument, 	NULL, 's'},	/*	select SIMD for assertion.	*/
-		{"precision",       required_argument, 	NULL, 'p'},	/*	Select precision for assertion.	*/
-		{"format-result",   required_argument, 	NULL, 'r'},	/*	Format the result to a more readable format.	*/
-		{NULL, 0, NULL, 0},
+		{"version",     no_argument,       NULL, 'v'},    /*	Print hpm version that the program uses.	*/
+		{"assert",      no_argument,       NULL, 'A'},    /*	Assert only integrity.	*/
+		{"performance", no_argument,       NULL, 'P'},    /*	Assert only performance.	*/
+		{"type",        required_argument, NULL, 't'},    /*	Specify type to assert.	*/
+		{"simd",        required_argument, NULL, 's'},    /*	select SIMD for assertion.	*/
+		{"precision",   required_argument, NULL, 'p'},    /*	Select precision for assertion.	*/
+		{"format",      optional_argument, NULL, 'r'},    /*	Format the result to a more readable format.	*/
+		{NULL, 0,                          NULL, 0},
 	};
 
 	int c;
@@ -124,28 +102,64 @@ void htpReadArgument(int argc, char** argv) {
 	}
 }
 
+SIMDBenchmarksResult **htpAllocateBenchmarks(int num) {
+
+	int x;
+	/*  Allocate benchmarks. */
+	SIMDBenchmarksResult** benchmarkResults = (SIMDBenchmarksResult**)malloc(sizeof(SIMDBenchmarksResult*) * 32);
+	assert(benchmarkResults);
+
+	/*  */
+	for(x = 0; x < num; x++){
+		/*  */
+		benchmarkResults[x] = (SIMDBenchmarksResult*)malloc(sizeof(SIMDBenchmarksResult));
+		benchmarkResults[x]->num = 192;
+		benchmarkResults[x]->results = malloc(sizeof(FunctionResult) * benchmarkResults[x]->num);
+		assert(benchmarkResults[x]->results);
+	}
+
+	return benchmarkResults;
+}
+
+
 int main(int argc, char** argv) {
 
-	int i;
+	int i,j;
 	const unsigned int nenum = sizeof(uint32_t) * 4;
 
 	/*	Read argument.	*/
 	htpReadArgument(argc, argv);
+	res = hptGetTimeResolution();
+
+	/*  Allocate benchmarks. */
+	const numBenchmarks = sizeof(uint32_t) * sizeof(uint8_t);
+	SIMDBenchmarksResult** benchmarkResults = htpAllocateBenchmarks(numBenchmarks);
 
 	/*	Iterate through each possible SIMD options.	*/
-	for (i = 0; i < nenum; i++) {
+	for (i = 0, j = 0; i < nenum; i++){
+		uint32_t simd = (uint32_t)(1 <<i);
 		/*	Check if SIMD is specified and supported.	*/
-		if ((g_SIMD & (1 << i)) && hpm_supportcpufeat(1 << i))
-			htpSimdExecute(1 << i);
+		if ((g_SIMD & simd) && hpm_supportcpufeat(simd)) {
+			benchmarkResults[j]->simd = simd;
+			benchmarkResults[j]->num = 0;
+			benchmarkResults[j]->type = 0;
+
+			htpSimdExecute(benchmarkResults[j]->simd, benchmarkResults[j]);
+			j++;
+		}
 	}
+
+	/*  Display results.    */
+	htpFormatResult(j, benchmarkResults);
 
 	/*	End of test.	*/
 	return EXIT_SUCCESS;
 }
 
-void htpSimdExecute(unsigned int simd){
+void htpSimdExecute(unsigned int simd, SIMDBenchmarksResult* benchmarkResult){
 
 	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
+
 
 	/*	Initilize the hpm library.	*/
 	if(!hpm_init(simd)){
@@ -154,7 +168,7 @@ void htpSimdExecute(unsigned int simd){
 	}
 
 	/*	Start performance test.	*/
-	htpBenchmarkPerformanceTest();
+	htpBenchmarkPerformanceTest(benchmarkResult);
 
 	/*	Release resources.	*/
 	hpm_release();
@@ -181,45 +195,64 @@ long int hptGetTime(void){
 }
 
 /**
- *	Invoked benchmark function.
+ *
+ * @param func
+ * @param name
+ * @param result
  */
-#define HPM_BENCHMARK_FUNC_CALL(func)											\
-		ttime = hptGetTime();													\
-		func##sp_test();														\
-		ttotaltime = hptGetTime() - ttime;										\
-		printf("%s %f seconds.\n", HPM_STR(func), (float)ttotaltime / res);		\
+static HPM_ALWAYS_INLINE void
+htpBenchmarkFunc(func_benchmark func, const char *HPM_RESTRICT name, FunctionResult *HPM_RESTRICT result) {
+	result->name = name;
+	long int ctime, totaltime;
+	ctime = hptGetTime();
+	func();
+	totaltime = hptGetTime() - ctime;
+	result->nanosec = totaltime;
+	printf("%s %f seconds.\n", name, (float) totaltime / res);
+}
 
-void htpBenchmarkPerformanceTest(void){
+/**
+ *
+ */
+#define HPM_BENCHMARK_FUNC_CALL(func, bench, index) htpBenchmarkFunc(&func##sp_test, HPM_STR(func), &bench->results[index++])
 
-	uint64_t ttime = 0;			/*	*/
-	uint64_t ttotaltime = 0;	/*	*/
-	uint64_t res = hptGetTimeResolution();
+void htpBenchmarkPerformanceTest(SIMDBenchmarksResult* benchmarkResult){
+
+	int findex = 0;
 
 	if(g_precision & eFloat){
+
+		/*	Check integrity.	*/
+		if(g_type & eIntegrity){
+			printf("Integrity check.\n");
+			htpIntegritySpCheckf();
+		}
+
+		HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_copyfv, benchmarkResult, findex);
 
 		/*	Matrix mode.	*/
 		if( g_type & eMatrix ){
 			printf("single precision matrix.\n");
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_copyfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_multiply_mat4x4fv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_multiply_mat1x4fv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_identityfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_transposefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_determinantfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_inversefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_decomposefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_translationfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_scalefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationXf);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationYf);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationZf);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationQf);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_projfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_orthfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_unprojf);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_copyfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_multiply_mat4x4fv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_multiply_mat1x4fv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_identityfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_transposefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_determinantfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_inversefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_decomposefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_translationfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_scalefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationXf, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationYf, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationZf, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_rotationQf, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_projfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_orthfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_unprojf, benchmarkResult, findex);
 		}
 
 		/*	Comparing mode.	*/
@@ -227,14 +260,14 @@ void htpBenchmarkPerformanceTest(void){
 			printf("single precision comparing.\n");
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_neqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_neqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_gfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_lfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_eqfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_neqfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_eqfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_eqfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_neqfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_neqfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_gfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_lfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_eqfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_mat4_neqfv, benchmarkResult, findex);
 		}
 
 		/*	Quaternion mode.	*/
@@ -243,37 +276,37 @@ void htpBenchmarkPerformanceTest(void){
 			printf("Single precision vector performance.\n"
 					"-----------------------------\n");
 
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_copyfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_multi_quatfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_multi_vec3fv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_directionfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_get_vectorfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_conjugatefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_inversefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_dotfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_identityfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_axis_anglefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_from_mat4x4fv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_axisf);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_lerpfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_slerpfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_pitchfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_yawfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_quat_rollfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_copyfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_multi_quatfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_multi_vec3fv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_directionfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_get_vectorfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_conjugatefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_inversefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_dotfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_identityfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_axis_anglefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_from_mat4x4fv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_axisf, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_lerpfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_slerpfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_pitchfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_yawfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_rollfv, benchmarkResult, findex);
 		}
 
 		/*	Math mode.	*/
 		if(g_type & eMath){
 			printf("Single precision Math performance.\n"
 					"-----------------------------\n");
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_maxfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_minfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_minfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_sqrtfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_sqrtfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_fast_sqrtfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_fast_sqrtfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_maxfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_minfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_minfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_sqrtfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_sqrtfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_fast_sqrtfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_fast_sqrtfv, benchmarkResult, findex);
 
 		}
 
@@ -283,39 +316,51 @@ void htpBenchmarkPerformanceTest(void){
 					"-----------------------------\n");
 
 			/*	Vector4*/
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_copyfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_dotfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lengthfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lengthsqurefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_normalizefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_negatefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lerpfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_slerpfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_copyfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_dotfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lengthfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lengthsqurefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_normalizefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_negatefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_lerpfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_slerpfv, benchmarkResult, findex);
 
 			/*	Vector3 */
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_max_compfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_min_compfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_crossproductfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_tripleProductfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_dotfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_lengthfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_lengthsquarefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_normalizefv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_reflectfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_refractfv);
-			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_projfv);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_max_compfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_min_compfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_crossproductfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_tripleProductfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_dotfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_lengthfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_lengthsquarefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_normalizefv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_reflectfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_refractfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_vec3_projfv, benchmarkResult, findex);
 		}
 
-		/**/
-		if(g_type & eIntegrity){
-			printf("Integrity check.\n");
-			htpIntegritySpCheckf();
-		}
 	}
 	else if(g_precision & eDouble){
 
 	}
 
+	benchmarkResult->num = findex;
 	printf("\n\n");
 }
 
+void htpFormatResult(unsigned int numResults, const SIMDBenchmarksResult** results){
+
+	int i, j;
+	//const int nResults = results[0].num;
+
+	/*	*/
+	for(j = 0; j < numResults; j++){
+		const SIMDBenchmarksResult* benchmark = results[j];
+		for(i = 0; i < benchmark->num; i++){
+
+		}
+
+		/*	*/
+	}
+
+}

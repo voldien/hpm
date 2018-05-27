@@ -21,6 +21,7 @@
 #include<hpm.h>
 #include<hpmmath.h>
 #include<assert.h>
+#include<stdint.h>
 
 /**
  *	Global variable decleration.
@@ -33,6 +34,7 @@ extern const unsigned int g_it;
 /**
  *	Macro function declaration.
  */
+typedef void (*func_benchmark)(void);
 #define HPM_BENCHMARK_FUNC_DECL(func)	\
 extern void func##sp_test(void);
 #define HPM_BENCHMARK_FUNC_IMP(func)	\
@@ -147,25 +149,37 @@ enum PerformanceTestType{
  *	Precision type.
  */
 enum PrecisionType{
-	eFloat          = 1,                    /*	Single precision floating points.	*/
-	eDouble         = 2,                    /*	Dobule precision floating points.	*/
-	eAllPrecision   = (eFloat | eDouble)    /*	Perform all precision types.	*/
+	eFloat          = 0x1,                    /*	Single precision floating points.	*/
+	eDouble         = 0x2,                    /*	Double precision floating points.	*/
+	eAllPrecision   = (eFloat | eDouble)      /*	Perform all precision types.	*/
 };
 
 /**
  *
  */
-typedef struct result_t{
-	
-}Result;
+typedef struct function_result_t{
+	const char* name;   /**/
+	long int nanosec;   /**/
+	enum PerformanceTestType type;
+}FunctionResult;
+
+/**
+ * Time result per SIMD.
+ */
+typedef struct simd_benchmark_result_t {
+	enum PrecisionType type;    /*  */
+	uint32_t simd;              /*  */
+	FunctionResult *results;    /*  */
+	uint32_t num;               /*  */
+} SIMDBenchmarksResult;
 
 extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
+extern SIMDBenchmarksResult** htpAllocateBenchmarks(int num);
 extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
 extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
-extern int hptLog2MutExlusive32(unsigned int a);	/*	*/
-extern void htpSimdExecute(unsigned int simd);		/*	*/
-extern void htpBenchmarkPerformanceTest(void);		/*	*/
-extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordinly.	*/
-extern void htpFormatResult(unsigned int numResults, const Result* results);
+extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksResult* benchmarkResult);		/*	*/
+extern void htpBenchmarkPerformanceTest(SIMDBenchmarksResult* benchmarkResult);		/*	*/
+extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
+extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksResult** results);
 
 #endif
