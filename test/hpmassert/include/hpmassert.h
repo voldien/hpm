@@ -30,6 +30,7 @@ extern int g_SIMD;
 extern int g_type;
 extern int g_precision;
 extern const unsigned int g_it;
+extern long int g_time_res;
 
 /**
  *	Macro function declaration.
