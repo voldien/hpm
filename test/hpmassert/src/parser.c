@@ -29,8 +29,8 @@ static unsigned int hpmNumParam(const char *arg){
 /**
  *	Get param by nth index.
  */
-static void hpmGetParamByIndex(const char *__restrict__ arg,
-                               char *__restrict__ param, unsigned int index) {
+static void hpmGetParamByIndex(const char *HPM_RESTRICT arg,
+                               char *HPM_RESTRICT param, unsigned int index) {
 
     unsigned int i;
     const char* tmp = arg;
@@ -56,8 +56,8 @@ static void hpmGetParamByIndex(const char *__restrict__ arg,
 
 }
 
-unsigned int hpmParserBitWiseMultiParam(const char *__restrict__ arg,
-                                        const char **__restrict__ opts){
+unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
+                                        const char **HPM_RESTRICT opts){
 
     unsigned int i = 0;			/*	*/
     unsigned int j = 0;			/*	*/

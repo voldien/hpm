@@ -18,7 +18,7 @@
 */
 #ifndef _HPM_PARSER_H_
 #define _HPM_PARSER_H_ 1
-
+#include"hpmdef.h"
 /**
  *	Parse bit flag argument options. Where each
  *	argument is separated by comma. Where all and none
@@ -30,8 +30,8 @@
  *
  *	@Return bitwise option.
  */
-extern unsigned int hpmParserBitWiseMultiParam(const char *__restrict__ arg,
-                                               const char **__restrict__ opts);
+extern unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
+                                               const char **HPM_RESTRICT opts);
 
 
 #endif
