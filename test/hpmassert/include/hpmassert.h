@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_TEST_H_
-#define _HPM_TEST_H_ 1
+#ifndef _HPM_ASSERT_H_
+#define _HPM_ASSERT_H_ 1
 #include<hpm.h>
 #include<hpmmath.h>
 #include<assert.h>
@@ -29,6 +29,7 @@
 extern int g_SIMD;
 extern int g_type;
 extern int g_precision;
+extern int g_format;
 extern const unsigned int g_it;
 extern long int g_time_res;
 
@@ -158,29 +159,37 @@ enum PrecisionType{
 /**
  *
  */
-typedef struct function_result_t{
+typedef struct function_raw_t{
 	const char* name;   /**/
 	long int nanosec;   /**/
 	enum PerformanceTestType type;
-}FunctionResult;
+}FunctionRaw;
 
 /**
  * Time result per SIMD.
  */
-typedef struct simd_benchmark_result_t {
+typedef struct simd_benchmark_raw_t {
 	enum PrecisionType type;    /*  */
 	uint32_t simd;              /*  */
-	FunctionResult *results;    /*  */
+	FunctionRaw *results;    /*  */
 	uint32_t num;               /*  */
-} SIMDBenchmarksResult;
+} SIMDBenchmarksRaw;
+
+/**
+ *
+ */
+typedef struct simd_time_percentage_result_t{
+	float percentage;
+}SIMDTimeResult;
 
 extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
-extern SIMDBenchmarksResult** htpAllocateBenchmarks(int num);
+extern SIMDBenchmarksRaw* htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs);
 extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
 extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
-extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksResult* benchmarkResult);		/*	*/
-extern void htpBenchmarkPerformanceTest(SIMDBenchmarksResult* benchmarkResult);		/*	*/
+extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult);		/*	*/
+extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
-extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksResult** results);
+extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results);
+extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results, SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);
 
 #endif
