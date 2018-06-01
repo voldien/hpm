@@ -13,9 +13,9 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_maxfv) {
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_vec8_maxfv) {
 	register int x;
-	hpmvec4f vec1 = { 1, 2, 1, 1 };
-	hpmvec4f vec2 = { 1, 0, 6, 1 };
-	hpmvec4f vec3 = { 1, 0, 6, 1 };
+	hpmvec8f vec1 = { 1, 2, 1, 1 };
+	hpmvec8f vec2 = { 1, 0, 6, 1 };
+	hpmvec8f vec3 = { 1, 0, 6, 1 };
 
 	for (x = 0; x < g_it; x++) {
 		hpm_vec8_maxfv(&vec1, &vec2, &vec3);
@@ -33,9 +33,9 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_minfv) {
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_vec8_minfv) {
 	register int x;
-	hpmvec4f vec1 = { 1, 2, 1, 1 };
-	hpmvec4f vec2 = { 1, 0, 6, 1 };
-	hpmvec4f vec3 = { 1, 0, 6, 1 };
+	hpmvec8f vec1 = { 1, 2, 1, 1 };
+	hpmvec8f vec2 = { 1, 0, 6, 1 };
+	hpmvec8f vec3 = { 1, 0, 6, 1 };
 
 	for (x = 0; x < g_it; x++) {
 		hpm_vec8_minfv(&vec1, &vec2, &vec3);
