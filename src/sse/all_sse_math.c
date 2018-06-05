@@ -14,6 +14,8 @@ HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* HPM_RESTRICT a, const hpmvec8f* HP
 	hpmvec8fu* HPM_RESTRICT max = c;
 	const hpmvec8fu* HPM_RESTRICT au = a;
 	const hpmvec8fu* HPM_RESTRICT bu = b;
+
+	/*  Compute max.    */
 	max->d2[0] = _mm_max_ps(au->d2[0], bu->d2[0]);
 	max->d2[1] = _mm_max_ps(au->d2[1], bu->d2[1]);
 }
@@ -25,6 +27,8 @@ HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* HP
 	hpmvec8fu* HPM_RESTRICT min = c;
 	const hpmvec8fu* HPM_RESTRICT au = a;
 	const hpmvec8fu* HPM_RESTRICT bu = b;
+
+	/*  Compute min.    */
 	min->d2[0] = _mm_min_ps(au->d2[0], bu->d2[0]);
 	min->d2[1] = _mm_min_ps(au->d2[1], bu->d2[1]);
 }

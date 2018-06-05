@@ -1,6 +1,5 @@
 #include"hpmmatrix.h"
 
-
 #include<immintrin.h>
 #   ifdef HPM_VC
 #      include<intrin.h>
@@ -12,6 +11,8 @@
 HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
 	hpmmat4uf* HPM_RESTRICT d = destination;
 	const hpmmat4uf* HPM_RESTRICT s = source;
+
+	/*  Copy memory.    */
 	 _mm256_storeu_ps(&d->oc[0], s->oc[0]);
 	 _mm256_storeu_ps(&d->oc[1], s->oc[1]);
 }
@@ -60,7 +61,8 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 	*output = brod1 * larg[0] + brod2 * larg[1] + brod3 * larg[2] + brod4 * larg[3];
 }
 
-HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){	/*	TODO fix if it can be optimized even further.*/
+HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
+	/*	TODO fix if it can be optimized even further.*/
 	const hpmvec8f row0 = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f };
 	const hpmvec8f row1 = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 	hpmmat4uf* mat8 = mat;
