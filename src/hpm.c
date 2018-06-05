@@ -370,9 +370,11 @@ static int log2MutExlusive32(unsigned int a){
 	int i = 0;
 	const int bitlen = 32;
 
+	/*  */
 	if(a == 0)
 		return 0;
 
+	/*  Iterate through each bit.   */
 	for(; i < bitlen; i++){
 		if((a >> i) & 0x1)
 			return (i + 1);
