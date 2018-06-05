@@ -28,44 +28,60 @@ extern "C" {
 #endif
 
 /**
- *
+ * Print vector4 to stdout.
+ * @param vec non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_vec4_print(const hpmvec4f* vec);
+extern HPMDECLSPEC void hpm_vec4_print(const hpmvec4f *vec);
 
 /**
+ * Print vector4 to character buffer.
  *
+ * @param text non-null character address.
+ * @param vec non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_vec4_sprint(char* text, const hpmvec4f* vec);
+extern HPMDECLSPEC void hpm_vec4_sprint(char *HPM_RESTRICT text, const hpmvec4f *HPM_RESTRICT vec);
 
 /**
- *
+ * Print vector3 to stdout.
+ * @param vec non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_vec3_print(const hpmvec3f* vec);
+extern HPMDECLSPEC void hpm_vec3_print(const hpmvec3f *vec);
 
 /**
+ * Print vector3 to character buffer.
  *
+ * @param text non-null character address.
+ * @param vec non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_vec3_sprint(char* text, const hpmvec3f* vec);
+extern HPMDECLSPEC void hpm_vec3_sprint(char *HPM_RESTRICT text, const hpmvec3f *HPM_RESTRICT vec);
 
 /**
- *
+ * Print quaternion to stdout.
+ * @param quat non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_quat_print(const hpmquatf* quat);
+extern HPMDECLSPEC void hpm_quat_print(const hpmquatf *quat);
 
 /**
+ * Print Quaternion to character buffer.
  *
+ * @param text non-null character address.
+ * @param quat non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_quat_sprint(char* text, const hpmquatf* vec);
+extern HPMDECLSPEC void hpm_quat_sprint(char *HPM_RESTRICT text, const hpmquatf *HPM_RESTRICT quat);
 
 /**
- *
+ * Print matrix to stdout.
+ * @param mat non-null valid vector address.
  */
 extern HPMDECLSPEC void hpm_mat4x4_print(const hpmvec4x4f_t mat);
 
 /**
+ * Print Matrix4x4 to character buffer.
  *
+ * @param text non-null character address.
+ * @param mat non-null valid vector address.
  */
-extern HPMDECLSPEC void hpm_mat4x4_sprint(char* text, const hpmvec4x4f_t mat);
+extern HPMDECLSPEC void hpm_mat4x4_sprint(char *HPM_RESTRICT text, const hpmvec4x4f_t mat);
 
 
 #ifdef __cplusplus /*	C++ Environment	*/

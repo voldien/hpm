@@ -400,12 +400,12 @@ const char* hpm_get_simd_symbol(unsigned int SIMD) {
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
 
-void hpm_vec4_print(const hpmvec4f* vec) {
+void hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
 	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_vec4_sprint(char* text, const hpmvec4f* vec){
+void hpm_vec4_sprint(char* text, const hpmvec4f* HPM_RESTRICT vec){
 	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
@@ -415,7 +415,7 @@ void hpm_vec3_print(const hpmvec3f* vec) {
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_vec3_sprint(char* text, const hpmvec3f* vec){
+void hpm_vec3_sprint(char* HPM_RESTRICT text, const hpmvec3f* HPM_RESTRICT vec){
 	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
@@ -426,7 +426,7 @@ void hpm_quat_print(const hpmquatf* quat) {
 	        hpm_quat_getwf(*quat));
 }
 
-void hpm_quat_sprint(char* text, const hpmquatf* quat){
+void hpm_quat_sprint(char* HPM_RESTRICT text, const hpmquatf* HPM_RESTRICT quat){
 	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
@@ -444,7 +444,7 @@ void hpm_mat4x4_print(const hpmvec4x4f_t mat){
 		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
 }
 
-void hpm_mat4x4_sprint(char* text, const hpmvec4x4f_t mat){
+void hpm_mat4x4_sprint(char* HPM_RESTRICT text, const hpmvec4x4f_t mat){
     sprintf(text,
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
