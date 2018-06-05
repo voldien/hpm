@@ -34,6 +34,7 @@ void htpReadArgument(int argc, char** argv) {
 			{"type",        required_argument, NULL, 't'},    /*	Specify type to assert.	*/
 			{"simd",        required_argument, NULL, 's'},    /*	select SIMD for assertion.	*/
 			{"precision",   required_argument, NULL, 'p'},    /*	Select precision for assertion.	*/
+			{"sample",      required_argument, NULL, 'S'},    /*	Set sample space.	*/
 			{"format",      optional_argument, NULL, 'r'},    /*	Format the result to a more readable format.	*/
 			{NULL, 0,                          NULL, 0},
 	};
@@ -86,6 +87,7 @@ void htpReadArgument(int argc, char** argv) {
 				g_type = eAll & ~(eIntegrity);
 				break;
 			case 'r':
+				g_format = 0x1;
 				break;
 			default:
 				break;
@@ -93,28 +95,25 @@ void htpReadArgument(int argc, char** argv) {
 	}
 }
 
-SIMDBenchmarksResult **htpAllocateBenchmarks(int num) {
+SIMDBenchmarksRaw *htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs) {
 
-	int x;
+	unsigned int x;
 	/*  Allocate benchmarks. */
-	SIMDBenchmarksResult** benchmarkResults = (SIMDBenchmarksResult**)malloc(sizeof(SIMDBenchmarksResult*) * 32);
-	assert(benchmarkResults);
+	SIMDBenchmarksRaw* benchmarkResults;
+	benchmarkResults = (SIMDBenchmarksRaw*)malloc(sizeof(SIMDBenchmarksRaw) * num);
 
 	/*  */
 	for(x = 0; x < num; x++){
 		/*  */
-		benchmarkResults[x] = (SIMDBenchmarksResult*)malloc(sizeof(SIMDBenchmarksResult));
-		benchmarkResults[x]->num = 192;
-		benchmarkResults[x]->results = malloc(sizeof(FunctionResult) * benchmarkResults[x]->num);
-		assert(benchmarkResults[x]->results);
+		benchmarkResults[x].num = numFuncs;
+		benchmarkResults[x].results = malloc(sizeof(FunctionRaw) * benchmarkResults[x].num);
+		assert(benchmarkResults[x].results);
 	}
 
 	return benchmarkResults;
 }
 
-
-
-void htpSimdExecute(unsigned int simd, SIMDBenchmarksResult* benchmarkResult){
+void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult){
 
 	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
 
@@ -136,7 +135,7 @@ long int hptGetTimeResolution(void){
 #if defined(HPM_UNIX)
 	struct timespec spec;
 	clock_getres(1, &spec);	/*	CLOCK_MONOTONIC	*/
-	return (1E9 / spec.tv_nsec);
+	return (1E9L / spec.tv_nsec);
 #else
 	return 1E9;
 #endif
@@ -146,7 +145,7 @@ long int hptGetTime(void){
 #if defined(HPM_UNIX)
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
-    return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3;
+    return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3L;
 #else
 	return 1;
 #endif
@@ -159,34 +158,33 @@ long int hptGetTime(void){
  * @param result
  */
 static HPM_ALWAYS_INLINE void
-htpBenchmarkFunc(func_benchmark func, const char *HPM_RESTRICT name, FunctionResult *HPM_RESTRICT result) {
+htpBenchmarkFunc(func_benchmark func, const char *HPM_RESTRICT name, FunctionRaw *HPM_RESTRICT result) {
 	result->name = name;
 	long int ctime, totaltime;
 	ctime = hptGetTime();
 	func();
 	totaltime = hptGetTime() - ctime;
 	result->nanosec = totaltime;
-	printf("%s %f seconds.\n", name, (float) totaltime / g_time_res);
+	if((g_format & 0x1) == 0)
+		printf("%s %f seconds.\n", name, (float) totaltime / g_time_res);
 }
 
 /**
  *
  */
-#define HPM_BENCHMARK_FUNC_CALL(func, bench, index) htpBenchmarkFunc(&func##sp_test, HPM_STR(func), &bench->results[index++])
+#define HPM_BENCHMARK_FUNC_CALL(func, benchmark, index) htpBenchmarkFunc(&func##sp_test, HPM_STR(func), &benchmark->results[index++])
 
-void htpBenchmarkPerformanceTest(SIMDBenchmarksResult* benchmarkResult){
+void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
-	int findex = 0;
+	unsigned int findex = 0;
 
-	if(g_precision & eFloat){
+	if(benchmarkResult->type & eFloat){
 
 		/*	Check integrity.	*/
 		if(g_type & eIntegrity){
 			printf("Integrity check.\n");
 			htpIntegritySpCheckf();
 		}
-
-		HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_copyfv, benchmarkResult, findex);
 
 		/*	Matrix mode.	*/
 		if( g_type & eMatrix ){
@@ -306,19 +304,103 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksResult* benchmarkResult){
 	printf("\n\n");
 }
 
-void htpFormatResult(unsigned int numResults, const SIMDBenchmarksResult** results){
+void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 
 	int i, j;
-	//const int nResults = results[0].num;
+	int x, y;
+	size_t maxFuncNameLen = 0;
+	size_t lineCount = 0;
+	SIMDTimeResult *timeResults = NULL;
+	int maxFuncEntries;
+	int seperateSize = 0;
+	if (numResults <= 0)
+		return;
 
-	/*	*/
-	for(j = 0; j < numResults; j++){
-		const SIMDBenchmarksResult* benchmark = results[j];
-		for(i = 0; i < benchmark->num; i++){
+	/*  Compute the performance.    */
+	htpResultModel(numResults, results, &timeResults, &maxFuncEntries);
 
-		}
-
-		/*	*/
+	/*  Compute max length name.    */
+	const FunctionRaw *result = results[0].results;
+	for (i = 0; i < results[0].num; i++) {
+		const size_t len = strlen(result[i].name);
+		if (len > maxFuncNameLen)
+			maxFuncNameLen = len;
 	}
 
+	/*	Iterate through each SIMD - Col*/
+	for (j = 0; j < maxFuncEntries; j++) {
+		lineCount = 0;
+		const SIMDBenchmarksRaw *benchmark = results;
+
+		/*  Display function name.  */
+		const FunctionRaw *funcResult = &benchmark->results[j];
+		lineCount += printf("| %s ", funcResult->name) - 3;
+
+		/*  Print remaining space.  */
+		const size_t spaces = maxFuncNameLen - lineCount;
+		for (x = 0; x < spaces; x++)
+			fwrite(" ", 1, 1, stdout);
+		printf("| ");
+
+		/*  Print all results.  */
+		lineCount = maxFuncNameLen + 1;
+		for (i = 0; i < numResults; i++) {
+			lineCount += printf("%f |", timeResults[j * numResults + i].percentage);
+			lineCount += 1;
+		}
+		printf("\n");
+
+		/*  Draw separate line. */
+		for (i = 0; i < lineCount; i++) {
+			fwrite("-", 1, 1, stdout);
+		}
+		/*	Next line.  */
+		fwrite("\n", 1, 1, stdout);
+	}
+
+	free(timeResults);
+}
+
+void htpResultModel(unsigned int numBench,
+                    const SIMDBenchmarksRaw* HPM_RESTRICT raw,
+                    SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels) {
+
+	int x, y;
+	int maxEntries = 0;
+
+	/*  Compute max number of function entries. */
+	for( x = 0; x < numBench; x++){
+		if(raw[x].num > maxEntries)
+			maxEntries = raw[x].num;
+	}
+
+	/*  Allocate percentage results.   */
+	const size_t resultEntireSize = sizeof(SIMDTimeResult) * maxEntries * numBench;
+	*models = (SIMDTimeResult*)malloc(resultEntireSize);
+	memset(*models, 0, resultEntireSize);
+	assert(*models);
+
+	/*  Iterate through each function.*/
+	for(y = 0; y < raw[0].num; y++){
+
+		long int baseline = INT32_MAX;
+
+		/*  Compute baseline from SIMD column.   */
+		for(x = 0; x < numBench; x++){
+			FunctionRaw* result = raw[x].results;
+			/*  Compute min baseline.    */
+			if(result[x].nanosec < baseline)
+				baseline = result[x].nanosec;
+		}
+
+		/*  Iterate through each result and compute performance percentages.    */
+		for(x = 0; x < numBench; x++){
+			const FunctionRaw* result = &raw[x].results[y];
+			const float perc = (float)((double)result->nanosec / (double)baseline);
+			(*models)[y * numBench + x].percentage = perc;
+		}
+	}
+
+	assert(numberModels);
+	*numberModels = maxEntries;
 }

@@ -127,7 +127,7 @@ extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
  *
  *	@Return 1 if supported. 0 if not supported.
  */
-extern HPMDECLSPEC int HPMAPIENTRY hpm_supportcpufeat(unsigned int SIMD);
+extern HPMDECLSPEC int HPMAPIENTRY hpm_support_cpu_feat(unsigned int SIMD);
 
 /**
  *	Get symbol name for specified SIMD enumerator.
