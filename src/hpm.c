@@ -383,18 +383,20 @@ static int log2MutExlusive32(unsigned int a){
 
 const char* hpm_get_simd_symbol(unsigned int SIMD) {
 	static const char* gc_simd_symbols[] = {
-			"",
-			"NOSIMD",
-			"MMX",
-			"SSE",
-			"SSE2",
-			"SSE3",
-			"SSE41",
-			"SSE42",
-			"AVX",
-			"AVX2",
-			"AVX512",
-			"NEON",
+			"",         /*  None    */
+			"NOSIMD",   /*  (1 << 0)    */
+			"MMX",      /*  (1 << 1)    */
+			"SSE",      /*  (1 << 2)    */
+			"SSE2",     /*  (1 << 3)    */
+			"SSE3",     /*  (1 << 4)    */
+			"SSSE3",    /*  (1 << 5)    */
+			"SSE41",    /*  (1 << 6)    */
+			"SSE42",    /*  (1 << 7)    */
+			"AVX",      /*  (1 << 8)    */
+			"AVX2",     /*  (1 << 9)    */
+			"AVX512",   /*  (1 << 10)   */
+			"NEON",     /*  (1 << 11)   */
+			"FMA",      /*  (1 << 12)   */
 			NULL,
 	};
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
