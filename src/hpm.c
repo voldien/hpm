@@ -81,7 +81,7 @@ int hpm_init(unsigned int simd){
 	case HPM_DEFAULT:{
 		unsigned int i;
 		for(i = HPM_NEON; i < HPM_DEFAULT; i >>= 1){
-			if(hpm_supportcpufeat(i)){
+			if(hpm_support_cpu_feat(i)){
 				return hpm_init(i);
 			}
 		}
@@ -262,10 +262,10 @@ int hpm_init(unsigned int simd){
 	g_simd = simd;
 	error:	/*	error.	*/
 
+	/*  Determine if successfully.   */
 	return ( libhandle != NULL) ;
 }
 
-/*	TODO Fix later to make it platform independent.	*/
 int hpm_release(void) {
     int status = HPM_CLOSE(libhandle);
     if (status < 0)
@@ -316,7 +316,7 @@ const char* hpm_version(void) {
 	#define cpuid(regs, i)
 #endif
 
-int hpm_supportcpufeat(unsigned int simd) {
+int hpm_support_cpu_feat(unsigned int simd) {
     int cpuInfo[4] = {0};
 
     switch (simd) {
