@@ -26,10 +26,10 @@
 /**
  *	Global variable decleration.
  */
-extern int g_SIMD;
-extern int g_type;
-extern int g_precision;
-extern int g_format;
+extern unsigned int g_SIMD;
+extern unsigned int g_type;
+extern unsigned int g_precision;
+extern unsigned int g_format;
 extern const unsigned int g_it;
 extern long int g_time_res;
 

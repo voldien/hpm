@@ -8,32 +8,32 @@
 /**
  *	Global variables.
  */
-int g_SIMD = (unsigned int)(-1);
-int g_type = eAll;
-int g_precision = eFloat;
-int g_format = 0;
-const unsigned int g_it = 1E7;
+unsigned int g_SIMD = (unsigned int)(-1);
+int unsigned g_type = eAll;
+int unsigned g_precision = eFloat;
+int unsigned g_format = 0;
+const unsigned int g_it = (unsigned int)1E7L;
 long int g_time_res = 0;
 
 
 int main(int argc, char** argv) {
 
-	int i,j;
-	const unsigned int nenum = sizeof(uint32_t) * 4;
+	unsigned int i,j;
+	const unsigned int nrEnums = sizeof(uint32_t) * 4;
 
 	/*	Read argument.	*/
 	htpReadArgument(argc, argv);
 	g_time_res = hptGetTimeResolution();
 
 	/*  Allocate benchmarks. */
-	const numBenchmarks = 32;
+	const unsigned int numBenchmarks = nrEnums;
 	SIMDBenchmarksRaw* benchmarkResults = htpAllocateBenchmarks(numBenchmarks, 256);
 
 	/*	Iterate through each possible SIMD options.	*/
-	for (i = 0, j = 0; i < nenum; i++){
+	for (i = 0, j = 0; i < nrEnums; i++){
 		uint32_t simd = (uint32_t)(1 <<i);
 		/*	Check if SIMD is specified and supported.	*/
-		if ((g_SIMD & simd) && hpm_supportcpufeat(simd)) {
+		if ((g_SIMD & simd) && hpm_support_cpu_feat(simd)) {
 			/*  Initialize the benchmark.   */
 			benchmarkResults[j].simd = simd;
 			benchmarkResults[j].num = 0;

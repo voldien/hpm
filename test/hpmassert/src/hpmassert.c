@@ -63,7 +63,7 @@ void htpReadArgument(int argc, char** argv) {
 					g_SIMD = i;
 
 					/*	Check if supported.	*/
-					if (!hpm_supportcpufeat(g_SIMD)) {
+					if (!hpm_support_cpu_feat(g_SIMD)) {
 						fprintf(stderr, "SIMD extension not supported.\n");
 						exit(EXIT_FAILURE);
 					}
@@ -102,7 +102,7 @@ SIMDBenchmarksRaw *htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs
 	SIMDBenchmarksRaw* benchmarkResults;
 	benchmarkResults = (SIMDBenchmarksRaw*)malloc(sizeof(SIMDBenchmarksRaw) * num);
 
-	/*  */
+	/*  Allocate function raw result buffers.  */
 	for(x = 0; x < num; x++){
 		/*  */
 		benchmarkResults[x].num = numFuncs;
