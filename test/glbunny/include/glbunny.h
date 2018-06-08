@@ -21,6 +21,9 @@
 #include<hpm.h>
 #include<stdio.h>
 #include<GL/glew.h>
+#include<SDL2/SDL.h>
+#include<spb/sprite.h>
+
 /**
  *	Global constants.
  */
@@ -41,6 +44,7 @@ extern int g_debug;				/*	*/
 typedef struct geometry_t{
 	GLint vao;
 	GLint vbo;
+	GLint nbo;
 	GLint ibo;
 	GLint numVertices;
 	GLint numIndices;
@@ -48,6 +52,31 @@ typedef struct geometry_t{
 	hpmvec4f maxBound;
 	hpmvec4f centerBound;
 }Geometry;
+
+typedef struct scene_t{
+	int glflag;                 /*	*/
+	SDL_Window* window;         /*	*/
+	SDL_GLContext* glc;			/*	*/
+	Uint64 freq;			    /*	*/
+	Uint64 pretime;				/*	*/
+
+	hpmvec4x4f_t* mvp;			/*	*/
+	hpmvec4x4f_t* model;		/*	*/
+	hpmvec4x4f_t* modelview;	/*	*/
+	hpmvec4x4f_t view;			/*	*/
+	hpmvec4x4f_t proj;			/*	*/
+	hpmvec4f position;	        /*	*/
+	hpmquatf camor;				/*	*/
+	hpmvec4f dir;				/*	*/
+	hpmquatf* quat;				/*	*/
+
+	Geometry bunny;
+	Geometry plan;
+	GLuint prog;
+	GLint mvploc;
+	GLint modeloc;
+	SBSpriteBatch* batch;
+}Scene;
 
 /**
  *	Get version of hpmglbunny program
@@ -57,20 +86,13 @@ typedef struct geometry_t{
 extern const char* get_glbunny_version(void);
 
 /**
- *	Get GLSL version of current opengl context.
- *	@Return 3 digited version in 10^3.
+ *	Get GLSL version of current OpenGL context.
+ *	@Return 3 digit version in 10^3.
  */
 extern unsigned int getGLSLVersion(void);
 
 /**
- *	log2 with mutuality exclusive bit flag.
- *
- *	@Return exponent of base 2 for a.
- */
-extern int Log2MutExlusive32(unsigned int a);
-
-/**
- *
+ * Enable OpenGL debug callback and logging.
  */
 extern void enableGLDebug(void);
 
@@ -88,18 +110,22 @@ extern GLint createShader(const char* HPM_RESTRICT vsource,
  *
  *	@Return non-negative if succesfully.
  */
-extern GLuint createBunny(unsigned int* HPM_RESTRICT numvertices,
-        unsigned int* HPM_RESTRICT numindices);
+extern GLuint createBunny(Geometry* HPM_RESTRICT geometry);
 
 /**
- *	Create grid object.
- *
- *	@Return
+ * Create grid object.
+ * @param numvertices
+ * @param numindices
+ * @return
  */
 extern GLuint createGrid(unsigned int* HPM_RESTRICT numvertices,
         unsigned int* HPM_RESTRICT* numindices);
+
 /**
- *	@Return
+ *
+ * @param nVertices
+ * @param nIndices
+ * @return
  */
 extern GLuint createCube(unsigned int* HPM_RESTRICT nVertices,
         unsigned int* HPM_RESTRICT nIndices);
@@ -111,8 +137,29 @@ extern GLuint createCube(unsigned int* HPM_RESTRICT nVertices,
 extern void print_dependency_versions(void);
 
 /**
- *	Read user option argument.
+ * Read user option argument.
+ * @param argc
+ * @param argv
  */
 extern void readargument(int argc, const char** argv);
+
+/**
+ *
+ * @param scene
+ * @return
+ */
+extern int createScene(Scene* scene);
+
+/**
+ *
+ * @param scene
+ * @return
+ */
+extern int releaseScene(Scene* scene);
+
+/**
+ *
+ */
+extern void sceneRenderer(Scene* scene);
 
 #endif

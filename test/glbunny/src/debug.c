@@ -107,22 +107,23 @@ void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
 
 void enableGLDebug(void){
 
-        /*	Check if debug callback is supported.	*/
-        if (!glDebugMessageCallbackAMD && !glDebugMessageCallbackARB){
-            fprintf(stderr, "Failed loading OpenGL callback functions.\n");
-            return;
-        }
+	/*	Check if debug callback is supported.	*/
+	if (!glDebugMessageCallbackAMD && !glDebugMessageCallbackARB){
+		fprintf(stderr, "Failed loading OpenGL callback functions.\n");
+		return;
+	}
 
-        /*	Set Debug message callback.	*/
-        if(glDebugMessageCallbackARB){
-            glDebugMessageCallbackARB((GLDEBUGPROCARB)callback_debug_gl, NULL);
-        }
-        if(glDebugMessageCallbackAMD){
-            glDebugMessageCallbackAMD((GLDEBUGPROCAMD)callback_debug_gl, NULL);
-        }
+	/*	Set Debug message callback.	*/
+	if(glDebugMessageCallbackARB){
+		glDebugMessageCallbackARB((GLDEBUGPROCARB)callback_debug_gl, NULL);
+	}
+	if(glDebugMessageCallbackAMD){
+		glDebugMessageCallbackAMD((GLDEBUGPROCAMD)callback_debug_gl, NULL);
+	}
 
-        /*	Enable debug.    */
-        glEnable(GL_DEBUG_OUTPUT);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
-        glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+	/*	Enable debug.    */
+	glEnable(GL_DEBUG_OUTPUT);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS_ARB);
+	glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 }
+

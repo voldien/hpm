@@ -90,23 +90,6 @@ unsigned int getGLSLVersion(void){
 	return version;
 }
 
-int Log2MutExlusive32(unsigned int a){
-
-	int i = 0;
-	int po = 0;
-	const int bitlen = 32;
-
-	if(a == 0)
-		return 0;
-
-	for(; i < bitlen; i++){
-		if((a >> i) & 0x1)
-			return (i + 1);
-	}
-
-	assert(0);
-}
-
 GLint createShader(const char* HPM_RESTRICT vsource,
         const char* HPM_RESTRICT fsource) {
 
@@ -169,36 +152,32 @@ GLint createShader(const char* HPM_RESTRICT vsource,
 	return prog;
 }
 
-GLuint createBunny(unsigned int* HPM_RESTRICT numvertices,
-        unsigned int* HPM_RESTRICT numindices){
+GLuint createBunny(Geometry* geometry){
 
-	GLuint vao;
-	GLuint vbo;
-	GLuint ibo;
-	GLuint nbo;
 
 	/*	Create bunny geometry.	*/
-	glGenVertexArrays(1, &vao);
-	glBindVertexArray(vao);
+	glGenVertexArrays(1, &geometry->vao);
+	glBindVertexArray(geometry->vao);
 
-	glGenBuffersARB(1, &vbo);
-	glGenBuffersARB(1, &nbo);
-	glGenBuffersARB(1, &ibo);
+	glGenBuffersARB(1, &geometry->vbo);
+	glGenBuffersARB(1, &geometry->nbo);
+	glGenBuffersARB(1, &geometry->ibo);
 
-	*numindices = BUNNY_NUM_INDICES;
-	*numvertices = BUNNY_NUM_VERTS;
+	geometry->numIndices = BUNNY_NUM_INDICES;
+	geometry->numVertices = BUNNY_NUM_VERTS;
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, vbo);
+	/*	*/
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, geometry->vbo);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_vertices, GL_STATIC_DRAW_ARB);
 
 	/*	*/
-	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, ibo);
+	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, geometry->ibo);
 	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices, GL_STATIC_DRAW_ARB);
 
 	glEnableVertexAttribArrayARB(0);
 	glVertexAttribPointerARB(0, 3, GL_FLOAT, GL_FALSE, 12, NULL);
 
-	glBindBufferARB(GL_ARRAY_BUFFER_ARB, nbo);
+	glBindBufferARB(GL_ARRAY_BUFFER_ARB, geometry->nbo);
 	glBufferDataARB(GL_ARRAY_BUFFER_ARB, BUNNY_NUM_VERTS * sizeof(float) * 3, bunny_normals, GL_STATIC_DRAW_ARB);
 
 	glEnableVertexAttribArrayARB(1);
@@ -206,7 +185,15 @@ GLuint createBunny(unsigned int* HPM_RESTRICT numvertices,
 
 	glBindVertexArray(0);
 
-	return vao;
+	return geometry->vao;
+}
+
+GLuint createGrid(unsigned int* numvertices,
+		unsigned int* HPM_RESTRICT* numindices){
+
+
+
+	return 0;
 }
 
 void print_dependency_versions(void){
@@ -220,11 +207,12 @@ void print_dependency_versions(void){
 
 void readargument(int argc, const char** argv){
 
-    /*	*/
+    /*	Possible long options.	*/
 	static struct option longoption[] = {
-			{"version",	no_argument,	NULL, 'v'},
-			{"output",	required_argument,	NULL, 'o'},
-			{"simd",	required_argument,	NULL, 's'},
+			{"version", no_argument,        NULL, 'v'},	/*	Print version of the glbunny and hpm library.	*/
+			{"debug",	no_argument,  		NULL, 'd'},	/*	Change default SIMD. */
+			{"output",  required_argument,  NULL, 'o'},	/*	Override the time output.	*/
+			{"simd",    required_argument,  NULL, 's'},	/*	Change default SIMD. */
 			{NULL,	0,	NULL, 0},
 	};
 
@@ -238,7 +226,6 @@ void readargument(int argc, const char** argv){
 		case 'v':
 			printf("version %s.\n", get_glbunny_version());
 			exit(EXIT_SUCCESS);
-			break;
 		case 's':
 			if(optarg){
 				int i = 1;
@@ -256,7 +243,7 @@ void readargument(int argc, const char** argv){
 				g_hpmflag = i;
 
 				/*	Check if supported.	*/
-				if(!hpm_supportcpufeat(g_hpmflag)){
+				if(!hpm_support_cpu_feat(g_hpmflag)){
 					fprintf(stderr, "SIMD extension not supported.\n");
 					exit(EXIT_FAILURE);
 				}
