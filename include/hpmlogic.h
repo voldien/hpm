@@ -22,6 +22,10 @@
 #include"hpmvector.h"
 #include"hpmmatrix.h"
 
+#ifdef __cplusplus /*	C++ Environment	*/
+extern "C" {
+#endif
+
 /**
  *	Determine if a and b is equal.
  *
@@ -86,6 +90,10 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_eqfv, const hpmvec4x4f_t a,
  *	@Return none zero if statement is true.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4_neqfv, const hpmvec4x4f_t a,
-		const hpmvec4x4f_t b);
+           const hpmvec4x4f_t b);
+
+#ifdef __cplusplus /*	C++ Environment	*/
+}
+#endif
 
 #endif
