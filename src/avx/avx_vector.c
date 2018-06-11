@@ -16,10 +16,11 @@ HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 
 	hpmvec8f lvMultp = _mm256_hadd_ps(
 			_mm256_castps128_ps256(lvMult),
-			_mm256_castps128_ps256(lvMult) );
+			_mm256_castps128_ps256(lvMult));
+	lvMultp = _mm256_hadd_ps(lvMultp, lvMultp);
 
 	/*	Return first element.	*/
-	return _mm_cvtss_f32 ( _mm256_castps256_ps128( _mm256_sqrt_ps( lvMultp ) ) );
+	return _mm_cvtss_f32 ( _mm_sqrt_ss( _mm256_castps256_ps128( lvMultp ) ) );
 }
 
 HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
@@ -27,7 +28,8 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 
 	hpmvec8f lvMultp = _mm256_hadd_ps(
 			_mm256_castps128_ps256(lvMult),
-			_mm256_castps128_ps256(lvMult) );
+			_mm256_castps128_ps256(lvMult));
+	lvMultp = _mm256_hadd_ps(lvMultp, lvMultp);
 
 	/*	Return first element.	*/
 	return _mm_cvtss_f32 ( _mm256_castps256_ps128( lvMultp ) );
