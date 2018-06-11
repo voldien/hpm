@@ -341,7 +341,7 @@
 #endif
 
 /**
- *
+ * Macro for single or multi library builds.
  */
 #ifdef HPM_USE_SINGLE_LIBRARY
 	#define HPM_LOCALSYMBOL ""

@@ -67,7 +67,7 @@ typedef struct hpm_vec3uf_t{
 
 
 /**
- *	SEE 128 bits data types.
+ *	SSE 128 bits data types.
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
@@ -309,15 +309,17 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
 
 /**
  *	Get element in vector with greatest value.
+ *
+ *	@param vec
  */
 HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_max_compfv, const hpmvec4f* vec);
 
 /**
  *	Get element in vector with minimum value.
+ *
+ *	@param vec
  */
 HPM_EXPORT(hpmvecf, HPMAPIFASTENTRY, hpm_vec4_min_compfv, const hpmvec4f* vec);
-
-
 
 /**
  *	Compute cross product.

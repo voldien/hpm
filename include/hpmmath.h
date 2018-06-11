@@ -28,10 +28,10 @@ extern "C" {
 
 
 /**
- *	Compute max value of a and b.
- *	max = a > b ? a : b
+ * Compute max value of a and b.
+ * max = a > b ? a : b
  *
- *	@Return max value for each element of the vector data type.
+ * @Return max value for each element of the vector data type.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT c);
@@ -39,10 +39,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_maxfv, const hpmvec8f* HPM_RESTRICT a,
 		const hpmvec8f* HPM_RESTRICT b, hpmvec8f* HPM_RESTRICT c);
 
 /**
- *	Compute min value of a and b.
- *	min = a < b ? a : b
+ * Compute min value of a and b.
+ * min = a < b ? a : b
  *
- *	@Return min value for each element of the vector data type.
+ * @return min value for each element of the vector data type.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_minfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT c);
@@ -50,11 +50,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_minfv, const hpmvec8f* HPM_RESTRICT a,
 		const hpmvec8f* HPM_RESTRICT b, hpmvec8f* HPM_RESTRICT c);
 
 /**
- *	Computer square root.
+ * Computer square root for each element.
  *
- *	\arg
+ * @param arg reference object.
  *
- *	\out
+ * @param out square rooted vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_sqrtfv, const hpmvec4f* HPM_RESTRICT arg,
         hpmvec4f* HPM_RESTRICT out);
@@ -62,11 +62,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_sqrtfv, const hpmvec8f* HPM_RESTRICT arg,
         hpmvec8f* HPM_RESTRICT out);
 
 /**
- *	Computer approximate square root.
+ * Computer approximate square root for each element.
  *
- *	\arg
+ * @param arg reference object.
  *
- *	\out
+ * @param out square rooted vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_fast_sqrtfv, const hpmvec4f* HPM_RESTRICT arg,
         hpmvec4f* HPM_RESTRICT out);
@@ -74,8 +74,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_fast_sqrtfv, const hpmvec8f* HPM_RESTRICT
         hpmvec8f* HPM_RESTRICT out);
 
 /**
- *	Create random vector, where each component
- *	is within the following range [0,1].
+ * Create random vector, where each component
+ * is within the following range [0,1].
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_randomfv, hpmvec4f* out);
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec8_randomfv, hpmvec8f* out);
