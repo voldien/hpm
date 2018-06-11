@@ -37,11 +37,11 @@ HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 
 HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
 
-	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );	/*	{ x , y, z , w} => { y, x, w, z }	*/
-	const hpmvec4f cevmax = _mm_max_ps(*vec, cev);								/*	=> { max(x,y), max(y,x), max(z,w), max(w,z) }*/
+	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );  /*	{ x , y, z , w} => { y, x, w, z }	*/
+	const hpmvec4f cevmax = _mm_max_ps(*vec, cev);                              /*	=> { max(x,y), max(y,x), max(z,w), max(w,z) }*/
 
-	const hpmvec4f commax = _mm_shuffle_ps(cevmax, cevmax, _MM_SHUFFLE(0, 1, 2, 3));	/* => { max(z,w), max(z,w), max(x,y), max(x,y) }*/
-	const hpmvec4f compfv = _mm_max_ss(cevmax, commax);								/*	{ max(max(x,y), max(z,w)), n/a, n/a, n/a} */
+	const hpmvec4f commax = _mm_shuffle_ps(cevmax, cevmax, _MM_SHUFFLE(0, 1, 2, 3));    /* => { max(z,w), max(z,w), max(x,y), max(x,y) }*/
+	const hpmvec4f compfv = _mm_max_ss(cevmax, commax);                                 /*	{ max(max(x,y), max(z,w)), n/a, n/a, n/a} */
 
 	return _mm_cvtss_f32(compfv);
 }
