@@ -26,13 +26,15 @@ extern "C" {
 #endif
 
 /**
- *	Create look at matrix.
+ * Create look at matrix.
  *
- *	\eye the look at target.
+ * @param eye the look at target.
  *
- *	\position position in world space.
+ * @param position position in world space.
  *
- *	\up up direction in respect to the viewer.
+ * @param up direction in respect to the viewer.
+ *
+ * @param mat
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
         const hpmvec4f* HPM_RESTRICT position, const hpmvec4f* HPM_RESTRICT up,
