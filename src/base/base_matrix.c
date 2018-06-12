@@ -320,23 +320,25 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 
 	hpmvec4x4f_t mvp;
 	hpmvec4x4f_t inverseMVP;
-	hpmvec4f tmp;
+	hpmvec4f m;
 	hpmvec4f result;
 
 	/*	Create mvp matrix and its inverse.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);
-	if(HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP) == 0)
+	const hpmvecf det = HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP);
+	if(det == 0){
 		return 0;
+	}
 
 	/*	Transform into normalize coordinates between -1 and 1.  */
 	const hpmvecf x = 2.0f * ((winx - viewport[0]) / viewport[2]) - 1.0f;
 	const hpmvecf y = 2.0f * ((winy - viewport[1]) / viewport[3]) - 1.0f;
 	const hpmvecf z = (2.0f * winz) - 1.0f;
+	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&m, x, y, z, 1.0f);
 
 	/*	Compute the object coordinates. */
-	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&tmp, x, y, z, 1.0f);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat1x4fv)(inverseMVP, &tmp, &result);
-	if(hpm_vec4_getwf(result) == 0.0)
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat1x4fv)(inverseMVP, &m, &result);
+	if(hpm_vec4_getwf(result) == 0.0f)
 		return 0;
 
 	/*  Compute w inverse.  */
