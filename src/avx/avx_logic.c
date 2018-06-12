@@ -23,12 +23,13 @@ HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f*
 HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
-	const hpmvec4i mask = {~0, ~0, ~0, ~0};
+
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
-	return _mm_test_all_zeros(cmp, mask);
+	/*	Check if all one.	*/
+	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
-	return cmp[0] & cmp[1] & cmp[2] & cmp[3];
+	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
 #endif
 }
 
@@ -39,12 +40,11 @@ HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f
 HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
-	const hpmvec4i mask = {~0, ~0, ~0, ~0};
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
-	return _mm_test_all_zeros(cmp, mask);
+	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
-	return cmp[0] & cmp[1] & cmp[2] & cmp[3];
+	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
 #endif
 }
 
