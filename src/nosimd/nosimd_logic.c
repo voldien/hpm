@@ -1,20 +1,42 @@
 #include"hpmlogic.h"
+#include <float.h>
+#include <f2c.h>
 
+static int almostEqual(float a, float b) {
+
+	const float maxRelativeDiff = FLT_EPSILON;
+	const float difference = fabs(a - b);
+
+	a = (float)fabs(a);
+	b = (float)fabs(b);
+	const float scaledEpsilon = maxRelativeDiff * max(a,b);
+
+	return difference <= scaledEpsilon;
+	return fabs(a - b) <= FLT_EPSILON ? 1 : 0;
+}
+
+HPM_IMP(hpmboolean, hpm_vec_eqfv, hpmvecf a, hpmvecf b){
+	return almostEqual(a, b);
+}
+
+HPM_IMP(hpmboolean, hpm_vec_neqfv, hpmvecf a, hpmvecf b){
+	return HPM_CALLLOCALFUNC(hpm_vec_eqfv)(a, b) ? 0 : 1;
+}
 
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 
-	(*res)[0] = (*a)[0] == (*b)[0] ? (~0) : 0;
-	(*res)[1] = (*a)[1] == (*b)[1] ? (~0) : 0;
-	(*res)[2] = (*a)[2] == (*b)[2] ? (~0) : 0;
-	(*res)[3] = (*a)[3] == (*b)[3] ? (~0) : 0;
+	(*res)[0] = HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getxf(*a),hpm_vec4_getxf(*b));
+	(*res)[1] = HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getyf(*a),hpm_vec4_getyf(*b));
+	(*res)[2] = HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getzf(*a),hpm_vec4_getzf(*b));
+	(*res)[3] = HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getwf(*a),hpm_vec4_getwf(*b));
 
 }
 HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b){
-	return  (((*a)[0] == (*b)[0]) &&
-			 ((*a)[1] == (*b)[1]) &&
-			 ((*a)[2] == (*b)[2]) &&
-			 ((*a)[3] == (*b)[3])) ? 1 : 0;
+	return  (HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getxf(*a),hpm_vec4_getxf(*b)) &&
+			HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getyf(*a),hpm_vec4_getyf(*b)) &&
+			HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getzf(*a),hpm_vec4_getzf(*b)) &&
+			HPM_CALLLOCALFUNC(hpm_vec_eqfv)(hpm_vec4_getwf(*a),hpm_vec4_getwf(*b))) ? 1 : 0;
 }
 
 HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
