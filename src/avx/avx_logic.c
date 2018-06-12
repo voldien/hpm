@@ -57,25 +57,40 @@ HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* 
 
 HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* HPM_RESTRICT ufa = a;
-	const hpmmat4uf* HPM_RESTRICT ufb = b;
+	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
 
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_US);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_US);
+	/*	Compare elements.	*/
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_UQ);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_UQ);
+	const hpmvec8f comp = _mm256_castsi256_ps(_mm256_set1_epi16((short)0xFFFF));
 
-	/*	*/
-	return (hpmboolean)_mm256_testz_ps(lb, rb);
+	/*	All bits 1 implies equal.	*/
+	return (hpmboolean)_mm256_testc_ps(rb, comp) && (hpmboolean)_mm256_testc_ps(lb, comp);
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* HPM_RESTRICT ufa = a;
-	const hpmmat4uf* HPM_RESTRICT ufb = b;
+	return !HPM_CALLLOCALFUNC(hpm_mat4_eqfv)(a, b);
 
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OS);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OS);
+	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
 
-	/*	*/
-	return (hpmboolean)!_mm256_testz_ps(lb, rb);
+
+
+	/*	Compare*/
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_OQ);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_OQ);
+
+	/*  */
+	const hpmvec8i or = _mm256_castps_si256(_mm256_or_ps(lb, rb));
+	const hpmvec8i comp = _mm256_set1_epi16((short)0xFFFF);
+
+	/*  No non-equal implies matrices are equal.    */
+//	if(_mm256_testz_ps(or, comp))
+//		return 0;
+
+	/*  If there exists a non equal implies matrix are not equal.   */
+	return 1;
 }
 
