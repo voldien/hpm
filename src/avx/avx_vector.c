@@ -48,22 +48,22 @@ HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
 
 HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
 
-	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );	/*	{ x , y, z , w} => { y, x, w, z }	*/
-	const hpmvec4f cevmin = _mm_min_ps(*vec, cev);								/*	=> { min(x,y), min(y,x), min(z,w), min(w,z) }*/
+	const hpmvec4f cev = _mm_shuffle_ps(*vec, *vec, _MM_SHUFFLE(3, 2, 0, 1) );  /*	{ x , y, z , w} => { y, x, w, z }	*/
+	const hpmvec4f cevmin = _mm_min_ps(*vec, cev);                              /*	=> { min(x,y), min(y,x), min(z,w), min(w,z) }*/
 
-	const hpmvec4f commin = _mm_shuffle_ps(cevmin, cevmin, _MM_SHUFFLE(0, 1, 2, 3));	/* => { min(z,w), min(z,w), min(x,y), max(x,y) }*/
-	const hpmvec4f compfv = _mm_min_ss(cevmin, commin);									/*	{ min(min(x,y), min(z,w)), n/a, n/a, n/a} */
+	const hpmvec4f commin = _mm_shuffle_ps(cevmin, cevmin, _MM_SHUFFLE(0, 1, 2, 3));    /* => { min(z,w), min(z,w), min(x,y), max(x,y) }*/
+	const hpmvec4f compfv = _mm_min_ss(cevmin, commin);                                 /*	{ min(min(x,y), min(z,w)), n/a, n/a, n/a} */
 
 	return _mm_cvtss_f32(compfv);
 }
 
 HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* v1, const hpmvec3f* v2, hpmvec3f* out){
 
-	const hpmvec3f tmp1 = _mm_shuffle_ps(*v1, *v1, _MM_SHUFFLE(3, 0, 2, 1));	/*	{x, y, z, w } => {y, z, x, w }	*/
-	const hpmvec3f tmp2 = _mm_shuffle_ps(*v2, *v2, _MM_SHUFFLE(3, 1, 0, 2));	/*	{x, y, z, w } => {z, x, y, w }	*/
+	const hpmvec3f tmp1 = _mm_shuffle_ps(*v1, *v1, _MM_SHUFFLE(3, 0, 2, 1));    /*	{x, y, z, w } => {y, z, x, w }	*/
+	const hpmvec3f tmp2 = _mm_shuffle_ps(*v2, *v2, _MM_SHUFFLE(3, 1, 0, 2));    /*	{x, y, z, w } => {z, x, y, w }	*/
 
-	const hpmvec3f tmp3 = _mm_shuffle_ps(*v1, *v1, _MM_SHUFFLE(3, 1, 0, 2));	/*	{x, y, z, w } => {z, x, y, w }	*/
-	const hpmvec3f tmp4 = _mm_shuffle_ps(*v2, *v2, _MM_SHUFFLE(3, 0, 2, 1));	/*	{x, y, z, w } => {y, z, x, w }	*/
+	const hpmvec3f tmp3 = _mm_shuffle_ps(*v1, *v1, _MM_SHUFFLE(3, 1, 0, 2));    /*	{x, y, z, w } => {z, x, y, w }	*/
+	const hpmvec3f tmp4 = _mm_shuffle_ps(*v2, *v2, _MM_SHUFFLE(3, 0, 2, 1));    /*	{x, y, z, w } => {y, z, x, w }	*/
 
-	*out = (tmp1 * tmp2) - (tmp3 * tmp4);	/*	{ y * z - z * y, z * x - x * z,  x * y  - y * x, w * w, w * w}	*/
+	*out = (tmp1 * tmp2) - (tmp3 * tmp4);   /*	{ y * z - z * y, z * x - x * z,  x * y  - y * x, w * w, w * w}	*/
 }

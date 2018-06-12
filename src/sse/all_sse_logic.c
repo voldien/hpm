@@ -1,4 +1,5 @@
 #include"hpmlogic.h"
+#include"hpmdef.h"
 #include<limits.h>
 #include<immintrin.h>
 #   ifdef HPM_VC
@@ -6,6 +7,15 @@
 #	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #		include<x86intrin.h>
 #   endif
+
+
+HPM_IMP(hpmboolean, hpm_vec_eqfv, hpmvecf a, hpmvecf b){
+	return _mm_comieq_ss(_mm_set_ss(a), _mm_set_ss(b));
+}
+
+HPM_IMP(hpmboolean, hpm_vec_neqfv, hpmvecf a, hpmvecf b){
+	return _mm_comineq_ss(_mm_set_ss(a), _mm_set_ss(b));
+}
 
 HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) == (*b);

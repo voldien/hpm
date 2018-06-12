@@ -191,29 +191,29 @@ HPM_IMP( void, hpm_mat4x4_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* quat){
 	mat[0][0] = 1 - (yy + zz);
 	mat[0][1] = xy + wz;
 	mat[0][2] = xz - wy;
-	mat[0][3] = 0;
+	mat[0][3] = 0.0f;
 
 	mat[1][0] = xy - wz;
 	mat[1][1] =  1 - (xx + zz);
 	mat[1][2] = yz + wx;
-	mat[1][3] = 0;
+	mat[1][3] = 0.0f;
 
 	mat[2][0] = xz + wy;
 	mat[2][1] = yz - wx;
 	mat[2][2] = 1 - (xx + yy);
-	mat[2][3] = 0.0;
+	mat[2][3] = 0.0f;
 
-	mat[3][0] = 0.0;
-	mat[3][1] = 0.0;
-	mat[3][2] = 0.0;
-	mat[3][3] = 1.0;
+	mat[3][0] = 0.0f;
+	mat[3][1] = 0.0f;
+	mat[3][2] = 0.0f;
+	mat[3][3] = 1.0f;
 }
 
 HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
 		hpmvec4x4f_t mat, const hpmvec4f* HPM_RESTRICT xaxis,
 		const hpmvec4f* HPM_RESTRICT yaxis, const hpmvec4f* HPM_RESTRICT zaxis){
 
-	const hpmvec4f row3 = {0,0,0,1};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[0], xaxis);
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[1], yaxis);
 	HPM_CALLLOCALFUNC(hpm_vec4_copyfv)(&mat[2], zaxis);

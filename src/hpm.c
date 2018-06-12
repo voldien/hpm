@@ -151,7 +151,7 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_multi_rotationzf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationzf);
 	hpm_mat4x4_multi_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQfv);
 
-	/*	*/
+	/*	Projection matrix functions.    */
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_orthfv = hpm_get_symbolfuncp(hpm_mat4x4_orthfv);
 	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
@@ -242,7 +242,9 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_randomfv = hpm_get_symbolfuncp(hpm_vec4_randomfv);
 	hpm_vec8_randomfv = hpm_get_symbolfuncp(hpm_vec8_randomfv);
 
-	/*	Logic conditions.	*/
+	/*	Logic equality conditions.	*/
+	hpm_vec_eqfv = hpm_get_symbolfuncp(hpm_vec_eqfv);
+	hpm_vec_neqfv= hpm_get_symbolfuncp(hpm_vec_neqfv);
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);

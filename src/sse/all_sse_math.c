@@ -11,9 +11,9 @@ HPM_IMP(void, hpm_vec4_maxfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HP
 	_mm_store_ps(c, (hpmvec4f)_mm_max_ps(*a, *b));
 }
 HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* HPM_RESTRICT a, const hpmvec8f* HPM_RESTRICT b, hpmvec8f* HPM_RESTRICT c){
-	hpmvec8fu* HPM_RESTRICT max = c;
-	const hpmvec8fu* HPM_RESTRICT au = a;
-	const hpmvec8fu* HPM_RESTRICT bu = b;
+	hpmvec8fu* HPM_RESTRICT max = (hpmvec8fu*)c;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	const hpmvec8fu* HPM_RESTRICT bu = (hpmvec8fu*)b;
 
 	/*  Compute max.    */
 	max->d2[0] = _mm_max_ps(au->d2[0], bu->d2[0]);
@@ -24,9 +24,9 @@ HPM_IMP(void, hpm_vec4_minfv, const hpmvec4f* a, const hpmvec4f* b, hpmvec4f* c)
 	_mm_store_ps(c, (hpmvec4f)_mm_min_ps(*a, *b));
 }
 HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* HPM_RESTRICT c){
-	hpmvec8fu* HPM_RESTRICT min = c;
-	const hpmvec8fu* HPM_RESTRICT au = a;
-	const hpmvec8fu* HPM_RESTRICT bu = b;
+	hpmvec8fu* HPM_RESTRICT min = (hpmvec8fu*)c;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	const hpmvec8fu* HPM_RESTRICT bu = (hpmvec8fu*)b;
 
 	/*  Compute min.    */
 	min->d2[0] = _mm_min_ps(au->d2[0], bu->d2[0]);
@@ -40,8 +40,8 @@ HPM_IMP(void, hpm_vec4_sqrtfv, const hpmvec4f* HPM_RESTRICT a,
 }
 HPM_IMP(void, hpm_vec8_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
 		hpmvec8f* HPM_RESTRICT out) {
-	const hpmvec8fu* HPM_RESTRICT au = a;
-	hpmvec8fu* HPM_RESTRICT outu = out;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	hpmvec8fu* HPM_RESTRICT outu = (hpmvec8fu*)out;
 
 	outu->d2[0] = _mm_sqrt_ps(au->d2[0]);
 	outu->d2[0] = _mm_sqrt_ps(au->d2[1]);
@@ -53,8 +53,8 @@ HPM_IMP(void, hpm_vec4_fast_sqrtfv, const hpmvec4f* HPM_RESTRICT a,
 }
 HPM_IMP(void, hpm_vec8_fast_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
 		hpmvec8f* HPM_RESTRICT out) {
-	const hpmvec8fu* HPM_RESTRICT au = a;
-	hpmvec8fu* HPM_RESTRICT outu = out;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	hpmvec8fu* HPM_RESTRICT outu = (hpmvec8fu*)out;
 
 	outu->d2[0] = _mm_rsqrt_ps(au->d2[0]);
 	outu->d2[0] = _mm_rsqrt_ps(au->d2[1]);
