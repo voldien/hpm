@@ -353,18 +353,25 @@ int hpm_support_cpu_feat(unsigned int simd) {
             cpuid(cpuInfo, 7);
             return (cpuInfo[0] & bit_AVX2);
         case HPM_AVX512:
+#if defined(bit_AVX512F)
             cpuid(cpuInfo, 7);
             return 0;   /*  Not supported yet!  */
             return (cpuInfo[0] & (bit_AVX512F | bit_AVX512DQ | bit_AVX512BW));
+#else
+            return 0;
+#endif
         case HPM_NEON:
 #if defined(HPM_ARM_NEON)
-		return 1;
+            return 1;
 #else
-		return 0;
+            return 0;
 #endif
-	default:
-		return 0;
-	}
+        case HPM_FMA:
+            cpuid(cpuInfo, 7);
+            return (cpuInfo[3] & bit_FMA4);
+        default:
+            return 0;
+    }
 }
 
 static int log2MutExlusive32(unsigned int a){

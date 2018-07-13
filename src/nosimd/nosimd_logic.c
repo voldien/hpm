@@ -1,6 +1,6 @@
 #include"hpmlogic.h"
 #include <float.h>
-#include <f2c.h>
+//#include <f2c.h>
 
 static int almostEqual(float a, float b) {
 

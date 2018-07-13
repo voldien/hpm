@@ -110,12 +110,15 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
 
 	hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
+	/*  */
 	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
 	if(fabsf(dot - (-1.0f)) < 0.00001f){
 		HPM_CALLLOCALFUNC(hpm_quat_setf)(out, HPM_1_PI, hpm_vec4_getxf(*up), hpm_vec4_getyf(*up),
 		        hpm_vec4_getzf(*up));
 		return;
 	}
+
+	/*  */
 	if(fabsf(dot - (1.0f)) < 0.00001f){
 		HPM_CALLLOCALFUNC(hpm_quat_identityfv)(out);
 		return;
@@ -127,7 +130,6 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
 	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&rotAxis);
 	HPM_CALLLOCALFUNC(hpm_quat_axis_anglefv)(out, &rotAxis, rotAngle);
 }
-
 
 HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4f* HPM_RESTRICT mat){
 	const hpmmat4uf* HPM_RESTRICT umat = mat;
@@ -186,6 +188,7 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const flo
 	}
 	else q3 = *b;
 
+	/*  */
 	if(fdot <0.95f){
 		hpmvecf angle = acosf(fdot);
 		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
@@ -200,7 +203,7 @@ HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
 	const hpmvecf y = hpm_quat_getyf(*lf_quat);
 	const hpmvecf z = hpm_quat_getzf(*lf_quat);
 
-	return (float)asinf(2.0f * (w * y - z * x));
+	return (float)asin(2.0f * (w * y - z * x));
 }
 
 HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
@@ -209,7 +212,7 @@ HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
 	const hpmvecf y = hpm_quat_getyf(*lf_quat);
 	const hpmvecf z = hpm_quat_getzf(*lf_quat);
 
-	return (float)atan2f(2.0f * (w * z + x * y), 1.0f - (2.0f * (y * y + z * z)));
+	return (float)atan2(2.0f * (w * z + x * y), 1.0f - (2.0f * (y * y + z * z)));
 }
 
 HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
@@ -218,6 +221,6 @@ HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
 	const hpmvecf y = hpm_quat_getyf(*lf_quat);
 	const hpmvecf z = hpm_quat_getzf(*lf_quat);
 
-	return (float)atan2f(2.0f * (w * x + y * z),( 1.0f - ( 2.0f * (x * x + y * y))));
+	return (float)atan2(2.0f * (w * x + y * z),( 1.0f - ( 2.0f * (x * x + y * y))));
 }
 

@@ -455,9 +455,9 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
 /**
  *	Unproject matrix.
  *
- *	\winz z
- *
  *	\winx x coordinate position.
+ *
+ *	\winz z
  *
  *	\winy y coordinate position.
  *

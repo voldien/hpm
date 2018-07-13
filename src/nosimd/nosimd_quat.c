@@ -21,6 +21,12 @@ HPM_IMP( void, hpm_quat_multi_quatfv, const hpmquatf* lquat, const hpmquatf* rqu
 
 HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* lf_quat, const hpmquatf* rf_vec, hpmquatf* quat){
 
+
+	const hpmvecf w;
+	const hpmvecf x;
+	const hpmvecf y;
+	const hpmvecf z;
+
 	quat[0][HPM_QUAT_W] = -(lf_quat[0][HPM_QUAT_X] * (*rf_vec)[HPM_QUAT_X]) - (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_Y]) - (lf_quat[0][HPM_QUAT_Z] * (*rf_vec)[HPM_QUAT_Z]);
 
 	quat[0][HPM_QUAT_X] =  (lf_quat[0][HPM_QUAT_W] * (*rf_vec)[HPM_QUAT_X]) + (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_Z]) - (lf_quat[0][HPM_QUAT_Z] * (*rf_vec)[HPM_QUAT_Y]);
