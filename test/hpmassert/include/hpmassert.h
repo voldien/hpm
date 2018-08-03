@@ -184,6 +184,7 @@ typedef struct simd_time_percentage_result_t{
 
 extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
 extern SIMDBenchmarksRaw* htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs);
+extern void htpDeallocateBenchmarks(SIMDBenchmarksRaw* benchmarksRaw, unsigned int num);
 extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
 extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
 extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult);		/*	*/

@@ -113,6 +113,15 @@ SIMDBenchmarksRaw *htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs
 	return benchmarkResults;
 }
 
+void htpDeallocateBenchmarks(SIMDBenchmarksRaw* benchmarksRaw, unsigned int num){
+
+	unsigned int i;
+
+	for(i = 0; i < num; i++)
+		free(benchmarksRaw[i].results);
+	free(benchmarksRaw);
+}
+
 void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult){
 
 	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
