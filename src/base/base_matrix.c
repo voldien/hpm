@@ -92,13 +92,16 @@ HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, float x, float y, floa
 }
 
 HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t mat, const hpmvec3f* translation){
+
+	const hpmvecf x = hpm_vec4_getxf(*translation);
+	const hpmvecf y = hpm_vec4_getyf(*translation);
+	const hpmvecf z = hpm_vec4_getzf(*translation);
+
 	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
 	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
-	const hpmvec4f row3 = {	(*translation)[0],
-							(*translation)[1],
-							(*translation)[2],
-							1.0f};
+	const hpmvec4f row3 = {	x, y, z, 1.0f};
+
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -136,10 +139,11 @@ HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmve
 HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
 	const hpmvecf ccos = cosf(angle);
 	const hpmvecf csin = sinf(angle);
-	const hpmvec4f row0 = { 1, 0, 0, 0 };
-	const hpmvec4f row1 = { 0, ccos, -csin, 0 };
-	const hpmvec4f row2 = { 0, csin, ccos, 0 };
-	const hpmvec4f row3 = { 0, 0, 0, 1 };
+	const hpmvec4f row0 = { 1.0f, 0.0f, 0.0f, 0.0f };
+	const hpmvec4f row1 = { 0.0f, ccos, csin, 0.0f };
+	const hpmvec4f row2 = { 0.0f, -csin, ccos, 0.0f };
+	const hpmvec4f row3 = { 0.0f, 0.0f, 0.0f, 1.0f };
+
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -148,10 +152,13 @@ HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
 
 
 HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float angle){
-	const hpmvec4f row0 = {cosf(angle),0,sinf(angle),0};
-	const hpmvec4f row1 = { 0, 1, 0, 0 };
-	const hpmvec4f row2 = {-sinf(angle),0,cosf(angle),0};
-	const hpmvec4f row3 = { 0, 0, 0, 1 };
+	const hpmvecf ccos = cosf(angle);
+	const hpmvecf csin = sinf(angle);
+	const hpmvec4f row0 = {ccos, 0.0f, csin, 0.0f};
+	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec4f row2 = {-csin, 0, ccos, 0.0f};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
+
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -160,10 +167,13 @@ HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float angle){
 
 
 HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t mat, float angle){
-	const hpmvec4f row0 = {cosf(angle),sinf(angle),0,0};
-	const hpmvec4f row1 = {-sinf(angle),cosf(angle),0,0};
-	const hpmvec4f row2 = {0,0,1.0,0};
-	const hpmvec4f row3 = {0,0,0,1};
+	const hpmvecf ccos = cosf(angle);
+	const hpmvecf csin = sinf(angle);
+	const hpmvec4f row0 = {ccos, csin, 0.0f, 0.0f};
+	const hpmvec4f row1 = {-csin, ccos, 0.0f, 0.0f};
+	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f row3 = {0.0f, 0.0f, 0.0f, 1.0f};
+
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
