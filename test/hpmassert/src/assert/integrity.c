@@ -49,6 +49,12 @@ START_TEST(equality){
 	ck_assert_int_eq(hpm_vec_eqfv(-HPM_PI_2, -HPM_PI_4), 0);
 
 	/*  Single scalar compare.  */
+	ck_assert_int_eq(hpm_vec_eqfv(HPM_LN2, HPM_LOG10E), 0);
+	ck_assert_int_eq(hpm_vec_eqfv(HPM_LN2, HPM_LOG10E), 0);
+	ck_assert_int_eq(hpm_vec_neqfv(HPM_LN2, HPM_LOG10E), 1);
+	ck_assert_int_eq(hpm_vec_neqfv(HPM_LN2, HPM_LOG10E), 1);
+
+	/*  Single scalar compare.  */
 	ck_assert_int_eq(hpm_vec_neqfv(HPM_PI_4, HPM_LOG2E), 1);
 	ck_assert_int_eq(hpm_vec_neqfv(HPM_PI_2, HPM_PI_4), 1);
 
@@ -85,6 +91,12 @@ START_TEST(equality){
 	hpm_quat_identityfv(&v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &v2), 1);
 	ck_assert_int_eq(hpm_vec4_neqfv(&v1, &v2), 0);
+
+	/*  Compare vector equal for negative number.   */
+	hpm_vec4_setf(&v3, -1.0f, -1.0f, 1.0f, -1.0f);
+	hpm_vec4_setf(&v4, 0.0f, 0.0f, 0.0f, 0.0f);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v3, &v4), 0);
+	ck_assert_int_eq(hpm_vec4_neqfv(&v3, &v4), 1);
 
 	/*======================================*/
 	/*  Compare matrix condition functions. */
@@ -133,7 +145,8 @@ START_TEST (vector4){
 
 	/*	Check if normalization works.	*/
 	hpm_vec4_normalizefv(&v3);
-	ck_assert_int_eq(hpm_vec4_lengthfv(&v3), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthfv(&v3), 1.0f), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthsqurefv(&v3), 1.0f), 1);
 
 	/*	Check linear interpolation.	*/
 	hpm_vec4_setf(&v1, 1, 1, 1, 1);
