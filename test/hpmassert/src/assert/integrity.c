@@ -74,17 +74,17 @@ START_TEST(equality){
 
 	/*	Compare component wise for equal.	*/
 	hpm_vec4_com_eqfv(&v1, &v2, &res);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getxf(res), 0.0f), 1);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getyf(res), 0.0f), 1);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(res), 0.0f), 1);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getwf(res), 0.0f), 1);
+	ck_assert_int_eq(hpm_vec4_getxf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getyf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getzf(res), 0);
+	ck_assert_int_eq(hpm_vec4_getwf(res), 0);
 
 	/*	Compare component wise for non-equal.	*/
 	hpm_vec4_com_neqfv(&v1, &v2, &res);
-	ck_assert_int_ne(hpm_vec4_getxf(res), 1);
-	ck_assert_int_ne(hpm_vec4_getyf(res), 1);
-	ck_assert_int_ne(hpm_vec4_getzf(res), 1);
-	ck_assert_int_ne(hpm_vec4_getwf(res), 1);
+	ck_assert_int_ne(hpm_vec4_getxf(res), 0);
+	ck_assert_int_ne(hpm_vec4_getyf(res), 0);
+	ck_assert_int_ne(hpm_vec4_getzf(res), 0);
+	ck_assert_int_ne(hpm_vec4_getwf(res), 0);
 
 	/*	Compare vector equal.	*/
 	hpm_quat_identityfv(&v1);
@@ -133,6 +133,13 @@ START_TEST (vector4){
 	hpmvec4f v1;
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f, 1.0f, 1.0f, 1.0f };
+
+	/*  Vector set function.    */
+	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getxf(v1), 10.0f), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getyf(v1), -10.0f), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(v1), 5.0f), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getwf(v1), 0.0f), 1);
 
 	/*	Vector equality comparing.	*/
 	hpm_vec4_copyfv(&v1, &v2);
@@ -284,6 +291,7 @@ START_TEST (matrix4x4){
 
 	/*	translate position.	*/
 	hpm_mat4x4_translationfv(m1, &v1);
+	hpm_vec4_setf(&v2, 0.0f, 0.0f, 0.0f, 1.0f);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v2, &v3);
 	/*  v3 suppose to be { 1.0, 2.0, 3.0, 1.0 } */
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getxf(v3), 1.0f), 1);
@@ -291,12 +299,13 @@ START_TEST (matrix4x4){
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(v3), 3.0f), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getwf(v3), 1.0f), 1);
 
-	/*	Performing determine and inverse.	*/
+	/*	Performing identity determine and inverse.	*/
+	hpm_mat4x4_identityfv(m1);
+	hpm_mat4x4_identityfv(m2);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m1), hpm_mat4x4_inversefv(m1, m3)), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m1), 1.0f), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_inversefv(m1, m3), 1.0f), 1);
 
-	/*	Determine inverse works.	*/
 	hpm_mat4x4_multiply_mat4x4fv(m3, m1, m2);
 	hpm_mat4x4_identityfv(m3);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4_eqfv(m3, m2), 1.0f), 1);
@@ -314,6 +323,8 @@ START_TEST (matrix4x4){
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
 	hpm_mat4x4_transposefv(m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+
+	/*  Inverse.    */
 
 }
 END_TEST
@@ -371,8 +382,8 @@ START_TEST (transformation) {
 	ck_assert_int_eq(hpm_vec4_eqfv(&orthRes, &v1), 1);
 
 	/*  Check project function. h*/
-	const hpmvec4f projRes = {0.8f, 1.0f, -1.3f, -1.0f};
-	hpm_mat4x4_projfv(m1, (hpmvecf) HPM_DEG2RAD(45.0f), 1.3333f, 0.15f, 1000.0f);
+	const hpmvec4f projRes = {0.75f, 1.0f, -1.3003450632095f, -1.0f};
+	hpm_mat4x4_projfv(m1, (hpmvecf) HPM_DEG2RAD(45.0f), (hpmvecf)(4.0 / 3.0), 0.15f, 1000.0f);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &one, &v1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &projRes), 1);
 
@@ -381,22 +392,31 @@ START_TEST (transformation) {
 	hpm_mat4x4_rotationfv(m1, HPM_PI_4, &v1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &rotExcp), 1);
 
-	//hpm_mat4x4_rotationQfv(m1, &q1);
-
-	/*	*/
-	const hpmvec4f tranExc = {20.0f, -20.0f, 10.0f, 0.0f};
+	/*	Translation.    */
+	const hpmvec4f tranExc = {10.0f, -10.0f, 5.0f, 1.0f};
 	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
+	hpm_mat4x4_identityfv(m1);
 	hpm_mat4x4_multi_translationfv(m1, &v1);
+	hpm_vec4_setf(&v1, 0.0f, 0.0f, 0.0f, 1.0f);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &tranExc), 1);
 
+	/*  Scalar. */
+	const hpmvec4f scaleExc = {2.0, 2.0f, 2.0f, 0.0f};
+	hpm_vec4_setf(&v1, 2.0f, 2.0f, 2.0f, 0.0f);
+	hpm_mat4x4_identityfv(m1);
 	hpm_mat4x4_multi_scalefv(m1, &v1);
+	hpm_vec4_setf(&v1, 1.0f, 1.0f, 1.0f, 0.0f);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &scaleExc), 1);
+
+
 	hpm_mat4x4_multi_rotationxf(m1, 3);
 	hpm_mat4x4_multi_rotationyf(m1, 3);
 	hpm_mat4x4_multi_rotationzf(m1, 3);
 	//hpm_mat4x4_multi_rotationQfv(m1, &q1);
 
-	/*	*/
+	/*	UnProject.  */
 	const int viewport[4] = {0, 0, 400, 400};
 	const int mousex = 350, mousey = 350;
 	const hpmvec4f expUnProj = {10.0f, 10.0f, 0.0f, 0.0f};
@@ -407,6 +427,8 @@ START_TEST (transformation) {
 	hpm_mat4x4_translationf(m2, 0.0f, 0.0f, 0.0f);
 	const hpmveci unprojSuccess = hpm_mat4x4_unprojf(mousex, mousey, 0, m1, m2, viewport, &pos);
 	ck_assert_int_eq(unprojSuccess, 1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&pos, &expUnProj), 1);
+
 }
 END_TEST
 
@@ -428,15 +450,15 @@ START_TEST(math){
 	ck_assert_int_eq((int)hpm_vec4_min_compfv(&v1), 1);
 	ck_assert_int_eq((int)hpm_vec4_max_compfv(&v1), 4);
 
-	const hpmvecf cvxf = 12;
-	const hpmvecf cvyf = 24;
-	const hpmvecf cvzf = 36;
-	const hpmvecf cvwf = 48;
+	const hpmvecf cvxf = 12.0f;
+	const hpmvecf cvyf = 24.0f;
+	const hpmvecf cvzf = 36.0f;
+	const hpmvecf cvwf = 48.0f;
 	hpm_vec4_setf(&v1, cvxf, cvyf, cvzf, cvwf);
-	ck_assert_int_eq(hpm_vec4_getxf(v1), cvxf);
-	ck_assert_int_eq(hpm_vec4_getyf(v1), cvyf);
-	ck_assert_int_eq(hpm_vec4_getzf(v1), cvzf);
-	ck_assert_int_eq(hpm_vec4_getwf(v1), cvwf);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getxf(v1), cvxf), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getyf(v1), cvyf), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(v1), cvzf), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getwf(v1), cvwf), 1);
 
 	/*	*/
 	ck_assert_int_eq((int)hpm_vec4_min_compfv(&v1), cvxf);
