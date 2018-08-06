@@ -136,7 +136,7 @@ HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmve
 }
 
 
-HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, hpmvecf angle){
 	const hpmvecf ccos = cosf(angle);
 	const hpmvecf csin = sinf(angle);
 	const hpmvec4f row0 = { 1.0f, 0.0f, 0.0f, 0.0f };
@@ -151,7 +151,7 @@ HPM_IMP( void, hpm_mat4x4_rotationXf, hpmvec4x4f_t mat, float angle){
 }
 
 
-HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, hpmvecf angle){
 	const hpmvecf ccos = cosf(angle);
 	const hpmvecf csin = sinf(angle);
 	const hpmvec4f row0 = {ccos, 0.0f, csin, 0.0f};
@@ -166,7 +166,7 @@ HPM_IMP( void, hpm_mat4x4_rotationYf, hpmvec4x4f_t mat, float angle){
 }
 
 
-HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t mat, hpmvecf angle){
 	const hpmvecf ccos = cosf(angle);
 	const hpmvecf csin = sinf(angle);
 	const hpmvec4f row0 = {ccos, csin, 0.0f, 0.0f};

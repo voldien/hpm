@@ -377,7 +377,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_scalefv,
  *	\yradian eular radian rotation in pitch.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationxf,
-		hpmvec4x4f_t mat, float xradian);
+		hpmvec4x4f_t mat, hpmvecf xradian);
 
 /**
  *	Multiple left matrix with Eular rotation matrix.
@@ -388,7 +388,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationxf,
  *	\yradian eular radian rotation in yaw.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationyf,
-		hpmvec4x4f_t mat, float yradian);
+		hpmvec4x4f_t mat, hpmvecf yradian);
 
 /**
  *	Multiple left matrix with Eular rotation matrix.
@@ -399,7 +399,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationyf,
  *	\yradian eular radian rotation in roll.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationzf,
-		hpmvec4x4f_t mat, float zradian);
+		hpmvec4x4f_t mat, hpmvecf zradian);
 
 /**
  *	Multiply quaternion rotation matrix.
