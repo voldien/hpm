@@ -44,10 +44,11 @@ extern "C" {
 typedef int (HPMAPIENTRY PHPMINIT)(unsigned int simd);
 typedef int (HPMAPIENTRY PHPMRELEASE)(void);
 typedef int (HPMAPIENTRY PHPMISINIT)(void);
-typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionname);
-typedef int (HPMAPIENTRY PHPMVERSION)(void);
+typedef unsigned int (HPMAPIENTRY PHPMGETSIMD)(void);
+typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionName, unsigned int simd);
+typedef const char* (HPMAPIENTRY PHPMVERSION)(void);
 typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
-typedef int (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
+typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 /**
  *	SIMD extensions flags.
