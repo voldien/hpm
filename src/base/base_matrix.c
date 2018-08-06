@@ -243,52 +243,54 @@ HPM_IMP(void, hpm_mat4x4_rotationAxisfv,
 
 HPM_IMP( void, hpm_mat4x4_multi_translationfv, hpmvec4x4f_t mat, const hpmvec3f* translate){
 	hpmvec4x4f_t trans;
-	hpmvec4x4f_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4f_t copy;
+
+	/*  */
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(trans, translate);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, trans, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, trans, mat);
 }
 
 HPM_IMP( void, hpm_mat4x4_multi_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale){
 	hpmvec4x4fi_t scal;
-	hpmvec4x4fi_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4fi_t copy;
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_scalefv)(scal, scale);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, scal, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, scal, mat);
 }
 
 
 HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, float angle){
 	hpmvec4x4f_t rot;
-	hpmvec4x4f_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4f_t copy;
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationXf)(rot, angle);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, rot, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
 HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, float angle){
 	hpmvec4x4f_t rot;
-	hpmvec4x4f_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4f_t copy;
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationYf)(rot, angle);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, rot, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
 HPM_IMP( void, hpm_mat4x4_multi_rotationzf, hpmvec4x4f_t mat, float angle){
 	hpmvec4x4f_t rot;
-	hpmvec4x4f_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4f_t copy;
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationZf)(rot, angle);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, rot, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
 
 HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* quat){
 	hpmvec4x4f_t mat_quat;
-	hpmvec4x4f_t tmp;
-	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(tmp, mat);
+	hpmvec4x4f_t copy;
+	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
 	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationQfv)(mat_quat, quat);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(tmp, mat_quat, mat);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, mat_quat, mat);
 }
 
 HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
