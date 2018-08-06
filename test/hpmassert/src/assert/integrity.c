@@ -321,6 +321,18 @@ START_TEST (matrix4x4){
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
 
 	/*  Inverse.    */
+	const hpmvec4x4f_t expInverse = {
+			{1.0f,   0.0f,   0.0f, 0.0f},
+			{0.0f,   1.0f,   0.0f, 0.0f},
+			{0.0f,   0.0f,   1.0f, 0.0f},
+			{-10.0f, -20.0f, 5.0f, 1.0f},
+	};
+	const hpmvecf det = 1.0f;
+	hpm_mat4x4_translationf(m1, 10, 20, 5);
+	hpm_mat4x4_inversefv(m1, m2);
+	ck_assert_int_eq(hpm_mat4_eqfv(m2, expInverse), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), det), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), hpm_mat4x4_determinantfv(expInverse)), 1);
 
 }
 END_TEST
