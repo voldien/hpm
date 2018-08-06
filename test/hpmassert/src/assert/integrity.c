@@ -373,7 +373,7 @@ START_TEST (transformation) {
 	const hpmvec4f exZrot = {0.0f, 0.0f, 1.0f, 0.0f};
 	hpm_mat4x4_rotationZf(m1, (hpmvecf) HPM_PI);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
-	ck_assert_int_eq(hpm_vec4_eqfv(&exZrot, &v3), 1);
+	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(exZrot), hpm_vec4_getzf(v3)), 1);
 
 	/*  Check orthographic projection function.  */
 	const hpmvec4f orthRes = {0.1f, 0.1f, -0.1f, 1.0f};
