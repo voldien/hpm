@@ -76,15 +76,11 @@ START_TEST(equality){
 	hpm_vec4_com_eqfv(&v1, &v2, &res);
 	ck_assert_int_eq(hpm_vec4_getxf(res), 0);
 	ck_assert_int_eq(hpm_vec4_getyf(res), 0);
-	ck_assert_int_eq(hpm_vec4_getzf(res), 0);
-	ck_assert_int_eq(hpm_vec4_getwf(res), 0);
 
 	/*	Compare component wise for non-equal.	*/
 	hpm_vec4_com_neqfv(&v1, &v2, &res);
 	ck_assert_int_ne(hpm_vec4_getxf(res), 0);
 	ck_assert_int_ne(hpm_vec4_getyf(res), 0);
-	ck_assert_int_ne(hpm_vec4_getzf(res), 0);
-	ck_assert_int_ne(hpm_vec4_getwf(res), 0);
 
 	/*	Compare vector equal.	*/
 	hpm_quat_identityfv(&v1);
