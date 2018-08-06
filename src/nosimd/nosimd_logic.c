@@ -1,6 +1,5 @@
 #include"hpmlogic.h"
 #include <float.h>
-//#include <f2c.h>
 
 static int almostEqual(float a, float b) {
 
@@ -9,7 +8,7 @@ static int almostEqual(float a, float b) {
 
 	a = (float)fabs(a);
 	b = (float)fabs(b);
-	const float scaledEpsilon = maxRelativeDiff * max(a,b);
+	const float scaledEpsilon = maxRelativeDiff * HPM_MAX(a,b);
 
 	return difference <= scaledEpsilon;
 	return fabs(a - b) <= FLT_EPSILON ? 1 : 0;
