@@ -174,11 +174,10 @@ START_TEST (quaternion){
 	hpmquatf q2 = { 1.0f, 1.0f, 1.0f, 1.0f };
 	hpmquatf q3 = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-	/*	Quaternion rotate and multiplication test.	*/
+	/*  Check identity. */
 	hpm_quat_identityfv(&q1);
-	hpm_quat_axisf(&q2, 0.3f, 0.4f, 0.1f);
-	hpm_quat_multi_quatfv(&q1, &q2, &q3);
-	ck_assert_int_eq(hpm_vec4_eqfv(&q3, &q2), 1);
+	hpm_quat_setf(&q2, 1.0f, 0.0f, 0.0, 0.0f);
+	ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q2), 1);
 
 	/*	Dot and equality.	*/
 	hpm_quat_identityfv(&q1);

@@ -80,11 +80,14 @@ HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect
 
 }
 
-HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis, float angle){
-	const hpmvecf half_angle = sinf(angle * 0.5f);
-	(*quat)[HPM_QUAT_X] = (*axis)[0] * half_angle;
-	(*quat)[HPM_QUAT_Y] = (*axis)[1] * half_angle;
-	(*quat)[HPM_QUAT_Z] = (*axis)[2] * half_angle;
+HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis, hpmvecf angle){
+	const hpmvecf half_angle = angle * 0.5f;
+	const hpmvecf halfsin = sinf(half_angle);
+
+	/*  */
+	(*quat)[HPM_QUAT_X] = hpm_vec4_getxf(*axis) * halfsin;
+	(*quat)[HPM_QUAT_Y] = hpm_vec4_getyf(*axis) * halfsin;
+	(*quat)[HPM_QUAT_Z] = hpm_vec4_getzf(*axis) * halfsin;
 	(*quat)[HPM_QUAT_W] = cosf(half_angle);
 }
 
