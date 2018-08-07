@@ -26,8 +26,8 @@ HPM_IMP(void, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
 	HPM_CALLLOCALFUNC(hpm_mat4x4_rotationAxisfv)(orientation, &xaxis, &yaxis, &zaxis);
 
 	/*	Create transformation matrix.	.	*/
-	HPM_CALLLOCALFUNC(hpm_vec4_negatefv)(&eye);
-	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(translation, &eye);
+	HPM_CALLLOCALFUNC(hpm_vec4_negatefv)(eye);
+	HPM_CALLLOCALFUNC(hpm_mat4x4_translationfv)(translation, eye);
 
 	/*	Create final view orientation matrix.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(orientation, translation, mat);
