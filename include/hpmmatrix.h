@@ -53,7 +53,7 @@ extern "C" {
  */
 HPM_ALIGN(32)
 typedef hpmvec4f hpmvec4x4f_t[4];
-typedef struct hpmvec4x4f_s{float m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
+typedef struct hpmvec4x4f_s{hpmvecf m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
 typedef hpmv4sf hpmvec4x4fi_t[4];
 typedef hpmvec4f hpmvec4x4fp_t;
 HPM_ALIGN(16)
@@ -84,7 +84,7 @@ typedef union{
  */
 HPM_ALIGN(32)
 typedef hpmvec2f hpmvec2x2f_t[2];
-typedef struct hpmvec2x2f_s{float m11,m21,m12,m22;}hpmmat2f;
+typedef struct hpmvec2x2f_s{hpmvecf m11,m21,m12,m22;}hpmmat2f;
 typedef hpmvec2f hpmvec2x2fp_t;
 HPM_ALIGN(16)
 typedef union{
@@ -147,14 +147,14 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4fv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
-		const hpmvec4x4f_t larg, const float rarg,
+		const hpmvec4x4f_t larg, const hpmvecf rarg,
 		hpmvec4x4f_t output);
 
 /**
  *	Divide each element in matrix by factor.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f,
-		hpmvec4x4f_t larg, const float factor);
+		hpmvec4x4f_t larg, const hpmvecf factor);
 
 /**
  *	Perform addition with two matrices.
@@ -208,7 +208,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat);
  *
  *	@Return computed determinet
  */
-HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_determinantfv,
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_determinantfv,
 		const hpmvec4x4f_t arg);
 
 /**
@@ -221,7 +221,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_determinantfv,
  *	@Return Computed determinant of mat. if 0 then there exist no inverse of mat and
  *	out is undefined.
  */
-HPM_EXPORT(float, HPMAPIENTRY, hpm_mat4x4_inversefv,
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
 		const hpmvec4x4f_t mat, hpmvec4x4f_t out);
 
 /**
@@ -252,7 +252,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
-		hpmvec4x4f_t mat, float x, float y, float z);
+		hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z);
 
 /**
  *	Construct translation matrix.
@@ -268,7 +268,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationfv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalef, hpmvec4x4f_t mat,
-		float x, float y, float z);
+		hpmvecf x, hpmvecf y, hpmvecf z);
 
 /**
  *	Construct scalar matrix.
@@ -290,7 +290,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalefv, hpmvec4x4f_t mat,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationfv,
-		hpmvec4x4f_t mat, float angle, const hpmvec3f* axis);
+		hpmvec4x4f_t mat, hpmvecf angle, const hpmvec3f* axis);
 
 /**
  *	Construct rotation matrix based on eular
@@ -303,7 +303,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationfv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationXf,
-		hpmvec4x4f_t mat, float xradian);
+		hpmvec4x4f_t mat, hpmvecf xradian);
 
 /**
  *	Construct rotation matrix.
@@ -313,7 +313,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationXf,
  *	\zradian rotation in radian.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationYf,
-		hpmvec4x4f_t mat, float yradian);
+		hpmvec4x4f_t mat, hpmvecf yradian);
 
 /**
  *	Construct eular rotation matrix
@@ -325,7 +325,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationYf,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
-		hpmvec4x4f_t mat, float zradian);
+		hpmvec4x4f_t mat, hpmvecf zradian);
 
 /**
  *	Create matrix from quaternion orientation.
@@ -449,8 +449,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
-		float left, float right, float bottom, float top,
-		float zNear, float zFar);
+           hpmvecf left, hpmvecf right, hpmvecf bottom, hpmvecf top,
+           hpmvecf zNear, hpmvecf zFar);
 
 /**
  *	Unproject matrix.
@@ -470,8 +470,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
  *	\pos position inside the projection space.
  *
  */
-HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, float winx,
-		float winy, float winz, const hpmvec4x4f_t projection,
+HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, hpmvecf winx,
+		hpmvecf winy, hpmvecf winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* HPM_RESTRICT viewport,
 		hpmvec3f* HPM_RESTRICT pos);
 

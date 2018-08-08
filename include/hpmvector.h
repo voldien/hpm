@@ -224,7 +224,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multifv, hpmvec4f* larg,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg,
-		const float rarg);
+		const hpmvecf rarg);
 
 /**
  *	Compute dot product of two 1x4 vectors.
@@ -238,7 +238,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg,
  *
  *	@Return
  */
-HPM_EXPORT(float, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg,
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg,
 		const hpmvec4f* rarg);
 
 /**
@@ -247,7 +247,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg,
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthfv, const hpmvec4f* arg);
+HPM_EXPORT( hpmvecf, HPMAPIFASTENTRY, hpm_vec4_lengthfv, const hpmvec4f* arg);
 
 /**
  *	Compute vector square length.
@@ -255,7 +255,7 @@ HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthfv, const hpmvec4f* arg);
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIFASTENTRY, hpm_vec4_lengthsqurefv, const hpmvec4f* arg);
+HPM_EXPORT( hpmvecf, HPMAPIFASTENTRY, hpm_vec4_lengthsqurefv, const hpmvec4f* arg);
 
 /**
  *	Normalize 1x4 vector with length 1.0. The direction of
@@ -289,7 +289,7 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negatefv, hpmvec4f* arg);
  *	\out
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
-		const hpmvec4f* b, float t, hpmvec4f* HPM_RESTRICT out);
+		const hpmvec4f* b, hpmvecf t, hpmvec4f* HPM_RESTRICT out);
 
 /**
  *	Spherical interpolation between a and b in respect to t.
@@ -305,7 +305,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
-		const hpmvec4f* b, float t, hpmvec4f* HPM_RESTRICT out);
+		const hpmvec4f* b, hpmvecf t, hpmvec4f* HPM_RESTRICT out);
 
 /**
  *	Get element in vector with greatest value.
@@ -340,7 +340,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_crossproductfv, const hpmvec3f* HPM_RESTR
  *
  *	@Return
  */
-HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
 		const hpmvec3f* v2, const hpmvec3f* v3);
 
 /**
@@ -348,7 +348,7 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_tripleProductfv, const hpmvec3f* v1,
  *
  *	@Return
  */
-HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
+HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
         const hpmvec3f* rarg);
 
 /**
@@ -356,14 +356,14 @@ HPM_EXPORT(float, HPMAPIENTRY, hpm_vec3_dotfv, const hpmvec3f* larg,
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
+HPM_EXPORT( hpmvecf, HPMAPIENTRY, hpm_vec3_lengthfv, const hpmvec3f* arg);
 
 /**
  *	Compute square length of vector.
  *
  *	@Return
  */
-HPM_EXPORT( float, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
+HPM_EXPORT( hpmvecf, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 
 /**
  *	Normalize 1x3 vector with length 1.0. The direction of
@@ -390,7 +390,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg,
-		const hpmvec3f* normal, float index, hpmvec3f* out);
+		const hpmvec3f* normal, hpmvecf index, hpmvec3f* out);
 
 /**
  *	Project vector a onto vector b.
