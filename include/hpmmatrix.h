@@ -428,7 +428,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
-		float fov, float aspect, float near, float far);
+		hpmvecf fov, hpmvecf aspect, hpmvecf near, hpmvecf far);
 
 /**
  *	Construct orthogonal matrix.
