@@ -13,7 +13,7 @@ HPM_IMP(void, hpm_vec4_copyfv, hpmvec4f* HPM_RESTRICT destination, const hpmvec4
 }
 
 HPM_IMP(void, hpm_vec4_setf, hpmvec4f* destination, const hpmvecf x, const hpmvecf y, const hpmvecf z, const hpmvecf w){
-	const hpmvec4f row0 = { x, y, z, w};
+	const hpmvec4f row0 = { x, y, z, w };
 	*destination = row0;
 }
 
