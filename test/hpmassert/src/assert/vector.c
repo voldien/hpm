@@ -89,10 +89,20 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_slerpfv) {
 
 /*	*/
 HPM_BENCHMARK_FUNC_IMP(hpm_vec4_max_compfv) {
+	register int x;
+	hpmvec4f vec1 = { 1, 2, 1, 1 };
 
+	for (x = 0; x < g_it; x++) {
+		hpm_vec4_max_compfv(&vec1);
+	}
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_vec4_min_compfv) {
+	register int x;
+	hpmvec4f vec1 = { 1, 2, 1, 1 };
 
+	for (x = 0; x < g_it; x++) {
+		hpm_vec4_min_compfv(&vec1);
+	}
 }
 
 /*	*/
