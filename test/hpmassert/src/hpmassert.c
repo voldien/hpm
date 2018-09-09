@@ -129,7 +129,7 @@ void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult){
 
 	/*	Initilize the hpm library.	*/
 	if(!hpm_init(simd)){
-		fprintf(stderr, "hpm_failed.\n");
+		fprintf(stderr, "hpm init failed with simd: %s.\n",hpm_get_simd_symbol(simd));
 		exit(EXIT_FAILURE);
 	}
 
@@ -144,7 +144,7 @@ long int hptGetTimeResolution(void){
 #if defined(HPM_UNIX)
 	struct timespec spec;
 	clock_getres(1, &spec);	/*	CLOCK_MONOTONIC	*/
-	return (1E9L / spec.tv_nsec);
+	return ((long int)1E9L / spec.tv_nsec);
 #else
 	return 1E9;
 #endif
@@ -166,20 +166,29 @@ long int hptGetTime(void){
  * @param name
  * @param result
  */
-static HPM_ALWAYS_INLINE void
-htpBenchmarkFunc(func_benchmark func, const char *HPM_RESTRICT name, FunctionRaw *HPM_RESTRICT result) {
+static HPM_ALWAYS_INLINE void htpBenchmarkFunc(func_benchmark func, const char *HPM_RESTRICT name, FunctionRaw *HPM_RESTRICT result) {
+
+	/*  Init.   */
 	result->name = name;
 	long int ctime, totaltime;
+
+	/*  Start timer.    */
 	ctime = hptGetTime();
+
+	/*  Invoke function.    */
 	func();
+
+	/*  Compute computation time in nano seconds.   */
 	totaltime = hptGetTime() - ctime;
 	result->nanosec = totaltime;
+
+	/*  Display formated.   */
 	if((g_format & 0x1) == 0)
 		printf("%s %f seconds.\n", name, (float) totaltime / g_time_res);
 }
 
 /**
- *
+ * Invoke benchmark function.
  */
 #define HPM_BENCHMARK_FUNC_CALL(func, benchmark, index) htpBenchmarkFunc(&func##sp_test, HPM_STR(func), &benchmark->results[index++])
 

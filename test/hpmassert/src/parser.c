@@ -50,7 +50,7 @@ static void hpmGetParamByIndex(const char *HPM_RESTRICT arg,
     tmp = strstr(tmp, ",");
     end = tmp ? (tmp) : &arg[strlen(arg)];
 
-    /*	Copy paramater.	*/
+    /*	Copy parameter.	*/
     memcpy(param, beg, (end - beg));
     param[end - beg] = '\0';
 

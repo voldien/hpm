@@ -48,8 +48,7 @@ int main(int argc, char** argv) {
 	htpFormatResult(j, benchmarkResults);
 
 	/*	End of test.	*/
-	for(i = 0; i < numBenchmarks; i++)
-		free(benchmarkResults[i].results);
-	free(benchmarkResults);
+	htpDeallocateBenchmarks(benchmarkResults, numBenchmarks);
+
 	return EXIT_SUCCESS;
 }
