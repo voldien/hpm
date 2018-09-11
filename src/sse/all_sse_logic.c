@@ -1,4 +1,5 @@
 #include"hpmlogic.h"
+#include"hpmdef.h"
 #include<limits.h>
 #include<immintrin.h>
 #   ifdef HPM_VC
@@ -7,11 +8,20 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+
+HPM_IMP(hpmboolean, hpm_vec_eqfv, hpmvecf a, hpmvecf b){
+	return _mm_comieq_ss(_mm_set_ss(a), _mm_set_ss(b));
+}
+
+HPM_IMP(hpmboolean, hpm_vec_neqfv, hpmvecf a, hpmvecf b){
+	return _mm_comineq_ss(_mm_set_ss(a), _mm_set_ss(b));
+}
+
+HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) == (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
 
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
@@ -19,30 +29,37 @@ HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
 	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
-	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
+	/*  Check all bits are 1.   */
+	return (cmp[0] & cmp[1]) != 0;
 #endif
 }
 
 
-HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) != (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
+	return !HPM_CALLLOCALFUNC(hpm_vec4_eqfv)(a,b);
 #if __SSE4_1__
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
 	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
-	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
+
+	/*  At least a non-equal will yield incorrect.  */
+	if((cmp[0] | cmp[1]) != 0)
+		return 1;
+
+	return 0;
 #endif
 }
 
-HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) > (*b);
 }
 
-HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) < (*b);
 }
 

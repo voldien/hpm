@@ -1,6 +1,6 @@
 /**
-    High performance matrix library utilizing SIMD extensions.
-    Copyright (C) 2016  Valdemar Lindberg
+    Parse bitwise multi param arguments, from the snt program.
+    Copyright (C) 2017  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,32 +16,23 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_UTIL_H_
-#define _HPM_UTIL_H_ 1
-#include"hpmmatrix.h"
-#include"hpmquaternion.h"
-
-#ifdef __cplusplus /*	C++ Environment	*/
-extern "C" {
-#endif
+#ifndef _HPM_PARSER_H_
+#define _HPM_PARSER_H_ 1
+#include<hpmdef.h>
 
 /**
- * Create look at matrix.
+ *	Parse bit flag argument options. Where each
+ *	argument is separated by comma. Where all and none
+ *	are reserved key word.
  *
- * @param eye the look at target.
+ *	\arg
  *
- * @param position position in world space.
+ *	\opts array of option null terminated string.
  *
- * @param up direction in respect to the viewer.
- *
- * @param mat
+ *	@Return bitwise option.
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
-        const hpmvec4f* HPM_RESTRICT position, const hpmvec4f* HPM_RESTRICT up,
-        hpmvec4x4f_t mat);
+extern unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
+                                               const char **HPM_RESTRICT opts);
 
-#ifdef __cplusplus /*	C++ Environment	*/
-}
-#endif
 
 #endif

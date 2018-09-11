@@ -26,7 +26,7 @@ HPM_IMP(float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 	lvTemp = _mm_add_ps( lvTemp, lvTemp2 );											/*	{ w + z + x + y, ... , w + z + x + y }	*/
 
 	/*	Return first element.	*/
-	return _mm_cvtss_f32 ( lvTemp );	/*	(w + z + x + y)	*/
+	return _mm_cvtss_f32 ( lvTemp );	/*	(w^2 + z^2 + x^2 + y^2)	*/
 #endif
 }
 
@@ -46,7 +46,7 @@ HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	const hpmvec4f sqr = _mm_sqrt_ss( lvTemp);
 
 	/*	Return first element.	*/
-	return _mm_cvtss_f32 ( sqr );	/*	sqrt(w + z + x + y)	*/
+	return _mm_cvtss_f32 ( sqr );	/*	sqrt(w^2 + z^2 + x^2 + y^2)	*/
 #endif
 }
 

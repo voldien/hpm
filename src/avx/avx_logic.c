@@ -7,65 +7,90 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(hpmboolean, hpm_vec_eqfv, hpmvecf a, hpmvecf b){
+	/*  Compare if single elements in the vector is equal.  */
+	return _mm_cvt_ss2si(_mm_cmp_ss(_mm_set_ss(a), _mm_set_ss(b), _CMP_EQ_OQ)) ? 1 : 0;
+}
+
+HPM_IMP(hpmboolean, hpm_vec_neqfv, hpmvecf a, hpmvecf b){
+	/*  Compare if single elements in the vector is not equal.  */
+	return _mm_cvt_ss2si(_mm_cmp_ss(_mm_set_ss(a), _mm_set_ss(b), _CMP_NEQ_OQ)) ? 1 : 0;
+}
+
+HPM_IMP(void, hpm_vec4_com_eqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) == (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_eqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
-	const hpmvec4i mask = {~0, ~0, ~0, ~0};
+
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
-	return _mm_test_all_zeros(cmp, mask);
+	/*	Check if all one.	*/
+	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpeq_ps(*a, *b) );
-	return cmp[0] & cmp[1] & cmp[2] & cmp[3];
+	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
 #endif
 }
 
 
-HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) != (*b);
 }
-HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* __restrict__ a,
-		const hpmvec4f* __restrict__ b){
+HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
+		const hpmvec4f* HPM_RESTRICT b){
 #if __SSE4_1__
-	const hpmvec4i mask = {~0, ~0, ~0, ~0};
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
-	return _mm_test_all_zeros(cmp, mask);
+	return _mm_test_all_ones(cmp);
 #else
 	const hpmvec4i cmp = _mm_castps_si128( _mm_cmpneq_ps(*a, *b) );
-	return cmp[0] & cmp[1] & cmp[2] & cmp[3];
+	return (cmp[0] | cmp[1] | cmp[2] | cmp[3]) != 0;
 #endif
 }
 
-HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) > (*b);
 }
-HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ res){
+HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){
 	*res = (*a) < (*b);
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* __restrict__ ufa = a;
-	const hpmmat4uf* __restrict__ ufb = b;
+	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
 
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_US);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_US);
+	/*	Compare elements.	*/
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_UQ);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_UQ);
+	const hpmvec8f comp = _mm256_castsi256_ps(_mm256_set1_epi16((short)0xFFFF));
 
-	/*	*/
-	return (hpmboolean)_mm256_testz_ps(lb, rb);
+	/*	All bits 1 implies equal.	*/
+	return (hpmboolean)_mm256_testc_ps(rb, comp) && (hpmboolean)_mm256_testc_ps(lb, comp);
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
-	const hpmmat4uf* __restrict__ ufa = a;
-	const hpmmat4uf* __restrict__ ufb = b;
+	return !HPM_CALLLOCALFUNC(hpm_mat4_eqfv)(a, b);
 
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_OS);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_OS);
+	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
 
-	/*	*/
-	return (hpmboolean)!_mm256_testz_ps(lb, rb);
+
+
+	/*	Compare*/
+	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_OQ);
+	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_OQ);
+
+	/*  */
+	const hpmvec8i or = _mm256_castps_si256(_mm256_or_ps(lb, rb));
+	const hpmvec8i comp = _mm256_set1_epi16((short)0xFFFF);
+
+	/*  No non-equal implies matrices are equal.    */
+//	if(_mm256_testz_ps(or, comp))
+//		return 0;
+
+	/*  If there exists a non equal implies matrix are not equal.   */
+	return 1;
 }
 

@@ -7,13 +7,15 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(void, hpm_vec4_maxfv, const hpmvec4f* __restrict__ a, const hpmvec4f* __restrict__ b, hpmvec4f* __restrict__ c) {
+HPM_IMP(void, hpm_vec4_maxfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT c) {
 	_mm_store_ps(c, (hpmvec4f)_mm_max_ps(*a, *b));
 }
-HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __restrict__ b, hpmvec8f* __restrict__ c){
-	hpmvec8fu* __restrict__ max = c;
-	const hpmvec8fu* __restrict__ au = a;
-	const hpmvec8fu* __restrict__ bu = b;
+HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* HPM_RESTRICT a, const hpmvec8f* HPM_RESTRICT b, hpmvec8f* HPM_RESTRICT c){
+	hpmvec8fu* HPM_RESTRICT max = (hpmvec8fu*)c;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	const hpmvec8fu* HPM_RESTRICT bu = (hpmvec8fu*)b;
+
+	/*  Compute max.    */
 	max->d2[0] = _mm_max_ps(au->d2[0], bu->d2[0]);
 	max->d2[1] = _mm_max_ps(au->d2[1], bu->d2[1]);
 }
@@ -21,36 +23,38 @@ HPM_IMP(void, hpm_vec8_maxfv, const hpmvec8f* __restrict__ a, const hpmvec8f* __
 HPM_IMP(void, hpm_vec4_minfv, const hpmvec4f* a, const hpmvec4f* b, hpmvec4f* c){
 	_mm_store_ps(c, (hpmvec4f)_mm_min_ps(*a, *b));
 }
-HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* __restrict__ c){
-	hpmvec8fu* __restrict__ min = c;
-	const hpmvec8fu* __restrict__ au = a;
-	const hpmvec8fu* __restrict__ bu = b;
+HPM_IMP(void, hpm_vec8_minfv, const hpmvec8f* a, const hpmvec8f* b, hpmvec8f* HPM_RESTRICT c){
+	hpmvec8fu* HPM_RESTRICT min = (hpmvec8fu*)c;
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	const hpmvec8fu* HPM_RESTRICT bu = (hpmvec8fu*)b;
+
+	/*  Compute min.    */
 	min->d2[0] = _mm_min_ps(au->d2[0], bu->d2[0]);
 	min->d2[1] = _mm_min_ps(au->d2[1], bu->d2[1]);
 }
 
 
-HPM_IMP(void, hpm_vec4_sqrtfv, const hpmvec4f* __restrict__ a,
-		hpmvec4f* __restrict__ out) {
+HPM_IMP(void, hpm_vec4_sqrtfv, const hpmvec4f* HPM_RESTRICT a,
+		hpmvec4f* HPM_RESTRICT out) {
 	*out = _mm_sqrt_ps(*a);
 }
-HPM_IMP(void, hpm_vec8_sqrtfv, const hpmvec8f* __restrict__ a,
-		hpmvec8f* __restrict__ out) {
-	const hpmvec8fu* __restrict__ au = a;
-	hpmvec8fu* __restrict__ outu = out;
+HPM_IMP(void, hpm_vec8_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
+		hpmvec8f* HPM_RESTRICT out) {
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	hpmvec8fu* HPM_RESTRICT outu = (hpmvec8fu*)out;
 
 	outu->d2[0] = _mm_sqrt_ps(au->d2[0]);
 	outu->d2[0] = _mm_sqrt_ps(au->d2[1]);
 }
 
-HPM_IMP(void, hpm_vec4_fast_sqrtfv, const hpmvec4f* __restrict__ a,
-		hpmvec4f* __restrict__ out) {
+HPM_IMP(void, hpm_vec4_fast_sqrtfv, const hpmvec4f* HPM_RESTRICT a,
+		hpmvec4f* HPM_RESTRICT out) {
 	*out = _mm_rsqrt_ps(*a);
 }
-HPM_IMP(void, hpm_vec8_fast_sqrtfv, const hpmvec8f* __restrict__ a,
-		hpmvec8f* __restrict__ out) {
-	const hpmvec8fu* __restrict__ au = a;
-	hpmvec8fu* __restrict__ outu = out;
+HPM_IMP(void, hpm_vec8_fast_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
+		hpmvec8f* HPM_RESTRICT out) {
+	const hpmvec8fu* HPM_RESTRICT au = (hpmvec8fu*)a;
+	hpmvec8fu* HPM_RESTRICT outu = (hpmvec8fu*)out;
 
 	outu->d2[0] = _mm_rsqrt_ps(au->d2[0]);
 	outu->d2[0] = _mm_rsqrt_ps(au->d2[1]);

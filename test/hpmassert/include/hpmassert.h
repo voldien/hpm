@@ -16,20 +16,31 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_TEST_H_
-#define _HPM_TEST_H_ 1
+#ifndef _HPM_ASSERT_H_
+#define _HPM_ASSERT_H_ 1
 #include<hpm.h>
 #include<hpmmath.h>
 #include<assert.h>
+#include<stdint.h>
 
 /**
- *	Function declaration.
+ *	Global variable decleration.
  */
+extern unsigned int g_SIMD;
+extern unsigned int g_type;
+extern unsigned int g_precision;
+extern unsigned int g_format;
+extern const unsigned int g_it;
+extern long int g_time_res;
+
+/**
+ *	Macro function declaration.
+ */
+typedef void (*func_benchmark)(void);
 #define HPM_BENCHMARK_FUNC_DECL(func)	\
 extern void func##sp_test(void);
 #define HPM_BENCHMARK_FUNC_IMP(func)	\
 void func##sp_test(void)
-
 
 /**
  * Vector benchmark function declaration
@@ -123,42 +134,63 @@ HPM_BENCHMARK_FUNC_DECL(hpm_mat4_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4_neqfv);
 
 /**
- *	Perforamance type.
+ *	Performance type.
  */
 enum PerformanceTestType{
-	eMatrix 		= 0x1,						/*	Matrices.	*/
-	eTransfering 	= 0x2,						/*	Data transfer.	*/
-	eComparing 		= 0x4,						/*	*/
-	eIntegrity 		= 0x8,						/*	*/
-	eQuaternion 	= 0x10,						/*	*/
-	eMath 			= 0x20,						/*	*/
-	eVector 		= 0x40,						/*	*/
-	eAll 			= (unsigned int)(-1)		/*	*/
+	eMatrix         = 0x1,                      /*	Matrices.	*/
+	eTransfering    = 0x2,                      /*	Data transfer.	*/
+	eComparing      = 0x4,                      /*	Equality test.	*/
+	eIntegrity      = 0x8,                      /*	Integrity test.	*/
+	eQuaternion     = 0x10,                     /*	Quaternion test.	*/
+	eMath           = 0x20,                     /*	Math functions test.	*/
+	eVector         = 0x40,                     /*	Vector function test.	*/
+	eAll            = (unsigned int)(-1)        /*	Perform all tests.	*/
 };
 
 /**
  *	Precision type.
  */
 enum PrecisionType{
-	eFloat			= 1,					/**/
-	eDouble 		= 2,					/**/
-	eAllPrecision	= (eFloat | eDouble)
+	eFloat          = 0x1,                    /*	Single precision floating points.	*/
+	eDouble         = 0x2,                    /*	Double precision floating points.	*/
+	eAllPrecision   = (eFloat | eDouble)      /*	Perform all precision types.	*/
 };
 
+/**
+ *
+ */
+typedef struct function_raw_t{
+	const char* name;   /**/
+	long int nanosec;   /**/
+	enum PerformanceTestType type;
+}FunctionRaw;
 
 /**
- *	Read user argument option.
+ * Time result per SIMD.
  */
-extern void readArgument(int argc, char** argv);
+typedef struct simd_benchmark_raw_t {
+	enum PrecisionType type;    /*  */
+	uint32_t simd;              /*  */
+	FunctionRaw *results;    /*  */
+	uint32_t num;               /*  */
+} SIMDBenchmarksRaw;
 
 /**
- *	Function forward declaration.
+ *
  */
-extern long int hptGetTimeNano(void);				/*	*/
-extern long int hptGetTimeResolution(void);			/*	*/
-extern int hptLog2MutExlusive32(unsigned int a);	/*	*/
-extern void htpSimdExecute(unsigned int simd);		/*	*/
-extern void htpBenchmarkPerformanceTest(void);		/*	*/
-extern void htpIntegritySpCheck(void);				/*	Check each function is working as accordinly.	*/
+typedef struct simd_time_percentage_result_t{
+	float percentage;
+}SIMDTimeResult;
+
+extern void htpReadArgument(int argc, char** argv);	/*	Read user argument option.	*/
+extern SIMDBenchmarksRaw* htpAllocateBenchmarks(unsigned int num, unsigned int numFuncs);
+extern void htpDeallocateBenchmarks(SIMDBenchmarksRaw* benchmarksRaw, unsigned int num);
+extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
+extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
+extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult);		/*	*/
+extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
+extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
+extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results);
+extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results, SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);
 
 #endif

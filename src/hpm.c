@@ -1,19 +1,30 @@
 #include"hpm.h"
-#include"hpmmath.h"
-#include"hpmmatrix.h"
-#include"hpmvector.h"
-#include"hpmquaternion.h"
-#include"hpmlogic.h"
-#include"hpmutil.h"
-#include<dlfcn.h>
 #include<assert.h>
 
+/**
+ * Macro for adding cross platform
+ * for loading external libraries.
+ */
+#ifdef HPM_UNIX
+	#include<dlfcn.h>
+	#define HPM_LOAD_LIBRARY(path) dlopen( ( path ), RTLD_LAZY)
+	#define HPM_LOAD_SYM(lib, func) dlsym( ( lib ), ( func ) );
+	#define HPM_CLOSE(lib) dlclose( ( lib ) )
+    #define HPM_LIB_ERROR() dlerror()
+#elif defined(HPM_WINDOWS)
+	#include<Winbase.h>
+	#define HPM_LOAD_LIBRARY(path) LoadLibrary( ( path ) )
+	#define HPM_LOAD_SYM(lib, func) GetProcAddress( ( lib ), ( func ) )
+	#define HPM_CLOSE(lib) FreeLibrary( ( lib ) )
+    #define HPM_LIB_ERROR() GetLastError()
+#else
+    #pragma message("Warning: None supported platform!")
+#endif
 
 /*	library handle.
  	NULL means that there is no library open.	*/
 void* libhandle = NULL;
-unsigned int g_simd;
-
+unsigned int g_simd = HPM_NONE;
 
 /**
  *	Macro for getting function pointer by variable name of
@@ -22,8 +33,11 @@ unsigned int g_simd;
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
-	int closestatus;
 	char* libpath;
+
+	/*	*/
+	if(simd == HPM_NONE)
+		return 0;
 
 	/*	Check if argument is a power of two.	*/
 	if( ( simd && ((simd - 1) & simd) ) ){
@@ -67,7 +81,7 @@ int hpm_init(unsigned int simd){
 	case HPM_DEFAULT:{
 		unsigned int i;
 		for(i = HPM_NEON; i < HPM_DEFAULT; i >>= 1){
-			if(hpm_supportcpufeat(i)){
+			if(hpm_support_cpu_feat(i)){
 				return hpm_init(i);
 			}
 		}
@@ -80,23 +94,22 @@ int hpm_init(unsigned int simd){
 	/*	load library.	*/
 #ifndef HPM_USE_SINGLE_LIBRARY
 	if(libhandle == NULL){
-		libhandle = dlopen((const char*)libpath, RTLD_LAZY);
+		libhandle = HPM_LOAD_LIBRARY((const char*)libpath);
 	}else{
 		/*	if library has only been initialized.	*/
 		return 0;
 	}
 #else
-	libhandle = dlopen(NULL, RTLD_LAZY);
+	libhandle = HPM_LOAD_LIBRARY((const char*)NULL);
 #endif
 
 	/*	Error checks.	*/
 	if(libhandle == NULL){
-		fprintf(stderr, "%s\n", dlerror());
+		fprintf(stderr, "%s\n", HPM_LIB_ERROR());
 		goto error;
 	}
 
-
-	/*	matrix	*/
+	/*	Matrices.	*/
 	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
@@ -128,17 +141,17 @@ int hpm_init(unsigned int simd){
 	hpm_mat4x4_rotationZf = hpm_get_symbolfuncp(hpm_mat4x4_rotationZf);
 	hpm_mat4x4_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_rotationQfv);
 
-	/**/
+	/*	*/
 	hpm_mat4x4_multi_translationfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_translationfv);
 	hpm_mat4x4_multi_scalefv = hpm_get_symbolfuncp(hpm_mat4x4_multi_scalefv);
 
-	/**/
+	/*	*/
 	hpm_mat4x4_multi_rotationxf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationxf);
 	hpm_mat4x4_multi_rotationyf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationyf);
 	hpm_mat4x4_multi_rotationzf = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationzf);
 	hpm_mat4x4_multi_rotationQfv = hpm_get_symbolfuncp(hpm_mat4x4_multi_rotationQfv);
 
-	/**/
+	/*	Projection matrix functions.    */
 	hpm_mat4x4_projfv = hpm_get_symbolfuncp(hpm_mat4x4_projfv);
 	hpm_mat4x4_orthfv = hpm_get_symbolfuncp(hpm_mat4x4_orthfv);
 	hpm_mat4x4_unprojf = hpm_get_symbolfuncp(hpm_mat4x4_unprojf);
@@ -229,7 +242,9 @@ int hpm_init(unsigned int simd){
 	hpm_vec4_randomfv = hpm_get_symbolfuncp(hpm_vec4_randomfv);
 	hpm_vec8_randomfv = hpm_get_symbolfuncp(hpm_vec8_randomfv);
 
-	/*	Logic conditions.	*/
+	/*	Logic equality conditions.	*/
+	hpm_vec_eqfv = hpm_get_symbolfuncp(hpm_vec_eqfv);
+	hpm_vec_neqfv= hpm_get_symbolfuncp(hpm_vec_neqfv);
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);
@@ -245,58 +260,57 @@ int hpm_init(unsigned int simd){
 	/*	Utilities.	*/
 	hpm_util_lookatfv = hpm_get_symbolfuncp(hpm_util_lookatfv);
 
-	/*	*/
+	/*	Store current SIMD extension.	*/
 	g_simd = simd;
-
 	error:	/*	error.	*/
 
+	/*  Determine if successfully.   */
 	return ( libhandle != NULL) ;
 }
 
-/*	TODO Fix later to make it platform indepdent.	*/
-int hpm_release(void){
-	int status = dlclose(libhandle);
-	if(status < 0 ){
-		fprintf(stderr, "Failed to close library. | %s\n", dlerror());
-	}
-	libhandle = NULL;
-	g_simd = 0;
-	return status == 0;
+int hpm_release(void) {
+    int status = HPM_CLOSE(libhandle);
+    if (status < 0)
+        fprintf(stderr, "Failed to close library. | %s\n", HPM_LIB_ERROR());
+    libhandle = NULL;
+    g_simd = 0;
+    return status == 0;
 }
 
-int hpm_isinit(void){
+int hpm_isinit(void) {
 	return libhandle != NULL;
 }
 
-unsigned int hpm_get_simd(void){
+unsigned int hpm_get_simd(void) {
 	return g_simd;
 }
 
-void* hpm_get_address(const char* cfunctionName, unsigned int simd){
+void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
 
 	void* pfunc;
 
+    /*  Load function from main library.    */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 	char buf[128];
 	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
 
-	pfunc = dlsym(libhandle, buf);
+	pfunc = HPM_LOAD_SYM(libhandle, buf);
 #else
-	pfunc = dlsym(libhandle, cfunctionName);
+	pfunc = HPM_LOAD_SYM(libhandle, cfunctionName);
 #endif
-	/*	*/
-	if(pfunc == NULL){
-		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, dlerror());
-	}
 
-	return ( pfunc );
+    /*	Check error.    */
+    if (pfunc == NULL)
+        fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, HPM_LIB_ERROR());
+
+    return (pfunc);
 }
 
-const char* hpm_version(void){
+const char* hpm_version(void) {
 	return HPM_STR_VERSION;
 }
 
-/*	TODO resolve for non x86 and non x86_64 cpu*/
+/*	TODO resolve for non x86 and non x86_64 CPUS*/
 #include<cpuid.h>
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
 	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
@@ -304,60 +318,72 @@ const char* hpm_version(void){
 	#define cpuid(regs, i)
 #endif
 
-int hpm_supportcpufeat(unsigned int simd){
-	int cpuInfo[4] = {0};
+int hpm_support_cpu_feat(unsigned int simd) {
+    int cpuInfo[4] = {0};
 
-	switch(simd){
-	case HPM_NOSIMD:
-		return 1;	/*	Always supported.	*/
-	case HPM_MMX:
-		cpuid(cpuInfo, 1);
-		return 0;	/*	Not supported in the library.	*/
-		return (cpuInfo[2] & bit_MMX);
-	case HPM_SSE:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[3] & bit_SSE);
-	case HPM_SSE2:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[3] & bit_SSE2);
-	case HPM_SSE3:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE3);
-	case HPM_SSSE3:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSSE3);
-	case HPM_SSE4_1:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE4_1);
-	case HPM_SSE4_2:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_SSE4_2);
-	case HPM_AVX:
-		cpuid(cpuInfo, 1);
-		return (cpuInfo[2] & bit_AVX);
-	case HPM_AVX2:
-		cpuid(cpuInfo, 7);
-		return (cpuInfo[0] & bit_AVX2);
-	case HPM_NEON:
-#if defined(HPM_ARM_NEON)
-		return 1;
+    switch (simd) {
+        case HPM_NOSIMD:
+            return 1;    /*	Always supported.	*/
+        case HPM_MMX:
+            cpuid(cpuInfo, 1);
+            return 0;    /*	Not supported in the library.	*/
+            return (cpuInfo[2] & bit_MMX);
+        case HPM_SSE:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[3] & bit_SSE);
+        case HPM_SSE2:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[3] & bit_SSE2);
+        case HPM_SSE3:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE3);
+        case HPM_SSSE3:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSSE3);
+        case HPM_SSE4_1:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE4_1);
+        case HPM_SSE4_2:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_SSE4_2);
+        case HPM_AVX:
+            cpuid(cpuInfo, 1);
+            return (cpuInfo[2] & bit_AVX);
+        case HPM_AVX2:
+            cpuid(cpuInfo, 7);
+            return (cpuInfo[0] & bit_AVX2);
+        case HPM_AVX512:
+#if defined(bit_AVX512F)
+            cpuid(cpuInfo, 7);
+            return 0;   /*  Not supported yet!  */
+            return (cpuInfo[0] & (bit_AVX512F | bit_AVX512DQ | bit_AVX512BW));
 #else
-		return 0;
+            return 0;
 #endif
-	default:
-		return 0;
-	}
+        case HPM_NEON:
+#if defined(HPM_ARM_NEON)
+            return 1;
+#else
+            return 0;
+#endif
+        case HPM_FMA:
+            cpuid(cpuInfo, 7);
+            return (cpuInfo[3] & bit_FMA4);
+        default:
+            return 0;
+    }
 }
 
 static int log2MutExlusive32(unsigned int a){
 
 	int i = 0;
-	int po = 0;
 	const int bitlen = 32;
 
+	/*  */
 	if(a == 0)
 		return 0;
 
+	/*  Iterate through each bit.   */
 	for(; i < bitlen; i++){
 		if((a >> i) & 0x1)
 			return (i + 1);
@@ -366,60 +392,61 @@ static int log2MutExlusive32(unsigned int a){
 	assert(0);
 }
 
-const char* hpm_get_simd_symbol(unsigned int SIMD){
+const char* hpm_get_simd_symbol(unsigned int SIMD) {
 	static const char* gc_simd_symbols[] = {
-			"",
-			"NOSIMD",
-			"MMX",
-			"SSE",
-			"SSE2",
-			"SSE3",
-			"SSE41",
-			"SSE42",
-			"AVX",
-			"AVX2",
-			"AVX512",
-			"NEON",
+			"",         /*  None    */
+			"NOSIMD",   /*  (1 << 0)    */
+			"MMX",      /*  (1 << 1)    */
+			"SSE",      /*  (1 << 2)    */
+			"SSE2",     /*  (1 << 3)    */
+			"SSE3",     /*  (1 << 4)    */
+			"SSSE3",    /*  (1 << 5)    */
+			"SSE41",    /*  (1 << 6)    */
+			"SSE42",    /*  (1 << 7)    */
+			"AVX",      /*  (1 << 8)    */
+			"AVX2",     /*  (1 << 9)    */
+			"AVX512",   /*  (1 << 10)   */
+			"NEON",     /*  (1 << 11)   */
+			"FMA",      /*  (1 << 12)   */
 			NULL,
 	};
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
 
-
-void hpm_vec4_print(const hpmvec4f* vec) {
-	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+int hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
+	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_vec4_sprint(char* text, const hpmvec4f* vec){
-	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+int hpm_vec4_sprint(char* text, const hpmvec4f* HPM_RESTRICT vec){
+	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_vec3_print(const hpmvec3f* vec) {
-	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+int hpm_vec3_print(const hpmvec3f* vec) {
+	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_vec3_sprint(char* text, const hpmvec3f* vec){
-	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+int hpm_vec3_sprint(char* HPM_RESTRICT text, const hpmvec3f* HPM_RESTRICT vec){
+	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
-void hpm_quat_print(const hpmquatf* quat) {
-	printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+int hpm_quat_print(const hpmquatf* quat) {
+	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
-void hpm_quat_sprint(char* text, const hpmquatf* quat){
-	sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+int hpm_quat_sprint(char* HPM_RESTRICT text, const hpmquatf* HPM_RESTRICT quat){
+	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
-void hpm_mat4x4_print(const hpmvec4x4f_t mat){
-    printf(
+int hpm_mat4x4_print(const hpmvec4x4f_t mat){
+	return printf(
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
@@ -430,8 +457,8 @@ void hpm_mat4x4_print(const hpmvec4x4f_t mat){
 		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
 }
 
-void hpm_mat4x4_sprint(char* text, const hpmvec4x4f_t mat){
-    sprintf(text,
+int hpm_mat4x4_sprint(char* HPM_RESTRICT text, const hpmvec4x4f_t mat){
+    return sprintf(text,
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
 		"{ %.1f, %.1f, %.1f, %.1f }\n"
 		"{ %.1f, %.1f, %.1f, %.1f }\n"

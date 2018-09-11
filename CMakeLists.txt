@@ -1,7 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
 PROJECT(hpm)
 
-
 #	build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 IF(NOT BUILD_SHARED_LIBS)
@@ -11,7 +10,7 @@ ENDIF()
 
 # hpm version setup.
 SET(HPM_VERSION_MAJOR 0)
-SET(HPM_VERSION_MINOR 7)
+SET(HPM_VERSION_MINOR 8)
 SET(HPM_VERSION_REVISION 0)
 SET(HPM_VERSION_STATE a)
 SET(HPM_VERSION ${HPM_VERSION_MAJOR}.${HPM_VERSION_MINOR}${HPM_VERSION_STATE}${HPM_VERSION_REVISION} )
@@ -38,11 +37,11 @@ IF(USE_SINGLE_LIBRARY)
 	SET(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
 	SET(SIMD_FLAGS "${SIMD_FLAGS} -static")
 ELSE()
-	MESSAGE(STATUS "")
+	MESSAGE(STATUS "Individual SIMD Library Mode.")
 ENDIF()
 
 
-# gcc compiler options.
+# GCC compiler options.
 IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 	ADD_DEFINITIONS(-fPIC)
 	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
@@ -66,10 +65,18 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 		SET(SIMD_FLAGS "-ftree-vectorize -ftree-slp-vectorize -ftree-vectorizer-verbose=10 -fopt-info-vec-optimized")
 	ENDIF()
 
+ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+	# Compiling language standard.
+	ADD_DEFINITIONS(-std=c11)
+	#
+	ADD_DEFINITIONS(-w)
+
+	SET(SIMD_FLAGS "${SIMD_FLAGS}")
 ELSEIF(MSVC)
 
 		# Enable multi-core complication with MSVC
 		ADD_DEFINITIONS(/MP)
+		ADD_DEFINITIONS(/DHPM_INTERNAL=1)
 ENDIF()
 
 
@@ -80,9 +87,9 @@ FILE (GLOB basecore 	${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
 FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
 FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
 FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
-#FILE (GLOB avx512_source src/avx/*)
+#FILE (GLOB avx512_source src/avx512/*)
 
-INCLUDE_DIRECTORIES(include)
+INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Target with no simd extensions requirements.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
@@ -92,6 +99,17 @@ TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 # X86 and amd64 CPU architecture.
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 
+	IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
+
+	ELSEIF(MSVC)
+		SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS "/arch:SSE")
+		SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS "/arch:SSE2")
+		SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "/arch:SSE3")
+		SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS "/arch:SSE4.1")
+		SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "/arch:SSE4.2")
+		SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS "/arch:AVX")
+		SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "/arch:AVX2")
+	ENDIF()
 	# Will added later once AVX512 is more accessible.
 	#ADD_LIBRARY(${avx512_source} ${basecore} )
 	#SET_TARGET_PROPERTIES(hpmavx512 PROPERTIES COMPILE_FLAGS "-mavx512" )
@@ -141,18 +159,22 @@ ENDIF()
 # Main library target for initializing the library. The libhpm is always a shared library.
 ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c )
 IF(USE_SINGLE_LIBRARY)
-
+	
+	# Instruction for building the single library.
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl )
 	FILE(GLOB staticlib ${CMAKE_CURRENT_SOURCE_DIR}/*.a)
 	STRING(REPLACE ".a/" ".a /" LIB_PATHS ${staticlib})
 	SET_TARGET_PROPERTIES(hpm PROPERTIES LINK_FLAGS "-Wl,--whole-archive ${LIB_PATHS} -Wl,--no-whole-archive")
 	SET(BUILD_SHARED_LIBS TRUE)
+
+	#
 	IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 
 	ENDIF()
 
-	set(LINK_SEARCH_START_STATIC FALSE)
-	set(CMAKE_EXE_LINKER_FLAGS "-shared")
+	# 
+	SET(LINK_SEARCH_START_STATIC FALSE)
+	SET(CMAKE_EXE_LINKER_FLAGS "-shared")
 ELSE()
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl)
 ENDIF()
@@ -163,9 +185,9 @@ INSTALL (FILES ${headers} DESTINATION include/hpm)
 
 # Add the install targets
 INSTALL (TARGETS hpm DESTINATION lib)
-IF(USE_SINGLE_LIBRARY)
+IF(NOT USE_SINGLE_LIBRARY)
 
-ELSE()
+	# Install each individual SIMD library extensions.
 	INSTALL (TARGETS hpmnosimd DESTINATION lib)
 	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 		#INSTALL (TARGETS hpmavx512 DESTINATION lib)
@@ -177,6 +199,8 @@ ELSE()
 		INSTALL (TARGETS hpmsse41 DESTINATION lib)
 		INSTALL (TARGETS hpmsse42 DESTINATION lib)
 	ENDIF()
+	
+	# Install NEON SIMD extension if on an ARM platform.
 	IF(__arm__)
 		INSTALL (TARGETS hpmneon DESTINATION lib)
 	ENDIF()
@@ -190,7 +214,12 @@ IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
 	ADD_CUSTOM_TARGET(	distribution
 				COMMAND mkdir -p ${TARGETDIR}
-				COMMAND cp -r src include test CMakeLists.txt LICENSE README.md ${TARGETDIR}
+				COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/src
+						${CMAKE_CURRENT_SOURCE_DIR}/include 
+						${CMAKE_CURRENT_SOURCE_DIR}/test
+						${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+						${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+						${CMAKE_CURRENT_SOURCE_DIR}/README.md ${TARGETDIR}
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()

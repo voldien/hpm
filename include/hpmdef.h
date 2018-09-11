@@ -92,7 +92,8 @@
 
 
 /**
- *
+ * Include arm neon header
+ * if neon is supported on the arm architecture.
  */
 #if defined(__GNUC__) && defined(__ARM_NEON__)
      /* GCC-compatible compiler, targeting ARM with NEON */
@@ -214,6 +215,7 @@
 	#   define HPM_UNIX 1
 #endif
 
+
 /**
  *	Calling function convention.
  */
@@ -238,6 +240,7 @@
 	#define HPMAPIFASTENTRY __fastcall
 #endif
 
+
 /**
  *	Force inline.
  */
@@ -260,16 +263,15 @@
 	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
 	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
 #elif defined(HPM_VC)
-	#define HPM_ALIGN(alignment) __attribute__ ((aligned(alignment)))
-	#define HPM_VECTORALIGN(alignment) __attribute__ ((__vector_size__ (alignment), __may_alias__))
-	#define HPM_VECTORALIGNI(alignment) __attribute__ ((__vector_size__ (alignment)))
+	#define HPM_ALIGN(alignment) __declspec(align(alignment))
+	#define HPM_VECTORALIGN(alignment) __declspec(align(alignment))
+	#define HPM_VECTORALIGNI(alignment) __declspec(align(alignment))
 #elif defined(HPM_)
 #endif
 
 
-
 /**
- *	library declaration.
+ *	Library declaration.
  */
 #if defined(HPM_GNUC) || defined(HPM_CLANG)
 	#if defined(HPM_UNIX)
@@ -286,9 +288,26 @@
 #endif
 
 
+/**
+ *	Restrict decleration.
+ */
+#ifndef HPM_RESTRICT
+	#if defined(HPM_GNUC)
+		#define HPM_RESTRICT __restrict__
+	#elif defined(HPM_CLANG)
+	    #define HPM_RESTRICT __restrict
+	#elif defined(HPM_VC)
+		#define HPM_RESTRICT __declspec(restrict)
+    #else
+	    #define HPM_RESTRICT
+	#endif
+#endif
+
+
 #if defined(HPM_ARM) || defined(HPM_I386)
 
 #endif
+
 
 /**
  *	String macros.
@@ -298,7 +317,7 @@
 #define HPM_TEXT(quote) quote										/*	*/
 
 /**
- *	Get current simd extension prefix.
+ *	Get current SIMD extension prefix.
  */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 
@@ -322,7 +341,7 @@
 #endif
 
 /**
- *
+ * Macro for single or multi library builds.
  */
 #ifdef HPM_USE_SINGLE_LIBRARY
 	#define HPM_LOCALSYMBOL ""
@@ -379,10 +398,9 @@
 #endif
 
 
-
 /**
  *	Define implementation header for
- *	definining the function.
+ *	defining the functions.
  */
 #define HPM_IMP(ret, func, ...)					\
 ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
@@ -410,7 +428,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 #endif	/*	_HPM_MATH_H_	*/
 
 /**
- *	Inline convertion functions.
+ *	Inline conversion functions.
  *	Convert between radians and degrees.
  */
 #define HPM_DEG2RAD( a ) ( ( (a) * HPM_PI ) / 180.0 )
@@ -419,7 +437,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 /**
  *	Inline math functions.
  */
-#ifdef __SSE4__
+#if  defined(__SSE4__) && defined(HPM_INTERNAL)
 	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
 	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
 	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))

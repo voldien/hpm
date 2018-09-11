@@ -9,31 +9,35 @@
 
 
 HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
-	const hpmquatf wzyx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,1,2,3) );		/*	{ w, x, y, z } => { w, z, y, x }	*/
-	const hpmquatf baba = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,0,1) );		/*	{ w, x, y, z } => { w, z, w, z }	*/
-	const hpmquatf dcdc = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2,3,2,3) );		/*	{ w, x, y, z } => { y, z, y, z }	*/
+
+	const hpmquatf lwwww = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,0,0,0) );     /*	{ w, x, y, z } => { w, w, w, w }	*/
+	const hpmquatf rwxyz = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(3,2,1,0) );     /*	{ w, x, y, z } => { w, x, y, z }	*/
+	const hpmquatf lxxxx = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(1,1,1,1) );     /*	{ w, x, y, z } => { x, x, x, x }	*/
+	const hpmquatf rxwzy = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(2,3,0,1) );     /*	{ w, x, y, z } => { x, w, z, y }	*/
+	const hpmquatf lyyyy = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(2,2,2,2) );     /*	{ w, x, y, z } => { y, y, y, y }	*/
+	const hpmquatf ryzwx = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(1,0,3,2) );     /*	{ w, x, y, z } => { y, z, w, x }	*/
+	const hpmquatf lzzzz = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(3,3,3,3) );     /*	{ w, x, y, z } => { z, z, z, z }	*/
+	const hpmquatf rzyxw = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,2,3) );     /*	{ w, x, y, z } => { z, y, x, w }	*/
+
+	/*  Coefficients.    */
 	const hpmquatf row1 = {-1.0f,  1.0f, -1.0f,  1.0f};
 	const hpmquatf row2 = {-1.0f,  1.0f,  1.0f, -1.0f};
 	const hpmquatf row3 = {-1.0f, -1.0f,  1.0f,  1.0f};
 
+	/*  Column 1.   */
+	const hpmquatf qwwww_rwxyz = _mm_mul_ps(lwwww, rwxyz);
 
-	const hpmquatf qwwwwrwxyz = _mm_mul_ps(
-			_mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,0,0,0)),
-			_mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,2,3)));
+	/*  Column 2.   */
+	const hpmquatf qxxxx_rxwzy = _mm_mul_ps(lxxxx, rxwzy) * row1;
 
-	const hpmquatf qxxxxrxwzy = _mm_mul_ps(
-			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(1,1,1,1)),
-			_mm_shuffle_ps(*rarg, *rarg,_MM_SHUFFLE(1,0,3,2))) * row1;
+	/*  Column 3.   */
+	const hpmquatf qyyyy_rxyzw = _mm_mul_ps(lyyyy, ryzwx) * row2;
 
-	const hpmquatf qyyyyrxyzw = _mm_mul_ps(
-			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(2,2,2,2)),
-			_mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(1,2,0,1))) * row2;
+	/*  Column 4.   */
+	const hpmquatf qzzzz_rzyxw = _mm_mul_ps(lzzzz, rzyxw) * row3;
 
-	const hpmquatf qzzzzrzyxw = _mm_mul_ps(
-			_mm_shuffle_ps(*larg, *larg,_MM_SHUFFLE(3,3,3,3)),
-			_mm_shuffle_ps(*rarg, *rarg,_MM_SHUFFLE(3,2,1,0))) * row3;
-
-	*out =  qwwwwrwxyz + qxxxxrxwzy + qyyyyrxyzw + qzzzzrzyxw;
+	/*  Sum the products.   */
+	*out = qwwww_rwxyz + qxxxx_rxwzy + qyyyy_rxyzw + qzzzz_rzyxw;
 
 }
 

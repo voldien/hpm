@@ -16,6 +16,7 @@ HPM_IMP(void, hpm_vec4_randomfv, hpmvec4f* out){
 
 	srand(time(NULL));
 
+	/*  Iterate through each element.   */
 	for(i = 0; i < n; i++)
 		(*out)[i] = (hpmvecf)rand()/(hpmvecf)UINT_MAX;
 	/*
@@ -38,6 +39,7 @@ HPM_IMP(void, hpm_vec8_randomfv, hpmvec8f* out){
 
 	srand(time(NULL));
 
+	/*  Iterate through each element.   */
 	for(i = 0; i < n; i++)
 		(*out)[i] = (hpmvecf)rand()/(hpmvecf)UINT_MAX;
 	/*
