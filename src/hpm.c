@@ -314,8 +314,10 @@ const char* hpm_version(void) {
 #include<cpuid.h>
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
 	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
+#elif defined(HPM_ARM)
+	#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
 #else
-	#define cpuid(regs, i)
+	#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
 #endif
 
 int hpm_support_cpu_feat(unsigned int simd) {
