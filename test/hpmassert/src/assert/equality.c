@@ -66,7 +66,6 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4_eqfv) {
 	register int x;
 	hpmvec4f vec1 = { 1, 2, 1, 1 };
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
-	hpmvec4f vec3;
 
 	hpm_vec4_randomfv(&vec1);
 	hpm_vec4_randomfv(&vec2);
@@ -79,7 +78,6 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4_neqfv) {
 	register int x;
 	hpmvec4f vec1 = { 1, 2, 1, 1 };
 	hpmvec4f vec2 = { 1, 0, 6, 1 };
-	hpmvec4f vec3;
 
 	hpm_vec4_randomfv(&vec1);
 	hpm_vec4_randomfv(&vec2);

@@ -116,7 +116,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_quat_axis_anglefv) {
 	hpmvec3f axis = { 0.0f, 1.0f, 0.0f, 0.0f };
 
 	for (x = 0; x < g_it; x++) {
-		hpm_quat_axis_anglefv(&rot, &axis, HPM_PI);
+		hpm_quat_axis_anglefv(&rot, &axis, (hpmvecf)HPM_PI);
 	}
 }
 

@@ -101,7 +101,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationfv) {
 	hpmvec3f axis = {1.0f, 0.0f, 0.0f, 0.0f};
 
 	for (x = 0; x < g_it; x++) {
-		hpm_mat4x4_rotationfv(result, HPM_PI_2, &axis);
+		hpm_mat4x4_rotationfv(result, (hpmvecf)HPM_PI_2, &axis);
 	}
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationXf) {
@@ -109,7 +109,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationXf) {
 	hpmvec4x4f_t result;
 
 	for (x = 0; x < g_it; x++) {
-		hpm_mat4x4_rotationXf(result, HPM_1_PI);
+		hpm_mat4x4_rotationXf(result, (hpmvecf)HPM_1_PI);
 	}
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationYf) {
@@ -117,7 +117,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationYf) {
 	hpmvec4x4f_t result;
 
 	for (x = 0; x < g_it; x++) {
-		hpm_mat4x4_rotationYf(result, HPM_1_PI);
+		hpm_mat4x4_rotationYf(result, (hpmvecf)HPM_1_PI);
 	}
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationZf) {
@@ -125,7 +125,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationZf) {
 	hpmvec4x4f_t result;
 
 	for (x = 0; x < g_it; x++) {
-		hpm_mat4x4_rotationZf(result, HPM_1_PI);
+		hpm_mat4x4_rotationZf(result, (hpmvecf)HPM_1_PI);
 	}
 }
 HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_rotationQf) {
@@ -144,7 +144,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_mat4x4_projfv) {
 	hpmvec4x4f_t project;
 
 	for (x = 0; x < g_it; x++) {
-		hpm_mat4x4_projfv(project, HPM_PI_2, 4.0f/ 3.0f, 0.15f, 1000.0f);
+		hpm_mat4x4_projfv(project, (hpmvecf)HPM_PI_2, 4.0f/ 3.0f, 0.15f, 1000.0f);
 	}
 
 }

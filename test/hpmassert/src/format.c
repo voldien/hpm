@@ -7,7 +7,6 @@
 
 static void drawSep(const unsigned int size){
 
-	unsigned int i;
 	char buf[256];
 	const unsigned int bufSize = sizeof(buf);
 
@@ -23,7 +22,7 @@ static void drawSep(const unsigned int size){
 void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 
 	int i, j;
-	int x, y;
+	int x;
 	size_t maxFuncNameLen = 0;
 	size_t lineCount = 0;
 	SIMDTimeResult *timeResults = NULL;

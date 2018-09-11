@@ -48,7 +48,7 @@ void htpReadArgument(int argc, char** argv) {
 		switch (c) {
 			case 's':
 				if (optarg) {
-					int i = 1;
+					unsigned int i = 1;
 
 					do {
 						if (strcmp(hpm_get_simd_symbol(i), optarg) == 0) {
@@ -154,7 +154,7 @@ long int hptGetTime(void){
 #if defined(HPM_UNIX)
 	struct timeval tSpec;
     gettimeofday(&tSpec, NULL);
-    return (tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3L;
+    return (long int)(tSpec.tv_sec * 1E6L + tSpec.tv_usec) * 1E3L;
 #else
 	return 1;
 #endif
