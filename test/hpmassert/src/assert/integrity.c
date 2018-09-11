@@ -366,19 +366,27 @@ START_TEST (matrix4x4){
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m1), 1.0f), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_inversefv(m1, m3), 1.0f), 1);
 
+	/*  Check identity matrices multiplication. */
 	hpm_mat4x4_multiply_mat4x4fv(m3, m1, m2);
 	hpm_mat4x4_identityfv(m3);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4_eqfv(m3, m2), 1.0f), 1);
 
-	/*	Transpose.	*/
+	/*	Transpose identity matrix check.	*/
 	hpm_mat4x4_identityfv(m3);
 	hpm_mat4x4_identityfv(m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m3, m2), 1);
 	hpm_mat4x4_transposefv(m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m3, m2), 1);
 
-	/*	Transpose.	*/
-	hpm_mat4x4_scalef(m2, (hpmvecf)HPM_PI / 3.5f,(hpmvecf)HPM_PI / 3.5f,(hpmvecf)HPM_PI / 3.5f);
+	/*	Transpose non identical diagonal.	*/
+	hpm_mat4x4_scalef(m2, (hpmvecf)HPM_PI / 3.5f,(hpmvecf)HPM_PI / 5.5f,(hpmvecf)HPM_PI / 1.5f);
+	hpm_mat4x4_copyfv(m1, m2);
+	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+	hpm_mat4x4_transposefv(m2);
+	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+
+	/*	Transpose non symmetric matrix.	*/
+	hpm_mat4x4_projfv(m2, (hpmvecf)HPM_PI / 4.0f, 4.0f / 3.0f, 0.15, 1000.0f);
 	hpm_mat4x4_copyfv(m1, m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
 	hpm_mat4x4_transposefv(m2);
