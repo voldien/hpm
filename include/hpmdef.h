@@ -350,6 +350,7 @@
 	#define HPM_LOCALSYMBOL	""											/*	Namespace for local symbol. Use for creating single library file.	*/
 	#define HPM_FUNCSYMBOL(func)	fimp##func
 #endif
+
 #define HPM_DEFFUNCSYMBOL(func)	fimp##func
 #define HPM_FUNCTYPE(func) func##_t										/*	Declare function data type.	*/
 #define HPM_FUNCPOINTER(func) HPM_FUNCTYPE(func) func					/*	Declare function pointer.	*/
@@ -438,14 +439,14 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
  *	Inline math functions.
  */
 #if  defined(__SSE4__) && defined(HPM_INTERNAL)
-	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
-	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-	#define HPM_CLAMP(a, min, max)	(MAX( ( max ) ,MIN( ( min ) , ( a ) )))
+	#define HPM_MIN(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+	#define HPM_MAX(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+	#define HPM_CLAMP(a, min, max)	(HPM_MIN( ( max ) ,HPM_MAX( ( min ) , ( a ) )))
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #else
-	#define HPM_MIN(a,b)	( ( (a) > (b) ) ? (a) : (b) )
-	#define HPM_MAX(a,b)	( ( (a) < (b) ) ? (a) : (b) )
-	#define HPM_CLAMP(a, min, max)	(HPM_MAX( ( max ) ,HPM_MIN( ( min ) , ( a ) )))
+	#define HPM_MIN(a,b)	( ( (a) < (b) ) ? (a) : (b) )
+	#define HPM_MAX(a,b)	( ( (a) > (b) ) ? (a) : (b) )
+	#define HPM_CLAMP(a, min, max)	(HPM_MIN( ( max ) ,HPM_MAX( ( min ) , ( a ) )))
 	#define HPM_LERP(a, b, t)	( ( (a) + ( (b) - (a) )*(t) )
 #endif
 
