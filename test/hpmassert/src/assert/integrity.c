@@ -281,7 +281,6 @@ START_TEST (quaternion){
 	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", q2msg, q1msg);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
-
 	/*	Check direction.	*/
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
 	hpm_quat_identityfv(&q1);
@@ -338,7 +337,7 @@ START_TEST (matrix4x4){
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
 
-	/*	*/
+	/*	Initialize matrices.    */
 	hpm_mat4x4_identityfv(m1);
 	hpm_mat4x4_identityfv(m2);
 	hpm_mat4x4_identityfv(m3);
@@ -512,15 +511,15 @@ START_TEST(math){
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f };
 
-	/*	*/
+	/*	Compute max elements.   */
 	hpm_vec4_maxfv(&v1, &v2, &v3);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v3, &v1), 1);
 
-	/*	*/
+	/*	Compute min elements.   */
 	hpm_vec4_minfv(&v1, &v2, &v3);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v3, &v2), 1);
 
-	/*	*/
+	/*	Determine smallest and biggest elements.    */
 	ck_assert_int_eq((int)hpm_vec4_min_compfv(&v1), 1);
 	ck_assert_int_eq((int)hpm_vec4_max_compfv(&v1), 4);
 
@@ -529,21 +528,23 @@ START_TEST(math){
 	const hpmvecf cvzf = 36.0f;
 	const hpmvecf cvwf = 48.0f;
 	hpm_vec4_setf(&v1, cvxf, cvyf, cvzf, cvwf);
+
+	/*  Integrity check.    */
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getxf(v1), cvxf), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getyf(v1), cvyf), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(v1), cvzf), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getwf(v1), cvwf), 1);
 
-	/*	*/
+	/*	Determine smallest and biggest elements.    */
 	ck_assert_int_eq((int)hpm_vec4_min_compfv(&v1), cvxf);
 	ck_assert_int_eq((int)hpm_vec4_max_compfv(&v1), cvwf);
 
-	/*	*/
+	/*	Determine biggest elements.    */
 	ck_assert_int_ne((int)hpm_vec4_max_compfv(&v1), cvxf);
 	ck_assert_int_ne((int)hpm_vec4_max_compfv(&v1), cvyf);
 	ck_assert_int_ne((int)hpm_vec4_max_compfv(&v1), cvzf);
 
-	/*  */
+	/*	Determine smallest elements.    */
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvwf);
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvzf);
 	ck_assert_int_ne((int)hpm_vec4_min_compfv(&v1), cvyf);
@@ -584,7 +585,7 @@ Suite* htpCreateSuite(void){
 	tcase_add_test(testMat4Case, matrix4x4);        /*  Testing all matrix functions.   */
 	tcase_add_test(testTransCase, transformation);  /*  Testing all transformation functions. */
 	tcase_add_test(testMathCase, math);             /*  Testing all math functions. */
-	tcase_add_test(testUtilCase, utility);             /*  Testing all math functions. */
+	tcase_add_test(testUtilCase, utility);          /*  Testing all math functions. */
 
 	/*	Add test cases to test suite.	*/
 	suite_add_tcase(suite, testEquCase);
