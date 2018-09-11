@@ -36,48 +36,20 @@ HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
 	*out = iden;
 }
 
+HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* quat, hpmvec3f* out){
 
-/*	TODO fix these two function by fixing variable names.*/
-HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* larg, hpmvec3f* out){
+	/*  qxq^-1*/
+	const hpmvec3f forward;
 
-	/*	return ( *this * ( Quaternion(0, vector.x(),vector.y(),-vector.z()) ) * conjugate() ).getVector();*/
-	hpmquatf quatinvdir = { 0.0f, 0.0f, 0.0f, -1.0f };
-	hpmquatf quatconj = *larg;
-
-	/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(&quatinvdir, &quatconj, out);	/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, larg, &quatinvdir);		/*	*/
-
-	/*	Get vector.	*/
-	(*out)[0] = hpm_quat_getxf(quatinvdir);
-	(*out)[1] = hpm_quat_getyf(quatinvdir);
-	(*out)[2] = hpm_quat_getzf(quatinvdir);
-	(*out)[3] = 0.0f;
+	/*  Compute forward direction.  */
+	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&forward, 0.0, 0.0f, 1.0f, 0.0f);
+	HPM_CALLLOCALFUNC(hpm_quat_multi_vec3fv)(quat, &forward, out);
 }
 
 HPM_IMP( void, hpm_quat_get_vectorfv, const hpmquatf* quat, const hpmvec3f* vect, hpmvec3f* out){
 
-
-	hpmquatf quatinvdir = *vect * -1.0f;
-	hpmquatf quatconj = *quat;
-
-	quatinvdir[HPM_QUAT_X] = (*vect)[0];
-	quatinvdir[HPM_QUAT_Y] = (*vect)[1];
-	quatinvdir[HPM_QUAT_Z] = (*vect)[2];
-	quatinvdir[HPM_QUAT_W] = 0.0f;
-
-	/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_conjugatefv)(&quatconj);						/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(quat, &quatinvdir, out);		/*	*/
-	HPM_CALLLOCALFUNC(hpm_quat_multi_quatfv)(out, &quatconj, &quatinvdir);	/*	*/
-
-	/**/
-	(*out)[0] = hpm_quat_getxf(quatinvdir);
-	(*out)[1] = hpm_quat_getyf(quatinvdir);
-	(*out)[2] = hpm_quat_getzf(quatinvdir);
-	(*out)[3] = 0.0f;
-
+	/*  qxq^-1*/
+	HPM_CALLLOCALFUNC(hpm_quat_multi_vec3fv)(quat, vect, out);
 }
 
 HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3f* HPM_RESTRICT axis, hpmvecf angle){
