@@ -430,6 +430,7 @@ START_TEST (transformation) {
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
 
+	/*  Initialize matrices.    */
 	hpm_mat4x4_identityfv(m1);
 	hpm_mat4x4_identityfv(m2);
 	hpm_mat4x4_identityfv(m3);
@@ -480,7 +481,7 @@ START_TEST (transformation) {
 	hpm_mat4x4_rotationfv(m1, HPM_PI_4, &v1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &rotExcp), 1);
 
-	/*	Translation.    */
+	/*	Translation assert.    */
 	const hpmvec4f tranExc = {10.0f, -10.0f, 5.0f, 1.0f};
 	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
 	hpm_mat4x4_identityfv(m1);
@@ -489,7 +490,7 @@ START_TEST (transformation) {
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &tranExc), 1);
 
-	/*  Scalar. */
+	/*  Scalar assert. */
 	const hpmvec4f scaleExc = {2.0, 2.0f, 2.0f, 0.0f};
 	hpm_vec4_setf(&v1, 2.0f, 2.0f, 2.0f, 0.0f);
 	hpm_mat4x4_identityfv(m1);
@@ -498,7 +499,7 @@ START_TEST (transformation) {
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &scaleExc), 1);
 
-	/*	UnProject.  */
+	/*	UnProject assert.  */
 	const int viewport[4] = {0, 0, 400, 400};
 	const int mousex = 350, mousey = 350;
 	const hpmvec4f expUnProj = {10.0f, 10.0f, 0.0f, 0.0f};
@@ -612,7 +613,6 @@ void htpIntegritySpCheckf(void) {
 
 
 	int number_failed;
-	int i;
 	Suite *s;
 	SRunner *sr;
 
