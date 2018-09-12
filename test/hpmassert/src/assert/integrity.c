@@ -287,22 +287,22 @@ START_TEST (quaternion){
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
 	hpm_quat_identityfv(&q1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
-	
+
 	/*	Check direction rotated 180 degrees around yaw.	*/
+	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(q1msg, &direction);
+	hpm_vec4_sprint(q2msg, &nexpdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", q2msg, q1msg);
+
+	/*	Check direction rotated 90 degrees around pitch.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 2.0f, 0.0f, 0.0f);
 	hpm_quat_normalizefv(&q1);
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
 	hpm_vec4_sprint(q1msg, &direction);
 	hpm_vec4_sprint(q2msg, &up);
 	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", q2msg, q1msg);
-
-	/*	Check direction rotated 180 degrees around yaw.	*/
-	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI / 3.0f, 1.0f);
-	hpm_quat_normalizefv(&q1);
-	hpm_quat_get_vectorfv(&q1, &forward, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &nexpdir);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", q2msg, q1msg);
 
 
 	/*	Axis rotation.	*/
