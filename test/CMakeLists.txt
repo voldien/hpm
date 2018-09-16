@@ -2,6 +2,6 @@
 # hpm library.
 
 # Add hpmglbunny test.
-ADD_SUBDIRECTORY(glbunny)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/glbunny)
 # Add hpm assert for testing each function and assert them.
-ADD_SUBDIRECTORY(hpmassert)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/hpmassert)
