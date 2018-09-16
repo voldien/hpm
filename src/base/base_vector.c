@@ -118,10 +118,12 @@ HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* incidentVec, const hpmvec3f* 
 	*out = *incidentVec - ndotd2n;
 }
 
-HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, hpmvecf index, hpmvec3f* out){
-	const hpmvecf N_dot_I = -1.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
+HPM_IMP( void, hpm_vec3_refractfv, const hpmvec3f* incidentVec, const hpmvec3f* normal, hpmvecf index, hpmvec3f* out){
 
 	/*  */
+	const hpmvecf N_dot_I = -1.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
+
+	/*  Fraction index. */
 	index = 1.0f / index;
 
 	/*  */
@@ -136,7 +138,7 @@ HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal
 		/*  */
 		const hpmvecf cosT = sqrtf(1.0f - k);
 
-		*out = index * *incidentVec + (index * N_dot_I - cosT) * *normal;
+		*out = index * (*incidentVec) + (index * N_dot_I - cosT) * *normal;
 	}
 }
 
