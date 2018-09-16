@@ -2,16 +2,25 @@
 #include<float.h>
 #include<math.h>
 
-HPM_IMP( float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
-	return (*larg)[0] * (*rarg)[0] + (*larg)[1] * (*rarg)[1] + (*larg)[2] * (*rarg)[2] + (*larg)[3] * (*rarg)[3];
+HPM_IMP( hpmvecf, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
+	return hpm_vec4_getxf(*larg) * hpm_vec4_getxf(*rarg) +
+	       hpm_vec4_getyf(*larg) * hpm_vec4_getyf(*rarg) +
+	       hpm_vec4_getzf(*larg) * hpm_vec4_getzf(*rarg) +
+	       hpm_vec4_getwf(*larg) * hpm_vec4_getwf(*rarg);
 }
 
-HPM_IMP( float, hpm_vec4_lengthfv, const hpmvec4f* arg){
-	return sqrtf( (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3] );
+HPM_IMP( hpmvecf, hpm_vec4_lengthfv, const hpmvec4f* arg){
+	return sqrtf(hpm_vec4_getxf(*arg) * hpm_vec4_getxf(*arg) +
+		hpm_vec4_getyf(*arg) * hpm_vec4_getyf(*arg) +
+		hpm_vec4_getzf(*arg) * hpm_vec4_getzf(*arg) +
+		hpm_vec4_getwf(*arg) * hpm_vec4_getwf(*arg));
 }
 
-HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
-	return (*arg)[0] * (*arg)[0] + (*arg)[1] * (*arg)[1] + (*arg)[2] * (*arg)[2] + (*arg)[3] * (*arg)[3];
+HPM_IMP( hpmvecf, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
+	return hpm_vec4_getxf(*arg) * hpm_vec4_getxf(*arg) +
+	       hpm_vec4_getyf(*arg) * hpm_vec4_getyf(*arg) +
+	       hpm_vec4_getzf(*arg) * hpm_vec4_getzf(*arg) +
+	       hpm_vec4_getwf(*arg) * hpm_vec4_getwf(*arg);
 }
 
 HPM_IMP(hpmvecf, hpm_vec4_max_compfv, const hpmvec4f* vec){
