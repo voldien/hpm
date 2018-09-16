@@ -640,7 +640,7 @@ Suite* htpCreateSuite(void){
 	tcase_add_test(testMat4Case, matrix4x4);        /*  Testing all matrix functions.   */
 	tcase_add_test(testTransCase, transformation);  /*  Testing all transformation functions. */
 	tcase_add_test(testMathCase, math);             /*  Testing all math functions. */
-	tcase_add_test(testUtilCase, utility);          /*  Testing all math functions. */
+	tcase_add_test(testUtilCase, utility);          /*  Testing all utilities functions. */
 
 	/*	Add test cases to test suite.	*/
 	suite_add_tcase(suite, testEquCase);
