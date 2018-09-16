@@ -400,8 +400,16 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* incidentVec,
  *	Compute refraction from normal and direction vector
  *	in respect to refraction index.
  *
+ *	@param incidentVec
+ *
+ *	@param normal
+ *
+ *	@param index
+ *
+ *	@param out
+ *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refractfv, const hpmvec3f* incidentVec,
 		const hpmvec3f* normal, hpmvecf index, hpmvec3f* out);
 
 /**
