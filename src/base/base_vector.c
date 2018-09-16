@@ -103,26 +103,40 @@ HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, 
  */
 
 
-HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* arg, const hpmvec3f* normal, hpmvec3f* out){
-	const float dot = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(arg, normal);
-	const hpmvec3f row0 = { 2.0f, 2.0f, 2.0f, 2.0f };
-	const hpmvec3f vdot = { dot, dot, dot, dot };
-	*out = row0 * vdot * ( *normal ) - ( *arg );
+HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* incidentVec, const hpmvec3f* normal, hpmvec3f* out){
+	
+	const hpmvecf dot = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(incidentVec, normal);
+
+	const hpmvec3f row0 = { 2.0f, 2.0f, 2.0f, 0.0f };
+
+	const hpmvec3f vdot = { dot, dot, dot, 0.0f };
+
+	/*  2 * (d dot n) * n   */
+	const hpmvec3f ndotd2n = row0 * vdot * ( *normal );
+
+	/*  d - 2(n * d)n   */
+	*out = *incidentVec - ndotd2n;
 }
 
-HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, float index, hpmvec3f* out){
-	hpmvecf N_dot_I = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
-	hpmvecf k = 1.0f - index * index * (1.0f - N_dot_I * N_dot_I);
+HPM_IMP( void, hpm_vec3_refractfv, hpmvec3f* incidentVec, const hpmvec3f* normal, hpmvecf index, hpmvec3f* out){
+	const hpmvecf N_dot_I = -1.0f * HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(normal, incidentVec);
 
+	/*  */
+	index = 1.0f / index;
+
+	/*  */
+	const hpmvecf k = index * index * (1.0f - N_dot_I * N_dot_I);
+
+	/*  */
 	if (k < 0.0f){
-		const hpmvec3f zero = { 0, 0, 0, 0 };
+		const hpmvec3f zero = { 0.0f, 0.0f, 0.0f, 0.0f };
 		*out = zero;
 	}
 	else{
-		const hpmvecf tmp = index * N_dot_I + sqrtf(k);
-		const hpmvec3f index0 = { index, index, index, index };
-		const hpmvec3f tmp0 = { tmp, tmp, tmp, tmp };
-		*out = index0 * *incidentVec - tmp0 * *normal;
+		/*  */
+		const hpmvecf cosT = sqrtf(1.0f - k);
+
+		*out = index * *incidentVec + (index * N_dot_I - cosT) * *normal;
 	}
 }
 
