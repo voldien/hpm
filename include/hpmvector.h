@@ -143,12 +143,12 @@ typedef struct hpmvec8du_t{
 
 
 /**
- *	Copy vector4 source to destination.
- *	destination = source
+ * Copy vector4 source to destination.
+ * destination = source
  *
- *	\destination destination pointer.
+ * @param destination destination pointer.
  *
- *	\source source pointer.
+ * @param source pointer.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
@@ -156,25 +156,32 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_copyfv,
 		const hpmvec4f* HPM_RESTRICT source);
 
 /**
- *	Set vector by each component individually.
+ * Set vector by each component individually.
  *
+ * @param destination vector memory location.
+ * @param x first element.
+ * @param y second element.
+ * @param z third element.
+ * @param w fourth element.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setf, hpmvec4f* destination,
 		const hpmvecf x, const hpmvecf y, const hpmvecf z, const hpmvecf w);
 
 /**
+ * Set aligned scalar values for each element in the vector.
  *
+ * @param destination vector memory location.
+ * @param ss scalar aligned value.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setsf, hpmvec4f* destination,
 		const hpmvecf ss);
 
 /**
- *	Perform addition with two 1x4 vectors.
- *	larg = larg * rarg
+ * Perform addition with two 1x4 vectors.
+ * larg = larg * rarg
  *
- *	\larg
- *
- *	\arg
+ * @param larg left sided argument.
+ * @param arg right side argument
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg,
@@ -376,13 +383,18 @@ HPM_EXPORT( hpmvecf, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec3_normalizefv, hpmvec3f* arg);
 
 /**
- *	Compute reflective vector from normal and direction.
+ * Compute reflective vector from normal and direction.
  *
+ * @param incidentVec directional ray.
+ *
+ * @param normal normal vector on the surface of
+ * impact.
+ *
+ * @param out Reflected vector.
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* arg,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* incidentVec,
 		const hpmvec3f* normal, hpmvec3f* out);
-
 
 /**
  *	Compute refraction from normal and direction vector
@@ -395,9 +407,25 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refractfv, hpmvec3f* larg,
 /**
  *	Project vector a onto vector b.
  *
+ *	@remark Project vector will have same
+ *	direction as b with length in the span of
+ *	[0, length(b)].
+ *
+ *     a
+ *     ^
+ *    /'
+ *   / '
+ *  /  '
+ *  ------> b
+ *  |--| out
+ *
+ * @param a projected vector.
+ * @param b vector projected to.
+ *
+ * @param out projected vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_projfv, const hpmvec3f* a,
-		const hpmvec3f* b, hpmvec3f* larg);
+		const hpmvec3f* b, hpmvec3f* out);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }
