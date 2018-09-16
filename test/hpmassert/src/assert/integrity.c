@@ -126,9 +126,14 @@ END_TEST
 
 START_TEST (vector4){
 
+	char vac1msg[128];      /*  Actual result.  */
+	char vex2msg[128];      /*  Expected result.   */
 	hpmvec4f v1;
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const hpmvec3f up = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec3f right = {1.0f, 0.0f, 0.0f, 0.0f};
+	const hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
 	/*  Vector set function.    */
 	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
@@ -150,6 +155,46 @@ START_TEST (vector4){
 	hpm_vec4_normalizefv(&v3);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthfv(&v3), 1.0f), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthsqurefv(&v3), 1.0f), 1);
+
+	/*  Dot product.    */
+	ck_assert_int_eq(hpm_vec4_dotfv(&right, &up) == hpm_vec4_dotfv(&right, &forward), 1);
+	ck_assert_int_eq(hpm_vec4_dotfv(&forward, &up) == hpm_vec4_dotfv(&right, &forward), 1);
+
+	/*  Check cross product.    */
+	hpm_vec3_crossproductfv(&forward, &right, &v1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &up), 1);
+
+	/*  Check cross product.    */
+	hpm_vec3_crossproductfv(&up, &forward, &v1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &right), 1);
+
+	/*  Triple product (up  x forward) * forward.   */
+	const hpmvecf triple = hpm_vec3_tripleProductfv(&up, &forward, &forward);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &right), 1);
+
+	/*  Reflect vector. */
+	const hpmvec3f ray = {1.0f, -1.0f, 0.0f, 0.0f};
+	const hpmvec3f refray = {1.0f, 1.0f, 0.0f, 0.0f};
+	hpm_vec3_reflectfv(&ray, &up, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &refray);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &refray), "hpm_vec3_reflectfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
+
+	/*  Refract vector. */
+	const hpmvecf waterIndex = 1.33f;
+	const hpmvec3f rayRefr = { cos(HPM_DEG2RAD(-45.0)), sin(HPM_DEG2RAD(-45.0f)), 0.0f, 0.0f };
+	const hpmvec3f refraction = { cos(HPM_DEG2RAD(32.1 - 90.0)), sin(HPM_DEG2RAD(32.1 - 90.0)), 0.0f, 0.0f};
+	hpm_vec3_refractfv(&rayRefr, &up, waterIndex, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &refraction);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &refraction), "hpm_vec3_refractfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
+
+	/*  Project vector. */
+	const hpmvec3f projected = {1.0f, 0.0f, 0.0f, 0.0f};
+	hpm_vec3_projfv(&ray, &right, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &projected);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &projected), "hpm_vec3_projfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
 
 	/*	Check linear interpolation.	*/
 	hpm_vec4_setf(&v1, 1.0f, 1.0f, 1.0f, 1.0f);
