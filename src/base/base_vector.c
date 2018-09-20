@@ -63,14 +63,14 @@ HPM_IMP(void, hpm_vec4_negatefv, hpmvec4f* arg){
 
 
 
-HPM_IMP( void, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+HPM_IMP( void, hpm_vec4_lerpfv, const hpmvec4f* a, const hpmvec4f* b, hpmvecf t, hpmvec4f* out){
 	const hpmvec4f time = { t, t, t, t };
 	*out = (*a + (*b - *a) * time);
 }
 
-HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, float t, hpmvec4f* out){
+HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, hpmvecf t, hpmvec4f* out){
 
-	float theta;
+	hpmvecf theta;
 	hpmvec4f relative;
 
 	/*	*/
