@@ -573,17 +573,19 @@ START_TEST (transformation) {
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &scaleExc), 1);
 
 	/*	UnProject assert.  */
-	const int viewport[4] = {0, 0, 400, 400};
-	const int mousex = 350, mousey = 350;
-	const hpmvec4f expUnProj = {10.0f, 10.0f, 0.0f, 0.0f};
+	const int viewport[4] = {0, 0, 800, 600};
+	const hpmvecf size = 10.0f;
+	const int mousex = 600, mousey = 450;
+	const hpmvec4f expUnProj = {size / 2.0f, size / 2.0f, 0.0f, 0.0f};
 	hpmvec3f pos;
 
-	const hpmvec4f unprojRes = {0.0f};
-	hpm_mat4x4_orthfv(m1, -10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);
+	/*  */
+	hpm_mat4x4_orthfv(m1, -size, size, -size, size, -size, size);
 	hpm_mat4x4_translationf(m2, 0.0f, 0.0f, 0.0f);
 	const hpmveci unprojSuccess = hpm_mat4x4_unprojf(mousex, mousey, 0, m1, m2, viewport, &pos);
-	ck_assert_int_eq(unprojSuccess, 1);
-	ck_assert_int_eq(hpm_vec4_eqfv(&pos, &expUnProj), 1);
+
+	ck_assert_msg(hpm_vec4_eqfv(&pos, &expUnProj) && unprojSuccess, "hpm_mat4x4_unprojf failed, expected : { %f, %f } actual : { %f, %f }",
+	              hpm_vec4_getxf(expUnProj), hpm_vec4_getyf(expUnProj), hpm_vec4_getxf(pos), hpm_vec4_getyf(pos));
 
 }
 END_TEST
