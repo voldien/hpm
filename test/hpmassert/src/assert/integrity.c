@@ -126,9 +126,14 @@ END_TEST
 
 START_TEST (vector4){
 
+	char vac1msg[128];      /*  Actual result.  */
+	char vex2msg[128];      /*  Expected result.   */
 	hpmvec4f v1;
 	hpmvec4f v2 = { 0.0f, 0.0f, 0.0f, 0.0f };
 	hpmvec4f v3 = { 1.0f, 1.0f, 1.0f, 1.0f };
+	const hpmvec3f up = {0.0f, 1.0f, 0.0f, 0.0f};
+	const hpmvec3f right = {1.0f, 0.0f, 0.0f, 0.0f};
+	const hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
 
 	/*  Vector set function.    */
 	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
@@ -151,6 +156,46 @@ START_TEST (vector4){
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthfv(&v3), 1.0f), 1);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_lengthsqurefv(&v3), 1.0f), 1);
 
+	/*  Dot product.    */
+	ck_assert_int_eq(hpm_vec4_dotfv(&right, &up) == hpm_vec4_dotfv(&right, &forward), 1);
+	ck_assert_int_eq(hpm_vec4_dotfv(&forward, &up) == hpm_vec4_dotfv(&right, &forward), 1);
+
+	/*  Check cross product.    */
+	hpm_vec3_crossproductfv(&forward, &right, &v1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &up), 1);
+
+	/*  Check cross product.    */
+	hpm_vec3_crossproductfv(&up, &forward, &v1);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &right), 1);
+
+	/*  Triple product (up  x forward) * forward.   */
+	const hpmvecf triple = hpm_vec3_tripleProductfv(&up, &forward, &forward);
+	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &right), 1);
+
+	/*  Reflect vector. */
+	const hpmvec3f ray = {1.0f, -1.0f, 0.0f, 0.0f};
+	const hpmvec3f refray = {1.0f, 1.0f, 0.0f, 0.0f};
+	hpm_vec3_reflectfv(&ray, &up, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &refray);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &refray), "hpm_vec3_reflectfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
+
+	/*  Refract vector. */
+	const hpmvecf waterIndex = 1.33f;
+	const hpmvec3f rayRefr = { cos(HPM_DEG2RAD(-45.0)), sin(HPM_DEG2RAD(-45.0f)), 0.0f, 0.0f };
+	const hpmvec3f refraction = { cos(HPM_DEG2RAD(32.1 - 90.0)), sin(HPM_DEG2RAD(32.1 - 90.0)), 0.0f, 0.0f};
+	hpm_vec3_refractfv(&rayRefr, &up, waterIndex, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &refraction);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &refraction), "hpm_vec3_refractfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
+
+	/*  Project vector. */
+	const hpmvec3f projected = {1.0f, 0.0f, 0.0f, 0.0f};
+	hpm_vec3_projfv(&ray, &right, &v1);
+	hpm_vec4_sprint(vac1msg, &v1);
+	hpm_vec4_sprint(vex2msg, &projected);
+	ck_assert_msg(hpm_vec4_eqfv(&v1, &projected), "hpm_vec3_projfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
+
 	/*	Check linear interpolation.	*/
 	hpm_vec4_setf(&v1, 1.0f, 1.0f, 1.0f, 1.0f);
 	hpm_vec4_setf(&v2, 5.0f, 5.0f, 5.0f, 5.0f);
@@ -162,10 +207,14 @@ START_TEST (vector4){
 			               hpm_vec_eqfv(v3[3], halfway), "linear interpolation failed");
 
 	/*	Check spherical interpolation.	*/
-	hpm_vec4_setf(&v1, 1, 1, 1, 1);
-	hpm_vec4_setf(&v1, 5, 5, 5, 5);
+	hpm_vec4_setf(&v1, 1.0f, 1.0f, 1.0f, 1.0f);
+	hpm_vec4_setf(&v2, -5.0f, -5.0f, -5.0f, -5.0f);
 	hpm_vec4_slerpfv(&v1, &v2, 0.5f, &v3);
-	ck_assert_msg( v3[0] == v3[1] == v3[2] == v3[4] == 1, "spherical interpolation failed");
+	const hpmvecf slerphalfway = -0.5f;
+	ck_assert_msg( hpm_vec_eqfv(v3[0], slerphalfway) &&
+	               hpm_vec_eqfv(v3[1], slerphalfway) &&
+	               hpm_vec_eqfv(v3[2], slerphalfway) &&
+	               hpm_vec_eqfv(v3[3], slerphalfway), "spherical interpolation failed");
 
 }
 END_TEST
@@ -173,8 +222,8 @@ END_TEST
 
 START_TEST (quaternion){
 
-	char q1msg[128];
-	char q2msg[128];
+	char qacmsg[128];
+	char qexmsg[128];
 	hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 	hpmquatf q1 = { 1.0f, 1.0f, 1.0f, 1.0f };
 	hpmquatf q2 = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -270,7 +319,6 @@ START_TEST (quaternion){
 	ck_assert_msg(fabsf(hpm_quat_pitchfv(&q3) - expAngle) < marginerror,  "Pitch failed : actual %.8f expected %.8f", hpm_quat_pitchfv(&q3), 0.0f);
 	ck_assert_msg(fabsf(hpm_quat_rollfv(&q3) - expAngle) < marginerror,  "Roll failed : actual %.8f expected %.8f", hpm_quat_rollfv(&q3), 0.0f);
 	ck_assert_msg(fabsf(hpm_quat_yawfv(&q3) - expAngle) < marginerror,  "Yaw failed : actual %.8f expected %.8f", hpm_quat_yawfv(&q3), 0.0f);
-	//ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q3), 1);
 
 	/*	Direction from identity rotation.	*/
 	hpmvec4f direction;
@@ -278,31 +326,52 @@ START_TEST (quaternion){
 	const hpmvec4f nexpdir = { 0.0f, 0.0f, -1.0f, 0.0f };
 	hpm_quat_identityfv(&q1);
 	hpm_quat_directionfv(&q1, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &expdir);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &expdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", qexmsg, qacmsg);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
 	/*	Check direction.	*/
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
 	hpm_quat_identityfv(&q1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
-	
+
+	/*	Check direction.	*/
+	hpm_quat_inversefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
+
+	/*	Check direction rotated 0 degrees around yaw.	*/
+	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)0.0f, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &expdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", qexmsg, qacmsg);
+
+	/*	Check direction rotated 45 degrees around pitch.	*/
+	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 4.0f, 0.0f, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &up);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", qexmsg, qacmsg);
+
 	/*	Check direction rotated 180 degrees around yaw.	*/
+	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &nexpdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", qexmsg, qacmsg);
+
+	/*	Check direction rotated 90 degrees around pitch.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 2.0f, 0.0f, 0.0f);
 	hpm_quat_normalizefv(&q1);
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &up);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", q2msg, q1msg);
-
-	/*	Check direction rotated 180 degrees around yaw.	*/
-	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI / 3.0f, 1.0f);
-	hpm_quat_normalizefv(&q1);
-	hpm_quat_get_vectorfv(&q1, &forward, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &nexpdir);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &up);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 
 	/*	Axis rotation.	*/
@@ -317,9 +386,9 @@ START_TEST (quaternion){
 	const hpmvec3f pos = {0.0f, -1.0f, 0.0f, 0.0f};
 	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI, 0.0f, 0.0f);
 	hpm_quat_lookatfv(&pos, &up, &q2);
-	hpm_quat_sprint(q1msg, &q1);
-	hpm_quat_sprint(q2msg, &q2);
-	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_quat_sprint(qacmsg, &q1);
+	hpm_quat_sprint(qexmsg, &q2);
+	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 	/*	Linear interpolation.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)0, 0, 0);
@@ -333,6 +402,10 @@ START_TEST (quaternion){
 	hpm_quat_axisf(&q1, (hpmvecf)0, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 6.0f);
 	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 1.0f);
 	hpm_quat_slerpfv(&q1, &q2, 0.5f, &q3);
+
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_pitchfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), HPM_PI / 2.0f);
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_yawfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), HPM_PI / 2.0f);
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_rollfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), HPM_PI / 2.0f);
 }
 END_TEST
 
@@ -430,6 +503,7 @@ START_TEST (transformation) {
 	hpmvec4x4f_t m2;
 	hpmvec4x4f_t m3;
 
+	/*  Initialize matrices.    */
 	hpm_mat4x4_identityfv(m1);
 	hpm_mat4x4_identityfv(m2);
 	hpm_mat4x4_identityfv(m3);
@@ -480,7 +554,7 @@ START_TEST (transformation) {
 	hpm_mat4x4_rotationfv(m1, HPM_PI_4, &v1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v1, &rotExcp), 1);
 
-	/*	Translation.    */
+	/*	Translation assert.    */
 	const hpmvec4f tranExc = {10.0f, -10.0f, 5.0f, 1.0f};
 	hpm_vec4_setf(&v1, 10.0f, -10.0f, 5.0f, 0.0f);
 	hpm_mat4x4_identityfv(m1);
@@ -489,7 +563,7 @@ START_TEST (transformation) {
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &tranExc), 1);
 
-	/*  Scalar. */
+	/*  Scalar assert. */
 	const hpmvec4f scaleExc = {2.0, 2.0f, 2.0f, 0.0f};
 	hpm_vec4_setf(&v1, 2.0f, 2.0f, 2.0f, 0.0f);
 	hpm_mat4x4_identityfv(m1);
@@ -498,18 +572,20 @@ START_TEST (transformation) {
 	hpm_mat4x4_multiply_mat1x4fv(m1, &v1, &v2);
 	ck_assert_int_eq(hpm_vec4_eqfv(&v2, &scaleExc), 1);
 
-	/*	UnProject.  */
-	const int viewport[4] = {0, 0, 400, 400};
-	const int mousex = 350, mousey = 350;
-	const hpmvec4f expUnProj = {10.0f, 10.0f, 0.0f, 0.0f};
+	/*	UnProject assert.  */
+	const int viewport[4] = {0, 0, 800, 600};
+	const hpmvecf size = 10.0f;
+	const int mousex = 600, mousey = 450;
+	const hpmvec4f expUnProj = {size / 2.0f, size / 2.0f, 0.0f, 0.0f};
 	hpmvec3f pos;
 
-	const hpmvec4f unprojRes = {0.0f};
-	hpm_mat4x4_orthfv(m1, -10.0f, 10.0f, -10.0f, 10.0f, -10.0f, 10.0f);
+	/*  */
+	hpm_mat4x4_orthfv(m1, -size, size, -size, size, -size, size);
 	hpm_mat4x4_translationf(m2, 0.0f, 0.0f, 0.0f);
 	const hpmveci unprojSuccess = hpm_mat4x4_unprojf(mousex, mousey, 0, m1, m2, viewport, &pos);
-	ck_assert_int_eq(unprojSuccess, 1);
-	ck_assert_int_eq(hpm_vec4_eqfv(&pos, &expUnProj), 1);
+
+	ck_assert_msg(hpm_vec4_eqfv(&pos, &expUnProj) && unprojSuccess, "hpm_mat4x4_unprojf failed, expected : { %f, %f } actual : { %f, %f }",
+	              hpm_vec4_getxf(expUnProj), hpm_vec4_getyf(expUnProj), hpm_vec4_getxf(pos), hpm_vec4_getyf(pos));
 
 }
 END_TEST
@@ -594,7 +670,7 @@ Suite* htpCreateSuite(void){
 	tcase_add_test(testMat4Case, matrix4x4);        /*  Testing all matrix functions.   */
 	tcase_add_test(testTransCase, transformation);  /*  Testing all transformation functions. */
 	tcase_add_test(testMathCase, math);             /*  Testing all math functions. */
-	tcase_add_test(testUtilCase, utility);          /*  Testing all math functions. */
+	tcase_add_test(testUtilCase, utility);          /*  Testing all utilities functions. */
 
 	/*	Add test cases to test suite.	*/
 	suite_add_tcase(suite, testEquCase);
@@ -612,7 +688,6 @@ void htpIntegritySpCheckf(void) {
 
 
 	int number_failed;
-	int i;
 	Suite *s;
 	SRunner *sr;
 

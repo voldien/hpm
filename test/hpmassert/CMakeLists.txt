@@ -30,7 +30,7 @@ INCLUDE_DIRECTORIES(${CMAKE_SOURCE_DIR}/../../include)
 # Include header directory for this program.
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
-# Source files for the gl bunny program.
+# Source files for the hpmassert program.
 FILE(GLOB assertsrc	${CMAKE_CURRENT_SOURCE_DIR}/src/*.c
 			${CMAKE_CURRENT_SOURCE_DIR}/src/assert/*.c)
 
