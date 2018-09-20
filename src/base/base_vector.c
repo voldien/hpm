@@ -52,7 +52,7 @@ HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg){
 }
 
 HPM_IMP(void, hpm_vec4_normalizefv, hpmvec4f* arg){
-	hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )( arg );
+	const hpmvecf l = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )( arg );
 	*arg *= l;
 }
 
@@ -198,12 +198,14 @@ HPM_IMP( void, hpm_vec3_normalizefv, hpmvec3f* arg){
 HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* out){
 	hpmvec3f tmp1 = *a;
 	hpmvec3f tmp2 = *b;
-	tmp1[3] = 0;
-	tmp2[3] = 0;
 
-	/*	*/
-	hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp1);
-	hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp2);
+	/*  Zero last element.  */
+	hpm_vec4_setwf(tmp1, 0.0f);
+	hpm_vec4_setwf(tmp2, 0.0f);
+
+	/*	Compute dot products.   */
+	const hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp1);
+	const hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmp1, &tmp2);
 
 	*out = *b * s1 * dotinv;
 }
