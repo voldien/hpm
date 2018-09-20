@@ -218,8 +218,8 @@ END_TEST
 
 START_TEST (quaternion){
 
-	char q1msg[128];
-	char q2msg[128];
+	char qacmsg[128];
+	char qexmsg[128];
 	hpmvec4f v1 = { 1.0f, 2.0f, 3.0f, 4.0f };
 	hpmquatf q1 = { 1.0f, 1.0f, 1.0f, 1.0f };
 	hpmquatf q2 = { 1.0f, 1.0f, 1.0f, 1.0f };
@@ -323,9 +323,9 @@ START_TEST (quaternion){
 	const hpmvec4f nexpdir = { 0.0f, 0.0f, -1.0f, 0.0f };
 	hpm_quat_identityfv(&q1);
 	hpm_quat_directionfv(&q1, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &expdir);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &expdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", qexmsg, qacmsg);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
 	/*	Check direction.	*/
@@ -337,17 +337,17 @@ START_TEST (quaternion){
 	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI, 0.0f);
 	hpm_quat_normalizefv(&q1);
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &nexpdir);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &nexpdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &nexpdir), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 	/*	Check direction rotated 90 degrees around pitch.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 2.0f, 0.0f, 0.0f);
 	hpm_quat_normalizefv(&q1);
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
-	hpm_vec4_sprint(q1msg, &direction);
-	hpm_vec4_sprint(q2msg, &up);
-	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &up);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 
 	/*	Axis rotation.	*/
@@ -362,9 +362,9 @@ START_TEST (quaternion){
 	const hpmvec3f pos = {0.0f, -1.0f, 0.0f, 0.0f};
 	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI, 0.0f, 0.0f);
 	hpm_quat_lookatfv(&pos, &up, &q2);
-	hpm_quat_sprint(q1msg, &q1);
-	hpm_quat_sprint(q2msg, &q2);
-	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", q2msg, q1msg);
+	hpm_quat_sprint(qacmsg, &q1);
+	hpm_quat_sprint(qexmsg, &q2);
+	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 	/*	Linear interpolation.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)0, 0, 0);
