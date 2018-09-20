@@ -319,7 +319,6 @@ START_TEST (quaternion){
 	ck_assert_msg(fabsf(hpm_quat_pitchfv(&q3) - expAngle) < marginerror,  "Pitch failed : actual %.8f expected %.8f", hpm_quat_pitchfv(&q3), 0.0f);
 	ck_assert_msg(fabsf(hpm_quat_rollfv(&q3) - expAngle) < marginerror,  "Roll failed : actual %.8f expected %.8f", hpm_quat_rollfv(&q3), 0.0f);
 	ck_assert_msg(fabsf(hpm_quat_yawfv(&q3) - expAngle) < marginerror,  "Yaw failed : actual %.8f expected %.8f", hpm_quat_yawfv(&q3), 0.0f);
-	//ck_assert_int_eq(hpm_vec4_eqfv(&q1, &q3), 1);
 
 	/*	Direction from identity rotation.	*/
 	hpmvec4f direction;
