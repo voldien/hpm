@@ -336,6 +336,27 @@ START_TEST (quaternion){
 	hpm_quat_identityfv(&q1);
 	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
 
+	/*	Check direction.	*/
+	hpm_quat_inversefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	ck_assert_int_eq(hpm_vec4_eqfv(&direction, &expdir), 1);
+
+	/*	Check direction rotated 0 degrees around yaw.	*/
+	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)0.0f, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &expdir);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &expdir), "expected: %s, actual: %s", qexmsg, qacmsg);
+
+	/*	Check direction rotated 45 degrees around pitch.	*/
+	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 4.0f, 0.0f, 0.0f);
+	hpm_quat_normalizefv(&q1);
+	hpm_quat_get_vectorfv(&q1, &forward, &direction);
+	hpm_vec4_sprint(qacmsg, &direction);
+	hpm_vec4_sprint(qexmsg, &up);
+	ck_assert_msg(hpm_vec4_eqfv(&direction, &up), "expected: %s, actual: %s", qexmsg, qacmsg);
+
 	/*	Check direction rotated 180 degrees around yaw.	*/
 	hpm_quat_axisf(&q1, 0.0f, (hpmvecf)HPM_PI, 0.0f);
 	hpm_quat_normalizefv(&q1);
@@ -381,6 +402,10 @@ START_TEST (quaternion){
 	hpm_quat_axisf(&q1, (hpmvecf)0, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 6.0f);
 	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 1.0f);
 	hpm_quat_slerpfv(&q1, &q2, 0.5f, &q3);
+
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_pitchfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), HPM_PI / 2.0f);
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_yawfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), HPM_PI / 2.0f);
+	ck_assert_msg(hpm_vec_eqfv(hpm_quat_rollfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), HPM_PI / 2.0f);
 }
 END_TEST
 
