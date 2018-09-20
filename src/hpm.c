@@ -187,6 +187,7 @@ int hpm_init(unsigned int simd){
 	hpm_vec3_normalizefv = hpm_get_symbolfuncp(hpm_vec3_normalizefv);
 	hpm_vec3_reflectfv = hpm_get_symbolfuncp(hpm_vec3_reflectfv);
 	hpm_vec3_refractfv = hpm_get_symbolfuncp(hpm_vec3_refractfv);
+	hpm_vec3_refract2fv = hpm_get_symbolfuncp(hpm_vec3_refract2fv);
 	hpm_vec3_projfv = hpm_get_symbolfuncp(hpm_vec3_projfv);
 
 	/*	Quaternion	*/
