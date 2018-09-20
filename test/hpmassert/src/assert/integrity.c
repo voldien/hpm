@@ -207,10 +207,14 @@ START_TEST (vector4){
 			               hpm_vec_eqfv(v3[3], halfway), "linear interpolation failed");
 
 	/*	Check spherical interpolation.	*/
-	hpm_vec4_setf(&v1, 1, 1, 1, 1);
-	hpm_vec4_setf(&v1, 5, 5, 5, 5);
+	hpm_vec4_setf(&v1, 1.0f, 1.0f, 1.0f, 1.0f);
+	hpm_vec4_setf(&v2, -5.0f, -5.0f, -5.0f, -5.0f);
 	hpm_vec4_slerpfv(&v1, &v2, 0.5f, &v3);
-	ck_assert_msg( v3[0] == v3[1] == v3[2] == v3[4] == 1, "spherical interpolation failed");
+	const hpmvecf slerphalfway = -0.5f;
+	ck_assert_msg( hpm_vec_eqfv(v3[0], slerphalfway) &&
+	               hpm_vec_eqfv(v3[1], slerphalfway) &&
+	               hpm_vec_eqfv(v3[2], slerphalfway) &&
+	               hpm_vec_eqfv(v3[3], slerphalfway), "spherical interpolation failed");
 
 }
 END_TEST
