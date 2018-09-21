@@ -2,7 +2,7 @@
 #include<arm_neon.h>
 
 
-HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4fp_t* __restrict__ destination, const hpmvec4x4fp_t* __restrict__ source){
+HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4fp_t* HPM_RESTRICT destination, const hpmvec4x4fp_t* HPM_RESTRICT source){
 	destination[0] = (hpmv4sf)source[0];
 	destination[1] = (hpmv4sf)source[1];
 	destination[2] = (hpmv4sf)source[2];
@@ -36,17 +36,15 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 
 
 HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
-	_MM_TRANSPOSE4_PS(mat[0], mat[1], mat[2], mat[3]);
-}
-
-
-HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
 
 }
 
 
+HPM_IMP( hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t arg){
+
+}
 
 /*	Cramer's rule	*/
-HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){
+HPM_IMP( hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t src, hpmvec4x4f_t out){
 
 }
