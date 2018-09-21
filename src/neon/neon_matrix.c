@@ -36,7 +36,8 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 
 
 HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
-
+	vtrn2q_f32(mat[0], mat[1]);
+	vtrn2q_f32(mat[2], mat[3]);
 }
 
 
