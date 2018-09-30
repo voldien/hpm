@@ -129,17 +129,21 @@ void htpResultModel(unsigned int numBench,
 	memset(*models, 0, resultEntireSize);
 	assert(*models);
 
+	/*  Number of functions benchmarked.    */
+	const unsigned int nFunctions = raw[0].num;
+
 	/*  Iterate through each function.*/
-	for (y = 0; y < raw[0].num; y++) {
+	for (y = 0; y < nFunctions; y++) {
 
 		long int baseline = INT32_MAX;
 
-		/*  Compute baseline from SIMD column.   */
+		/*  Compute baseline from function row.   */
 		for (x = 0; x < numBench; x++) {
 			FunctionRaw *result = raw[x].results;
-			/*  Compute min baseline.    */
-			if (result[x].nanosec < baseline)
-				baseline = result[x].nanosec;
+
+			/*  Compute min baseline for each function per SIMD.    */
+			if (result[y].nanosec < baseline)
+				baseline = result[y].nanosec;
 		}
 
 		/*  Iterate through each result and compute performance percentages.    */
@@ -147,9 +151,9 @@ void htpResultModel(unsigned int numBench,
 			const FunctionRaw *result = &raw[x].results[y];
 
 			/*  Compute percentage gain.*/
-			const float perc = (float) ((double) baseline / (double) result->nanosec);
+			const float perc = (float) ((double) result->nanosec / (double) baseline);
 
-			/*  */
+			/*  Store percentage.   */
 			(*models)[y * numBench + x].percentage = perc;
 		}
 	}
