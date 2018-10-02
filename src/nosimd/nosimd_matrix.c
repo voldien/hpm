@@ -120,9 +120,16 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 }
 
 HPM_IMP( void, hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
+
+	/*  */
 	HPM_SWAPF32(mat[0][1], mat[1][0]);
 	HPM_SWAPF32(mat[0][2], mat[2][0]);
 	HPM_SWAPF32(mat[0][3], mat[3][0]);
-	HPM_SWAPF32(mat[0][1], mat[1][0]);
-	HPM_SWAPF32(mat[0][1], mat[1][0]);
+
+	/*  */
+	HPM_SWAPF32(mat[1][2], mat[2][1]);
+	HPM_SWAPF32(mat[1][3], mat[3][1]);
+
+	/*  */
+	HPM_SWAPF32(mat[2][3], mat[3][2]);
 }
