@@ -30,6 +30,7 @@ extern unsigned int g_SIMD;
 extern unsigned int g_type;
 extern unsigned int g_precision;
 extern unsigned int g_format;
+extern unsigned int g_result_model;
 extern const unsigned int g_it;
 extern long int g_time_res;
 
@@ -156,6 +157,11 @@ enum PrecisionType{
 	eAllPrecision   = (eFloat | eDouble)      /*	Perform all precision types.	*/
 };
 
+enum ResultModel{
+	ePercentage     = 0x1,
+	eElapseTime     = 0x2,
+};
+
 /**
  *
  */
@@ -191,6 +197,7 @@ extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult
 extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
 extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results);
-extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results, SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);
+extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results,
+		SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);  /*  Benchmark result model.   */
 
 #endif

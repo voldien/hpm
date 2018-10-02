@@ -41,9 +41,12 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	/*  Compute the performance differences.    */
 	htpResultModel(numResults, results, &timeResults, &maxFuncEntries);
 
-	/*  Compute max function name length.    */
+
+	const unsigned int numFuncs = results[0].num;
 	const FunctionRaw *result = results[0].results;
-	for (i = 0; i < results[0].num; i++) {
+
+	/*  Compute max function name length.    */
+	for (i = 0; i < numFuncs; i++) {
 		const size_t len = strlen(result[i].name);
 		if (len > maxFuncNameLen)
 			maxFuncNameLen = len;
@@ -64,7 +67,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	for (i = 0; i < numResults; i++) {
 		int length;
 
-		length = printf(" %5s - %c |",  hpm_get_simd_symbol(results[i].simd), result[i].type == eFloat ? 'f' : 'd');
+		length = printf(" %5s - %c |",  hpm_get_simd_symbol(results[i].simd), (results[i].type == eFloat) ? 'f' : 'd');
 
 		if(length > maxNameLength)
 			maxNameLength = length;
@@ -123,34 +126,51 @@ void htpResultModel(unsigned int numBench,
 			maxEntries = raw[x].num;
 	}
 
+	assert(maxEntries > 0);
+
 	/*  Allocate percentage results.   */
 	const size_t resultEntireSize = sizeof(SIMDTimeResult) * maxEntries * numBench;
 	*models = (SIMDTimeResult *) malloc(resultEntireSize);
 	memset(*models, 0, resultEntireSize);
 	assert(*models);
 
+	/*  Number of functions benchmarked.    */
+	const unsigned int nFunctions = (unsigned int)maxEntries;
+
 	/*  Iterate through each function.*/
-	for (y = 0; y < raw[0].num; y++) {
+	for (y = 0; y < nFunctions; y++) {
 
 		long int baseline = INT32_MAX;
 
-		/*  Compute baseline from SIMD column.   */
+		/*  Compute baseline from function row.   */
 		for (x = 0; x < numBench; x++) {
-			FunctionRaw *result = raw[x].results;
-			/*  Compute min baseline.    */
-			if (result[x].nanosec < baseline)
-				baseline = result[x].nanosec;
+			const FunctionRaw *result = raw[x].results;
+
+			/*  Compute min baseline for each function per SIMD.    */
+			if (result[y].nanosec < baseline)
+				baseline = result[y].nanosec;
 		}
 
 		/*  Iterate through each result and compute performance percentages.    */
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = &raw[x].results[y];
 
-			/*  Compute percentage gain.*/
-			const float perc = (float) ((double) baseline / (double) result->nanosec);
+			float modelResult;
 
-			/*  */
-			(*models)[y * numBench + x].percentage = perc;
+			/*  Compute result of specified model.  */
+			switch (g_result_model) {
+				case ePercentage:
+					modelResult = (float) ((double) result->nanosec / (double) baseline);
+					break;
+				case eElapseTime:
+					modelResult = (float) ((double) result->nanosec / (double) hptGetTimeResolution());
+					break;
+				default:
+					assert(0);
+			}
+
+			/*  Store percentage.   */
+			(*models)[y * numBench + x].percentage = modelResult;
 		}
 	}
 
