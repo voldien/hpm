@@ -12,6 +12,7 @@ unsigned int g_SIMD = (unsigned int) (-1);
 int unsigned g_type = eAll;
 int unsigned g_precision = eFloat;
 int unsigned g_format = 0;
+unsigned int g_result_model = ePercentage;
 const unsigned int g_it = (unsigned int) 1E7L;
 long int g_time_res = 0;
 
@@ -34,11 +35,13 @@ int main(int argc, char **argv) {
 		uint32_t simd = (uint32_t) (1 << i);
 		/*	Check if SIMD is specified and supported.	*/
 		if ((g_SIMD & simd) && hpm_support_cpu_feat(simd)) {
+
 			/*  Initialize the benchmark.   */
 			benchmarkResults[j].simd = simd;
 			benchmarkResults[j].num = 0;
 			benchmarkResults[j].type = eFloat;
 
+			/*  Run performance benchmark.  */
 			htpSimdExecute(benchmarkResults[j].simd, &benchmarkResults[j]);
 			j++;
 		}
