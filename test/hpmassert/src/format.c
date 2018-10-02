@@ -41,9 +41,12 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	/*  Compute the performance differences.    */
 	htpResultModel(numResults, results, &timeResults, &maxFuncEntries);
 
-	/*  Compute max function name length.    */
+
+	const unsigned int numFuncs = results[0].num;
 	const FunctionRaw *result = results[0].results;
-	for (i = 0; i < results[0].num; i++) {
+
+	/*  Compute max function name length.    */
+	for (i = 0; i < numFuncs; i++) {
 		const size_t len = strlen(result[i].name);
 		if (len > maxFuncNameLen)
 			maxFuncNameLen = len;
@@ -123,6 +126,8 @@ void htpResultModel(unsigned int numBench,
 			maxEntries = raw[x].num;
 	}
 
+	assert(maxEntries > 0);
+
 	/*  Allocate percentage results.   */
 	const size_t resultEntireSize = sizeof(SIMDTimeResult) * maxEntries * numBench;
 	*models = (SIMDTimeResult *) malloc(resultEntireSize);
@@ -130,7 +135,7 @@ void htpResultModel(unsigned int numBench,
 	assert(*models);
 
 	/*  Number of functions benchmarked.    */
-	const unsigned int nFunctions = raw[0].num;
+	const unsigned int nFunctions = (unsigned int)maxEntries;
 
 	/*  Iterate through each function.*/
 	for (y = 0; y < nFunctions; y++) {
@@ -139,7 +144,7 @@ void htpResultModel(unsigned int numBench,
 
 		/*  Compute baseline from function row.   */
 		for (x = 0; x < numBench; x++) {
-			FunctionRaw *result = raw[x].results;
+			const FunctionRaw *result = raw[x].results;
 
 			/*  Compute min baseline for each function per SIMD.    */
 			if (result[y].nanosec < baseline)
