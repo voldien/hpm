@@ -197,6 +197,7 @@ extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult
 extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
 extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results);
-extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results, SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);
+extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results,
+		SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);  /*  Benchmark result model.   */
 
 #endif
