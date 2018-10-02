@@ -64,7 +64,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	for (i = 0; i < numResults; i++) {
 		int length;
 
-		length = printf(" %5s - %c |",  hpm_get_simd_symbol(results[i].simd), result[i].type == eFloat ? 'f' : 'd');
+		length = printf(" %5s - %c |",  hpm_get_simd_symbol(results[i].simd), (results[i].type == eFloat) ? 'f' : 'd');
 
 		if(length > maxNameLength)
 			maxNameLength = length;
