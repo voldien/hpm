@@ -155,11 +155,22 @@ void htpResultModel(unsigned int numBench,
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = &raw[x].results[y];
 
-			/*  Compute percentage gain.*/
-			const float perc = (float) ((double) result->nanosec / (double) baseline);
+			float modelResult;
+
+			/*  Compute result of specified model.  */
+			switch (g_result_model) {
+				case ePercentage:
+					modelResult = (float) ((double) result->nanosec / (double) baseline);
+					break;
+				case eElapseTime:
+					modelResult = (float) ((double) result->nanosec / (double) hptGetTimeResolution());
+					break;
+				default:
+					assert(0);
+			}
 
 			/*  Store percentage.   */
-			(*models)[y * numBench + x].percentage = perc;
+			(*models)[y * numBench + x].percentage = modelResult;
 		}
 	}
 

@@ -30,6 +30,7 @@ extern unsigned int g_SIMD;
 extern unsigned int g_type;
 extern unsigned int g_precision;
 extern unsigned int g_format;
+extern unsigned int g_result_model;
 extern const unsigned int g_it;
 extern long int g_time_res;
 
@@ -154,6 +155,11 @@ enum PrecisionType{
 	eFloat          = 0x1,                    /*	Single precision floating points.	*/
 	eDouble         = 0x2,                    /*	Double precision floating points.	*/
 	eAllPrecision   = (eFloat | eDouble)      /*	Perform all precision types.	*/
+};
+
+enum ResultModel{
+	ePercentage     = 0x1,
+	eElapseTime     = 0x2,
 };
 
 /**
