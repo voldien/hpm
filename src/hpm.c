@@ -312,8 +312,8 @@ const char* hpm_version(void) {
 }
 
 /*	TODO resolve for non x86 and non x86_64 CPUS*/
-#include<cpuid.h>
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
+	#include<cpuid.h>
 	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
 #else
 	#define cpuid(regs, i)
@@ -325,6 +325,7 @@ int hpm_support_cpu_feat(unsigned int simd) {
     switch (simd) {
         case HPM_NOSIMD:
             return 1;    /*	Always supported.	*/
+#if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
         case HPM_MMX:
             cpuid(cpuInfo, 1);
             return 0;    /*	Not supported in the library.	*/
@@ -361,15 +362,16 @@ int hpm_support_cpu_feat(unsigned int simd) {
 #else
             return 0;
 #endif
+	    case HPM_FMA:
+		    cpuid(cpuInfo, 7);
+		    return (cpuInfo[3] & bit_FMA4);
+#endif
         case HPM_NEON:
 #if defined(HPM_ARM_NEON)
             return 1;
 #else
             return 0;
 #endif
-        case HPM_FMA:
-            cpuid(cpuInfo, 7);
-            return (cpuInfo[3] & bit_FMA4);
         default:
             return 0;
     }
