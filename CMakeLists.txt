@@ -88,6 +88,7 @@ FILE (GLOB basecore 	${CMAKE_CURRENT_SOURCE_DIR}/src/base/*
 FILE (GLOB nosimdsource ${CMAKE_CURRENT_SOURCE_DIR}/src/nosimd/* )
 FILE (GLOB all_sse_source ${CMAKE_CURRENT_SOURCE_DIR}/src/sse/*)
 FILE (GLOB avx_source ${CMAKE_CURRENT_SOURCE_DIR}/src/avx/*)
+FILE (GLOB neon_source ${CMAKE_CURRENT_SOURCE_DIR}/src/neon/*)
 #FILE (GLOB avx512_source src/avx512/*)
 
 INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -154,7 +155,7 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 
 ELSE()
 	# Target for Neon 
-	ADD_LIBRARY(hpmneon ${basecore}) #	Will resolve the neon specific implementation later. 
+	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the neon specific implementation later. 
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 
 ENDIF()
 
