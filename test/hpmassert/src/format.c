@@ -19,7 +19,7 @@ static void drawSep(const unsigned int size){
 	fwrite("\n", 1, 1, stdout);
 }
 
-void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
+void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmarkResults){
 
 	int i, j;
 	int x;
@@ -39,11 +39,11 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	}
 
 	/*  Compute the performance differences.    */
-	htpResultModel(numResults, results, &timeResults, &maxFuncEntries);
+	htpResultModel(numResults, benchmarkResults, &timeResults, &maxFuncEntries);
 
 
-	const unsigned int numFuncs = results[0].num;
-	const FunctionRaw *result = results[0].results;
+	const unsigned int numFuncs = benchmarkResults[0].num;
+	const FunctionRaw *result = benchmarkResults[0].results;
 
 	/*  Compute max function name length.    */
 	for (i = 0; i < numFuncs; i++) {
@@ -67,7 +67,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	for (i = 0; i < numResults; i++) {
 		int length;
 
-		length = printf(" %5s - %c |",  hpm_get_simd_symbol(results[i].simd), (results[i].type == eFloat) ? 'f' : 'd');
+		length = printf(" %5s - %c |",  hpm_get_simd_symbol(benchmarkResults[i].simd), (benchmarkResults[i].type == eFloat) ? 'f' : 'd');
 
 		if(length > maxNameLength)
 			maxNameLength = length;
@@ -81,7 +81,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results){
 	/*	Iterate through each SIMD - Row.    */
 	for (j = 0; j < maxFuncEntries; j++) {
 		lineCount = 0;
-		const SIMDBenchmarksRaw *benchmark = results;
+		const SIMDBenchmarksRaw *benchmark = benchmarkResults;
 
 		/*  Display function name.  */
 		const FunctionRaw *funcResult = &benchmark->results[j];

@@ -180,15 +180,17 @@ START_TEST (vector4){
 	hpm_vec4_sprint(vex2msg, &refray);
 	ck_assert_msg(hpm_vec4_eqfv(&v1, &refray), "hpm_vec3_reflectfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
 
-	/*  Refract vector. */
+	/*  Refraction vector. */
 	const hpmvecf waterIndex = 1.33f;
 	const hpmvec3f rayRefr = { cos(HPM_DEG2RAD(-45.0)), sin(HPM_DEG2RAD(-45.0f)), 0.0f, 0.0f };
 	const hpmvec3f refraction = { cos(HPM_DEG2RAD(32.1 - 90.0)), sin(HPM_DEG2RAD(32.1 - 90.0)), 0.0f, 0.0f};
 	hpm_vec3_refractfv(&rayRefr, &up, waterIndex, &v1);
 	hpm_vec4_sprint(vac1msg, &v1);
 	hpm_vec4_sprint(vex2msg, &refraction);
-	ck_assert_msg(hpm_vec4_eqfv(&v1, &refraction), "hpm_vec3_refractfv failed, expected: %s, actual: %s", vex2msg, vac1msg);
-
+	ck_assert_msg(fabs(hpm_vec4_lengthfv(&v1) - hpm_vec4_lengthfv(&refraction)) < 0.001f, "hpm_vec3_refractfv failed, vector length does not match. expected: %s, actual: %s", vex2msg, vac1msg);
+	const hpmvecf cosTheta = (hpmvecf)fabs(hpm_vec4_dotfv(&v1, &refraction));
+	ck_assert_msg(cosTheta < 1.001f && cosTheta > 0.998f, "hpm_vec3_refractfv failed, vector angle does not match: expected: %s, actual: %s", vex2msg, vac1msg);
+	
 	/*  Project vector. */
 	const hpmvec3f projected = {1.0f, 0.0f, 0.0f, 0.0f};
 	hpm_vec3_projfv(&ray, &right, &v1);
