@@ -417,43 +417,43 @@ const char* hpm_get_simd_symbol(unsigned int SIMD) {
 }
 
 int hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec4_sprint(char* text, const hpmvec4f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec3_print(const hpmvec3f* vec) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec3_sprint(char* HPM_RESTRICT text, const hpmvec3f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_quat_print(const hpmquatf* quat) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
 int hpm_quat_sprint(char* HPM_RESTRICT text, const hpmquatf* HPM_RESTRICT quat){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
 int hpm_mat4x4_print(const hpmvec4x4f_t mat){
 	return printf(
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n",
 		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
 		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
 		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
@@ -462,10 +462,10 @@ int hpm_mat4x4_print(const hpmvec4x4f_t mat){
 
 int hpm_mat4x4_sprint(char* HPM_RESTRICT text, const hpmvec4x4f_t mat){
     return sprintf(text,
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n",
 		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
 		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
 		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
