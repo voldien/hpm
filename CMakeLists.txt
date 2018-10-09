@@ -93,11 +93,12 @@ INCLUDE_DIRECTORIES(${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 # Target with no simd extensions requirements.
 ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
-SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm -DHPM_INTERNAL_IMP=1 -DHPM_SIMD_PREFIX=nosimd" )
+SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1 -DHPM_SIMD_PREFIX=nosimd" )
 TARGET_LINK_LIBRARIES(hpmnosimd -lm)
 
 # X86 and amd64 CPU architecture.
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+	SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "-mno-abm" )
 
 	# Will added later once AVX512 is more accessible.
 	#ADD_LIBRARY(${avx512_source} ${basecore} )
