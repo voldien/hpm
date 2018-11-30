@@ -106,7 +106,7 @@ HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, hpmvecf t
 
 
 HPM_IMP( void, hpm_vec3_reflectfv, const hpmvec3f* incidentVec, const hpmvec3f* normal, hpmvec3f* out){
-	
+
 	const hpmvecf dot = HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(incidentVec, normal);
 
 	const hpmvec3f row0 = { 2.0f, 2.0f, 2.0f, 0.0f };
@@ -132,11 +132,10 @@ HPM_IMP( void, hpm_vec3_refractfv, const hpmvec3f* incidentVec, const hpmvec3f* 
 	const hpmvecf k = index * index * (1.0f - N_dot_I * N_dot_I);
 
 	/*  */
-	if (k < 0.0f){
-		const hpmvec3f zero = { 0.0f, 0.0f, 0.0f, 0.0f };
+	if (k < 0.0f) {
+		const hpmvec3f zero = {0.0f, 0.0f, 0.0f, 0.0f};
 		*out = zero;
-	}
-	else{
+	} else {
 		/*  */
 		const hpmvecf cosT = sqrtf(1.0f - k);
 
@@ -155,11 +154,10 @@ HPM_IMP(void, hpm_vec3_refract2fv, const hpmvec3f* incidentVec,
 
 	const hpmvecf k = index * index * (1.0f - N_dot_I * N_dot_I);
 
-	if (k < 0.0f){
-		const hpmvec3f zero = { 0.0f, 0.0f, 0.0f, 0.0f };
+	if (k < 0.0f) {
+		const hpmvec3f zero = {0.0f, 0.0f, 0.0f, 0.0f};
 		*out = zero;
-	}
-	else{
+	} else {
 		const hpmvecf cosT = sqrtf(1.0f - k);
 
 		*out = index * *incidentVec + (index * N_dot_I - cosT) * *normal;
@@ -172,33 +170,34 @@ HPM_IMP( hpmvecf, hpm_vec3_tripleProductfv, const hpmvec3f* v1, const hpmvec3f* 
 	return HPM_CALLLOCALFUNC(hpm_vec3_dotfv)(v3, &tmp);
 }
 
-HPM_IMP( hpmvecf, hpm_vec3_dotfv, const hpmvec3f* larg, const hpmvec3f* rarg){
+HPM_IMP(hpmvecf, hpm_vec3_dotfv, const hpmvec3f* larg,
+           const hpmvec3f* rarg) {
 	hpmvec3f tmp1 = *larg;
 	hpmvec3f tmp2 = *rarg;
 
 	hpm_vec4_setwf(tmp1, 0.0f);
 	hpm_vec4_setwf(tmp2, 0.0f);
-	return HPM_CALLLOCALFUNC( hpm_vec4_dotfv)(&tmp1, &tmp2);
+	return HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmp1, &tmp2);
 }
 
 HPM_IMP( hpmvecf, hpm_vec3_lengthfv, const hpmvec3f* arg){
 	hpmvec3f tmp = *arg;
 
 	hpm_vec4_setwf(tmp, 0.0f);
-	return HPM_CALLLOCALFUNC( hpm_vec4_lengthfv )(&tmp);
+	return HPM_CALLLOCALFUNC(hpm_vec4_lengthfv)(&tmp);
 }
 
 HPM_IMP( hpmvecf, hpm_vec3_lengthsquarefv, const hpmvec3f* arg){
 	hpmvec3f tmp = *arg;
 
 	hpm_vec4_setwf(tmp, 0.0f);
-	return HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(&tmp);
+	return HPM_CALLLOCALFUNC(hpm_vec4_lengthsqurefv)(&tmp);
 }
 
 HPM_IMP( void, hpm_vec3_normalizefv, hpmvec3f* arg){
 
 	hpm_vec4_setwf((*arg), 0);
-	HPM_CALLLOCALFUNC( hpm_vec4_normalizefv )(arg);
+	HPM_CALLLOCALFUNC(hpm_vec4_normalizefv)(arg);
 }
 
 HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* out){
@@ -210,8 +209,8 @@ HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* 
 	hpm_vec4_setwf(tmpB, 0.0f);
 
 	/*	Compute dot products.   */
-	const hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmpA, &tmpA);
-	const hpmvecf s1 = HPM_CALLLOCALFUNC( hpm_vec4_dotfv )(&tmpA, &tmpB);
+	const hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmpA, &tmpA);
+	const hpmvecf s1 = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmpA, &tmpB);
 
 	/*  Compute final product.  */
 	*out = *b * s1 * dotinv;
