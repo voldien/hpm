@@ -19,19 +19,19 @@ HPM_IMP( void, hpm_quat_multi_quatfv, const hpmquatf* lquat, const hpmquatf* rqu
 	*quat = cquat;
 }
 
-HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* lf_quat, const hpmquatf* rf_vec, hpmquatf* quat){
+HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* quat, const hpmvec3f* rf_vec, hpmvec3f* vec){
 
+	hpmvec3f t;
+	hpmvec4f q_xyz;
+	hpmquatf tcross;
 
-	const hpmvecf w;
-	const hpmvecf x;
-	const hpmvecf y;
-	const hpmvecf z;
+	/*  Compute t.  */
+	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&q_xyz, hpm_quat_getxf(*quat), hpm_quat_getyf(*quat), hpm_quat_getzf(*quat), 0.0f);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)( &q_xyz, rf_vec,  &t);
+	t *= 2.0f;
 
-	quat[0][HPM_QUAT_W] = -(lf_quat[0][HPM_QUAT_X] * (*rf_vec)[HPM_QUAT_X]) - (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_Y]) - (lf_quat[0][HPM_QUAT_Z] * (*rf_vec)[HPM_QUAT_Z]);
+	/*  Compute rotated vector. */
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)( &q_xyz, &t,  &tcross);
+	*vec = *rf_vec + hpm_quat_getwf(*quat) * t + tcross;
 
-	quat[0][HPM_QUAT_X] =  (lf_quat[0][HPM_QUAT_W] * (*rf_vec)[HPM_QUAT_X]) + (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_Z]) - (lf_quat[0][HPM_QUAT_Z] * (*rf_vec)[HPM_QUAT_Y]);
-
-	quat[0][HPM_QUAT_Y] =  (lf_quat[0][HPM_QUAT_W] * (*rf_vec)[HPM_QUAT_Y]) + (lf_quat[0][HPM_QUAT_Z] * (*rf_vec)[HPM_QUAT_X]) - (lf_quat[0][HPM_QUAT_X] * (*rf_vec)[HPM_QUAT_Z]);
-
-	quat[0][HPM_QUAT_Z] =  (lf_quat[0][HPM_QUAT_W] * (*rf_vec)[HPM_QUAT_Z]) + (lf_quat[0][HPM_QUAT_X] * (*rf_vec)[HPM_QUAT_Y]) - (lf_quat[0][HPM_QUAT_Y] * (*rf_vec)[HPM_QUAT_X]);
 }
