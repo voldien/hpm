@@ -414,6 +414,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 #include<math.h>
 #ifdef _HPM_MATH_H_
 	#define HPM_PI              3.14159265358979323846  	/* pi */
+	#define HPM_2PI             6.28318530718               /* 2 * pi */
 	#define HPM_PI_2            1.57079632679489661923  	/* pi/2 */
 	#define HPM_PI_4            0.78539816339744830962  	/* pi/4 */
 	#define HPM_E               2.7182818284590452354   	/* e */
