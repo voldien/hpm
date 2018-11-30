@@ -202,6 +202,12 @@ HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_quat_inversefv, hpmquatf* arg);
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_quat_dotfv, const hpmquatf* larg,
 		const hpmquatf* rarg);
 
+
+/**
+ * 
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_powfv, hpmquatf* quat, const hpmvecf exponent);
+
 /**
  *	Copy quaternion identity to destination.
  *
@@ -290,6 +296,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lerpfv, const hpmquatf* larg,
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg,
 		const hpmquatf* rarg, const hpmvecf t, hpmquatf* out);
+
+
+/**
+ *
+ */
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_eularfv, const hpmquatf* quat,
+		 hpmvecf* pitch, hpmvecf* yaw, hpmvecf* roll);
 
 /**
  *	Compute quaternion pitch angle rotation in radian.

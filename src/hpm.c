@@ -219,11 +219,13 @@ int hpm_init(unsigned int simd){
 	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
 	hpm_quat_lookatfv = hpm_get_symbolfuncp(hpm_quat_lookatfv);
 	/*	*/
+	hpm_quat_powfv = hpm_get_symbolfuncp(hpm_quat_powfv);
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	/*	*/
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 
+	hpm_quat_eularfv = hpm_get_symbolfuncp(hpm_quat_eularfv);
 	hpm_quat_pitchfv = hpm_get_symbolfuncp(hpm_quat_pitchfv);
 	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
 	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
