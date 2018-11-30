@@ -83,21 +83,28 @@ HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3
 	(*quat)[HPM_QUAT_W] = cosf(half_angle);
 }
 
-HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
-	const float num1 = yaw_radian * 0.5f;
-	const float sy = (float)sinf((float)num1);
-	const float cy = (float)cosf((float)num1);
-	const float num4 = roll_radian * 0.5f;
-	const float sr = (float)sinf((float)num4);
-	const float cr = (float)cosf((float)num4);
-	const float num7 = pitch_radian * 0.5f;
-	const float sp = (float)sinf((float)num7);
-	const float cp = (float)cosf((float)num7);
+HPM_IMP(void, hpm_quat_axisf, hpmquatf *quat, const hpmvecf pitch_radian, const hpmvecf yaw_radian,
+        const hpmvecf roll_radian) {
 
-	(*quat)[HPM_QUAT_W] = cy * cr * cp + sy * sr * sp;
-	(*quat)[HPM_QUAT_X] = cy * sr * cp - sy * cr * sp;
-	(*quat)[HPM_QUAT_Y] = cy * cr * sp + sy * sr * cp;
-	(*quat)[HPM_QUAT_Z] = sy * cr * cp - cy * sr * sp;
+	const hpmvecf num1 = yaw_radian * 0.5f;
+	const hpmvecf cy = (hpmvecf) cosf((hpmvecf) num1);
+	const hpmvecf sy = (hpmvecf) sinf((hpmvecf) num1);
+	const hpmvecf num4 = roll_radian * 0.5f;
+	const hpmvecf cr = (hpmvecf) cosf((hpmvecf) num4);
+	const hpmvecf sr = (hpmvecf) sinf((hpmvecf) num4);
+	const hpmvecf num7 = pitch_radian * 0.5f;
+	const hpmvecf cp = (hpmvecf) cosf((hpmvecf) num7);
+	const hpmvecf sp = (hpmvecf) sinf((hpmvecf) num7);
+
+	/*  Compute component wise. */
+	const hpmvecf w = cy * cp * cr + sy * sp * sr;
+	const hpmvecf x = -cy * sp * cr - sy * cp * sr;
+	const hpmvecf y = cy * sp * sr - sy * cp * cr;
+	const hpmvecf z = sy * sp * cr - cy * cp * sr;
+
+	/*  Assign. */
+	const hpmquatf axis = {w, x, y, z};
+	*quat = axis;
 }
 
 HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
