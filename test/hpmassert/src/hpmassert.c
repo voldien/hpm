@@ -31,6 +31,7 @@ void htpReadArgument(int argc, char** argv) {
 			{"version",     no_argument,       NULL, 'v'},    /*	Print hpm version that the program uses.	*/
 			{"assert",      no_argument,       NULL, 'A'},    /*	Assert only integrity.	*/
 			{"performance", no_argument,       NULL, 'P'},    /*	Assert only performance.	*/
+			{"quite",       no_argument,       NULL, 'q'},    /*	Display only results.	*/
 			{"type",        required_argument, NULL, 't'},    /*	Specify type to assert.	*/
 			{"simd",        required_argument, NULL, 's'},    /*	select SIMD for assertion.	*/
 			{"precision",   required_argument, NULL, 'p'},    /*	Select precision for assertion.	*/
@@ -41,7 +42,7 @@ void htpReadArgument(int argc, char** argv) {
 
 	int c;
 	int optindex;
-	const char* shortarg = "APs:vp:t:r";
+	const char* shortarg = "APqs:vp:t:r";
 
 	/*	Iterate through options.	*/
 	while ((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF) {
@@ -88,6 +89,8 @@ void htpReadArgument(int argc, char** argv) {
 				break;
 			case 'r':
 				g_format = 0x1;
+				break;
+			case 'q':
 				break;
 			default:
 				break;

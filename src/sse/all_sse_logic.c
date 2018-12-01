@@ -72,14 +72,14 @@ HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 
 	return _mm_testc_si128(resrow0, resrow1) & _mm_testc_si128(resrow2, resrow3);
 #else
-	const hpmvec4f row01 = _mm_or_ps(_mm_cmpeq_ps(a[0], b[0]), _mm_cmpneq_ps(a[1], b[1]));
-	const hpmvec4f row23 = _mm_or_ps(_mm_cmpeq_ps(a[2], b[2]), _mm_cmpneq_ps(a[3], b[3]));
-	const hpmvec4f row0123 = _mm_or_ps(row01, row23);
+	const hpmvec4f row01 = _mm_and_ps(_mm_cmpeq_ps(a[0], b[0]), _mm_cmpeq_ps(a[1], b[1]));
+	const hpmvec4f row23 = _mm_and_ps(_mm_cmpeq_ps(a[2], b[2]), _mm_cmpeq_ps(a[3], b[3]));
+	const hpmvec4f row0123 = _mm_and_ps(row01, row23);
 #ifdef __SSSE3__
 	return _mm_cvtsi128_si32( _mm_abs_epi32(_mm_castps_si128(row0123)) );
 #else
 	const hpmvec4i resrow = _mm_castps_si128(row0123);
-	return ( resrow[0] | resrow[1] ) != 0;
+	return ( resrow[0] & resrow[1] ) != 0;
 #endif
 
 #endif

@@ -24,7 +24,7 @@
 #include<stdint.h>
 
 /**
- *	Global variable decleration.
+ * Global variable decleration.
  */
 extern unsigned int g_SIMD;
 extern unsigned int g_type;
@@ -35,7 +35,7 @@ extern const unsigned int g_it;
 extern long int g_time_res;
 
 /**
- *	Macro function declaration.
+ * Macro function declaration.
  */
 typedef void (*func_benchmark)(void);
 #define HPM_BENCHMARK_FUNC_DECL(func)	\
@@ -68,7 +68,7 @@ HPM_BENCHMARK_FUNC_DECL(hpm_vec3_refractfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec3_projfv);
 
 /**
- *	Quaternion benchmark function declaration.
+ * Quaternion benchmark function declaration.
  */
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_copyfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_multi_quatfv);
@@ -89,7 +89,7 @@ HPM_BENCHMARK_FUNC_DECL(hpm_quat_yawfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_rollfv);
 
 /**
- *	Matrices.
+ * Matrices.
  */
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_copyfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4x4_multiply_mat4x4fv);
@@ -123,7 +123,7 @@ HPM_BENCHMARK_FUNC_DECL(hpm_vec4_fast_sqrtfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec8_fast_sqrtfv);
 
 /**
- *	Compare logic benchmark function declaration.
+ * Compare logic benchmark function declaration.
  */
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_com_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_vec4_eqfv);
@@ -135,7 +135,7 @@ HPM_BENCHMARK_FUNC_DECL(hpm_mat4_eqfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_mat4_neqfv);
 
 /**
- *	Performance type.
+ * Performance type.
  */
 enum PerformanceTestType{
 	eMatrix         = 0x1,                      /*	Matrices.	*/
@@ -149,7 +149,7 @@ enum PerformanceTestType{
 };
 
 /**
- *	Precision type.
+ * Precision type.
  */
 enum PrecisionType{
 	eFloat          = 0x1,                    /*	Single precision floating points.	*/
@@ -157,9 +157,12 @@ enum PrecisionType{
 	eAllPrecision   = (eFloat | eDouble)      /*	Perform all precision types.	*/
 };
 
+/**
+ * Result model options.
+ */
 enum ResultModel{
-	ePercentage     = 0x1,
-	eElapseTime     = 0x2,
+	ePercentage     = 0x1,  /*  Display percentage based on baseline.  */
+	eElapseTime     = 0x2,  /*  Display time in seconds.    */
 };
 
 /**
@@ -177,7 +180,7 @@ typedef struct function_raw_t{
 typedef struct simd_benchmark_raw_t {
 	enum PrecisionType type;    /*  */
 	uint32_t simd;              /*  */
-	FunctionRaw *results;    /*  */
+	FunctionRaw *results;       /*  */
 	uint32_t num;               /*  */
 } SIMDBenchmarksRaw;
 
@@ -196,7 +199,7 @@ extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
 extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
-extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* results);
+extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmarkResults);
 extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results,
 		SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);  /*  Benchmark result model.   */
 

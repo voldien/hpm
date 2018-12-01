@@ -6,6 +6,8 @@
 #	elif defined(HPM_GNUC) || defined(HPM_CLANG)
 #       if defined(HPM_X86) || defined(HPM_X86_64)
 #		    include<x86intrin.h>
+#include <assert.h>
+
 #       endif
 #   endif
 
@@ -16,25 +18,42 @@ HPM_IMP(void, hpm_quat_setf, hpmquatf* destination,
 	*destination = set;
 }
 
-HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
+HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* quat){
 	/*  { w, -x, -y -z }  */
 	const hpmquatf conj = { 1.0f, -1.0f, -1.0f, -1.0f };
-	*larg *= conj;
+	*quat *= conj;
 }
 
-HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
+HPM_IMP( void, hpm_quat_inversefv, hpmquatf* quat){
 	/*  Compute inverse length. */
-	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(arg);
+	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(quat);
 	/*  Conjugate quaternion.   */
-	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
-	*arg *= sqrleng;
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(quat);
+	*quat *= sqrleng;
+}
+
+HPM_IMP(void, hpm_quat_powfv, hpmquatf* quat, const hpmvecf exponent) {
+
+
+	if(fabs(hpm_quat_getwf(*quat)) < 0.999f){
+		const hpmvecf alpha = acos(hpm_quat_getwf(*quat));
+
+		const hpmvecf newAlpha = alpha * exponent;
+
+		const hpmvecf w = cosf(newAlpha);
+
+		const hpmvecf mult = sinf(newAlpha) / sinf(alpha);
+
+		const hpmvec4f factor = { w, mult, mult ,mult };
+		*quat *= factor;
+	}
 }
 
 
-HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
+HPM_IMP( void, hpm_quat_identityfv, hpmquatf* quat){
 	/*  { w, x, y, z }  */
 	const hpmquatf iden = { 1.0f, 0.0f, 0.0f, 0.0f };
-	*out = iden;
+	*quat = iden;
 }
 
 HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* quat, hpmvec3f* out){
@@ -58,27 +77,39 @@ HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3
 	const hpmvecf halfsin = sinf(half_angle);
 
 	/*  */
-	(*quat)[HPM_QUAT_X] = hpm_vec4_getxf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_Y] = hpm_vec4_getyf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_Z] = hpm_vec4_getzf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_W] = cosf(half_angle);
+
+	const hpmvecf x = hpm_vec4_getxf(*axis) * halfsin;
+	const hpmvecf y = hpm_vec4_getyf(*axis) * halfsin;
+	const hpmvecf z = hpm_vec4_getzf(*axis) * halfsin;
+	const hpmvecf w = cosf(half_angle);
+
+	const hpmquatf result = {w, x, y, z};
+
+	*quat = result;
 }
 
-HPM_IMP( void, hpm_quat_axisf, hpmquatf* quat, float pitch_radian, float yaw_radian, float roll_radian){
-	const float num1 = yaw_radian * 0.5f;
-	const float sy = (float)sinf((float)num1);
-	const float cy = (float)cosf((float)num1);
-	const float num4 = roll_radian * 0.5f;
-	const float sr = (float)sinf((float)num4);
-	const float cr = (float)cosf((float)num4);
-	const float num7 = pitch_radian * 0.5f;
-	const float sp = (float)sinf((float)num7);
-	const float cp = (float)cosf((float)num7);
+HPM_IMP(void, hpm_quat_axisf, hpmquatf *quat, const hpmvecf pitch_radian, const hpmvecf yaw_radian,
+        const hpmvecf roll_radian) {
 
-	(*quat)[HPM_QUAT_W] = cy * cr * cp + sy * sr * sp;
-	(*quat)[HPM_QUAT_X] = cy * sr * cp - sy * cr * sp;
-	(*quat)[HPM_QUAT_Y] = cy * cr * sp + sy * sr * cp;
-	(*quat)[HPM_QUAT_Z] = sy * cr * cp - cy * sr * sp;
+	const hpmvecf num1 = yaw_radian * 0.5f;
+	const hpmvecf cy = (hpmvecf) cosf((hpmvecf) num1);
+	const hpmvecf sy = (hpmvecf) sinf((hpmvecf) num1);
+	const hpmvecf num4 = roll_radian * 0.5f;
+	const hpmvecf cr = (hpmvecf) cosf((hpmvecf) num4);
+	const hpmvecf sr = (hpmvecf) sinf((hpmvecf) num4);
+	const hpmvecf num7 = pitch_radian * 0.5f;
+	const hpmvecf cp = (hpmvecf) cosf((hpmvecf) num7);
+	const hpmvecf sp = (hpmvecf) sinf((hpmvecf) num7);
+
+	/*  Compute component wise. */
+	const hpmvecf w = cy * cp * cr + sy * sp * sr;
+	const hpmvecf x = -cy * sp * cr - sy * cp * sr;
+	const hpmvecf y = cy * sp * sr - sy * cp * cr;
+	const hpmvecf z = sy * sp * cr - cy * cp * sr;
+
+	/*  Assign. */
+	const hpmquatf axis = {w, x, y, z};
+	*quat = axis;
 }
 
 HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
@@ -173,30 +204,48 @@ HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const flo
 		return HPM_CALLLOCALFUNC(hpm_quat_lerpfv)(a, b, t, out);
 }
 
-HPM_IMP( float, hpm_quat_pitchfv, const hpmquatf* lf_quat){
-	const hpmvecf w = hpm_quat_getwf(*lf_quat);
-	const hpmvecf x = hpm_quat_getxf(*lf_quat);
-	const hpmvecf y = hpm_quat_getyf(*lf_quat);
-	const hpmvecf z = hpm_quat_getzf(*lf_quat);
 
-	return (float)asin(2.0f * (w * y - z * x));
+HPM_IMP(void, hpm_quat_eularfv, const hpmquatf* quat,
+           hpmvecf* pitch, hpmvecf* yaw, hpmvecf* roll) {
+
+	const hpmvecf w = hpm_quat_getwf(*quat);
+	const hpmvecf x = hpm_quat_getxf(*quat);
+	const hpmvecf y = hpm_quat_getyf(*quat);
+	const hpmvecf z = hpm_quat_getzf(*quat);
+
+	const hpmvecf sp = -2.0f * (y * z + w * x);
+	assert(quat && pitch && yaw && roll);
+
+	if (fabs(sp) > 0.9999f) {
+		*pitch = sp * (hpmvecf) HPM_PI_2;
+		*yaw = atan2f(-x * z + w * y, 0.5f * y * y - z * z);
+		*roll = 0.0f;
+
+	} else {
+
+		*pitch = asinf(sp);
+		*yaw = atan2f(x * z - w * y, 0.5f - x * x - y * y);
+		*roll = atan2f(x * y - w * z, 0.5f - x * x - z * z);
+	}
 }
 
-HPM_IMP( float, hpm_quat_yawfv, const hpmquatf* lf_quat){
-	const hpmvecf w = hpm_quat_getwf(*lf_quat);
-	const hpmvecf x = hpm_quat_getxf(*lf_quat);
-	const hpmvecf y = hpm_quat_getyf(*lf_quat);
-	const hpmvecf z = hpm_quat_getzf(*lf_quat);
+HPM_IMP( hpmvecf, hpm_quat_pitchfv, const hpmquatf* quat){
 
-	return (float)atan2(2.0f * (w * z + x * y), 1.0f - (2.0f * (y * y + z * z)));
+	hpmvecf p,y,r;
+	HPM_CALLLOCALFUNC(hpm_quat_eularfv)(quat, &p, &y, &r);
+	return p;
+
 }
 
-HPM_IMP( float, hpm_quat_rollfv, const hpmquatf* lf_quat){
-	const hpmvecf w = hpm_quat_getwf(*lf_quat);
-	const hpmvecf x = hpm_quat_getxf(*lf_quat);
-	const hpmvecf y = hpm_quat_getyf(*lf_quat);
-	const hpmvecf z = hpm_quat_getzf(*lf_quat);
+HPM_IMP( hpmvecf, hpm_quat_yawfv, const hpmquatf* quat){
+	hpmvecf p,y,r;
+	HPM_CALLLOCALFUNC(hpm_quat_eularfv)(quat, &p, &y, &r);
+	return y;
+}
 
-	return (float)atan2(2.0f * (w * x + y * z),( 1.0f - ( 2.0f * (x * x + y * y))));
+HPM_IMP( hpmvecf, hpm_quat_rollfv, const hpmquatf* quat){
+	hpmvecf p,y,r;
+	HPM_CALLLOCALFUNC(hpm_quat_eularfv)(quat, &p, &y, &r);
+	return r;
 }
 

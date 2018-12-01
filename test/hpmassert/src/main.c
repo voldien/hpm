@@ -6,7 +6,7 @@
 #include"hpmparser.h"
 
 /**
- *	Global variables.
+ * Global variables.
  */
 unsigned int g_SIMD = (unsigned int) (-1);
 int unsigned g_type = eAll;

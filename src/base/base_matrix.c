@@ -183,7 +183,8 @@ HPM_IMP( void, hpm_mat4x4_rotationZf, hpmvec4x4f_t mat, hpmvecf angle){
 
 
 HPM_IMP( void, hpm_mat4x4_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* quat){
-	hpmvecf w = (*quat)[HPM_QUAT_W], x = (*quat)[1], y = (*quat)[2], z = (*quat)[3],
+	
+	hpmvecf w = hpm_quat_getwf(*quat), x = hpm_quat_getxf(*quat), y = hpm_quat_getyf(*quat), z = hpm_quat_getzf(*quat),
 	x2 = x + x,
 	y2 = y + y,
 	z2 = z + z,
@@ -339,7 +340,7 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 	/*	Create mvp matrix and its inverse.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);
 	const hpmvecf det = HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP);
-	if(det == 0){
+	if (det == 0) {
 		return 0;
 	}
 
@@ -351,7 +352,7 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 
 	/*	Compute the object coordinates. */
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat1x4fv)(inverseMVP, &m, &result);
-	if(hpm_vec4_getwf(result) == 0.0f)
+	if (hpm_vec4_getwf(result) == 0.0f)
 		return 0;
 
 	/*  Compute w inverse.  */

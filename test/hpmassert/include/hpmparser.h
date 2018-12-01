@@ -25,11 +25,11 @@
  *	argument is separated by comma. Where all and none
  *	are reserved key word.
  *
- *	\arg
+ * @param arg
  *
- *	\opts array of option null terminated string.
+ * @param opts array of option null terminated string.
  *
- *	@Return bitwise option.
+ * @return bitwise option.
  */
 extern unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
                                                const char **HPM_RESTRICT opts);

@@ -33,7 +33,7 @@ unsigned int g_simd = HPM_NONE;
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
-	char* libpath;
+	char* libpath = NULL;
 
 	/*	*/
 	if(simd == HPM_NONE)
@@ -219,11 +219,13 @@ int hpm_init(unsigned int simd){
 	hpm_quat_axisf = hpm_get_symbolfuncp(hpm_quat_axisf);
 	hpm_quat_lookatfv = hpm_get_symbolfuncp(hpm_quat_lookatfv);
 	/*	*/
+	hpm_quat_powfv = hpm_get_symbolfuncp(hpm_quat_powfv);
 	hpm_quat_identityfv = hpm_get_symbolfuncp(hpm_quat_identityfv);
 	/*	*/
 	hpm_quat_lerpfv = hpm_get_symbolfuncp(hpm_quat_lerpfv);
 	hpm_quat_slerpfv = hpm_get_symbolfuncp(hpm_quat_slerpfv);
 
+	hpm_quat_eularfv = hpm_get_symbolfuncp(hpm_quat_eularfv);
 	hpm_quat_pitchfv = hpm_get_symbolfuncp(hpm_quat_pitchfv);
 	hpm_quat_yawfv = hpm_get_symbolfuncp(hpm_quat_yawfv);
 	hpm_quat_rollfv = hpm_get_symbolfuncp(hpm_quat_rollfv);
@@ -419,43 +421,43 @@ const char* hpm_get_simd_symbol(unsigned int SIMD) {
 }
 
 int hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec4_sprint(char* text, const hpmvec4f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec3_print(const hpmvec3f* vec) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_vec3_sprint(char* HPM_RESTRICT text, const hpmvec3f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_vec4_getxf(*vec),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
 	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
 }
 
 int hpm_quat_print(const hpmquatf* quat) {
-	return printf("{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
 int hpm_quat_sprint(char* HPM_RESTRICT text, const hpmquatf* HPM_RESTRICT quat){
-	return sprintf(text, "{ %.1f, %.1f, %.1f, %.1f }", hpm_quat_getxf(*quat),
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
 	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
 	        hpm_quat_getwf(*quat));
 }
 
 int hpm_mat4x4_print(const hpmvec4x4f_t mat){
 	return printf(
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n",
 		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
 		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
 		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
@@ -464,10 +466,10 @@ int hpm_mat4x4_print(const hpmvec4x4f_t mat){
 
 int hpm_mat4x4_sprint(char* HPM_RESTRICT text, const hpmvec4x4f_t mat){
     return sprintf(text,
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n"
-		"{ %.1f, %.1f, %.1f, %.1f }\n",
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n"
+		"{ %.5f, %.5f, %.5f, %.5f }\n",
 		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
 		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
 		mat[0][2], mat[1][2], mat[2][2], mat[3][2],

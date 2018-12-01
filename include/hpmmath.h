@@ -31,7 +31,7 @@ extern "C" {
  * Compute max value of a and b.
  * max = a > b ? a : b
  *
- * @Return max value for each element of the vector data type.
+ * @return max value for each element of the vector data type.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_maxfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT c);
