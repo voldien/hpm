@@ -34,7 +34,7 @@ extern "C" {
  *
  * @param up direction in respect to the viewer.
  *
- * @param mat
+ * @param mat look at matrix.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
         const hpmvec4f* HPM_RESTRICT position, const hpmvec4f* HPM_RESTRICT up,

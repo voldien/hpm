@@ -27,16 +27,20 @@ extern "C" {
 #endif
 
 /**
- * @param a
- * @param b
- * @return
+ * Compare float equality.
+ *
+ * @param a valid float.
+ * @param b valid float.
+ * @return non-zero if a and b is equal.
  */
 HPM_EXPORT(hpmboolean, HPMAPIFASTENTRY, hpm_vec_eqfv, hpmvecf a, hpmvecf b);
 
 /**
- * @param a
- * @param b
- * @return
+ * Compare float inequality.
+ *
+ * @param a valid float.
+ * @param b valid float.
+ * @return non-zero if a and b is not equal.
  */
 HPM_EXPORT(hpmboolean, HPMAPIFASTENTRY, hpm_vec_neqfv, hpmvecf a, hpmvecf b);
 
@@ -51,7 +55,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_eqfv, const hpmvec4f *HPM_RESTRICT a,
 /**
  * Determine if a and b is equal.
  *
- * @Return non-zero if equal, zero otherwise.
+ * @return non-zero if equal, zero otherwise.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_eqfv, const hpmvec4f *HPM_RESTRICT a,
            const hpmvec4f *HPM_RESTRICT b);
@@ -67,7 +71,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_neqfv, const hpmvec4f *HPM_RESTRICT a
 /**
  * Determine if a and b is not equal.
  *
- * @Return non-zero if not equal, zero otherwise.
+ * @return non-zero if not equal, zero otherwise.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f *HPM_RESTRICT a,
            const hpmvec4f *HPM_RESTRICT b);
@@ -75,16 +79,17 @@ HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_vec4_neqfv, const hpmvec4f *HPM_RESTRICT
 /**
  * Determine if a is greater than b.
  *
- * @param res
+ * @param res return a non 0 value for each element of the vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_com_gfv, const hpmvec4f *HPM_RESTRICT a,
            const hpmvec4f *HPM_RESTRICT b, hpmvec4f *HPM_RESTRICT res);
+
 /**
  * Determine if a is less than b.
  *
- * @param a
+ * @param a left side argument.
  *
- * @param b
+ * @param b right side argument.
  *
  * @param res
  */

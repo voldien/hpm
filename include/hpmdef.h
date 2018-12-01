@@ -23,7 +23,7 @@
 #include<limits.h>
 
 /**
- *	Compiler version macro.
+ * Compiler version macro.
  */
 #define HPM_COMPILER_VERSION(major, minor, revision, state) HPM_STR(major)HPM_TEXT(".")HPM_STR(minor)HPM_TEXT(".")HPM_STR(revision)
 
@@ -289,7 +289,7 @@
 
 
 /**
- *	Restrict decleration.
+ *	Restrict declaration.
  */
 #ifndef HPM_RESTRICT
 	#if defined(HPM_GNUC)
@@ -317,7 +317,7 @@
 #define HPM_TEXT(quote) quote										/*	*/
 
 /**
- *	Get current SIMD extension prefix.
+ *	Get current SIMD extension prefix function symbol name.
  */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 
@@ -380,21 +380,21 @@
 	#define HPM_DEFINEFUNC(func)
 #endif
 
-#define HPM_EXPORT(ret, callback, func, ...)								\
-		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPM_FUNCPOINTER(func);										\
-		HPM_DEFINEFUNC(func)												\
+#define HPM_EXPORT(ret, callback, func, ...)                                \
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__);            \
+		extern HPM_FUNCPOINTER(func);                                       \
+		HPM_DEFINEFUNC(func)                                                \
 
 
 #elif defined(HPM_INTERNAL_IMP)	/*	*/
-#define HPM_EXPORT(ret, callback, func, ...)										\
-		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 					\
-		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);		\
+#define HPM_EXPORT(ret, callback, func, ...)                                        \
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__);                    \
+		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);          \
 
 #else	/*	*/
-#define HPM_EXPORT(ret, callback, func, ...)								\
-		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__); 			\
-		extern HPM_FUNCPOINTER(func)										\
+#define HPM_EXPORT(ret, callback, func, ...)                                \
+		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__);            \
+		extern HPM_FUNCPOINTER(func)                                        \
 
 #endif
 
@@ -403,8 +403,8 @@
  *	Define implementation header for
  *	defining the functions.
  */
-#define HPM_IMP(ret, func, ...)					\
-ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
+#define HPM_IMP(ret, func, ...)                 \
+ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)           \
 
 
 /**
@@ -414,7 +414,7 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
 #include<math.h>
 #ifdef _HPM_MATH_H_
 	#define HPM_PI              3.14159265358979323846  	/* pi */
-	#define HPM_2PI             6.28318530718               /* 2 * pi */
+	#define HPM_2PI             (2.0 * HPM_PI)              /* 2 * pi */
 	#define HPM_PI_2            1.57079632679489661923  	/* pi/2 */
 	#define HPM_PI_4            0.78539816339744830962  	/* pi/4 */
 	#define HPM_E               2.7182818284590452354   	/* e */
@@ -457,24 +457,24 @@ ret HPM_FUNCSYMBOL(func)(__VA_ARGS__)			\
  */
 #if defined(HPM_X86_64)
 /*	#define HPM_SWAPF32(a, b)	__asm__("bswapq %0 %1" : "=r" (a) : "0" (a) : "=r" (b) : "1" (b))	*/
-	#define HPM_SWAPF32(a, b)	\
-		{ float tmp = ( a );	\
-		( a ) = ( b );			\
+	#define HPM_SWAPF32(a, b)   \
+		{ float tmp = ( a );    \
+		( a ) = ( b );          \
 		( b ) = tmp; }
 #elif defined(HPM_X86)
-	#define HPM_SWAPF32(a, b)	\
-		{ float tmp = ( a );	\
-		( a ) = ( b );			\
+	#define HPM_SWAPF32(a, b)   \
+		{ float tmp = ( a );    \
+		( a ) = ( b );          \
 		( b ) = tmp; }
 #elif defined(HPM_ARM)
-	#define HPM_SWAPF32(a, b)	\
-		{ float tmp = ( a );	\
-		( a ) = ( b );			\
+	#define HPM_SWAPF32(a, b)   \
+		{ float tmp = ( a );    \
+		( a ) = ( b );          \
 		( b ) = tmp; }
 #else
-	#define HPM_SWAPF32(a, b)	\
-		{ float tmp = ( a );	\
-		( a ) = ( b );			\
+	#define HPM_SWAPF32(a, b)   \
+		{ float tmp = ( a );    \
+		( a ) = ( b );          \
 		( b ) = tmp; }
 #endif
 

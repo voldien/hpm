@@ -28,18 +28,17 @@
 #include"hpmprint.h"
 
 /**
- * 	The main hpm library header file.
- * 	Hpm library has be initialize in order
- * 	utilize the library with hpm_init.
+ * The main hpm library header file.
+ * Hpm library has be initialize in order
+ * utilize the library with hpm_init.
  */
-
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
 #endif
 
 /**
- *	Function data types.
+ * Function data types.
  */
 typedef int (HPMAPIENTRY PHPMINIT)(unsigned int simd);
 typedef int (HPMAPIENTRY PHPMRELEASE)(void);
@@ -51,7 +50,7 @@ typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
 typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 /**
- *	SIMD extensions flags.
+ * SIMD (single instruction multiple data) extensions flags.
  */
 #define HPM_NONE        (0 << 0)    /*  No HPM SIMD exention flag.	*/
 #define HPM_NOSIMD      (1 << 0)    /*  No SIMD hardware feature, using the FPU and ALU.	*/
@@ -73,70 +72,73 @@ typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 
 /**
- *	Initialize hpm library by assigning all function pointer in respect
- *	to what SIMD (Single Instruction multiple data) extension chosen.
+ * Initialize hpm library by assigning all function pointer in respect
+ * to what SIMD (Single Instruction multiple data) extension chosen.
  *
- *	\SIMD what SIMD (Single Instruction multiple data) extension.
+ * @param SIMD what SIMD (Single Instruction multiple data) extension.
  *
- *	@Return 1 if successfully initialized. 0 if there was a failure.
+ * @return 1 if successfully initialized. 0 if there was a failure.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_init(unsigned int SIMD);
 
 /**
- *	Release library which all the function pointer associates with.
- *	This means all the function pointer will become invalid.
+ * Release library which all the function pointer associates with.
+ * This means all the function pointer will become invalid.
  *
- *	@Return 1
+ * @return non-zero if successfully released.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_release(void);
 
 /**
  * 	Check if hpm has been initialized.
  *
- *	@Return none zero if initialized. Otherwise 0.
+ * @return none zero if initialized. Otherwise 0.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_isinit(void);
 
 /**
- *	Get current initialized SIMD extension.
+ * Get current initialized SIMD extension.
  *
- *	@Return none zero if initialized.
+ * @return none zero if initialized.
  */
 extern HPMDECLSPEC unsigned int HPMAPIENTRY hpm_get_simd(void);
 
 /**
- *	Get function pointer address by its symbol name
- *	from the hpm library currently loaded, that was
- *	specified in hpm_init.
+ * Get function pointer address by its symbol name
+ * from the hpm library currently loaded, that was
+ * specified in hpm_init.
  *
- *	\cfunctionName
+ * @param cfunctionName function symbol name defined by HPM_FUNCSYMBOL.
  *
- *	@Return func pointer to the function. if NULL then the cfunction Name was valid.
+ * @param simd the SIMD associated with the function. used for extracting
+ * correct symbol for when using hpm in single library mode.
+ *
+ * @return func pointer to the function. if NULL then the cfunction Name was valid.
  */
 extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName, unsigned int simd);
 
 /**
- *	Get hpm version.
+ * Get hpm version.
  *
- *	@Return non NULL terminated string pointer.
+ * @return non NULL terminated string pointer.
  */
 extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
 
 /**
- *	Determine if SIMD extension is supported on the CPU.
+ * Determine if SIMD extension is supported on the CPU.
  *
- *	\SIMD SIMD extension to check if supported on the CPU.
+ * @param SIMD SIMD extension to check if supported on the CPU.
  *
- *	@Return 1 if supported. 0 if not supported.
+ * @return 1 if supported. 0 if not supported.
  */
 extern HPMDECLSPEC int HPMAPIENTRY hpm_support_cpu_feat(unsigned int SIMD);
 
 /**
- *	Get symbol name for specified SIMD enumerator.
+ * Get symbol name for specified SIMD enumerator.
  *
- *	\SIMD SIMD enumerator.
+ * @param SIMD SIMD enumerator.
  *
- *	@Return non-null terminated string.
+ * @return non-null terminated string.
  */
 extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
 
@@ -145,4 +147,4 @@ extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD
 }
 #endif
 
-#endif	/*	_HPM_H_	*/
+#endif

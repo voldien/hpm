@@ -24,7 +24,7 @@
 
 
 /**
- * 						Information.
+ *						Information.
  *	hpm follows how OpenGL allocates their matrices.
  *	That is to say in a not how a 2 dimensional array in c.
  *
@@ -48,7 +48,7 @@ extern "C" {
 
 
 /**
- *	Matrix4x4 float
+ * Matrix4x4 float
  *
  */
 HPM_ALIGN(32)
@@ -65,7 +65,7 @@ typedef union{
 
 
 /**
- *	Matrix4x4 double.
+ * Matrix4x4 double.
  *
  */
 typedef hpmvec4d hpmvec4x4d_t[4];
@@ -79,7 +79,7 @@ typedef union{
 
 
 /**
- *	Matrix2x2 float
+ * Matrix2x2 float
  *
  */
 HPM_ALIGN(32)
@@ -93,13 +93,11 @@ typedef union{
 
 
 /**
- *	Copy source matrix destination matrix.
+ * Copy source matrix destination matrix.
  *
- *	\destination
+ * @param destination
  *
- *	\source
- *
- *	@@Return
+ * @param source
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv,
 		hpmvec4x4fp_t* HPM_RESTRICT destination,
@@ -107,15 +105,15 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv,
 
 
 /**
- *	Multiply two matrices.
+ * Multiply two matrices.
  *
- *	(larg) x (rarg) = (output)
+ * (larg) x (rarg) = (output)
  *
- *	\larg left side argument.
+ * @param larg left side argument.
  *
- *	\right right side argument.
+ * @param right right side argument.
  *
- *	\output
+ * @param output
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_mat4x4fv,
@@ -123,13 +121,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_mat4x4fv,
 		hpmvec4x4f_t output);
 
 /**
- *	Multiply matrix with 1x4 vector.
+ * Multiply matrix with 1x4 vector.
  *
- *	\larg
+ * @param larg
  *
- *	\rarg
+ * @param rarg
  *
- *	\output
+ * @param output
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4fv,
@@ -137,13 +135,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_mat1x4fv,
 		hpmvec4f* output);
 
 /**
- *	Multiply matrix4x4 by scalar.
+ * Multiply matrix4x4 by scalar.
  *
- *	\larg
+ * @param larg
  *
- *	\rarg
+ * @param rarg
  *
- *	\output
+ * @param output
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
@@ -151,19 +149,19 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
 		hpmvec4x4f_t output);
 
 /**
- *	Divide each element in matrix by factor.
+ * Divide each element in matrix by factor.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f,
 		hpmvec4x4f_t larg, const hpmvecf factor);
 
 /**
- *	Perform addition with two matrices.
+ * Perform addition with two matrices.
  *
- *	\larg
+ * @param larg
  *
- *	\rarg
+ * @param rarg
  *
- *	\output
+ * @param output
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_additition_mat4x4fv,
@@ -171,13 +169,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_additition_mat4x4fv,
 		hpmvec4x4f_t output);
 
 /**
- *	Subtract two matrices.
+ * Subtract two matrices.
  *
- *	\larg
+ * @param larg
  *
- *	\rarg
+ * @param rarg
  *
- *	\output
+ * @param output
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_subraction_mat4x4fv,
 		const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg,
@@ -185,41 +183,41 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_subraction_mat4x4fv,
 
 
 /**
- *	Copy identity matrix to destination matrix.
+ * Copy identity matrix to destination matrix.
  *
- *	\destination
+ * @param destination
  *
  */
 HPM_EXPORT(void, HPMAPIFASTENTRY, hpm_mat4x4_identityfv,
 		hpmvec4x4f_t destination);
 
 /**
- *	Transpose matrix.
+ * Transpose matrix.
  *
- *	\mat
+ * @param mat4x4
  *
  */
-HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat);
+HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat4x4);
 
 /**
- *	Compute determine of a 4x4 matrix.
+ * Compute determine of a 4x4 matrix.
  *
- *	\arg valid matrix memory pointer.
+ * @param mat4x4 valid matrix memory pointer.
  *
- *	@Return computed determinet
+ * @return computed determinant.
  */
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_determinantfv,
-		const hpmvec4x4f_t arg);
+		const hpmvec4x4f_t mat4x4);
 
 /**
- *	Compute inverse
+ * Compute inverse
  *
- *	\mat
+ * @param mat
  *
- *	\out
+ * @param out
  *
- *	@Return Computed determinant of mat. if 0 then there exist no inverse of mat and
- *	out is undefined.
+ * @return Computed determinant of mat. if 0 then there exist no inverse of mat and
+ * out is undefined.
  */
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
 		const hpmvec4x4f_t mat, hpmvec4x4f_t out);
@@ -227,13 +225,13 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
 /**
  * 	Extract position, rotation, scale vectors from matrix.
  *
- *	\mat
+ * @param mat
  *
- *	\position
+ * @param position
  *
- *	\rotation
+ * @param rotation
  *
- *	\scale
+ * @param scale
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
@@ -242,210 +240,222 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
 		hpmvec3f* HPM_RESTRICT scale);
 
 /**
- *	Construct translation matrix.
+ * Construct translation matrix.
  *
- *	\x position in x axis.
+ * @param x position in x axis.
  *
- *	\y position in y axis.
+ * @param y position in y axis.
  *
- *	\z position in z axis.
+ * @param z position in z axis.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
 		hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z);
 
 /**
- *	Construct translation matrix.
+ * Construct translation matrix.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationfv,
 		hpmvec4x4f_t mat, const hpmvec3f* translation);
 
 /**
- *	Construct scalar matrix.
+ * Construct scalar matrix.
  *
- *	\mat
+ * @param mat4x4
  *
+ * @param x
+ * @param y
+ * @param z
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalef, hpmvec4x4f_t mat,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalef, hpmvec4x4f_t mat4x4,
 		hpmvecf x, hpmvecf y, hpmvecf z);
 
 /**
- *	Construct scalar matrix.
+ * Construct scalar matrix.
  *
- *	\mat
+ * @param mat4x4
+ *
+ * @param scale
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalefv, hpmvec4x4f_t mat,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_scalefv, hpmvec4x4f_t mat4x4,
 		const hpmvec3f* scale);
 
 /**
- *	Construct rotation matrix.
+ * Construct rotation matrix.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\angle in radian.
+ * @param angle in radian.
  *
- *	\axis
+ * @param axis
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationfv,
-		hpmvec4x4f_t mat, hpmvecf angle, const hpmvec3f* axis);
+		hpmvec4x4f_t mat4x4, hpmvecf angle, const hpmvec3f* axis);
 
 /**
- *	Construct rotation matrix based on eular
+ * Construct rotation matrix based on Eular
  *
- *	Eular rotation around x axis.
+ * Eular rotation around x axis.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\xradian radians on the x axis.
+ * @param xradian radians on the x axis.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationXf,
-		hpmvec4x4f_t mat, hpmvecf xradian);
+		hpmvec4x4f_t mat4x4, hpmvecf xradian);
 
 /**
- *	Construct rotation matrix.
+ * Construct rotation matrix.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\zradian rotation in radian.
+ * @param zradian rotation in radian.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationYf,
-		hpmvec4x4f_t mat, hpmvecf yradian);
+		hpmvec4x4f_t mat4x4, hpmvecf yradian);
 
 /**
- *	Construct eular rotation matrix
- *	rotating along the Z axis.
+ * Construct Eular rotation matrix
+ * rotating along the Z axis.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\zradian rotation in radian.
+ * @param zradian rotation in radian.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationZf,
-		hpmvec4x4f_t mat, hpmvecf zradian);
+		hpmvec4x4f_t mat4x4, hpmvecf zradian);
 
 /**
- *	Create matrix from quaternion orientation.
+ * Create matrix from quaternion orientation.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\quat
+ * @param quat
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationQfv,
-		hpmvec4x4f_t mat, const hpmquatf* quat);
+		hpmvec4x4f_t mat4x4, const hpmquatf* quat);
 
 /**
- *	Create rotation matrix from three bias vector.
+ * Create rotation matrix from three bias vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_rotationAxisfv,
 		hpmvec4x4f_t mat, const hpmvec4f* HPM_RESTRICT xaxis,
 		const hpmvec4f* HPM_RESTRICT yaxis, const hpmvec4f* HPM_RESTRICT zaxis);
 
 /**
- *	Construct translation matrix and multiply
- *	it with mat on the right side of mat.
+ * Construct translation matrix and multiply
+ * it with mat on the right side of mat.
  *
- *	\mat
+ * @param mat4x4
  *
- *	\translation
+ * @param translation
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_translationfv,
-		hpmvec4x4f_t mat, const hpmvec4f* translation);
+		hpmvec4x4f_t mat4x4, const hpmvec4f* translation);
 
 /**
- *	Multiply mat by scalar matrix.
- *	mat = mat * scale
+ * Multiply mat by scalar matrix.
+ * mat = mat * scale
  *
- *	\mat
+ * @param mat4x4
  *
- *	\scale
+ * @param scale
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_scalefv,
-		hpmvec4x4f_t mat, const hpmvec4f* scale);
+		hpmvec4x4f_t mat4x4, const hpmvec4f* scale);
 
 /**
- *	Multiple left matrix with Eular rotation matrix.
- *	mat = mat * eularRotX(radian).
+ * Multiple left matrix with Eular rotation matrix.
+ * mat = mat * eularRotX(radian).
  *
- *	\mat left sided matrix.
+ * @param mat4x4 left sided matrix.
  *
- *	\yradian eular radian rotation in pitch.
+ * @param yradian Eular radian rotation in pitch.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationxf,
-		hpmvec4x4f_t mat, hpmvecf xradian);
+		hpmvec4x4f_t mat4x4, hpmvecf xradian);
 
 /**
- *	Multiple left matrix with Eular rotation matrix.
- *	mat = mat * eularRotY(radian).
+ * Multiple left matrix with Eular rotation matrix.
+ * mat = mat * eularRotY(radian).
  *
- *	\mat left sided matrix.
+ * @param mat4x4 left sided matrix.
  *
- *	\yradian eular radian rotation in yaw.
+ * @param yradian Eular radian rotation in yaw.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationyf,
-		hpmvec4x4f_t mat, hpmvecf yradian);
+		hpmvec4x4f_t mat4x4, hpmvecf yradian);
 
 /**
- *	Multiple left matrix with Eular rotation matrix.
- *	mat = mat * eularRotZ(radian).
+ * Multiple left matrix with Eular rotation matrix.
+ * mat = mat * eularRotZ(radian).
  *
- *	\mat left sided matrix.
+ * @param mat4x4 left sided matrix.
  *
- *	\yradian eular radian rotation in roll.
+ * @param yradian Eular radian rotation in roll.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationzf,
-		hpmvec4x4f_t mat, hpmvecf zradian);
+		hpmvec4x4f_t mat4x4, hpmvecf zradian);
 
 /**
- *	Multiply quaternion rotation matrix.
- *	mat = mat * fquat;
+ * Multiply quaternion rotation matrix.
+ * mat = mat * fquat;
  *
- *	\mat 4x4 matrix.
+ * @param mat4x4 4x4 matrix.
  *
- *	\fquat normalized quaternion.
+ * @param fquat normalized quaternion.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multi_rotationQfv,
-		hpmvec4x4f_t mat, const hpmquatf* fquat);
+		hpmvec4x4f_t mat4x4, const hpmquatf* fquat);
 
 /**
- *	Construct projection matrix.
+ * Construct projection matrix.
  *
- *	\mat
+ * @param mat
  *
- *	\fov field of view in radian (0, pi).
+ * @param fov field of view in radian (0, pi).
  *
- *	\aspect view aspect.
+ * @param aspect view aspect.
  *
- *	\near near plane.
+ * @param near near plane.
  *
- *	\far far plane.
+ * @param far far plane.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
 		hpmvecf fov, hpmvecf aspect, hpmvecf near, hpmvecf far);
 
 /**
- *	Construct orthogonal matrix.
+ * Construct orthogonal matrix.
  *
- *	\mat
  *
- *	\left
+ * |----|
+ * |\   |
+ * | \  |
+ * |  \ |
+ * |----|
  *
- *	\right
+ * @param mat
  *
- *	\bottom
+ * @param left
  *
- *	\top
+ * @param right
  *
- *	\zNear
+ * @param bottom
  *
- *	\zFar
+ * @param top
+ *
+ * @param zNear
+ *
+ * @param zFar
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
@@ -453,22 +463,23 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
            hpmvecf zNear, hpmvecf zFar);
 
 /**
- *	Unproject matrix.
+ * Unproject matrix.
  *
- *	\winx x coordinate position.
+ * @param winx x coordinate position.
  *
- *	\winz z
+ * @param winy y coordinate position.
  *
- *	\winy y coordinate position.
+ * @param winz z coordinate position.
  *
- *	\projection project matrix.
+ * @param projection project matrix.
  *
- *	\modelview model-view matrix.
+ * @param modelview model-view matrix.
  *
- *	\viewport viewport of the screen (x, y, width, height)
+ * @param viewport viewport of the screen (x, y, width, height)
  *
- *	\pos position inside the projection space.
+ * @param pos position inside the projection space.
  *
+ * @return non-zero if successfully unproject.
  */
 HPM_EXPORT(hpmboolean, HPMAPIENTRY, hpm_mat4x4_unprojf, hpmvecf winx,
 		hpmvecf winy, hpmvecf winz, const hpmvec4x4f_t projection,
