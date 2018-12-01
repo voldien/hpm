@@ -208,10 +208,12 @@ HPM_IMP( void, hpm_vec3_projfv, const hpmvec3f* a, const hpmvec3f* b, hpmvec3f* 
 	hpm_vec4_setwf(tmpA, 0.0f);
 	hpm_vec4_setwf(tmpB, 0.0f);
 
-	/*	Compute dot products.   */
-	const hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmpA, &tmpA);
+	/*	Compute inverse dot products of the length of b.   */
+	const hpmvecf dotinv = 1.0f / HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmpB, &tmpB);
+
+	/*  Compute angle between a and b.  */
 	const hpmvecf s1 = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&tmpA, &tmpB);
 
-	/*  Compute final product.  */
+	/*  Compute final product. */
 	*out = *b * s1 * dotinv;
 }
