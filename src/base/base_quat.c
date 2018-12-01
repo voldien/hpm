@@ -18,18 +18,18 @@ HPM_IMP(void, hpm_quat_setf, hpmquatf* destination,
 	*destination = set;
 }
 
-HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* larg){
+HPM_IMP( void, hpm_quat_conjugatefv, hpmquatf* quat){
 	/*  { w, -x, -y -z }  */
 	const hpmquatf conj = { 1.0f, -1.0f, -1.0f, -1.0f };
-	*larg *= conj;
+	*quat *= conj;
 }
 
-HPM_IMP( void, hpm_quat_inversefv, hpmquatf* arg){
+HPM_IMP( void, hpm_quat_inversefv, hpmquatf* quat){
 	/*  Compute inverse length. */
-	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(arg);
+	const hpmvecf sqrleng = 1.0f / HPM_CALLLOCALFUNC( hpm_vec4_lengthsqurefv )(quat);
 	/*  Conjugate quaternion.   */
-	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(arg);
-	*arg *= sqrleng;
+	HPM_CALLLOCALFUNC( hpm_quat_conjugatefv )(quat);
+	*quat *= sqrleng;
 }
 
 HPM_IMP(void, hpm_quat_powfv, hpmquatf* quat, const hpmvecf exponent) {
@@ -50,10 +50,10 @@ HPM_IMP(void, hpm_quat_powfv, hpmquatf* quat, const hpmvecf exponent) {
 }
 
 
-HPM_IMP( void, hpm_quat_identityfv, hpmquatf* out){
+HPM_IMP( void, hpm_quat_identityfv, hpmquatf* quat){
 	/*  { w, x, y, z }  */
 	const hpmquatf iden = { 1.0f, 0.0f, 0.0f, 0.0f };
-	*out = iden;
+	*quat = iden;
 }
 
 HPM_IMP( void, hpm_quat_directionfv, const hpmquatf* quat, hpmvec3f* out){
@@ -77,10 +77,15 @@ HPM_IMP( void, hpm_quat_axis_anglefv, hpmquatf* HPM_RESTRICT quat, const hpmvec3
 	const hpmvecf halfsin = sinf(half_angle);
 
 	/*  */
-	(*quat)[HPM_QUAT_X] = hpm_vec4_getxf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_Y] = hpm_vec4_getyf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_Z] = hpm_vec4_getzf(*axis) * halfsin;
-	(*quat)[HPM_QUAT_W] = cosf(half_angle);
+
+	const hpmvecf x = hpm_vec4_getxf(*axis) * halfsin;
+	const hpmvecf y = hpm_vec4_getyf(*axis) * halfsin;
+	const hpmvecf z = hpm_vec4_getzf(*axis) * halfsin;
+	const hpmvecf w = cosf(half_angle);
+
+	const hpmquatf result = {w, x, y, z};
+
+	*quat = result;
 }
 
 HPM_IMP(void, hpm_quat_axisf, hpmquatf *quat, const hpmvecf pitch_radian, const hpmvecf yaw_radian,
