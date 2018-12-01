@@ -33,7 +33,7 @@ unsigned int g_simd = HPM_NONE;
 #define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
 
 int hpm_init(unsigned int simd){
-	char* libpath;
+	char* libpath = NULL;
 
 	/*	*/
 	if(simd == HPM_NONE)
