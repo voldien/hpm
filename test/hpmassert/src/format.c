@@ -41,7 +41,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 	/*  Compute the performance differences.    */
 	htpResultModel(numResults, benchmarkResults, &timeResults, &maxFuncEntries);
 
-
+	/*  */
 	const unsigned int numFuncs = benchmarkResults[0].num;
 	const FunctionRaw *result = benchmarkResults[0].results;
 
@@ -110,6 +110,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 
 	free(timeResults);
 }
+
 
 void htpResultModel(unsigned int numBench,
                     const SIMDBenchmarksRaw* HPM_RESTRICT raw,

@@ -3,8 +3,8 @@
 #include<stdlib.h>
 
 /**
- *	Get number of parameter in argument.
- *	@Return number of comma - 1.
+ * Get number of parameter in argument.
+ * @return number of comma - 1.
  */
 static unsigned int hpmNumParam(const char *arg){
 
@@ -27,7 +27,7 @@ static unsigned int hpmNumParam(const char *arg){
 }
 
 /**
- *	Get param by nth index.
+ * Get param by nth index.
  */
 static void hpmGetParamByIndex(const char *HPM_RESTRICT arg,
                                char *HPM_RESTRICT param, unsigned int index) {
