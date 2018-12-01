@@ -454,6 +454,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refract2fv, const hpmvec3f* incidentVec,
  *  ------> b
  *  |--| out
  *
+ *  out = n * ( dot(a, n) / ( || n ||^2 ))
+ *
  * @param a projected vector.
  * @param b vector projected to.
  *
