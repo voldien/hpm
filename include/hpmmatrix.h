@@ -24,21 +24,21 @@
 
 
 /**
- *						Information.
- *	hpm follows how OpenGL allocates their matrices.
- *	That is to say in a not how a 2 dimensional array in c.
+ *                  Information.
+ * hpm follows how OpenGL allocates their matrices.
+ * That is to say in a not how a 2 dimensional array in c.
  *
- *		C array					OpenGL matrix array
+ *      C array                 OpenGL matrix array
  *
- *		| a b c d |				| a e i m |
- *		| e f g h |		==>		| b f j n |
- *		| i j k l |		==>		| c j k o |
- *		| m n o q |				| d h l q |
+ *      | a b c d |             | a e i m |
+ *      | e f g h |     ==>     | b f j n |
+ *      | i j k l |     ==>     | c j k o |
+ *      | m n o q |             | d h l q |
  *
- *	When using the matrix data types with e.g OpenGL
- *	uniform matrix function. The 'transpose' parameter has to be
- *	GL_FALSE. Because hpm's matrix in system memory is allocated
- *	with OpenGL's convention.
+ * When using the matrix data types with e.g OpenGL
+ * uniform matrix function. The 'transpose' parameter has to be
+ * GL_FALSE. Because hpm's matrix in system memory is allocated
+ * with OpenGL's convention.
  *
  */
 
@@ -223,7 +223,7 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
 		const hpmvec4x4f_t mat, hpmvec4x4f_t out);
 
 /**
- * 	Extract position, rotation, scale vectors from matrix.
+ * Extract position, rotation, scale vectors from matrix.
  *
  * @param mat
  *
