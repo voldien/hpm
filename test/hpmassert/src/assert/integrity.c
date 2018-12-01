@@ -493,7 +493,7 @@ START_TEST (matrix4x4){
 	hpm_mat4x4_copyfv(m1, m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
 	hpm_mat4x4_transposefv(m2);
-	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+	ck_assert_int_eq(hpm_mat4_neqfv(m1, m2), 1);
 
 	/*  Inverse.    */
 	const hpmvec4x4f_t expInverse = {
@@ -505,9 +505,12 @@ START_TEST (matrix4x4){
 	const hpmvecf det = 1.0f;
 	hpm_mat4x4_translationf(m1, 10.0f, 20.0f, 5.0f);
 	hpm_mat4x4_inversefv(m1, m2);
-	ck_assert_int_eq(hpm_mat4_eqfv(m2, expInverse), 1);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), det), 1);
-	ck_assert_int_eq(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), hpm_mat4x4_determinantfv(expInverse)), 1);
+	hpm_mat4x4_sprint(mac1msg, m2);
+	hpm_mat4x4_sprint(mex2msg, expInverse);
+	ck_assert_msg(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), det), "hpm_mat4x4_determinantfv failed: expected: %f actual: %f", det, hpm_mat4x4_determinantfv(m2));
+	ck_assert_msg(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), hpm_mat4x4_determinantfv(expInverse)), "hpm_mat4x4_inversefv failed: expected : \n %s \n actual %s\n", mex2msg, mac1msg);
+	ck_assert_msg(hpm_mat4_eqfv(m2, expInverse), "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
+
 
 }
 END_TEST
