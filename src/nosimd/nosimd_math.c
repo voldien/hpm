@@ -52,7 +52,7 @@ HPM_IMP(void, hpm_vec8_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
 HPM_IMP(void, hpm_vec4_fast_sqrtfv, const hpmvec4f* HPM_RESTRICT a,
 		hpmvec4f* HPM_RESTRICT out) {
 	int i;
-	for(i = 0; i < 8; i++)
+	for (i = 0; i < 4; i++)
 		(*out)[i] = sqrtf((*a)[i]);
 }
 HPM_IMP(void, hpm_vec8_fast_sqrtfv, const hpmvec8f* HPM_RESTRICT a,
