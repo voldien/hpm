@@ -130,10 +130,35 @@ HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale){
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmvec3f* axis){
+HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, hpmvecf angle, const hpmvec3f* axis){
 
+	const hpmvec3f n = *axis;
 
+	/*  */
+	const hpmvecf costheta = cosf(angle);
+	const hpmvecf sintheta = sinf(angle);
+	const hpmvecf ncostheta = 1.0f - costheta;
 
+	/*  Extract constants.  */
+	const hpmvecf nx = hpm_vec4_getxf(n);
+	const hpmvecf ny = hpm_vec4_getyf(n);
+	const hpmvecf nz = hpm_vec4_getzf(n);
+
+	/*  Compute constants.  */
+	const hpmvecf nxsq = nx * nx;
+	const hpmvecf nysq = ny * ny;
+	const hpmvecf nzsq = nz * nz;
+
+	/*  Compute each matrix column.    */
+	const hpmvec4f row0 = { ncostheta * nxsq + costheta, nx * ny * ncostheta  - nz * sintheta , nx * ny * ncostheta + ny * sintheta, 0.0f };
+	const hpmvec4f row1 = { nx * ny * ncostheta  + nz * costheta, nysq * ncostheta  + costheta, ny * nz * ncostheta - nx * sintheta, 0.0f };
+	const hpmvec4f row2 = { nx * nz * ncostheta - ny * sintheta, ny * nz * ncostheta  + nx * sintheta , nzsq * ncostheta + costheta, 0.0f };
+	const hpmvec4f row3 = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
 
 
