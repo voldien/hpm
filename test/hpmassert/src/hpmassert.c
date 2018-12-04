@@ -3,6 +3,7 @@
 #include<time.h>
 #include<sys/time.h>
 #include<getopt.h>
+#include <hpmlog.h>
 #include"hpmparser.h"
 
 static const char *gs_type[] = {
@@ -24,11 +25,15 @@ static const char *gs_precision[] = {
 		NULL
 };
 
+
+
 void htpReadArgument(int argc, char** argv) {
 
 	/*	*/
 	static struct option longoption[] = {
 			{"version",     no_argument,       NULL, 'v'},    /*	Print hpm version that the program uses.	*/
+			{"verbose",     no_argument,       NULL, 'V'},    /*	Print hpm version that the program uses.	*/
+			{"debug",       no_argument,       NULL, 'D'},    /*	Print hpm version that the program uses.	*/
 			{"assert",      no_argument,       NULL, 'A'},    /*	Assert only integrity.	*/
 			{"performance", no_argument,       NULL, 'P'},    /*	Assert only performance.	*/
 			{"quite",       no_argument,       NULL, 'q'},    /*	Display only results.	*/
@@ -42,7 +47,7 @@ void htpReadArgument(int argc, char** argv) {
 
 	int c;
 	int optindex;
-	const char* shortarg = "APqs:vp:t:r";
+	const char* shortarg = "APqs:vp:t:rVD";
 
 	/*	Iterate through options.	*/
 	while ((c = getopt_long(argc, argv, shortarg, longoption, &optindex)) != EOF) {
@@ -50,6 +55,11 @@ void htpReadArgument(int argc, char** argv) {
 			case 's':
 				if (optarg) {
 					unsigned int i = 1;
+
+					if(strcmp(optarg, "all") == 0){
+						g_SIMD = UINT32_MAX;
+						break;
+					}
 
 					do {
 						if (strcmp(hpm_get_simd_symbol(i), optarg) == 0) {
@@ -75,11 +85,11 @@ void htpReadArgument(int argc, char** argv) {
 				exit(EXIT_SUCCESS);
 			case 'p':
 				if (optarg)
-					g_precision = hpmParserBitWiseMultiParam(optarg, gs_precision);
+					g_precision = htpParserBitWiseMultiParam(optarg, gs_precision);
 				break;
 			case 't':
 				if (optarg)
-					g_type = hpmParserBitWiseMultiParam(optarg, gs_type);
+					g_type = htpParserBitWiseMultiParam(optarg, gs_type);
 				break;
 			case 'A':
 				g_type = eIntegrity;
@@ -91,6 +101,13 @@ void htpReadArgument(int argc, char** argv) {
 				g_format = 0x1;
 				break;
 			case 'q':
+				htpSetVerbosity(HTP_VERBOSE_QUITE);
+				break;
+			case 'V':
+				htpSetVerbosity(HTP_VERBOSE_LOG);
+				break;
+			case 'D':
+				htpSetVerbosity(HTP_VERBOSE_DEBUG);
 				break;
 			default:
 				break;
@@ -127,7 +144,7 @@ void htpDeallocateBenchmarks(SIMDBenchmarksRaw* benchmarksRaw, unsigned int num)
 
 void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult){
 
-	printf("Starting %s extension test.\n", hpm_get_simd_symbol(simd));
+	htpLogPrint(HTP_VERBOSE_LOG, "Starting %s extension test.\n", hpm_get_simd_symbol(simd));
 
 
 	/*	Initilize the hpm library.	*/
@@ -187,7 +204,7 @@ static HPM_ALWAYS_INLINE void htpBenchmarkFunc(func_benchmark func, const char *
 
 	/*  Display formated.   */
 	if((g_format & 0x1) == 0)
-		printf("%s %f seconds.\n", name, (float) totaltime / g_time_res);
+		htpLogPrint(HTP_VERBOSE_LOG, "%s %f seconds.\n", name, (float) totaltime / g_time_res);
 }
 
 /**
@@ -203,14 +220,14 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
 		/*	Check integrity.	*/
 		if(g_type & eIntegrity){
-			printf("Integrity check.\n");
+			htpLogPrint(HTP_VERBOSE_LOG, "Integrity check.\n");
 			htpIntegritySpCheckf();
 		}
 
 		/*	Matrix mode.	*/
 		if( g_type & eMatrix ){
-			printf("single precision matrix.\n");
-			printf("Single precision vector performance.\n"
+			htpLogPrint(HTP_VERBOSE_LOG, "single precision matrix.\n");
+			htpLogPrint(HTP_VERBOSE_LOG, "Single precision vector performance.\n"
 			       "-----------------------------\n");
 			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_copyfv, benchmarkResult, findex);
 			HPM_BENCHMARK_FUNC_CALL(hpm_mat4x4_multiply_mat4x4fv, benchmarkResult, findex);
@@ -234,8 +251,8 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
 		/*	Comparing mode.	*/
 		if( g_type & eComparing ){
-			printf("single precision comparing.\n");
-			printf("Single precision vector performance.\n"
+			htpLogPrint(HTP_VERBOSE_LOG, "single precision comparing.\n");
+			htpLogPrint(HTP_VERBOSE_LOG, "Single precision vector performance.\n"
 			       "-----------------------------\n");
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_com_eqfv, benchmarkResult, findex);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_eqfv, benchmarkResult, findex);
@@ -249,8 +266,8 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
 		/*	Quaternion mode.	*/
 		if(g_type & eQuaternion){
-			printf("single precision Quaternion.\n");
-			printf("Single precision vector performance.\n"
+			htpLogPrint(HTP_VERBOSE_LOG, "single precision Quaternion.\n");
+			htpLogPrint(HTP_VERBOSE_LOG, "Single precision vector performance.\n"
 			       "-----------------------------\n");
 
 			HPM_BENCHMARK_FUNC_CALL(hpm_quat_copyfv, benchmarkResult, findex);
@@ -276,7 +293,7 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
 		/*	Math mode.	*/
 		if(g_type & eMath){
-			printf("Single precision Math performance.\n"
+			htpLogPrint(HTP_VERBOSE_LOG, "Single precision Math performance.\n"
 			       "-----------------------------\n");
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec4_maxfv, benchmarkResult, findex);
 			HPM_BENCHMARK_FUNC_CALL(hpm_vec8_maxfv, benchmarkResult, findex);
@@ -291,7 +308,7 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 
 		/*	Vector mode.	*/
 		if(g_type & eVector){
-			printf("Single precision vector performance.\n"
+			htpLogPrint(HTP_VERBOSE_LOG, "Single precision vector performance.\n"
 			       "-----------------------------\n");
 
 			/*	Vector4*/
@@ -324,5 +341,5 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 	}
 
 	benchmarkResult->num = findex;
-	printf("\n\n");
+	htpLogPrint(HTP_VERBOSE_LOG, "\n\n");
 }
