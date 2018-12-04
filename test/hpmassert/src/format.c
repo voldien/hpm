@@ -121,7 +121,8 @@ void htpResultModel(unsigned int numBench,
 
 	assert(numberModels > 0);
 
-	/*  Compute max number of function entries. */
+
+	/*  Compute max number of function entries for computing model. */
 	for (x = 0; x < numBench; x++) {
 		if (raw[x].num > maxEntries)
 			maxEntries = raw[x].num;
@@ -135,20 +136,33 @@ void htpResultModel(unsigned int numBench,
 	memset(*models, 0, resultEntireSize);
 	assert(*models);
 
+
+	/**
+	 * Performance model:
+	 * 
+	 * baseline = slowest result of all SIMD features in nanoseconds which is
+	 * the one with highest nanoseconds.
+	 * result / baseline is greater than 1.
+	 * SIMD with the baseline result will have a performance gain of 0.0 and thus
+	 * result will be 1.0.
+	 *
+	 * r = f(it) / max(it)
+	 */
+
 	/*  Number of functions benchmarked.    */
 	const unsigned int nFunctions = (unsigned int)maxEntries;
 
 	/*  Iterate through each function.*/
 	for (y = 0; y < nFunctions; y++) {
 
-		long int baseline = INT32_MAX;
+		long int baseline = INT64_MIN;
 
 		/*  Compute baseline from function row.   */
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = raw[x].results;
 
 			/*  Compute min baseline for each function per SIMD.    */
-			if (result[y].nanosec < baseline)
+			if (result[y].nanosec > baseline)
 				baseline = result[y].nanosec;
 		}
 
@@ -156,22 +170,24 @@ void htpResultModel(unsigned int numBench,
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = &raw[x].results[y];
 
-			float modelResult;
+			double modelResult;
 
 			/*  Compute result of specified model.  */
 			switch (g_result_model) {
 				case ePercentage:
-					modelResult = (float) ((double) result->nanosec / (double) baseline);
+					modelResult = ((double) result->nanosec / (double) baseline);
+					modelResult = 1.0 / modelResult;
 					break;
 				case eElapseTime:
-					modelResult = (float) ((double) result->nanosec / (double) hptGetTimeResolution());
+					modelResult = ((double) result->nanosec / (double) hptGetTimeResolution());
 					break;
 				default:
+					/*  Not a valid model.  */
 					assert(0);
 			}
 
 			/*  Store percentage.   */
-			(*models)[y * numBench + x].percentage = modelResult;
+			(*models)[y * numBench + x].percentage = (float) modelResult;
 		}
 	}
 
