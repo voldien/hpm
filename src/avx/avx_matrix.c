@@ -61,11 +61,11 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 	*output = brod1 * larg[0] + brod2 * larg[1] + brod3 * larg[2] + brod4 * larg[3];
 }
 
-HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
+HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat4x4){
 	/*	TODO fix if it can be optimized even further.*/
 	const hpmvec8f row0 = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f };
 	const hpmvec8f row1 = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-	hpmmat4uf* mat8 = mat;
+	hpmmat4uf* mat8 = mat4x4;
 	mat8->oc[0] = row0;
 	mat8->oc[1] = row1;
 }
@@ -75,7 +75,7 @@ HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
 }
 
 /*	TODO add Cramer's rule version	*/
-HPM_IMP(float, hpm_mat4x4_determinantfv,
+HPM_IMP(hpmvecf, hpm_mat4x4_determinantfv,
 		const hpmvec4x4f_t f_mat4){
 
 	return f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][2]* f_mat4[3][3] - f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][3]* f_mat4[3][2] + f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][3]* f_mat4[3][1] -  f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][1]* f_mat4[3][3]
@@ -87,16 +87,16 @@ HPM_IMP(float, hpm_mat4x4_determinantfv,
 }
 
 /*	TODO add Cramer's rule version	*/
-HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res){
-	float tmp[12]; /* temp array for pairs*/
-	float src[16]; /* array of transpose source matrix */
-	float* dst = res;
-	const float* mat = f_mat4;
+HPM_IMP( hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res){
+	hpmvecf tmp[12]; /* temp array for pairs*/
+	hpmvecf src[16]; /* array of transpose source matrix */
+	hpmvecf* dst = res;
+	const hpmvecf* mat = f_mat4;
 	int i,j;
 
-	float detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
+	hpmvecf detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
 	if(detm > 0.0f){
-		float invdet = 1.0f / detm;
+		hpmvecf invdet = 1.0f / detm;
 		res[0][0] = invdet  * (f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[1][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][1] = -invdet * (f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[0][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][2] = invdet  * (f_mat4[0][1] * (f_mat4[1][2] * f_mat4[3][3] - f_mat4[1][3] * f_mat4[3][2]) + f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][3]) + f_mat4[0][3] * (f_mat4[1][1] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][1]));

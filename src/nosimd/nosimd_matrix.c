@@ -78,16 +78,16 @@ HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
 }
 
 /*	Cramer's rule	*/ /*	TODO Fix	*/
-HPM_IMP( float, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res){
-	float tmp[12]; /* temp array for pairs*/
-	float src[16]; /* array of transpose source matrix */
-	float* dst = res;
-	const float* mat = f_mat4;
+HPM_IMP( hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res){
+	hpmvecf tmp[12]; /* temp array for pairs*/
+	hpmvecf src[16]; /* array of transpose source matrix */
+	hpmvecf* dst = res;
+	const hpmvecf* mat = f_mat4;
 	int i,j;
 
-	float detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
+	hpmvecf detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
 	if(detm > 0.0f){
-		float invdet = 1.0f / detm;
+		hpmvecf invdet = 1.0f / detm;
 		res[0][0] = invdet  * (f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[1][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][1] = -invdet * (f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[0][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][2] = invdet  * (f_mat4[0][1] * (f_mat4[1][2] * f_mat4[3][3] - f_mat4[1][3] * f_mat4[3][2]) + f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][3]) + f_mat4[0][3] * (f_mat4[1][1] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][1]));

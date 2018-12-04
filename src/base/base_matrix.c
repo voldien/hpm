@@ -10,7 +10,7 @@
 #   endif
 
 
-HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
+HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const hpmvecf rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;
 	output[1] = larg[1] * row0;
@@ -18,7 +18,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float
 	output[3] = larg[3] * row0;
 }
 
-HPM_IMP( void, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const float rarg){
+HPM_IMP( void, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const hpmvecf rarg){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	larg[0] /= row0;
 	larg[1] /= row0;
@@ -81,7 +81,7 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 }
 
 
-HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, float x, float y, float z){
+HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z){
 	const hpmvec4f row0 = { 1, 0, 0, 0 };
 	const hpmvec4f row1 = { 0, 1, 0, 0 };
 	const hpmvec4f row2 = { 0, 0, 1, 0 };
@@ -109,7 +109,7 @@ HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t mat, const hpmvec3f* trans
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t mat, float x, float y, float z){
+HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z){
 	const hpmvec4f row0 = { x, 0, 0, 0 };
 	const hpmvec4f row1 = { 0, y, 0, 0 };
 	const hpmvec4f row2 = { 0, 0, z, 0 };
@@ -287,7 +287,7 @@ HPM_IMP( void, hpm_mat4x4_multi_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale
 }
 
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -295,7 +295,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, float angle){
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -303,7 +303,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, float angle){
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationzf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationzf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -320,7 +320,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, mat_quat, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
+HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, hpmvecf f_fov, hpmvecf f_aspect, hpmvecf f_near, hpmvecf f_far){
 	const hpmvecf angle = f_fov;
 	const hpmvecf xScale = (1.0f / (tanf(angle) ) / f_aspect);
 	const hpmvecf yScale = 1.0f / tanf(angle);
@@ -338,7 +338,7 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect,
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, float bottom, float top, float zNear, float zFar){
+HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, hpmvecf left, hpmvecf right, hpmvecf bottom, hpmvecf top, hpmvecf zNear, hpmvecf zFar){
 	/*	*/
 	const hpmvec4f row0 = {2.0f/(right - left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0f, 2.0f/(top - bottom), 0.0f, 0.0f};
@@ -352,8 +352,8 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, flo
 	mat[3] = row3;
 }
 
-HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
-		float winy, float winz, const hpmvec4x4f_t projection,
+HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, hpmvecf winx,
+		hpmvecf winy, hpmvecf winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* HPM_RESTRICT viewport,
 		hpmvec3f* HPM_RESTRICT pos){
 

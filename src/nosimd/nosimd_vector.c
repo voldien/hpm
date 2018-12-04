@@ -53,7 +53,7 @@ HPM_IMP(hpmvecf, hpm_vec4_min_compfv, const hpmvec4f* vec){
 
 HPM_IMP( void, hpm_vec3_crossproductfv, const hpmvec3f* v1, const hpmvec3f* v2, hpmvec3f* out){
 
-
+	/*  */
 	const hpmvecf cx = hpm_vec4_getyf(*v1) * hpm_vec4_getzf(*v2) - hpm_vec4_getzf(*v1) * hpm_vec4_getyf(*v2);
 	const hpmvecf cy = hpm_vec4_getzf(*v1) * hpm_vec4_getxf(*v2) - hpm_vec4_getxf(*v1) * hpm_vec4_getzf(*v2);
 	const hpmvecf cz = hpm_vec4_getxf(*v1) * hpm_vec4_getyf(*v2) - hpm_vec4_getyf(*v1) * hpm_vec4_getxf(*v2);

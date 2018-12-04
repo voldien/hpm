@@ -58,10 +58,12 @@ typedef struct hpm_vec2uf_t{
 typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);   /*	*/
-typedef struct hpm_vec3uf_t{
-	union{
+typedef struct hpm_vec3uf_t {
+	union {
 		hpmvec3f v;
-		struct{hpmvecf x, y, z;};
+		struct {
+			hpmvecf x, y, z;
+		};
 	};
 };
 
@@ -71,10 +73,12 @@ typedef struct hpm_vec3uf_t{
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
-typedef struct hpm_vec4uf_t{
-	union{
+typedef struct hpm_vec4uf_t {
+	union {
 		hpmvec4f v;
-		struct{hpmvecf x, y, z, w;};
+		struct {
+			hpmvecf x, y, z, w;
+		};
 	};
 };
 
@@ -96,19 +100,19 @@ typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
  *	Union data types
  */
 HPM_ALIGN(16)
-typedef struct hpmvec8fu_t{
-	union{
+typedef struct hpmvec8fu_t {
+	union {
 		hpmvec4f d2[2];
 		hpmvec8f d;
 	};
-}hpmvec8fu;
+} hpmvec8fu;
 HPM_ALIGN(16)
-typedef struct hpmvec4du_t{
-	union{
+typedef struct hpmvec4du_t {
+	union {
 		hpmvec2d d2[2];
 		hpmvec4d d;
 	};
-}hpmvec4du;
+} hpmvec4du;
 
 /**
  *	AVX 512 bits data types.
@@ -117,12 +121,12 @@ typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
 typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
 typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
 HPM_ALIGN(16)
-typedef struct hpmvec8du_t{
-	union{
+typedef struct hpmvec8du_t {
+	union {
 		hpmvec4d d2[2];
 		hpmvec8d d;
 	};
-}hpmvec8du;
+} hpmvec8du;
 
 
 /**
