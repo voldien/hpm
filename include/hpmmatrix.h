@@ -57,11 +57,13 @@ typedef struct hpmvec4x4f_s{hpmvecf m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,
 typedef hpmv4sf hpmvec4x4fi_t[4];
 typedef hpmvec4f hpmvec4x4fp_t;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec4x4f_t m;
 	hpmmat4f s;
-	struct {hpmvec8f oc[2];};
-}hpmmat4uf;
+	struct {
+		hpmvec8f oc[2];
+	};
+} hpmmat4uf;
 
 
 /**
@@ -71,11 +73,11 @@ typedef union{
 typedef hpmvec4d hpmvec4x4d_t[4];
 typedef struct hpmvec4x4d_s{double m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4d;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec4x4d_t m;
 	struct hpmvec4x4d_s s;
 	hpmvec2d t[2][2];
-}hpmmat4ud;
+} hpmmat4ud;
 
 
 /**
@@ -87,9 +89,9 @@ typedef hpmvec2f hpmvec2x2f_t[2];
 typedef struct hpmvec2x2f_s{hpmvecf m11,m21,m12,m22;}hpmmat2f;
 typedef hpmvec2f hpmvec2x2fp_t;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec2x2f_t m;
-}hpmmat2uf;
+} hpmmat2uf;
 
 
 /**
