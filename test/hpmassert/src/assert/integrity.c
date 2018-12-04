@@ -511,18 +511,21 @@ START_TEST (matrix4x4){
 	ck_assert_msg(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), hpm_mat4x4_determinantfv(expInverse)), "hpm_mat4x4_inversefv failed: expected : \n %s \n actual %s\n", mex2msg, mac1msg);
 	ck_assert_msg(hpm_mat4_eqfv(m2, expInverse), "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
 
-
 }
 END_TEST
 
 START_TEST (transformation) {
 
+	char mac1msg[256];      /*  Actual result.  */
+	char mex2msg[256];      /*  Expected result.   */
 	hpmvec4f v1 = {1.0f, 2.0f, 3.0f, 4.0f};
 	hpmvec4f v2 = {0.0f, 0.0f, 0.0f, 0.0f};
 	hpmvec4f v3 = {1.0f};
 	const hpmvec4f w = {0.0f, 0.0f, 0.0f, 1.0f};
 	const hpmvec4f forward = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec4f up = {0.0f, 1.0f, 0.0f, 0.0f};
 	const hpmvec4f one = {1.0f, 1.0f, 1.0f, 1.0f};
+
 
 	hpmvec4x4f_t m1;
 	hpmvec4x4f_t m2;
@@ -561,6 +564,32 @@ START_TEST (transformation) {
 	hpm_mat4x4_rotationZf(m1, (hpmvecf) HPM_PI);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	ck_assert_int_eq(hpm_vec_eqfv(hpm_vec4_getzf(exZrot), hpm_vec4_getzf(v3)), 1);
+
+
+	/*  Rotate around forward axis with 0 degree angle. */
+	hpm_mat4x4_rotationfv(m1, 0.0f, &forward);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	hpm_vec4_sprint(mac1msg, &v3);
+	hpm_vec4_sprint(mex2msg, &forward);
+	ck_assert_msg(hpm_vec4_eqfv(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
+	              mac1msg);
+
+	/*  Rotate around forward axis with 180 degree angle. */
+	hpm_mat4x4_rotationfv(m1, HPM_PI_2, &forward);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	hpm_vec4_sprint(mac1msg, &v3);
+	hpm_vec4_sprint(mex2msg, &forward);
+	ck_assert_msg(hpm_vec4_eqfv(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
+	              mac1msg);
+
+	/*  Rotate around up axis with 180 degree angle. */
+	const hpmvec4f exprot = {-1.0f, 0.0f, 0.0f, 0.0f};
+	hpm_mat4x4_rotationfv(m1, HPM_PI_2, &up);
+	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
+	hpm_vec4_sprint(mac1msg, &v3);
+	hpm_vec4_sprint(mex2msg, &exprot);
+	ck_assert_msg(hpm_vec4_eqfv(&exprot, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
+	              mac1msg);
 
 	/*  Check orthographic projection function.  */
 	const hpmvec4f orthRes = {0.1f, 0.1f, -0.1f, 1.0f};
