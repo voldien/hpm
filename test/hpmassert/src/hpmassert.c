@@ -270,6 +270,8 @@ void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult){
 			HPM_BENCHMARK_FUNC_CALL(hpm_quat_pitchfv, benchmarkResult, findex);
 			HPM_BENCHMARK_FUNC_CALL(hpm_quat_yawfv, benchmarkResult, findex);
 			HPM_BENCHMARK_FUNC_CALL(hpm_quat_rollfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_eularfv, benchmarkResult, findex);
+			HPM_BENCHMARK_FUNC_CALL(hpm_quat_powfv, benchmarkResult, findex);
 		}
 
 		/*	Math mode.	*/
