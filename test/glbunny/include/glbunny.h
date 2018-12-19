@@ -22,16 +22,15 @@
 #include<stdio.h>
 #include<GL/glew.h>
 #include<SDL2/SDL.h>
-#include<spb/sprite.h>
 
 /**
- *	Global constants.
+ * Global constants.
  */
 extern const char* gc_vertexpolygone;      /*	Vertex */
 extern const char* gc_fragmentpolygone;    /*	Fragment.	*/
 
 /**
- *	Global variable.
+ * Global variable.
  */
 extern uint32_t g_hpmflag;      /*	*/
 extern FILE* g_outputfd;        /*	*/
@@ -42,10 +41,10 @@ extern int g_debug;				/*	*/
  *
  */
 typedef struct geometry_t{
-	GLint vao;
-	GLint vbo;
-	GLint nbo;
-	GLint ibo;
+	GLuint vao;
+	GLuint vbo;
+	GLuint nbo;
+	GLuint ibo;
 	GLint numVertices;
 	GLint numIndices;
 	hpmvec4f minBound;
@@ -75,19 +74,18 @@ typedef struct scene_t{
 	GLuint prog;
 	GLint mvploc;
 	GLint modeloc;
-	SBSpriteBatch* batch;
 }Scene;
 
 /**
- *	Get version of hpmglbunny program
+ * Get version of hpmglbunny program
  *	version.
- *	@Return non-null terminated string.
+ * @return non-null terminated string.
  */
 extern const char* get_glbunny_version(void);
 
 /**
- *	Get GLSL version of current OpenGL context.
- *	@Return 3 digit version in 10^3.
+ * Get GLSL version of current OpenGL context.
+ * @return 3 digit version in 10^3.
  */
 extern unsigned int getGLSLVersion(void);
 
@@ -97,18 +95,18 @@ extern unsigned int getGLSLVersion(void);
 extern void enableGLDebug(void);
 
 /**
- *	Create shader object from shader source
+ * Create shader object from shader source
  *	string.
  *
- *	@Return shader program unique id.
+ * @return shader program unique id.
  */
 extern GLint createShader(const char* HPM_RESTRICT vsource,
         const char* HPM_RESTRICT fsource);
 
 /**
- *	Create bunny.
+ * Create bunny.
  *
- *	@Return non-negative if succesfully.
+ * @return non-negative if succesfully.
  */
 extern GLuint createBunny(Geometry* HPM_RESTRICT geometry);
 
@@ -131,7 +129,7 @@ extern GLuint createCube(unsigned int* HPM_RESTRICT nVertices,
         unsigned int* HPM_RESTRICT nIndices);
 
 /**
- *	Print verbose information about the
+ * Print verbose information about the
  *	program.
  */
 extern void print_dependency_versions(void);
