@@ -65,9 +65,15 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmv
 					larg[3][3] * (*rarg)[3];
 }
 
-HPM_IMP( float, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
-	int i;
-	const float* mat = f_mat4;
+HPM_IMP( hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
+	const hpmmat4f* mat = (const hpmvec4f *)f_mat4;
+
+	return (mat->m41 * mat->m32 * mat->m23 * mat->m14 - mat->m31 * mat->m42 * mat->m23 * mat->m14 - mat->m41 * mat->m22 * mat->m33 * mat->m14 + mat->m21 * mat->m42 * mat->m33 * mat->m14 +
+	        mat->m31 * mat->m22 * mat->m43 * mat->m14 - mat->m21 * mat->m32 * mat->m43 * mat->m14 - mat->m41 * mat->m32 * mat->m13 * mat->m24 + mat->m31 * mat->m42 * mat->m13 * mat->m24 +
+	        mat->m41 * mat->m12 * mat->m33 * mat->m24 - mat->m11 * mat->m42 * mat->m33 * mat->m24 - mat->m31 * mat->m12 * mat->m43 * mat->m24 + mat->m11 * mat->m32 * mat->m43 * mat->m24 +
+	        mat->m41 * mat->m22 * mat->m13 * mat->m34 - mat->m21 * mat->m42 * mat->m13 * mat->m34 - mat->m41 * mat->m12 * mat->m23 * mat->m34 + mat->m11 * mat->m42 * mat->m23 * mat->m34 +
+			mat->m21 * mat->m12 * mat->m43 * mat->m34 - mat->m11 * mat->m22 * mat->m43 * mat->m34 - mat->m31 * mat->m22 * mat->m13 * mat->m44 + mat->m21 * mat->m32 * mat->m13 * mat->m44 +
+	        mat->m31 * mat->m12 * mat->m23 * mat->m44 - mat->m11 * mat->m32 * mat->m23 * mat->m44 - mat->m21 * mat->m12 * mat->m33 * mat->m44 + mat->m11 * mat->m22 * mat->m33 * mat->m44);
 
 	return f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][2]* f_mat4[3][3] - f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][3]* f_mat4[3][2] + f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][3]* f_mat4[3][1] -  f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][1]* f_mat4[3][3]
 		 + f_mat4[0][0]* f_mat4[1][3]* f_mat4[2][1]* f_mat4[3][2] - f_mat4[0][0]* f_mat4[1][3]* f_mat4[2][2]* f_mat4[3][1] - f_mat4[0][1]* f_mat4[1][2]* f_mat4[2][3]* f_mat4[3][0] +  f_mat4[0][1]* f_mat4[1][2]* f_mat4[2][0]* f_mat4[3][3]
