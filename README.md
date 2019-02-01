@@ -1,15 +1,15 @@
 # HPM
 [![Travis Build Status](https://travis-ci.org/voldien/hpm.svg?branch=master)](https://travis-ci.org/voldien/hpm)
 
-*HPM* is a matrix library that supports multiple SIMD implementations that can be loaded in rune-time. Furthermore, the program can load the most appropriated implementation on its own and, it can as well explicitly load a specific SIMD extension with the available SIMD enumerators.
+*HPM* is a matrix library that supports multiple SIMD implementations that can be loaded in run-time. Furthermore, the program can load the most appropriated implementation on its own and, it can as well explicitly load a specific SIMD extension with the available SIMD enumerators.
 
-The number of features are relative low as a result of the same function as to be implemented multiple time for multiple SIMD extensions.
+The number of features is relatively low as a result of the same function as to be implemented multiple time for multiple SIMD extensions.
 ## Features ##
 * Matrix4x4, Matrix3x3 - Common matrix operation for a 4x4 and 3x3 is supported.
 * Vector4, Vector3 - Common vector operation for vector3 and vector4 is supported.
 * Quaternion - About all common quaternion operation is supported.
-* Compare - Compare matrices, vectors and quaternion by object or by component-wise.
-* Math - Simple maths function as max, min, sqrt and random is supported.
+* Compare - Compare matrices, vectors, and quaternion by the object or by component-wise.
+* Math - Simple maths function as max, min, sqrt and random are supported.
 * Utility - Support functions that utilities the other features for creating specific types of matrices.
 * Print - Easy function for printing vector primitive type values.
 
@@ -35,28 +35,27 @@ int main(int argc, const char** argv){
 
 ```
 
-The following line demonstrate how to compile it and link the program:
+The following line demonstrates how to compile it and link the program:
 ```
 gcc *.c -o hpmexample -lhpm
 ```
 
 ## Assert/Performance Tools
 In order to evaluate if the library has any performance differences on the system. The following test program for *hpm* can be used.
-It will perform performance test for all SIMD feature if supported by the machine, when no SIMD extension argument has been set.
-
+It will perform a performance test for all SIMD feature if supported by the machine when no SIMD extension argument has been set.
 ```bash
 hpmassert --performance
 ```
-The performance gain can be rather subtle for high end computer specification, whereas low end are more distinguishable.
-What should remark about the *hpmassert* program is that everything is execute in a consecutive order. This does not represent what the performance differences would be when each function is called in a randomly order. 
+The performance gain can be rather subtle for high-end computer specification, whereas low ends are more distinguishable.
+What should remark about the *hpmassert* program is that everything is executed in consecutive order. This does not represent what the performance differences would be when each function is called in a random order. 
 
-The following command will perform unit test that checks and determine if all of the implementations for each of the SIMD extensions works. 
+The following command will perform a unit test that checks and determine if all of the implementations for each of the SIMD extensions works. 
 ```bash
 hpmassert --assert
 ```
 
 ## hpmglbunny 
-The *hpmglbunny* is test program for determine if the matrices and quaternion function implementation, which is commonly used in rendering 3D models, works as accordingly. This program will render multiple rotating bunnies.
+The *hpmglbunny* is a test program to determine if the matrices and quaternion function implementation, which is commonly used in rendering 3D models, works as accordingly. This program will render multiple rotating bunnies.
 See following for example of how to execute the test tool:
 ```bash
 hpmglbunny --simd=avx
@@ -72,7 +71,7 @@ Because the library is still in development. That means that the symbol table ha
  Dependencies 
 ----------------
 The *hpm* project does not have any additional dependency other than the libraries provided with the standard *c* libraries.
-However, it is recommended that the following Debian packages has to be installed prior, see following . If a higher version is already installed this
+However, it is recommended that the following Debian packages have to be installed prior, see the following. If a higher version is already installed this
 is not required.
 ```bash
 apt-get install gcc-6
@@ -84,3 +83,4 @@ gcc --version
 
 ## License
 This project is licensed under the GPL+3 License - see the [LICENSE](LICENSE) file for details
+
