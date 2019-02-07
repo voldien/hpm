@@ -273,7 +273,6 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_from_mat4x4fv,
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axisf, hpmquatf* quat,
 		const hpmvecf pitch_radian, const hpmvecf yaw_radian, const hpmvecf roll_radian);
 
-
 /**
  * Compute linear interpolation between two quaternion.
  *
@@ -307,7 +306,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_slerpfv, const hpmquatf* larg,
  * Extract Eular degree for pitch, yaw and roll.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_eularfv, const hpmquatf* quat,
-		 hpmvecf* pitch, hpmvecf* yaw, hpmvecf* roll);
+		 hpmvecf* HPM_RESTRICT pitch, hpmvecf* HPM_RESTRICT yaw, hpmvecf* HPM_RESTRICT roll);
 
 /**
  * Compute quaternion pitch angle rotation in radian.
