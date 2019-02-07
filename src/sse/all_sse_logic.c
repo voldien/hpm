@@ -64,6 +64,11 @@ HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* 
 
 HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 #if __SSE4_1__
+	const hpmvec4f row01 = _mm_and_ps(_mm_cmpeq_ps(a[0], b[0]), _mm_cmpeq_ps(a[1], b[1]));
+	const hpmvec4f row23 = _mm_and_ps(_mm_cmpeq_ps(a[2], b[2]), _mm_cmpeq_ps(a[3], b[3]));
+	const hpmvec4f row0123 = _mm_and_ps(row01, row23);
+
+	return _mm_test_all_ones(_mm_castps_si128(row0123));
 	const hpmvec4i resrow0 = _mm_castps_si128( _mm_cmpeq_ps(a[0], b[0]) );
 	const hpmvec4i resrow1 = _mm_castps_si128( _mm_cmpeq_ps(a[1], b[1]) );
 	const hpmvec4i resrow2 = _mm_castps_si128( _mm_cmpeq_ps(a[2], b[2]) );
@@ -85,13 +90,19 @@ HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+
 #if __SSE4_1__
 	const hpmvec4i resrow0 = _mm_castps_si128( _mm_cmpneq_ps(a[0], b[0]) );
 	const hpmvec4i resrow1 = _mm_castps_si128( _mm_cmpneq_ps(a[1], b[1]) );
 	const hpmvec4i resrow2 = _mm_castps_si128( _mm_cmpneq_ps(a[2], b[2]) );
 	const hpmvec4i resrow3 = _mm_castps_si128( _mm_cmpneq_ps(a[3], b[3]) );
 
-	return _mm_testc_si128(resrow0, resrow1) & _mm_testc_si128(resrow2, resrow3);
+	const hpmvec4i pass1 = _mm_or_si128(resrow0, resrow1);
+	const hpmvec4i pass2 =  _mm_or_si128(resrow2, resrow3);
+	const hpmvec4i pass =  _mm_or_si128(pass1, pass2);
+	const hpmvec4i mask = _mm_set1_epi32(INT_MAX);
+
+	return !_mm_test_all_zeros(pass,  mask);
 #else
 	const hpmvec4f row01 = _mm_or_ps(_mm_cmpneq_ps(a[0], b[0]), _mm_cmpneq_ps(a[1], b[1]));
 	const hpmvec4f row23 = _mm_or_ps(_mm_cmpneq_ps(a[2], b[2]), _mm_cmpneq_ps(a[3], b[3]));
