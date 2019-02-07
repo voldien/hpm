@@ -141,7 +141,7 @@ HPM_IMP(hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t r
 	return detm;
 }
 
-HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
+HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat) {
 	const hpmvec4f row0 = {1.0f, 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0f, 1.0f, 0.0f, 0.0f};
 	const hpmvec4f row2 = {0.0f, 0.0f, 1.0f, 0.0f};
@@ -152,7 +152,7 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
+HPM_IMP(void, hpm_mat4x4_transposefv, hpmvec4x4f_t mat) {
 
 	/*  */
 	HPM_SWAPF32(mat[0][1], mat[1][0]);
