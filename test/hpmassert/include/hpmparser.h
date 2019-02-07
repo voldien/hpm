@@ -31,7 +31,7 @@
  *
  * @return bitwise option.
  */
-extern unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
+extern unsigned int htpParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
                                                const char **HPM_RESTRICT opts);
 
 

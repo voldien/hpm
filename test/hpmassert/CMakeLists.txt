@@ -47,7 +47,6 @@ ADD_TEST(
 		COMMAND hpmassert --assert)
 SET_TESTS_PROPERTIES(assert PROPERTIES DEPENDS hpmassert)
 
-
 ADD_TEST(
 		NAME performance
 		COMMAND hpmassert --performance --quite --simd=all)

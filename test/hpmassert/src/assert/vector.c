@@ -83,7 +83,7 @@ HPM_BENCHMARK_FUNC_IMP(hpm_vec4_slerpfv) {
 	hpmvec4f vec3 = { 1, 0, 6, 1 };
 
 	for (x = 0; x < g_it; x++) {
-		hpm_vec4_slerpfv(&vec1, &vec2, (float) x / (float) 1E7F, &vec3);
+		hpm_vec4_slerpfv(&vec1, &vec2, (hpmvecf) x / (hpmvecf) g_it, &vec3);
 	}
 }
 
