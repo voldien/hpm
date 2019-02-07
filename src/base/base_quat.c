@@ -185,28 +185,40 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4
 	}
 }
 
-HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
-	hpmvecf ht = (1.0f - t);
-	*out = *a * ht + *b * t;
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const hpmvecf t, hpmquatf* out) {
+	const hpmvecf ht = (1.0f - t);
+	*out = ht * *a  + t * *b;
 }
 
 HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const hpmvecf t, hpmquatf* out) {
 
-	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
 	hpmquatf q3;
-	if(fdot < 0.0f){
-		fdot = -fdot;
-		q3 = ( *b ) * -1.0f;
-	}
-	else q3 = *b;
+	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
+	const hpmvecd DOT_THRESHOLD = 0.9999f;
 
 	/*  */
-	if(fdot <0.95f){
-		hpmvecf angle = acosf(fdot);
-		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
+	if (fdot < 0.0f) {
+		fdot = -fdot;
+		q3 = (*b) * -1.0f;
+	} else
+		q3 = *b;
+
+	/*  */
+	float k0, k1;
+	if (fdot > DOT_THRESHOLD) {
+		k0 = 1.0f - t;
+		k1 = t;
+	} else {
+
+		hpmvecf sinOmega = sqrtf(1.0f - fdot * fdot);
+		hpmvecf omega = atan2f(sinOmega, fdot);
+		hpmvecf oneOverSinOmega = 1.0f / sinOmega;
+
+		k0 = sinf((1.0f - t) * omega) * oneOverSinOmega;
+		k1 = sinf(t * omega) * oneOverSinOmega;
 	}
-	else
-		return HPM_CALLLOCALFUNC(hpm_quat_lerpfv)(a, b, t, out);
+
+	*out = k0 * (*a) + k1 * q3;
 }
 
 
