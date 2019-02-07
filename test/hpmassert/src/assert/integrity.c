@@ -6,6 +6,7 @@
 int compare_vec4_less_precise(const hpmvec4f* a, const hpmvec4f* b){
 	const hpmvecf dot = hpm_vec4_dotfv(a,b) / (hpm_vec4_lengthfv(a) * hpm_vec4_lengthfv(b));
 
+	/*  Check both angle and length of vector.  */
 	return fabsf(dot) > 0.999f && fabs(dot) < 1.00001f && fabsf(hpm_vec4_lengthfv(a) - hpm_vec4_lengthfv(b)) < 0.000001f;
 }
 
@@ -382,7 +383,7 @@ START_TEST (quaternion){
 	hpm_quat_get_vectorfv(&q1, &forward, &direction);
 	hpm_vec4_sprint(qacmsg, &direction);
 	hpm_vec4_sprint(qexmsg, &halfLookup);
-	ck_assert_msg(compare_vec4_less_precise(&direction, &halfLookup), "expected: %s, actual: %s", qexmsg, qacmsg);  /*  TODO deal with precision errors.    */
+	ck_assert_msg(compare_vec4_less_precise(&direction, &halfLookup), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 	/*	Check direction rotated 180 degrees around yaw.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)0, (hpmvecf)HPM_PI, 0.0f);
@@ -406,31 +407,25 @@ START_TEST (quaternion){
 	hpm_quat_axis_anglefv(&q1, &axisDir, angle);
 	ck_assert_msg(fabsf(hpm_quat_rollfv(&q1) + angle) < marginerror, "quaternion axis rotation failed, expected: %f, actual: %f.", angle, hpm_quat_rollfv(&q1));
 
-	/*  Look at quaternion. */
-	const hpmvec3f pos = {0.0f, -1.0f, 0.0f, 0.0f};
-	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI, 0.0f, 0.0f);
-	hpm_quat_lookatfv(&pos, &up, &q2);
-	hpm_quat_sprint(qacmsg, &q1);
-	hpm_quat_sprint(qexmsg, &q2);
-	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
-
-	/*	Linear interpolation.	*/
-	hpm_quat_axisf(&q1, (hpmvecf)0, 0, 0);
-	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI, 0, 0);
-	hpm_quat_lerpfv(&q1, &q2, 0.5f, &q3);
-	ck_assert_msg(fabsf(hpm_quat_pitchfv(&q3) - (hpmvecf)HPM_PI / 2.0f) < marginerror, "quaternion linear interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), HPM_PI / 2.0f);
-	ck_assert_msg(fabsf(hpm_quat_yawfv(&q3) - (hpmvecf)HPM_PI ) < marginerror, "quaternion linear interpolation failed yaw: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), HPM_PI);
-	ck_assert_msg(fabsf(hpm_quat_rollfv(&q3) - (hpmvecf)HPM_PI / 2.0f ) < marginerror, "quaternion linear interpolation failed roll: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), HPM_PI / 2.0f);
-
 	/*	Spherical interpolation.	*/
 	hpm_quat_axisf(&q1, (hpmvecf)0, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 6.0f);
 	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI, (hpmvecf)HPM_PI / 1.0f);
 	hpm_quat_slerpfv(&q1, &q2, 0.5f, &q3);
+	const hpmvecf exSp = -0.26179940f;
+	const hpmvecf exSy = (hpmvecf)HPM_PI / -2.0f;
+	const hpmvecf exSr = 0.26179945f;
 
-	ck_assert_msg(hpm_vec_eqfv(hpm_quat_pitchfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), HPM_PI / 2.0f);
-	ck_assert_msg(hpm_vec_eqfv(hpm_quat_yawfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), HPM_PI / 2.0f);
-	ck_assert_msg(hpm_vec_eqfv(hpm_quat_rollfv(&q3), (hpmvecf)HPM_PI / 2.0f), "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), HPM_PI / 2.0f);
+	ck_assert_msg(fabsf(hpm_quat_pitchfv(&q3) - exSp) < marginerror, "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), exSp);
+	ck_assert_msg(fabsf(hpm_quat_yawfv(&q3) - exSy) < marginerror, "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), exSy);
+	ck_assert_msg(fabsf(hpm_quat_rollfv(&q3) - exSr) < marginerror, "quaternion spherical interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), exSr);
 
+	/*	Linear interpolation.	*/  /*  TODO add.   */
+//	hpm_quat_axisf(&q1, (hpmvecf)0, 0, 0);
+//	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI, 0, 0);
+//	hpm_quat_lerpfv(&q1, &q2, 0.5f, &q3);
+//	ck_assert_msg(fabsf(hpm_quat_pitchfv(&q3) - (hpmvecf)HPM_PI / 2.0f) < marginerror, "quaternion linear interpolation failed pitch: actual %.8f expected %.8f.", hpm_quat_pitchfv(&q3), HPM_PI / 2.0f);
+//	ck_assert_msg(fabsf(hpm_quat_yawfv(&q3) - (hpmvecf)HPM_PI ) < marginerror, "quaternion linear interpolation failed yaw: actual %.8f expected %.8f.", hpm_quat_yawfv(&q3), HPM_PI);
+//	ck_assert_msg(fabsf(hpm_quat_rollfv(&q3) - (hpmvecf)HPM_PI / 2.0f ) < marginerror, "quaternion linear interpolation failed roll: actual %.8f expected %.8f.", hpm_quat_rollfv(&q3), HPM_PI / 2.0f);
 
 	/*  exponents.  */
 	hpm_quat_identityfv(&q1);
@@ -449,9 +444,19 @@ START_TEST (quaternion){
 	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
 
 	/*  exponents.  */
-	hpm_quat_setf(&q1, 0.0f, 0.0f, 0.0f, 0.0f);
+	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI / 8.0f, 0.0f, 0.0f);
 	hpm_quat_axisf(&q2, (hpmvecf)HPM_PI / 4.0f, 0.0f, 0.0f);
 	hpm_quat_powfv(&q1, 2.0f);
+	hpm_quat_sprint(qacmsg, &q1);
+	hpm_quat_sprint(qexmsg, &q2);
+	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
+
+
+	/*  Look at quaternion. */
+	const hpmvec3f pos = {0.0f, -1.0f, -10.0f, 0.0f};
+	const hpmvec3f zero = {0.0f, 0.0f, 0.0f, 0.0f};
+	hpm_quat_axisf(&q1, (hpmvecf)HPM_PI, 0.0f, 0.0f);
+	hpm_quat_lookatfv(&pos, &zero, &up, &q2);
 	hpm_quat_sprint(qacmsg, &q1);
 	hpm_quat_sprint(qexmsg, &q2);
 	ck_assert_msg(hpm_vec4_eqfv(&q1, &q2), "expected: %s, actual: %s", qexmsg, qacmsg);
