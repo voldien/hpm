@@ -112,28 +112,32 @@ HPM_IMP(void, hpm_quat_axisf, hpmquatf *quat, const hpmvecf pitch_radian, const 
 	*quat = axis;
 }
 
-HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
-		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out){
+HPM_IMP(void, hpm_quat_lookatfv, const hpmvec3f* HPM_RESTRICT lookat, const hpmvec3f* HPM_RESTRICT pos,
+		const hpmvec3f* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out) {
 
-	hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
-
+	const hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec3f forwardVector = *lookat - *pos;
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&forwardVector);
+	
 	/*  */
-	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
-	if(fabsf(dot - (-1.0f)) < 0.00001f){
-		HPM_CALLLOCALFUNC(hpm_quat_setf)(out, HPM_1_PI, hpm_vec4_getxf(*up), hpm_vec4_getyf(*up),
+	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&forward, &forwardVector);
+	
+	if (fabsf(dot - (-1.0f)) < 0.000001f) {
+		//HPM_CALLLOCALFUNC(hpm_quat_axis_anglefv)(out, up, HPM_PI);
+		HPM_CALLLOCALFUNC(hpm_quat_setf)(out, HPM_PI, hpm_vec4_getxf(*up), hpm_vec4_getyf(*up),
 		        hpm_vec4_getzf(*up));
 		return;
 	}
 
 	/*  */
-	if(fabsf(dot - (1.0f)) < 0.00001f){
+	if (fabsf(dot - 1.0f) < 0.000001f) {
 		HPM_CALLLOCALFUNC(hpm_quat_identityfv)(out);
 		return;
 	}
 
-	hpmvecf rotAngle = acos(dot);
-	hpmvec3f rotAxis = {0.0f, 0.0f, 0.0f, 0.0f};
-	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&forward, &forward, &rotAxis);
+	const hpmvecf rotAngle = acosf(dot);
+	hpmvec3f rotAxis;
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&forward, &forwardVector, &rotAxis);
 	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&rotAxis);
 	HPM_CALLLOCALFUNC(hpm_quat_axis_anglefv)(out, &rotAxis, rotAngle);
 }

@@ -243,8 +243,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_axis_anglefv,
  *
  * @param out
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
-		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_quat_lookatfv, const hpmvec3f* HPM_RESTRICT lookat,
+		const hpmvec3f* HPM_RESTRICT pos, const hpmvec3f* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out);
 
 /**
  * TODO rename later.
