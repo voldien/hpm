@@ -80,12 +80,11 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 
 }
 
-
 HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z){
-	const hpmvec4f row0 = { 1, 0, 0, 0 };
-	const hpmvec4f row1 = { 0, 1, 0, 0 };
-	const hpmvec4f row2 = { 0, 0, 1, 0 };
-	const hpmvec4f row3 = { x, y, z, 1 };
+	const hpmvec4f row0 = { 1.0f, 0.0f, 0.0f, 0.0f };
+	const hpmvec4f row1 = { 0.0f, 1.0f, 0.0f, 0.0f };
+	const hpmvec4f row2 = { 0.0f, 0.0f, 1.0f, 0.0f };
+	const hpmvec4f row3 = { x,    y,    z,    1.0f };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -155,6 +154,7 @@ HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, hpmvecf angle, const hpm
 	const hpmvec4f row2 = { nx * nz * ncostheta - ny * sintheta, ny * nz * ncostheta  + nx * sintheta , nzsq * ncostheta + costheta, 0.0f };
 	const hpmvec4f row3 = { 0.0f, 0.0f, 0.0f, 1.0f };
 
+	/*  */
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -332,6 +332,7 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, hpmvecf f_fov, hpmvecf f_asp
 	const hpmvec4f row2 = {0.0f, 0.0f, zScale, -1.0f};
 	const hpmvec4f row3 = {0.0f, 0.0f, tScale, 0.0f};
 
+	/*	*/
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -355,7 +356,7 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, hpmvecf left, hpmvecf right,
 HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, hpmvecf winx,
 		hpmvecf winy, hpmvecf winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* HPM_RESTRICT viewport,
-		hpmvec3f* HPM_RESTRICT pos){
+		hpmvec3f* HPM_RESTRICT pos) {
 
 	hpmvec4x4f_t mvp;
 	hpmvec4x4f_t inverseMVP;
@@ -365,9 +366,9 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, hpmvecf winx,
 	/*	Create mvp matrix and its inverse.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);
 	const hpmvecf det = HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP);
-	if (det == 0) {
+	if (det == 0)
 		return 0;
-	}
+
 
 	/*	Transform into normalize coordinates between -1 and 1.  */
 	const hpmvecf x = 2.0f * ((winx - viewport[0]) / viewport[2]) - 1.0f;
