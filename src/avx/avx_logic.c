@@ -55,42 +55,66 @@ HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* 
 	*res = (*a) < (*b);
 }
 
-HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b) {
 
-	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
-	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
+	const hpmvec4f row01 = _mm_and_ps(_mm_cmpeq_ps(a[0], b[0]), _mm_cmpeq_ps(a[1], b[1]));
+	const hpmvec4f row23 = _mm_and_ps(_mm_cmpeq_ps(a[2], b[2]), _mm_cmpeq_ps(a[3], b[3]));
+	const hpmvec4f row0123 = _mm_and_ps(row01, row23);
 
-	/*	Compare elements.	*/
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_UQ);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_UQ);
-	const hpmvec8f comp = _mm256_castsi256_ps(_mm256_set1_epi16((short)0xFFFF));
+	return _mm_test_all_ones(_mm_castps_si128(row0123));
 
-	/*	All bits 1 implies equal.	*/
-	return (hpmboolean)_mm256_testc_ps(rb, comp) && (hpmboolean)_mm256_testc_ps(lb, comp);
+//	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+//	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
+//
+//	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_UQ);
+//	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_UQ);
+//
+//	const hpmvec8f row01 = _mm256_and_ps(lb, rb);
+
+	//const hpmvec4f row0123 = _mm_and_ps(row01[0], row01[4]);
+//	hpmvec4i a0 = _mm256_extractf128_si256(_mm256_castps_si256(row01), 0);
+//	hpmvec4i a1 = _mm256_extractf128_si256(_mm256_castps_si256(row01), 1);
+//
+//	return _mm_test_all_ones(a0) && _mm_test_all_ones(a1);
+
+//	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
+//	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
+//
+//	/*	Compare elements.	*/
+//	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_EQ_UQ);
+//	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_EQ_UQ);
+//	const hpmvec8f comp = _mm256_castsi256_ps(_mm256_set1_epi16((short)0xFFFF));
+//
+//	/*	All bits 1 implies equal.	*/
+//	return (hpmboolean)_mm256_testc_ps(rb, comp) && (hpmboolean)_mm256_testc_ps(lb, comp);
 }
 
-HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b) {
 
-	return !HPM_CALLLOCALFUNC(hpm_mat4_eqfv)(a, b);
+	const hpmvec4i resrow0 = _mm_castps_si128( _mm_cmpneq_ps(a[0], b[0]) );
+	const hpmvec4i resrow1 = _mm_castps_si128( _mm_cmpneq_ps(a[1], b[1]) );
+	const hpmvec4i resrow2 = _mm_castps_si128( _mm_cmpneq_ps(a[2], b[2]) );
+	const hpmvec4i resrow3 = _mm_castps_si128( _mm_cmpneq_ps(a[3], b[3]) );
 
-	const hpmmat4uf* HPM_RESTRICT ufa = (hpmmat4uf*)a;
-	const hpmmat4uf* HPM_RESTRICT ufb = (hpmmat4uf*)b;
+	const hpmvec4i pass1 = _mm_or_si128(resrow0, resrow1);
+	const hpmvec4i pass2 =  _mm_or_si128(resrow2, resrow3);
+	const hpmvec4i pass =  _mm_or_si128(pass1, pass2);
+	const hpmvec4i mask = _mm_set1_epi32(INT_MAX);
 
+	return !_mm_test_all_zeros(pass,  mask);
 
-
-	/*	Compare*/
-	const hpmvec8f lb = _mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_OQ);
-	const hpmvec8f rb = _mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_OQ);
-
-	/*  */
-	const hpmvec8i or = _mm256_castps_si256(_mm256_or_ps(lb, rb));
-	const hpmvec8i comp = _mm256_set1_epi16((short)0xFFFF);
-
-	/*  No non-equal implies matrices are equal.    */
-//	if(_mm256_testz_ps(or, comp))
-//		return 0;
-
-	/*  If there exists a non equal implies matrix are not equal.   */
-	return 1;
+//	const hpmmat4uf *HPM_RESTRICT ufa = (hpmmat4uf *) a;
+//	const hpmmat4uf *HPM_RESTRICT ufb = (hpmmat4uf *) b;
+//
+//	const hpmvec8i lb = _mm256_castps_si256(_mm256_cmp_ps(ufa->oc[0], ufb->oc[0], _CMP_NEQ_UQ));
+//	const hpmvec8i rb = _mm256_castps_si256(_mm256_cmp_ps(ufa->oc[1], ufb->oc[1], _CMP_NEQ_UQ));
+//
+//	const hpmvec8i pass1 = _mm256_or_si256(lb, rb);
+//	const hpmvec4i mask = _mm_set1_epi32(INT_MAX);
+//
+//	hpmvec4i a0 = _mm256_extractf128_si256(pass1, 0);
+//	hpmvec4i a1 = _mm256_extractf128_si256(pass1, 1);
+//
+//	return !(_mm_test_all_zeros(a0, mask) | _mm_test_all_zeros(a1, mask));
 }
 

@@ -13,8 +13,8 @@ HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t s
 	const hpmmat4uf* HPM_RESTRICT s = source;
 
 	/*  Copy memory.    */
-	d->oc[0], s->oc[0];
-	d->oc[1], s->oc[1];
+	d->oc[0] = s->oc[0];
+	d->oc[1] = s->oc[1];
 	/*
 	 _mm256_storeu_ps(&d->oc[0], s->oc[0]);
 	 _mm256_storeu_ps(&d->oc[1], s->oc[1]);
