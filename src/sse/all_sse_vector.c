@@ -7,7 +7,7 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
+HPM_IMP(hpmvecf, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 
 	const hpmvec4f lvMult = (*larg) * (*rarg);			/*	{ x^2, y^2, z^2, w^2 }	*/
 
@@ -30,7 +30,7 @@ HPM_IMP(float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 #endif
 }
 
-HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
+HPM_IMP(hpmvecf, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	hpmvec4f lvMult = (*arg) * (*arg);			/*	{ x^2, y^2, z^2, w^2 }	*/
 
 #if defined(__SSE3__)
@@ -50,7 +50,7 @@ HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 #endif
 }
 
-HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
+HPM_IMP( hpmvecf, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 	hpmvec4f lvMult = (*arg) * (*arg);			/*	{ x^2, y^2, z^2, w^2 }	*/
 
 #if defined(__SSE3__)

@@ -87,6 +87,8 @@ HPM_BENCHMARK_FUNC_DECL(hpm_quat_slerpfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_pitchfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_yawfv);
 HPM_BENCHMARK_FUNC_DECL(hpm_quat_rollfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_quat_eularfv);
+HPM_BENCHMARK_FUNC_DECL(hpm_quat_powfv);
 
 /**
  * Matrices.

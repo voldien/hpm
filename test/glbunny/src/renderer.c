@@ -9,7 +9,7 @@
 
 int createScene(Scene* scene) {
 
-	int status = EXIT_SUCCESS;
+	int status = 1;
 
 	/*	*/
 	int result = 0;                         /*	*/
@@ -96,7 +96,7 @@ int createScene(Scene* scene) {
 	scene->prog = createShader(gc_vertexpolygone, gc_fragmentpolygone);
 	if(scene->prog < 0){
 		fprintf(stderr, "Failed create shader.\n");
-		status = EXIT_FAILURE;
+		status = 0;
 		goto error;
 	}
 
@@ -128,20 +128,14 @@ int releaseScene(Scene *scene) {
 	return 0;
 }
 
-
 void sceneRenderer(Scene* scene) {
-
-
-	int status = EXIT_SUCCESS;
-
+	
 	/*	*/
-	int result = 0;             /*	*/
 	int isAlive = 1;            /*	*/
-	int i,j,z;                              /*	*/
-	int glflag;                             /*	*/
-	SDL_Event event = {0};                  /*	*/
-	Uint64 freq;						/*	*/
-	Uint64 pretime;						/*	*/
+	int i,j,z;                  /*	*/
+	SDL_Event event = {0};      /*	*/
+	Uint64 freq;                /*	*/
+	Uint64 pretime;             /*	*/
 
 	/*	*/
 	const unsigned int rows = 4;			/*	*/
@@ -176,17 +170,17 @@ void sceneRenderer(Scene* scene) {
 	hpm_mat4x4_identityfv(scene->proj);
 	hpm_quat_identityfv(&scene->camor);
 
-	/*	Enable program. */
+	/*	Enable shader program. */
 	glUseProgram(scene->prog);
 	mvploc = glGetUniformLocation(scene->prog, "mvp");
 	modeloc = glGetUniformLocation(scene->prog, "model");
 
-	/*	Main loop.	*/
+	/*  Init timer value.   */
 	pretime = SDL_GetPerformanceCounter();
-
 	/*	Get timer frequency resolution.	*/
 	freq = SDL_GetPerformanceFrequency();
 
+	/*	Main loop.	*/
 	while( isAlive ){
 
 		while(SDL_PollEvent(&event)){
@@ -210,6 +204,7 @@ void sceneRenderer(Scene* scene) {
 					hpmvec3f right;
 					hpmvec3f up = { 0, 1, 0 , 0 };
 
+					hpm_quat_normalizefv(&scene->camor);
 					hpm_quat_directionfv(&scene->camor, &scene->dir);
 					hpm_vec3_crossproductfv(&up, &scene->dir, &right );
 					hpm_vec3_crossproductfv( &scene->dir, &right, &up );
@@ -262,7 +257,7 @@ void sceneRenderer(Scene* scene) {
 						              -( bunny_model_centroid[0] + bunny_model_maxbounds[0] ),
 						              -( bunny_model_centroid[1] + bunny_model_maxbounds[1] ),
 						              -( bunny_model_centroid[2] + bunny_model_maxbounds[2] ), 0.0f);
-						hpm_quat_axisf(&scene->camor, HPM_DEG2RAD( 30.0f ), 0, 0);
+						hpm_quat_axisf(&scene->camor, (hpmvecf)HPM_DEG2RAD( 30.0f ), 0, 0);
 
 						/*	Update view matrix.	*/
 						hpm_mat4x4_translationfv(scene->view, &scene->position);
@@ -281,13 +276,12 @@ void sceneRenderer(Scene* scene) {
 					   || event.key.keysym.sym == SDLK_RIGHT
 					   || event.key.keysym.sym == SDLK_DOWN){
 
-						hpm_quat_get_vectorfv(&scene->camor, &cdir[SDLK_RIGHT - event.key.keysym.sym], &scene->dir);
-						/*
-						hpm_quat_directionfv(&camor, &dir);
-						hpm_vec3_crossproductfv(&up, &dir, &right );
-						hpm_vec3_crossproductfv( &dir, &right, &up );
-						*/
 
+						/*  Get direction vector from quaternion rotation. */
+						const hpmvec3f* direction = &cdir[SDLK_RIGHT - event.key.keysym.sym];
+						hpm_quat_get_vectorfv(&scene->camor, direction , &scene->dir);
+
+						/*  Update position.    */
 						scene->position += scene->dir  * -1.0f * 1000.0f;
 					}
 
@@ -298,7 +292,7 @@ void sceneRenderer(Scene* scene) {
 						case SDL_WINDOWEVENT_SIZE_CHANGED:
 							glViewport(0,0, event.window.data1, event.window.data2);
 							hpm_mat4x4_projfv(scene->proj,
-							                  HPM_DEG2RAD(fov),
+							                  (hpmvecf)HPM_DEG2RAD(fov),
 							                  (float)event.window.data1 / (float)event.window.data2,
 							                  0.15f, 1000.0f);
 							break;
@@ -322,7 +316,7 @@ void sceneRenderer(Scene* scene) {
 		/*	Update time uniform.	*/
 		float time = (SDL_GetPerformanceCounter() - pretime ) / (float)freq;
 		pretime = SDL_GetPerformanceCounter();
-		fprintf(g_outputfd, "%f\n", time);
+		fprintf(g_outputfd, "%f seconds - average ,%d fps\n", time, (unsigned int)(1.0f / time));
 
 		rot += time;
 
@@ -348,14 +342,20 @@ void sceneRenderer(Scene* scene) {
 		SDL_GL_SwapWindow(scene->window);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		/*	Render.	*/
+		/*	Set each matrix uniforms.	*/
 		glUniformMatrix4fv(mvploc, numInstances, GL_FALSE, (const GLfloat*)scene->mvp);
 		glUniformMatrix4fv(modeloc, numInstances, GL_FALSE, (const GLfloat*)scene->model);
-		/*  Draw.   */
+
+		/*  Draw all geometries.   */
 		glBindVertexArray(scene->bunny.vao);
-		glDrawElementsInstanced(GL_TRIANGLES, scene->bunny.numIndices, GL_UNSIGNED_SHORT, NULL, numInstances);
+		glDrawElementsInstancedARB(GL_TRIANGLES, scene->bunny.numIndices, GL_UNSIGNED_SHORT, NULL, numInstances);
+		glBindVertexArray(0);
+
+
+		/*  Draw background and floor.  */
 	}
 
 	error:	/*	Cleanup.	*/
-	return status;
+	
+	return;
 }

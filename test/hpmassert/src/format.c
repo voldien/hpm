@@ -3,6 +3,7 @@
 #include<time.h>
 #include<sys/time.h>
 #include<getopt.h>
+#include <hpmlog.h>
 #include"hpmparser.h"
 
 static void drawSep(const unsigned int size){
@@ -58,21 +59,21 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 	drawSep(seperateSize);
 
 	/*  Draw empty space. */
-	printf("| ");
+	htpLogPrint(HTP_VERBOSE_QUITE, "| ");
 	for (x = 0; x < maxFuncNameLen; x++)
 		fwrite(" ", 1, 1, stdout);
-	printf(" |");
+	htpLogPrint(HTP_VERBOSE_QUITE, " |");
 
 	/*  Display SIMD benchmark row.*/
 	for (i = 0; i < numResults; i++) {
 		int length;
 
-		length = printf(" %5s - %c |",  hpm_get_simd_symbol(benchmarkResults[i].simd), (benchmarkResults[i].type == eFloat) ? 'f' : 'd');
+		length = htpLogPrint(HTP_VERBOSE_QUITE, " %5s - %c |",  hpm_get_simd_symbol(benchmarkResults[i].simd), (benchmarkResults[i].type == eFloat) ? 'f' : 'd');
 
 		if(length > maxNameLength)
 			maxNameLength = length;
 	}
-	printf("\n");
+	htpLogPrint(HTP_VERBOSE_QUITE, "\n");
 	drawSep(seperateSize);
 
 	/*  Create column box format size. */
@@ -85,23 +86,23 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 
 		/*  Display function name.  */
 		const FunctionRaw *funcResult = &benchmark->results[j];
-		lineCount += printf("| %s ", funcResult->name) - 3;
+		lineCount += htpLogPrint(HTP_VERBOSE_QUITE, "| %s ", funcResult->name) - 3;
 
 		/*  Print remaining space.  */
 		const size_t spaces = maxFuncNameLen - lineCount;
 		for (x = 0; x < spaces; x++)
 			fwrite(" ", 1, 1, stdout);
-		printf("| ");
+		htpLogPrint(HTP_VERBOSE_QUITE, "| ");
 
 		/*  Print all results on the current row.  */
 		lineCount = maxFuncNameLen + 1;
 		for (i = 0; i < numResults; i++) {
 
 			/*  Increment the line size.    */
-			lineCount += printf(format, timeResults[j * numResults + i].percentage);
+			lineCount += htpLogPrint(HTP_VERBOSE_QUITE, format, timeResults[j * numResults + i].percentage);
 			lineCount += 1;
 		}
-		printf("\n");
+		htpLogPrint(HTP_VERBOSE_QUITE, "\n");
 
 		/*  Draw separate line. */
 		lineCount -= 4; /*  TODO resolve the equation for the length of the line.   */
@@ -121,7 +122,8 @@ void htpResultModel(unsigned int numBench,
 
 	assert(numberModels > 0);
 
-	/*  Compute max number of function entries. */
+
+	/*  Compute max number of function entries for computing model. */
 	for (x = 0; x < numBench; x++) {
 		if (raw[x].num > maxEntries)
 			maxEntries = raw[x].num;
@@ -135,20 +137,33 @@ void htpResultModel(unsigned int numBench,
 	memset(*models, 0, resultEntireSize);
 	assert(*models);
 
+
+	/**
+	 * Performance model:
+	 * 
+	 * baseline = slowest result of all SIMD features in nanoseconds which is
+	 * the one with highest nanoseconds.
+	 * result / baseline is greater than 1.
+	 * SIMD with the baseline result will have a performance gain of 0.0 and thus
+	 * result will be 1.0.
+	 *
+	 * r = f(it) / max(it)
+	 */
+
 	/*  Number of functions benchmarked.    */
 	const unsigned int nFunctions = (unsigned int)maxEntries;
 
 	/*  Iterate through each function.*/
 	for (y = 0; y < nFunctions; y++) {
 
-		long int baseline = INT32_MAX;
+		long int baseline = INT64_MIN;
 
 		/*  Compute baseline from function row.   */
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = raw[x].results;
 
 			/*  Compute min baseline for each function per SIMD.    */
-			if (result[y].nanosec < baseline)
+			if (result[y].nanosec > baseline)
 				baseline = result[y].nanosec;
 		}
 
@@ -156,22 +171,24 @@ void htpResultModel(unsigned int numBench,
 		for (x = 0; x < numBench; x++) {
 			const FunctionRaw *result = &raw[x].results[y];
 
-			float modelResult;
+			double modelResult;
 
 			/*  Compute result of specified model.  */
 			switch (g_result_model) {
 				case ePercentage:
-					modelResult = (float) ((double) result->nanosec / (double) baseline);
+					modelResult = ((double) result->nanosec / (double) baseline);
+					modelResult = 1.0 / modelResult;
 					break;
 				case eElapseTime:
-					modelResult = (float) ((double) result->nanosec / (double) hptGetTimeResolution());
+					modelResult = ((double) result->nanosec / (double) hptGetTimeResolution());
 					break;
 				default:
+					/*  Not a valid model.  */
 					assert(0);
 			}
 
 			/*  Store percentage.   */
-			(*models)[y * numBench + x].percentage = modelResult;
+			(*models)[y * numBench + x].percentage = (float) modelResult;
 		}
 	}
 

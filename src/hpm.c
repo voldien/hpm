@@ -11,12 +11,35 @@
 	#define HPM_LOAD_SYM(lib, func) dlsym( ( lib ), ( func ) );
 	#define HPM_CLOSE(lib) dlclose( ( lib ) )
     #define HPM_LIB_ERROR() dlerror()
+	/*  HPM library files.  */
+	#define HPM_FILE_SEE "libhpmsse.so"
+	#define HPM_FILE_SEE2 "libhpmsse2.so"
+	#define HPM_FILE_SEE3 "libhpmsse3.so"
+	#define HPM_FILE_SEE41 "libhpmsse41.so"
+	#define HPM_FILE_SEE42 "libhpmsse42.so"
+	#define HPM_FILE_AVX "libhpmavx.so"
+	#define HPM_FILE_AVX2 "libhpmavx2.so"
+	#define HPM_FILE_AVX512 "libhpmavx512.so"
+	#define HPM_FILE_NEON "libhpmneon.so"
+	#define HPM_FILE_NOSIMD "libhpmnosimd.so"
 #elif defined(HPM_WINDOWS)
 	#include<Winbase.h>
 	#define HPM_LOAD_LIBRARY(path) LoadLibrary( ( path ) )
 	#define HPM_LOAD_SYM(lib, func) GetProcAddress( ( lib ), ( func ) )
 	#define HPM_CLOSE(lib) FreeLibrary( ( lib ) )
     #define HPM_LIB_ERROR() GetLastError()
+
+	/*  HPM library files.  */
+	#define HPM_FILE_SEE "libhpmsse.dll"
+	#define HPM_FILE_SEE2 "libhpmsse2.dll"
+	#define HPM_FILE_SEE3 "libhpmsse3.dll"
+	#define HPM_FILE_SEE41 "libhpmsse41.dll"
+	#define HPM_FILE_SEE42 "libhpmsse42.dll"
+	#define HPM_FILE_AVX "libhpmavx.dll"
+	#define HPM_FILE_AVX2 "libhpmavx2.dll"
+	#define HPM_FILE_AVX512 "libhpmavx512.dll"
+	#define HPM_FILE_NEON "libhpmneon.dll"
+	#define HPM_FILE_NOSIMD "libhpmnosimd.dll"
 #else
     #pragma message("Warning: None supported platform!")
 #endif
@@ -46,49 +69,50 @@ int hpm_init(unsigned int simd){
 	}
 
 	/*	Translate SIMD to library filename.	*/
-	switch(simd){
-	case HPM_SSE:
-		libpath = "libhpmsse.so";
-		break;
-	case HPM_SSE2:
-		libpath = "libhpmsse2.so";
-		break;
-	case HPM_SSE3:
-	case HPM_SSSE3:
-		libpath = "libhpmsse3.so";
-		break;
-	case HPM_SSE4_1:
-		libpath = "libhpmsse41.so";
-		break;
-	case HPM_SSE4_2:
-		libpath = "libhpmsse42.so";
-		break;
-	case HPM_AVX:
-		libpath = "libhpmavx.so";
-		break;
-	case HPM_AVX2:
-		libpath = "libhpmavx2.so";
-		break;
-	case HPM_AVX512:
-		libpath = "libhpmavx512.so";
-		break;
-	case HPM_NEON:
-		libpath = "libhpmneon.so";
-		break;
-	case HPM_NOSIMD:
-		libpath = "libhpmnosimd.so";
-		break;
-	case HPM_DEFAULT:{
-		unsigned int i;
-		for(i = HPM_NEON; i < HPM_DEFAULT; i >>= 1){
-			if(hpm_support_cpu_feat(i)){
-				return hpm_init(i);
+	switch (simd) {
+		case HPM_SSE:
+			libpath = HPM_FILE_SEE;
+			break;
+		case HPM_SSE2:
+			libpath = HPM_FILE_SEE2;
+			break;
+		case HPM_SSE3:
+		case HPM_SSSE3:
+			libpath = HPM_FILE_SEE3;
+			break;
+		case HPM_SSE4_1:
+			libpath = HPM_FILE_SEE41;
+			break;
+		case HPM_SSE4_2:
+			libpath = HPM_FILE_SEE42;
+			break;
+		case HPM_AVX:
+			libpath = HPM_FILE_AVX;
+			break;
+		case HPM_AVX2:
+			libpath = HPM_FILE_AVX2;
+			break;
+		case HPM_AVX512:
+			libpath = HPM_FILE_AVX512;
+			break;
+		case HPM_NEON:
+			libpath = HPM_FILE_NEON;
+			break;
+		case HPM_NOSIMD:
+			libpath = HPM_FILE_NOSIMD;
+			break;
+		case HPM_DEFAULT: {
+			unsigned int i;
+			for (i = HPM_NEON; i < HPM_DEFAULT; i >>= 1) {
+				if (hpm_support_cpu_feat(i)) {
+					return hpm_init(i);
+				}
 			}
 		}
-	}break;
-	default:
-		fprintf(stderr, "Not a valid SIMD extension.\n");
-		return -2;
+			break;
+		default:
+			fprintf(stderr, "Not a valid SIMD extension.\n");
+			return -2;
 	}
 
 	/*	load library.	*/

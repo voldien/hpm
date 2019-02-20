@@ -1,15 +1,18 @@
 #include"hpmlogic.h"
 #include <float.h>
 
-static int almostEqual(float a, float b) {
+static int almostEqual(hpmvecf a, hpmvecf b) {
 
-	const float maxRelativeDiff = FLT_EPSILON;
-	const float difference = fabs(a - b);
+	/*  */
+	const hpmvecf maxRelativeDiff = FLT_EPSILON;
+	const hpmvecf difference = fabsf(a - b);
 
-	a = (float)fabs(a);
-	b = (float)fabs(b);
-	const float scaledEpsilon = maxRelativeDiff * HPM_MAX(a,b);
+	/*  */
+	a = (hpmvecf)fabsf(a);
+	b = (hpmvecf)fabsf(b);
+	const hpmvecf scaledEpsilon = maxRelativeDiff * HPM_MAX(a,b);
 
+	/*  */
 	return difference <= scaledEpsilon;
 	return fabs(a - b) <= FLT_EPSILON ? 1 : 0;
 }

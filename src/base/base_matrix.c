@@ -10,7 +10,7 @@
 #   endif
 
 
-HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float rarg, hpmvec4x4f_t output){
+HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const hpmvecf rarg, hpmvec4x4f_t output){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	output[0] = larg[0] * row0;
 	output[1] = larg[1] * row0;
@@ -18,7 +18,7 @@ HPM_IMP( void, hpm_mat4x4_multiply_scalarf, const hpmvec4x4f_t larg, const float
 	output[3] = larg[3] * row0;
 }
 
-HPM_IMP( void, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const float rarg){
+HPM_IMP( void, hpm_mat4x4_division_mat4x4f, hpmvec4x4f_t larg, const hpmvecf rarg){
 	const hpmvec4f row0 = {rarg, rarg, rarg, rarg};
 	larg[0] /= row0;
 	larg[1] /= row0;
@@ -80,12 +80,11 @@ HPM_IMP( void, hpm_mat4x4_decomposefv, const hpmvec4x4f_t mat,
 
 }
 
-
-HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, float x, float y, float z){
-	const hpmvec4f row0 = { 1, 0, 0, 0 };
-	const hpmvec4f row1 = { 0, 1, 0, 0 };
-	const hpmvec4f row2 = { 0, 0, 1, 0 };
-	const hpmvec4f row3 = { x, y, z, 1 };
+HPM_IMP( void, hpm_mat4x4_translationf, hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z){
+	const hpmvec4f row0 = { 1.0f, 0.0f, 0.0f, 0.0f };
+	const hpmvec4f row1 = { 0.0f, 1.0f, 0.0f, 0.0f };
+	const hpmvec4f row2 = { 0.0f, 0.0f, 1.0f, 0.0f };
+	const hpmvec4f row3 = { x,    y,    z,    1.0f };
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
@@ -109,7 +108,7 @@ HPM_IMP( void, hpm_mat4x4_translationfv, hpmvec4x4f_t mat, const hpmvec3f* trans
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t mat, float x, float y, float z){
+HPM_IMP( void, hpm_mat4x4_scalef, hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z){
 	const hpmvec4f row0 = { x, 0, 0, 0 };
 	const hpmvec4f row1 = { 0, y, 0, 0 };
 	const hpmvec4f row2 = { 0, 0, z, 0 };
@@ -130,10 +129,36 @@ HPM_IMP( void, hpm_mat4x4_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale){
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, float angle, const hpmvec3f* axis){
+HPM_IMP( void, hpm_mat4x4_rotationfv, hpmvec4x4f_t mat, hpmvecf angle, const hpmvec3f* axis){
 
+	const hpmvec3f n = *axis;
 
+	/*  */
+	const hpmvecf costheta = cosf(angle);
+	const hpmvecf sintheta = sinf(angle);
+	const hpmvecf ncostheta = 1.0f - costheta;
 
+	/*  Extract constants.  */
+	const hpmvecf nx = hpm_vec4_getxf(n);
+	const hpmvecf ny = hpm_vec4_getyf(n);
+	const hpmvecf nz = hpm_vec4_getzf(n);
+
+	/*  Compute constants.  */
+	const hpmvecf nxsq = nx * nx;
+	const hpmvecf nysq = ny * ny;
+	const hpmvecf nzsq = nz * nz;
+
+	/*  Compute each matrix column.    */
+	const hpmvec4f row0 = { ncostheta * nxsq + costheta, nx * ny * ncostheta  - nz * sintheta , nx * ny * ncostheta + ny * sintheta, 0.0f };
+	const hpmvec4f row1 = { nx * ny * ncostheta  + nz * costheta, nysq * ncostheta  + costheta, ny * nz * ncostheta - nx * sintheta, 0.0f };
+	const hpmvec4f row2 = { nx * nz * ncostheta - ny * sintheta, ny * nz * ncostheta  + nx * sintheta , nzsq * ncostheta + costheta, 0.0f };
+	const hpmvec4f row3 = { 0.0f, 0.0f, 0.0f, 1.0f };
+
+	/*  */
+	mat[0] = row0;
+	mat[1] = row1;
+	mat[2] = row2;
+	mat[3] = row3;
 }
 
 
@@ -262,7 +287,7 @@ HPM_IMP( void, hpm_mat4x4_multi_scalefv, hpmvec4x4f_t mat, const hpmvec3f* scale
 }
 
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -270,7 +295,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationxf, hpmvec4x4f_t mat, float angle){
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -278,7 +303,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationyf, hpmvec4x4f_t mat, float angle){
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, rot, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_multi_rotationzf, hpmvec4x4f_t mat, float angle){
+HPM_IMP( void, hpm_mat4x4_multi_rotationzf, hpmvec4x4f_t mat, hpmvecf angle){
 	hpmvec4x4f_t rot;
 	hpmvec4x4f_t copy;
 	HPM_CALLLOCALFUNC(hpm_mat4x4_copyfv)(copy, mat);
@@ -295,7 +320,7 @@ HPM_IMP( void, hpm_mat4x4_multi_rotationQfv, hpmvec4x4f_t mat, const hpmquatf* q
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(copy, mat_quat, mat);
 }
 
-HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect, float f_near, float f_far){
+HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, hpmvecf f_fov, hpmvecf f_aspect, hpmvecf f_near, hpmvecf f_far){
 	const hpmvecf angle = f_fov;
 	const hpmvecf xScale = (1.0f / (tanf(angle) ) / f_aspect);
 	const hpmvecf yScale = 1.0f / tanf(angle);
@@ -307,13 +332,14 @@ HPM_IMP( void, hpm_mat4x4_projfv, hpmvec4x4f_t mat, float f_fov, float f_aspect,
 	const hpmvec4f row2 = {0.0f, 0.0f, zScale, -1.0f};
 	const hpmvec4f row3 = {0.0f, 0.0f, tScale, 0.0f};
 
+	/*	*/
 	mat[0] = row0;
 	mat[1] = row1;
 	mat[2] = row2;
 	mat[3] = row3;
 }
 
-HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, float bottom, float top, float zNear, float zFar){
+HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, hpmvecf left, hpmvecf right, hpmvecf bottom, hpmvecf top, hpmvecf zNear, hpmvecf zFar){
 	/*	*/
 	const hpmvec4f row0 = {2.0f/(right - left), 0.0f, 0.0f, 0.0f};
 	const hpmvec4f row1 = {0.0f, 2.0f/(top - bottom), 0.0f, 0.0f};
@@ -327,10 +353,10 @@ HPM_IMP( void, hpm_mat4x4_orthfv, hpmvec4x4f_t mat, float left, float right, flo
 	mat[3] = row3;
 }
 
-HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
-		float winy, float winz, const hpmvec4x4f_t projection,
+HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, hpmvecf winx,
+		hpmvecf winy, hpmvecf winz, const hpmvec4x4f_t projection,
 		const hpmvec4x4f_t modelview, const int* HPM_RESTRICT viewport,
-		hpmvec3f* HPM_RESTRICT pos){
+		hpmvec3f* HPM_RESTRICT pos) {
 
 	hpmvec4x4f_t mvp;
 	hpmvec4x4f_t inverseMVP;
@@ -340,9 +366,9 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, float winx,
 	/*	Create mvp matrix and its inverse.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);
 	const hpmvecf det = HPM_CALLLOCALFUNC(hpm_mat4x4_inversefv)(mvp, inverseMVP);
-	if (det == 0) {
+	if (det == 0)
 		return 0;
-	}
+
 
 	/*	Transform into normalize coordinates between -1 and 1.  */
 	const hpmvecf x = 2.0f * ((winx - viewport[0]) / viewport[2]) - 1.0f;

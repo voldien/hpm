@@ -53,15 +53,22 @@ extern "C" {
  */
 HPM_ALIGN(32)
 typedef hpmvec4f hpmvec4x4f_t[4];
-typedef struct hpmvec4x4f_s{hpmvecf m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4f;
+typedef struct hpmvec4x4f_s{
+     hpmvecf m11,m21,m31,m41,    /*  column1 */
+             m12,m22,m32,m42,    /*  column2 */
+             m13,m23,m33,m43,    /*  column3 */
+             m14,m24,m34,m44;    /*  column4 */
+}hpmmat4f;
 typedef hpmv4sf hpmvec4x4fi_t[4];
 typedef hpmvec4f hpmvec4x4fp_t;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec4x4f_t m;
 	hpmmat4f s;
-	struct {hpmvec8f oc[2];};
-}hpmmat4uf;
+	struct {
+		hpmvec8f oc[2];
+	};
+} hpmmat4uf;
 
 
 /**
@@ -69,13 +76,18 @@ typedef union{
  *
  */
 typedef hpmvec4d hpmvec4x4d_t[4];
-typedef struct hpmvec4x4d_s{double m11,m21,m31,m41,m12,m22,m32,m42,m13,m23,m33,m43,m14,m24,m34,m44;}hpmmat4d;
+typedef struct hpmvec4x4d_s{
+    hpmvecd m11,m21,m31,m41,    /*  column1 */
+            m12,m22,m32,m42,    /*  column2 */
+            m13,m23,m33,m43,    /*  column3 */
+            m14,m24,m34,m44;    /*  column4 */
+} hpmmat4d;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec4x4d_t m;
 	struct hpmvec4x4d_s s;
 	hpmvec2d t[2][2];
-}hpmmat4ud;
+} hpmmat4ud;
 
 
 /**
@@ -87,9 +99,9 @@ typedef hpmvec2f hpmvec2x2f_t[2];
 typedef struct hpmvec2x2f_s{hpmvecf m11,m21,m12,m22;}hpmmat2f;
 typedef hpmvec2f hpmvec2x2fp_t;
 HPM_ALIGN(16)
-typedef union{
+typedef union {
 	hpmvec2x2f_t m;
-}hpmmat2uf;
+} hpmmat2uf;
 
 
 /**
@@ -103,11 +115,10 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_copyfv,
 		hpmvec4x4fp_t* HPM_RESTRICT destination,
 		const hpmvec4x4fp_t* HPM_RESTRICT source);
 
-
 /**
  * Multiply two matrices.
  *
- * (larg) x (rarg) = (output)
+ * expr: (larg) x (rarg) = (output)
  *
  * @param larg left side argument.
  *
@@ -150,6 +161,11 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_multiply_scalarf,
 
 /**
  * Divide each element in matrix by factor.
+ * expr: larg = larg / factor
+ *
+ * @param arg
+ *
+ * @param factor
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_division_mat4x4f,
 		hpmvec4x4f_t larg, const hpmvecf factor);
@@ -181,20 +197,19 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_subraction_mat4x4fv,
 		const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg,
 		hpmvec4x4f_t output);
 
-
 /**
- * Copy identity matrix to destination matrix.
+ * Copy identity matrix to matrix.
  *
- * @param destination
+ * @param mat4x4 valid matrix pointer parameter.
  *
  */
 HPM_EXPORT(void, HPMAPIFASTENTRY, hpm_mat4x4_identityfv,
-		hpmvec4x4f_t destination);
+		hpmvec4x4f_t mat4x4);
 
 /**
  * Transpose matrix.
  *
- * @param mat4x4
+ * @param mat4x4 valid matrix pointer parameter.
  *
  */
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_mat4x4_transposefv, hpmvec4x4f_t mat4x4);
@@ -220,7 +235,7 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_determinantfv,
  * out is undefined.
  */
 HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
-		const hpmvec4x4f_t mat, hpmvec4x4f_t out);
+		const hpmvec4x4f_t mat4x4, hpmvec4x4f_t out);
 
 /**
  * Extract position, rotation, scale vectors from matrix.
@@ -235,7 +250,7 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_mat4x4_inversefv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
-		const hpmvec4x4f_t mat, hpmvec3f* HPM_RESTRICT position,
+		const hpmvec4x4f_t mat4x4, hpmvec3f* HPM_RESTRICT position,
 		hpmquatf* HPM_RESTRICT rotation,
 		hpmvec3f* HPM_RESTRICT scale);
 
@@ -250,14 +265,17 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_decomposefv,
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationf,
-		hpmvec4x4f_t mat, hpmvecf x, hpmvecf y, hpmvecf z);
+		hpmvec4x4f_t mat4x4, hpmvecf x, hpmvecf y, hpmvecf z);
 
 /**
  * Construct translation matrix.
  *
+ * @param mat4x4
+ *
+ * @param translation
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_translationfv,
-		hpmvec4x4f_t mat, const hpmvec3f* translation);
+		hpmvec4x4f_t mat4x4, const hpmvec3f* translation);
 
 /**
  * Construct scalar matrix.
@@ -434,7 +452,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
 		hpmvecf fov, hpmvecf aspect, hpmvecf near, hpmvecf far);
 
 /**
- * Construct orthogonal matrix.
+ * Construct an orthogonal matrix.
  *
  *
  * |----|
@@ -443,22 +461,23 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_projfv, hpmvec4x4f_t mat,
  * |  \ |
  * |----|
  *
- * @param mat
+ * @param mat4x4 valid matrix pointer parameter
+ * were the orthogonal matrix will copied to.
  *
- * @param left
+ * @param left side from origin.
  *
- * @param right
+ * @param right side from origin.
  *
- * @param bottom
+ * @param bottom side from origin.
  *
- * @param top
+ * @param top side from origin.
  *
- * @param zNear
+ * @param zNear side from origin
  *
- * @param zFar
+ * @param zFar side from origin
  *
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat,
+HPM_EXPORT(void, HPMAPIENTRY, hpm_mat4x4_orthfv, hpmvec4x4f_t mat4x4,
            hpmvecf left, hpmvecf right, hpmvecf bottom, hpmvecf top,
            hpmvecf zNear, hpmvecf zFar);
 

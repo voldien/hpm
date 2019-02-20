@@ -56,50 +56,50 @@ static void hpmGetParamByIndex(const char *HPM_RESTRICT arg,
 
 }
 
-unsigned int hpmParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
+unsigned int htpParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
                                         const char **HPM_RESTRICT opts){
 
-    unsigned int i = 0;			/*	*/
-    unsigned int j = 0;			/*	*/
-    unsigned int res = 0;		/*	*/
-    unsigned int nparam;		/*	*/
-    char param[64];				/*	*/
+    unsigned int i = 0;            /*	*/
+    unsigned int j = 0;            /*	*/
+    unsigned int res = 0;        /*	*/
+    unsigned int nparam;        /*	*/
+    char param[64];                /*	*/
 
     /*	Get number of parameter in argument.	*/
     nparam = hpmNumParam(arg);
-    if(nparam <= 0){
+    if (nparam <= 0) {
         return 0;
     }
 
     /*	Check if none option exist.	*/
-    if(strstr(arg, "none")){
+    if (strstr(arg, "none")) {
         return 0;
     }
 
     /*	Check if all option exist.	*/
-    if(strstr(arg, "all")){
-        return (unsigned int)(~0x0);
+    if (strstr(arg, "all")) {
+        return (unsigned int) (~0x0);
     }
 
     /*	Iterate through each parameter.	*/
-    for(i = 0; i < nparam; i++){
+    for (i = 0; i < nparam; i++) {
 
         hpmGetParamByIndex(arg, param, i);
         j = 0;
-        do{
+        do {
 
             /*	*/
-            if(strcmp(opts[j], param) == 0){
+            if (strcmp(opts[j], param) == 0) {
                 break;
             }
             j++;
-            if(opts[j] == NULL){
+            if (opts[j] == NULL) {
                 //sntLogErrorPrintf("Invalid option, %s.\n", param);
-                exit(EXIT_FAILURE);	/*	TODO resolve.	*/
+                exit(EXIT_FAILURE);    /*	TODO resolve.	*/
             }
 
             /*	*/
-        }while(opts[j]);
+        } while (opts[j]);
 
         /*	*/
         res |= (1 << (j - 1));

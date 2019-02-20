@@ -25,13 +25,13 @@ int main(int argc, const char** argv){
 	memset(scene, 0, sizeof(Scene));
 
 	/*  Create scene.   */
-	if(createScene(scene))
+	if(!createScene(scene))
 		return EXIT_FAILURE;
 
 	/*  Renderer scene.   */
 	sceneRenderer(scene);
 
-	/*  */
+	/*  Release all resources.  */
 	releaseScene(scene);
 	free(scene);
 	return EXIT_SUCCESS;

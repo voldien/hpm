@@ -1,6 +1,6 @@
 /**
-    Parse bitwise multi param arguments, from the snt program.
-    Copyright (C) 2017  Valdemar Lindberg
+    High performance matrix library utilizing SIMD extensions.
+    Copyright (C) 2016  Valdemar Lindberg
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
@@ -16,23 +16,28 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _HPM_PARSER_H_
-#define _HPM_PARSER_H_ 1
-#include<hpmdef.h>
+#ifndef _HPM_LOG_H_
+#define _HPM_LOG_H_  1
+
+enum HTP_VERBOSITY{
+	HTP_VERBOSE_QUITE = 0,
+	HTP_VERBOSE_LOG = 1,
+	HTP_VERBOSE_DEBUG = 16,
+};
 
 /**
- *	Parse bit flag argument options. Where each
- *	argument is separated by comma. Where all and none
- *	are reserved key word.
  *
- * @param arg
- *
- * @param opts array of option null terminated string.
- *
- * @return bitwise option.
+ * @param verbosity
  */
-extern unsigned int htpParserBitWiseMultiParam(const char *HPM_RESTRICT arg,
-                                               const char **HPM_RESTRICT opts);
+extern void htpSetVerbosity(enum HTP_VERBOSITY verbosity);
 
+/**
+ *
+ * @param level
+ * @param format
+ * @param ...
+ * @return
+ */
+extern int htpLogPrint(enum HTP_VERBOSITY level, const char* format,...);
 
 #endif

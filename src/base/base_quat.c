@@ -112,28 +112,32 @@ HPM_IMP(void, hpm_quat_axisf, hpmquatf *quat, const hpmvecf pitch_radian, const 
 	*quat = axis;
 }
 
-HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
-		const hpmquatf* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out){
+HPM_IMP(void, hpm_quat_lookatfv, const hpmvec3f* HPM_RESTRICT lookat, const hpmvec3f* HPM_RESTRICT pos,
+		const hpmvec3f* HPM_RESTRICT up, hpmquatf* HPM_RESTRICT out) {
 
-	hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
-
+	const hpmvec3f forward = {0.0f, 0.0f, 1.0f, 0.0f};
+	const hpmvec3f forwardVector = *lookat - *pos;
+	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&forwardVector);
+	
 	/*  */
-	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_quat_dotfv)(lookat, &forward);
-	if(fabsf(dot - (-1.0f)) < 0.00001f){
-		HPM_CALLLOCALFUNC(hpm_quat_setf)(out, HPM_1_PI, hpm_vec4_getxf(*up), hpm_vec4_getyf(*up),
+	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(&forward, &forwardVector);
+	
+	if (fabsf(dot - (-1.0f)) < 0.000001f) {
+		//HPM_CALLLOCALFUNC(hpm_quat_axis_anglefv)(out, up, HPM_PI);
+		HPM_CALLLOCALFUNC(hpm_quat_setf)(out, HPM_PI, hpm_vec4_getxf(*up), hpm_vec4_getyf(*up),
 		        hpm_vec4_getzf(*up));
 		return;
 	}
 
 	/*  */
-	if(fabsf(dot - (1.0f)) < 0.00001f){
+	if (fabsf(dot - 1.0f) < 0.000001f) {
 		HPM_CALLLOCALFUNC(hpm_quat_identityfv)(out);
 		return;
 	}
 
-	hpmvecf rotAngle = acos(dot);
-	hpmvec3f rotAxis = {0.0f, 0.0f, 0.0f, 0.0f};
-	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&forward, &forward, &rotAxis);
+	const hpmvecf rotAngle = acosf(dot);
+	hpmvec3f rotAxis;
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&forward, &forwardVector, &rotAxis);
 	HPM_CALLLOCALFUNC(hpm_vec3_normalizefv)(&rotAxis);
 	HPM_CALLLOCALFUNC(hpm_quat_axis_anglefv)(out, &rotAxis, rotAngle);
 }
@@ -141,11 +145,12 @@ HPM_IMP(void, hpm_quat_lookatfv, const hpmquatf* HPM_RESTRICT lookat,
 HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4f* HPM_RESTRICT mat){
 	const hpmmat4uf* HPM_RESTRICT umat = mat;
 
-	float trace = umat->s.m11 + umat->s.m22 + umat->s.m33;
+	const hpmvecf trace = umat->s.m11 + umat->s.m22 + umat->s.m33;
 
+	/*  */
 	if( trace > 0 ) {
 
-		float s = 0.5f / sqrtf(trace + 1.0f);
+		hpmvecf s = 0.5f / sqrtf(trace + 1.0f);
 		(*quat)[HPM_QUAT_W] = 0.25f / s;
 		(*quat)[HPM_QUAT_X] = ( umat->s.m32 - umat->s.m23 ) * s;
 		(*quat)[HPM_QUAT_Y] = ( umat->s.m13 - umat->s.m31 ) * s;
@@ -154,7 +159,7 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4
 	}else {
 		if ( umat->s.m11 > umat->s.m22 && umat->s.m11 > umat->s.m33 ) {
 
-			float s = 2.0f * sqrtf( 1.0f + umat->s.m11 - umat->s.m22 - umat->s.m33);
+			hpmvecf s = 2.0f * sqrtf( 1.0f + umat->s.m11 - umat->s.m22 - umat->s.m33);
 			(*quat)[HPM_QUAT_W] = (umat->s.m32 - umat->s.m23 ) / s;
 			(*quat)[HPM_QUAT_X] = 0.25f * s;
 			(*quat)[HPM_QUAT_Y] = (umat->s.m12 + umat->s.m21 ) / s;
@@ -162,7 +167,7 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4
 
 		} else if (umat->s.m22 > umat->s.m33) {
 
-			float s = 2.0f * sqrtf( 1.0f + umat->s.m22 - umat->s.m11 - umat->s.m33);
+			hpmvecf s = 2.0f * sqrtf( 1.0f + umat->s.m22 - umat->s.m11 - umat->s.m33);
 			(*quat)[HPM_QUAT_W] = (umat->s.m13 - umat->s.m31 ) / s;
 			(*quat)[HPM_QUAT_X] = (umat->s.m12 + umat->s.m21 ) / s;
 			(*quat)[HPM_QUAT_Y] = 0.25f * s;
@@ -170,7 +175,7 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4
 
 		} else {
 
-			float s = 2.0f * sqrtf( 1.0f + umat->s.m33 - umat->s.m11 - umat->s.m22 );
+			hpmvecf s = 2.0f * sqrtf( 1.0f + umat->s.m33 - umat->s.m11 - umat->s.m22 );
 			(*quat)[HPM_QUAT_W] = (umat->s.m21 - umat->s.m12 ) / s;
 			(*quat)[HPM_QUAT_X] = (umat->s.m13 + umat->s.m31 ) / s;
 			(*quat)[HPM_QUAT_Y] = (umat->s.m23 + umat->s.m32 ) / s;
@@ -180,28 +185,40 @@ HPM_IMP(void, hpm_quat_from_mat4x4fv, hpmquatf* HPM_RESTRICT quat, const hpmvec4
 	}
 }
 
-HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
-	hpmvecf ht = (1.0f - t);
-	*out = *a * ht + *b * t;
+HPM_IMP( void, hpm_quat_lerpfv, const hpmquatf* a, const hpmquatf* b, const hpmvecf t, hpmquatf* out) {
+	const hpmvecf ht = (1.0f - t);
+	*out = ht * *a  + t * *b;
 }
 
-HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const float t, hpmquatf* out) {
+HPM_IMP( void, hpm_quat_slerpfv, const hpmquatf* a, const hpmquatf* b, const hpmvecf t, hpmquatf* out) {
 
-	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
 	hpmquatf q3;
-	if(fdot < 0.0f){
-		fdot = -fdot;
-		q3 = ( *b ) * -1.0f;
-	}
-	else q3 = *b;
+	hpmvecf fdot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
+	const hpmvecd DOT_THRESHOLD = 0.9999f;
 
 	/*  */
-	if(fdot <0.95f){
-		hpmvecf angle = acosf(fdot);
-		*out = (*a * sinf(angle * (1.0f - t)) + q3 * sinf(angle * t) ) / sinf(angle);
+	if (fdot < 0.0f) {
+		fdot = -fdot;
+		q3 = (*b) * -1.0f;
+	} else
+		q3 = *b;
+
+	/*  */
+	float k0, k1;
+	if (fdot > DOT_THRESHOLD) {
+		k0 = 1.0f - t;
+		k1 = t;
+	} else {
+
+		hpmvecf sinOmega = sqrtf(1.0f - fdot * fdot);
+		hpmvecf omega = atan2f(sinOmega, fdot);
+		hpmvecf oneOverSinOmega = 1.0f / sinOmega;
+
+		k0 = sinf((1.0f - t) * omega) * oneOverSinOmega;
+		k1 = sinf(t * omega) * oneOverSinOmega;
 	}
-	else
-		return HPM_CALLLOCALFUNC(hpm_quat_lerpfv)(a, b, t, out);
+
+	*out = k0 * (*a) + k1 * q3;
 }
 
 

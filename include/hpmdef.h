@@ -230,7 +230,7 @@
     #define HPMAPITHISENTRY JNICALL
     #define HPMAPISTDENTRY JNICALL
 #else
-#   if !defined(__cdecl) && ( defined(HPM_GNUC)  || defined(HPM_CLANG) )
+#   if !defined(__cdecl) && ( defined(HPM_GNUC)  || defined(HPM_CLANG))
         #define __cdecl  __attribute__ ((__cdecl__))
         #define __stdcall  __attribute__ ((stdcall))
 		#define __fastcall __attribute__((fastcall))
@@ -250,10 +250,11 @@
 	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #elif defined(HPM_GNUC) || defined(HPM_GHS)
 	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
+#elif defined(HPM_CLANG)
+	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
 #else
 	/*#pragma message("Warning: You'd need to add HPM_ALWAYS_INLINE for this compiler.")*/
 #endif
-
 
 /**
  *	Alignment of data and vectors.

@@ -45,7 +45,7 @@ const char* gc_vertexpolygone = ""
 "}\n";
 
 /**
- *  Fragment shader.
+ * Fragment shader.
  */
 const char* gc_fragmentpolygone = ""
 "\n"

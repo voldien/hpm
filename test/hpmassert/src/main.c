@@ -48,7 +48,8 @@ int main(int argc, char **argv) {
 	}
 
 	/*  Display results.    */
-	htpFormatResult(j, benchmarkResults);
+	if(g_type & ~(eIntegrity))
+		htpFormatResult(j, benchmarkResults);
 
 	/*	End of test.	*/
 	htpDeallocateBenchmarks(benchmarkResults, numBenchmarks);

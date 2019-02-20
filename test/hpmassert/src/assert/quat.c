@@ -195,3 +195,23 @@ HPM_BENCHMARK_FUNC_IMP(hpm_quat_rollfv) {
 		hpm_quat_rollfv(&quat);
 	}
 }
+
+
+HPM_BENCHMARK_FUNC_IMP(hpm_quat_eularfv) {
+	register int x;
+	hpmquatf quat = {0.0f, 0.0f, 0.0f, 1.0f};
+	hpmvecf p, y, r;
+
+	for (x = 0; x < g_it; x++) {
+		hpm_quat_eularfv(&quat, &p, &y, &r);
+	}
+}
+
+HPM_BENCHMARK_FUNC_IMP(hpm_quat_powfv) {
+	register int x;
+	hpmquatf quat = {0.0f, 0.0f, 0.0f, 1.0f};
+
+	for (x = 0; x < g_it; x++) {
+		hpm_quat_powfv(&quat, 2.45f);
+	}
+}

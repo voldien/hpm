@@ -6,12 +6,12 @@
 #		include<x86intrin.h>
 #   endif
 
-HPM_IMP(float, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
+HPM_IMP(hpmvecf, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 	/*	Return first element.	*/
 	return _mm_cvtss_f32( _mm_dp_ps(*larg, *rarg, 0xff) );
 }
 
-HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
+HPM_IMP(hpmvecf, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	hpmvec4f lvMult = (*arg) * (*arg);			/*	{ x^2, y^2, z^2, w^2 }	*/
 
 	hpmvec8f lvMultp = _mm256_hadd_ps(
@@ -23,7 +23,7 @@ HPM_IMP(float, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	return _mm_cvtss_f32 ( _mm_sqrt_ss( _mm256_castps256_ps128( lvMultp ) ) );
 }
 
-HPM_IMP( float, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
+HPM_IMP( hpmvecf, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 	const hpmvec4f lvMult = (*arg) * (*arg);	/*	{ x^2, y^2, z^2, w^2 }	*/
 
 	hpmvec8f lvMultp = _mm256_hadd_ps(

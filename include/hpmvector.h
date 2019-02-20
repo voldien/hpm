@@ -58,10 +58,12 @@ typedef struct hpm_vec2uf_t{
 typedef hpmveci hpmvec3i HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecf hpmvec3f HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecd hpmvec3d HPM_VECTORALIGN(32);   /*	*/
-typedef struct hpm_vec3uf_t{
-	union{
+typedef struct hpm_vec3uf_t {
+	union {
 		hpmvec3f v;
-		struct{hpmvecf x, y, z;};
+		struct {
+			hpmvecf x, y, z;
+		};
 	};
 };
 
@@ -71,10 +73,12 @@ typedef struct hpm_vec3uf_t{
  */
 typedef hpmveci hpmvec4i HPM_VECTORALIGN(16);   /*	*/
 typedef hpmvecf hpmvec4f HPM_VECTORALIGN(16);   /*	*/
-typedef struct hpm_vec4uf_t{
-	union{
+typedef struct hpm_vec4uf_t {
+	union {
 		hpmvec4f v;
-		struct{hpmvecf x, y, z, w;};
+		struct {
+			hpmvecf x, y, z, w;
+		};
 	};
 };
 
@@ -96,19 +100,19 @@ typedef hpmvecd hpmvec4d HPM_VECTORALIGN(32);
  *	Union data types
  */
 HPM_ALIGN(16)
-typedef struct hpmvec8fu_t{
-	union{
+typedef struct hpmvec8fu_t {
+	union {
 		hpmvec4f d2[2];
 		hpmvec8f d;
 	};
-}hpmvec8fu;
+} hpmvec8fu;
 HPM_ALIGN(16)
-typedef struct hpmvec4du_t{
-	union{
+typedef struct hpmvec4du_t {
+	union {
 		hpmvec2d d2[2];
 		hpmvec4d d;
 	};
-}hpmvec4du;
+} hpmvec4du;
 
 /**
  *	AVX 512 bits data types.
@@ -117,12 +121,12 @@ typedef hpmveci hpmvec16i HPM_VECTORALIGN(64);
 typedef hpmvecf hpmvec16f HPM_VECTORALIGN(64);
 typedef hpmvecd hpmvec8d HPM_VECTORALIGN(64);
 HPM_ALIGN(16)
-typedef struct hpmvec8du_t{
-	union{
+typedef struct hpmvec8du_t {
+	union {
 		hpmvec4d d2[2];
 		hpmvec8d d;
 	};
-}hpmvec8du;
+} hpmvec8du;
 
 
 /**
@@ -177,58 +181,71 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_setsf, hpmvec4f* destination,
 		const hpmvecf ss);
 
 /**
- * Perform addition with two 1x4 vectors.
- * larg = larg * rarg
+ * Compute addition on each elements in
+ * the vector individually by a factor.
+ * expr: larg += rarg;
  *
- * @param larg left sided argument.
- * @param arg right side argument
+ * @param larg left side vector argument.
  *
+ * @param rarg right side vector argument.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalef, hpmvec4f* larg,
 		const hpmvecf rarg);
 
 /**
- * Perform addition with two 1x4 vectors.
- * larg = larg * rarg
+ * Compute addition on each elements in
+ * the vector individually. expr: larg += rarg;
  *
- * @param larg
+ * @param larg left side vector argument.
  *
- * @param arg
- *
+ * @param rarg right side vector argument.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_addition_scalefv, hpmvec4f* larg,
 		const hpmvec4f* rarg);
 
 /**
- * larg -= rarg;
+ * Compute subtraction on each elements in
+ * the vector individually by a factor.
+ * expr: larg -= rarg;
  *
+ * @param larg left side vector argument.
  *
+ * @param rarg right side vector argument.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_subtractionf, hpmvec4f* larg,
 		const hpmvecf rarg);
 
 /**
- * larg -= rarg;
+ * Compute subtraction on each elements in
+ * the vector individually. expr: larg -= rarg;
  *
+ * @param larg left side vector argument.
  *
+ * @param rarg right side vector argument.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_subtractionfv, hpmvec4f* larg,
 		const hpmvec4f* rarg);
 
 /**
- * larg *= rarg
+ * Compute multiplication on each elements in
+ * the vector individually. expr: larg *= rarg
  *
- * @param larg
+ * @param larg left side vector argument.
  *
- * @param rarg
+ * @param rarg right side vector argument.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multifv, hpmvec4f* larg,
 		const hpmvec4f* rarg);
 
 /**
- * @param larg
- * @param rarg
+ * Compute multiplication on each elements in
+ * the vector individually by a scalar.
+ * expr: larg *= rarg;
+ *
+ * @param larg left side vector argument.
+ *
+ * @param rarg right side vector argument.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg,
 		const hpmvecf rarg);
@@ -237,7 +254,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_multi_scalef, hpmvec4f* larg,
  * Compute dot product of two 1x4 vectors.
  * Because dot product is associatve, which means
  * that the order you put the two vectors won't matter.
- * ||larg|| * ||rarg|| * cos(x)
+ * expr: ||larg|| * ||rarg|| * cos(x)
  *
  * @param larg left side argument
  *
@@ -250,7 +267,7 @@ HPM_EXPORT(hpmvecf, HPMAPIENTRY, hpm_vec4_dotfv, const hpmvec4f* larg,
 
 /**
  * Compute vector length.
- * sqrt(x * x + y * y + z * z + w * w)
+ * expr: sqrt(x * x + y * y + z * z + w * w)
  *
  * @return non-negative number.
  */
@@ -267,33 +284,33 @@ HPM_EXPORT( hpmvecf, HPMAPIFASTENTRY, hpm_vec4_lengthsqurefv, const hpmvec4f* ar
 /**
  * Normalize 1x4 vector with length 1.0. The direction of
  * the vector will remain as the same.
- * arg = arg / |arg|
+ * expr: arg = arg / |arg|
  *
- * @param vect
+ * @param vect valid vector pointer parameter.
  *
  */
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_normalizefv, hpmvec4f* vect);
 
 /**
  * Negate vector by multiply each component of the vector by -1.
- * arg = arg * -1
+ * expr: arg = arg * -1
  *
- * @param vect
+ * @param vect valid vector pointer parameter.
  */
 HPM_EXPORT( void, HPMAPIFASTENTRY, hpm_vec4_negatefv, hpmvec4f* vect);
 
 
 /**
  * Linear interpolation between a and b in respect to t.
- * out = (a + (b -a) * t)
+ * expr: out = (a + (b -a) * t)
  *
- * @param a	start vector
+ * @param a	start vector.
  *
- * @param b	end vector
+ * @param b	end vector.
  *
- * @param t time
+ * @param t time interval from [0,1]
  *
- * @param out
+ * @param out interpolated vector.
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
 		const hpmvec4f* b, hpmvecf t, hpmvec4f* HPM_RESTRICT out);
@@ -301,13 +318,13 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_lerpfv, const hpmvec4f* a,
 /**
  * Spherical interpolation between a and b in respect to t.
  *
- * @param a
+ * @param a start vector.
  *
- * @param b
+ * @param b end vector.
  *
- * @param t
+ * @param t interval from [0,1]
  *
- * @param out
+ * @param out interpolated vector.
  *
  */
 HPM_EXPORT(void, HPMAPIENTRY, hpm_vec4_slerpfv, const hpmvec4f* a,
@@ -383,7 +400,7 @@ HPM_EXPORT( hpmvecf, HPMAPIENTRY, hpm_vec3_lengthsquarefv, const hpmvec3f* arg);
 /**
  * Normalize 1x3 vector with length 1.0. The direction of
  * the vector will remain as the same.
- * arg = arg / |arg|
+ * expr: arg = arg / |arg|
  *
  * @param arg valid none zero vector.
  *
@@ -405,8 +422,8 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_reflectfv, const hpmvec3f* incidentVec,
 		const hpmvec3f* normal, hpmvec3f* out);
 
 /**
- *	Compute refraction from normal and direction vector
- *	in respect to refraction index.
+ * Compute refraction from normal and direction vector
+ * in respect to refraction index.
  *
  * @param incidentVec incomming vector.
  *
@@ -454,7 +471,7 @@ HPM_EXPORT(void, HPMAPIENTRY, hpm_vec3_refract2fv, const hpmvec3f* incidentVec,
  *  ------> b
  *  |--| out
  *
- *  out = n * ( dot(a, n) / ( || n ||^2 ))
+ *  expr: out = n * ( dot(a, n) / ( || n ||^2 ))
  *
  * @param a projected vector.
  * @param b vector projected to.

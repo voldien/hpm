@@ -48,7 +48,7 @@ HPM_IMP( void, hpm_vec4_multifv, hpmvec4f* larg, const hpmvec4f* rarg) {
 	*larg *= *rarg;
 }
 
-HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const float rarg) {
+HPM_IMP( void, hpm_vec4_multi_scalef, hpmvec4f* larg, const hpmvecf rarg) {
 	const hpmvec4f row0 = { rarg, rarg, rarg, rarg };
 	*larg *= row0;
 }
@@ -75,19 +75,25 @@ HPM_IMP( void, hpm_vec4_slerpfv, const hpmvec4f* a, const hpmvec4f* b, hpmvecf t
 	hpmvecf theta;
 	hpmvec4f relative;
 
+	const hpmvecf ablength = HPM_CALLLOCALFUNC(hpm_vec4_lengthfv)(a) * HPM_CALLLOCALFUNC(hpm_vec4_lengthfv)(b);
+
 	/*	*/
-	float dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a,b);
-	const hpmvec4f time = {t,t,t,t};
-	const float vsintime = sinf(t);
-	dot = HPM_CLAMP(dot, -1.0, 1.0);
+	hpmvecf dot = HPM_CALLLOCALFUNC(hpm_vec4_dotfv)(a, b);
+	dot /= ablength;
+	dot = (hpmvecf) HPM_CLAMP(dot, -1.0f, 1.0f);
+
+	/*  */
 	theta = acosf(dot) * t;
-	relative = *b - *a * time;
+	relative = *b - *a * dot;
 
 	/*	*/
 	HPM_CALLLOCALFUNC(hpm_vec4_normalizefv)(&relative);
-	const hpmvec4f vtheta = {theta, theta, theta, theta};
-	const hpmvec4f vsint = {vsintime, vsintime, vsintime, vsintime};
-	*out = (*a * vtheta) + (relative *vsint);
+
+	/*  */
+	const hpmvecf ctheta = cosf(theta);
+	const hpmvecf stheta = sinf(theta);
+
+	*out = (*a * ctheta) + (relative * stheta);
 }
 
 
