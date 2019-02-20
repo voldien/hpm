@@ -520,9 +520,11 @@ START_TEST (matrix4x4){
 	/*	Transpose non identical diagonal.	*/
 	hpm_mat4x4_scalef(m2, (hpmvecf)HPM_PI / 3.5f,(hpmvecf)HPM_PI / 5.5f,(hpmvecf)HPM_PI / 1.5f);
 	hpm_mat4x4_copyfv(m1, m2);
-	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+	hpm_mat4x4_sprint(mac1msg, m1);
+	hpm_mat4x4_sprint(mex2msg, m2);
+	ck_assert_msg(hpm_mat4_eqfv(m1, m2), "hpm_mat4_eqfv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
 	hpm_mat4x4_transposefv(m2);
-	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
+	ck_assert_msg(hpm_mat4_eqfv(m1, m2), "hpm_mat4_eqfv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
 
 	/*	Transpose non symmetric matrix.	*/
 	hpm_mat4x4_projfv(m2, (hpmvecf)HPM_PI / 4.0f, 4.0f / 3.0f, 0.15, 1000.0f);
