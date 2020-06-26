@@ -67,8 +67,20 @@ IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
 ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
 	# Compiling language standard.
 	ADD_DEFINITIONS(-fPIC)
+	SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC")
 	ADD_DEFINITIONS(-std=c11)
 
+		# Check build target.
+	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
+		MESSAGE(STATUS "Compile for release.")
+		ADD_DEFINITIONS(-DNDEBUG -O2)
+		SET(CMAKE_RELEASE TRUE)
+	ELSEIF( CMAKE_BUILD_TYPE STREQUAL "Debug")
+		MESSAGE(STATUS "Compile for debug.")
+		ADD_DEFINITIONS(-D_DEBUG)
+		ADD_DEFINITIONS(-g3 -O0)
+		SET(CMAKE_DEBUG TRUE)
+	ENDIF()
 	#
 	ADD_DEFINITIONS(-w)
 
@@ -184,13 +196,12 @@ IF(USE_SINGLE_LIBRARY)
 	TARGET_LINK_LIBRARIES(hpm -lm -ldl )
 	FILE(GLOB staticlib ${CMAKE_CURRENT_SOURCE_DIR}/*.a)
 	STRING(REPLACE ".a/" ".a /" LIB_PATHS ${staticlib})
-	SET_TARGET_PROPERTIES(hpm PROPERTIES LINK_FLAGS "-Wl,--whole-archive ${LIB_PATHS} -Wl,--no-whole-archive")
-	SET(BUILD_SHARED_LIBS TRUE)
 
 	#
 	IF((CMAKE_COMPILER_IS_GNUCC) AND NOT CMAKE_COMPILER_IS_MINGOW)
-
+		SET_TARGET_PROPERTIES(hpm PROPERTIES LINK_FLAGS "-Wl,--whole-archive ${LIB_PATHS} -Wl,--no-whole-archive")
 	ENDIF()
+	SET(BUILD_SHARED_LIBS TRUE)
 
 	# 
 	SET(LINK_SEARCH_START_STATIC FALSE)
@@ -227,19 +238,28 @@ IF(NOT USE_SINGLE_LIBRARY)
 ENDIF()
 
 # Invoke cmake file from the test directory.
-ADD_SUBDIRECTORY(test)
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 
 # Create distrubtion archive file.
 IF( UNIX )
 	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
 	ADD_CUSTOM_TARGET(	distribution
 				COMMAND mkdir -p ${TARGETDIR}
+				COMMAND mkdir -p ${TARGETDIR}/test
+				COMMAND mkdir -p ${TARGETDIR}/test/glbunny
+				COMMAND mkdir -p ${TARGETDIR}/test/hpmassert
 				COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/src
-						${CMAKE_CURRENT_SOURCE_DIR}/include 
-						${CMAKE_CURRENT_SOURCE_DIR}/test
-						${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-						${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
-						${CMAKE_CURRENT_SOURCE_DIR}/README.md ${TARGETDIR}
+				${CMAKE_CURRENT_SOURCE_DIR}/include
+				${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+				${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+				${CMAKE_CURRENT_SOURCE_DIR}/README.md
+				${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt
+				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/inlcude
+				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/src
+				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/CMakeLists.txt
+				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/inlcude
+				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/src
+				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/CMakeLists.txt ${TARGETDIR}
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()

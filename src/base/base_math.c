@@ -1,5 +1,6 @@
 #include"hpmmath.h"
 #include<limits.h>
+#include<time.h>
 
 #   ifdef HPM_VC
 #      include<intrin.h>

@@ -361,7 +361,7 @@ HPM_IMP( hpmboolean, hpm_mat4x4_unprojf, hpmvecf winx,
 	hpmvec4x4f_t mvp;
 	hpmvec4x4f_t inverseMVP;
 	hpmvec4f m;
-	hpmvec4f result;
+	hpmvec4f result = {0.0f, 0.0f, 0.0f, 0.0f};
 
 	/*	Create mvp matrix and its inverse.	*/
 	HPM_CALLLOCALFUNC(hpm_mat4x4_multiply_mat4x4fv)(projection, modelview, mvp);

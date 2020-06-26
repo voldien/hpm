@@ -51,10 +51,11 @@ HPM_IMP(void, hpm_vec4_com_neqfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f
 }
 HPM_IMP(hpmboolean, hpm_vec4_neqfv, const hpmvec4f* HPM_RESTRICT a,
 		const hpmvec4f* HPM_RESTRICT b){
+
 	return ((*a)[0] != (*b)[0] ||
 			(*a)[1] != (*b)[1] ||
 			(*a)[2] != (*b)[2] ||
-			(*a)[3] != (*b)[3] );
+			(*a)[3] != (*b)[3] ) ? 1 : 0;
 }
 
 HPM_IMP(void, hpm_vec4_com_gfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* HPM_RESTRICT b, hpmvec4f* HPM_RESTRICT res){

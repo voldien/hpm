@@ -379,7 +379,7 @@ int hpm_support_cpu_feat(unsigned int simd) {
             return (cpuInfo[2] & bit_AVX);
         case HPM_AVX2:
             cpuid(cpuInfo, 7);
-            return (cpuInfo[0] & bit_AVX2);
+            return (cpuInfo[2] & bit_AVX2);
         case HPM_AVX512:
 #if defined(bit_AVX512F)
             cpuid(cpuInfo, 7);

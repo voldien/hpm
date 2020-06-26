@@ -103,6 +103,13 @@ typedef union {
 	hpmvec2x2f_t m;
 } hpmmat2uf;
 
+/**
+ * Set individual rows of matrix.
+ */
+#define hpm_mat4x4_set_rowfv(mat4x4, index, row)    hpm_vec4_setxf(mat4x4[0], row[0])
+#define hpm_mat4x4_get_rowfv(mat4x4, index)
+#define hpm_mat4x4_set_colfv(mat4x4, index, col)    ((mat4x4)[index]) = (col)
+#define hpm_mat4x4_get_colfv(mat4x4, index)         ((mat4x4)[index])
 
 /**
  * Copy source matrix destination matrix.
