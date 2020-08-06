@@ -419,6 +419,8 @@ static int log2MutExlusive32(unsigned int a){
 	}
 
 	assert(0);
+
+	return 0;
 }
 
 const char* hpm_get_simd_symbol(unsigned int SIMD) {
