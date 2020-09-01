@@ -3,11 +3,13 @@ PROJECT(hpm VERSION 0.9.1)
 
 #	build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
+OPTION(BUILD_TEST "Build Test Suite" ON)
 IF(NOT BUILD_SHARED_LIBS)
 	set(CMAKE_EXE_LINKER_FLAGS "-static")
 	set(LINK_SEARCH_START_STATIC TRUE)
 ENDIF()
 OPTION(USE_SINGLE_LIBRARY "Build a single library binary file" OFF) # Not Full Supported.
+
 
 
 # hpm version setup.
@@ -239,7 +241,9 @@ IF(NOT USE_SINGLE_LIBRARY)
 ENDIF()
 
 # Invoke cmake file from the test directory.
-ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
+IF(BUILD_TEST)
+	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
+ENDIF()
 
 # Create distrubtion archive file.
 IF( UNIX )
