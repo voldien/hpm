@@ -41,7 +41,7 @@
 	#define HPM_FILE_NEON "libhpmneon.dll"
 	#define HPM_FILE_NOSIMD "libhpmnosimd.dll"
 #else
-    #pragma message("Warning: None supported platform!")
+    #pragma error("Warning: None supported platform!")
 #endif
 
 /*	library handle.

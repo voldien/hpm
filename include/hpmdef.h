@@ -100,7 +100,6 @@
      #include <arm_neon.h>
 #endif	/**/
 
-
 /**
  *	Platform define
  *	Architecture!
@@ -219,12 +218,12 @@
 /**
  *	Calling function convention.
  */
-#ifdef HPM_WINDOWS	        /** Windows Calling Convention.*/
+#if defined(HPM_VC)			/** Windows Calling Convention.*/
 	#define HPMAPIENTRY     __cdecl
 	#define HPMAPIFASTENTRY __fastcall
 	#define HPMAPITHISENTRY __thiscall
 	#define HPMAPISTDENTRY  __stdcall
-#elif defined(HPM_ANDROID)   /** Android Calling Convention	*/
+#elif defined(HPM_ANDROID)   		/** Android Calling Convention	*/
     #define HPMAPIENTRY JNICALL
     #define HPMAPIFASTENTRY JNICALL
     #define HPMAPITHISENTRY JNICALL
@@ -244,7 +243,7 @@
 /**
  *	Force inline.
  */
-#if defined(HPM_MSVC)
+#if defined(HPM_VC)
 	#define HPM_ALWAYS_INLINE __forceinline
 #elif defined(HPM_GNUC)
 	#define HPM_ALWAYS_INLINE inline __attribute__((always_inline))
@@ -267,7 +266,8 @@
 	#define HPM_ALIGN(alignment) __declspec(align(alignment))
 	#define HPM_VECTORALIGN(alignment) __declspec(align(alignment))
 	#define HPM_VECTORALIGNI(alignment) __declspec(align(alignment))
-#elif defined(HPM_)
+#else
+	#pragma message("Warning: None supported compiler for alignment.")
 #endif
 
 
@@ -282,9 +282,9 @@
 	#endif
 #elif defined(HPM_VC)
 	#if HPM_INTERNAL
-		#define HPMDECLSPEC __declspec(dllexport)
+	#define HPMDECLSPEC __declspec(dllexport)
 	#else
-		#define HPMDECLSPEC __declspec(dllimport)
+	#define HPMDECLSPEC __declspec(dllimport)
 	#endif
 #endif
 
@@ -303,12 +303,6 @@
 	    #define HPM_RESTRICT
 	#endif
 #endif
-
-
-#if defined(HPM_ARM) || defined(HPM_I386)
-
-#endif
-
 
 /**
  *	String macros.
