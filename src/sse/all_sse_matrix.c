@@ -62,7 +62,6 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat){
 	mat[3] = row3;
 }
 
-
 HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
 	_MM_TRANSPOSE4_PS(mat[0], mat[1], mat[2], mat[3]);
 }
