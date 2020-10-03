@@ -1,5 +1,7 @@
 # HPM
 [![Travis Build Status](https://travis-ci.org/voldien/hpm.svg?branch=master)](https://travis-ci.org/voldien/hpm)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Language grade: C/C++](https://img.shields.io/lgtm/grade/cpp/g/voldien/hpm.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/voldien/hpm/context:cpp)
 
 *HPM* is a matrix library that supports multiple SIMD implementations that can be loaded in run-time. Furthermore, the program can load the most appropriated implementation on its own and, it can as well explicitly load a specific SIMD extension with the available SIMD enumerators.
 
@@ -19,6 +21,15 @@ The matrix2x2 and the vector2 are not supported as a result of not being able to
 ## Motivation
 The main motivation of this project is to create a single library header interface for performing matrix operations, commonly used in 3D programming. Where the appropriated implementation, based on the available CPU extensions, will load the most efficient implementation. 
 Where it can be done either automatically or manually.
+
+## Installation
+The software can be easily installed with invoking the following command.
+```bash
+mkdir build && cd build
+cmake ..
+cmake --build .
+make install
+```
 
 ## Examples
 1. The following code initialize the *hpm* library to use the *SSE2* SIMD extension and, create an identity matrix. The release function will close the loaded library which in succession will make each function pointer undefined, which means all the matrices functions will be undefined.

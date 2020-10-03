@@ -74,12 +74,20 @@ HPM_IMP( hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
 	        mat->m21 * mat->m12 * mat->m43 * mat->m34 - mat->m11 * mat->m22 * mat->m43 * mat->m34 - mat->m31 * mat->m22 * mat->m13 * mat->m44 + mat->m21 * mat->m32 * mat->m13 * mat->m44 +
 	        mat->m31 * mat->m12 * mat->m23 * mat->m44 - mat->m11 * mat->m32 * mat->m23 * mat->m44 - mat->m21 * mat->m12 * mat->m33 * mat->m44 + mat->m11 * mat->m22 * mat->m33 * mat->m44);
 
-	return f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][2]* f_mat4[3][3] - f_mat4[0][0]* f_mat4[1][1]* f_mat4[2][3]* f_mat4[3][2] + f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][3]* f_mat4[3][1] -  f_mat4[0][0]* f_mat4[1][2]* f_mat4[2][1]* f_mat4[3][3]
-		 + f_mat4[0][0]* f_mat4[1][3]* f_mat4[2][1]* f_mat4[3][2] - f_mat4[0][0]* f_mat4[1][3]* f_mat4[2][2]* f_mat4[3][1] - f_mat4[0][1]* f_mat4[1][2]* f_mat4[2][3]* f_mat4[3][0] +  f_mat4[0][1]* f_mat4[1][2]* f_mat4[2][0]* f_mat4[3][3]
-		 - f_mat4[0][1]* f_mat4[1][3]* f_mat4[2][0]* f_mat4[3][2] + f_mat4[0][1]* f_mat4[1][3]* f_mat4[2][2]* f_mat4[3][0] - f_mat4[0][1]* f_mat4[1][0]* f_mat4[2][2]* f_mat4[3][3] +  f_mat4[0][1]* f_mat4[1][0]* f_mat4[2][3]* f_mat4[3][2]
-		 + f_mat4[0][2]* f_mat4[1][3]* f_mat4[2][0]* f_mat4[3][1] - f_mat4[0][2]* f_mat4[1][3]* f_mat4[2][1]* f_mat4[3][0] + f_mat4[0][2]* f_mat4[1][0]* f_mat4[2][1]* f_mat4[3][3] -  f_mat4[0][2]* f_mat4[1][0]* f_mat4[2][3]* f_mat4[3][1]
-		 + f_mat4[0][2]* f_mat4[1][1]* f_mat4[2][3]* f_mat4[3][0] - f_mat4[0][2]* f_mat4[1][1]* f_mat4[2][0]* f_mat4[3][3] - f_mat4[0][3]* f_mat4[1][0]* f_mat4[2][1]* f_mat4[3][2] +  f_mat4[0][3]* f_mat4[1][0]* f_mat4[2][2]* f_mat4[3][1]
-		 - f_mat4[0][3]* f_mat4[1][1]* f_mat4[2][2]* f_mat4[3][0] + f_mat4[0][3]* f_mat4[1][1]* f_mat4[2][0]* f_mat4[3][2] - f_mat4[0][3]* f_mat4[1][2]* f_mat4[2][0]* f_mat4[3][1] +  f_mat4[0][3]* f_mat4[1][2]* f_mat4[2][1]* f_mat4[3][0];
+
+
+	const hpmvecf a1 =  mat->m11 *(mat->m22 * (mat->m33 * mat->m44 - mat->m43*mat->m34) - mat->m23 * (mat->m32 * mat->m44 + mat->m42*mat->m34) + mat->m24 * (mat->m32 * mat->m43 - mat->m42*mat->m33));
+
+	const hpmvecf a2 =  mat->m12 *(mat->m21 * (mat->m33 * mat->m44 - mat->m43*mat->m34) - mat->m23 * (mat->m31 * mat->m44 + mat->m41*mat->m34) + mat->m24 * (mat->m31 * mat->m43 - mat->m41*mat->m33));
+
+	const hpmvecf a3 =  mat->m13 *(mat->m21 * (mat->m32 * mat->m44 - mat->m42*mat->m34) - mat->m22 * (mat->m31 * mat->m44 + mat->m41*mat->m34) + mat->m24 * (mat->m31 * mat->m42 - mat->m41*mat->m32));
+
+	const hpmvecf a4 =  mat->m14 *(mat->m21 * (mat->m32 * mat->m43 - mat->m42*mat->m33) - mat->m22 * (mat->m31 * mat->m43 + mat->m41*mat->m33) + mat->m23 * (mat->m31 * mat->m42 - mat->m41*mat->m32));
+
+	const hpmvecf det = a1 - a2 + a3 - a4;
+	return det;
+
+
 }
 
 /*	Cramer's rule	*/ /*	TODO Fix	*/

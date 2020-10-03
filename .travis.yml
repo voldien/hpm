@@ -5,16 +5,6 @@ matrix:
   include:
 #
     - os: linux
-      compiler: clang
-      addons:
-        apt:
-          source:
-            - llvm-toolchain-precise
-            - llvm-toolchain-precise-3.7
-          packages:
-           - clang-3.8
-#
-    - os: linux
       compiler: gcc-6
       addons:
           apt:

@@ -41,7 +41,7 @@
 	#define HPM_FILE_NEON "libhpmneon.dll"
 	#define HPM_FILE_NOSIMD "libhpmnosimd.dll"
 #else
-    #pragma message("Warning: None supported platform!")
+    #pragma error("Warning: None supported platform!")
 #endif
 
 /*	library handle.
@@ -381,7 +381,7 @@ int hpm_support_cpu_feat(unsigned int simd) {
             return (cpuInfo[2] & bit_AVX);
         case HPM_AVX2:
             cpuid(cpuInfo, 7);
-            return (cpuInfo[0] & bit_AVX2);
+            return (cpuInfo[2] & bit_AVX2);
         case HPM_AVX512:
 #if defined(bit_AVX512F)
             cpuid(cpuInfo, 7);
@@ -421,6 +421,8 @@ static int log2MutExlusive32(unsigned int a){
 	}
 
 	assert(0);
+
+	return 0;
 }
 
 const char* hpm_get_simd_symbol(unsigned int SIMD) {

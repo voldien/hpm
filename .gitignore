@@ -42,13 +42,18 @@ port/android/obj
 port/android/libs
 *.tar.*
 
+
+CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
 CMakeScripts
+Testing
 Makefile
 cmake_install.cmake
 install_manifest.txt
+compile_commands.json
 CTestTestfile.cmake
+_deps
 
 .metadata
 bin/
@@ -99,3 +104,21 @@ local.properties
 .cache-main
 .scala_dependencies
 .worksheet
+
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+
+*.ide/
+*.idea/
+.project
+.cbp
