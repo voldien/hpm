@@ -34,10 +34,19 @@ HPM_IMP(void, hpm_vec4_com_lfv, const hpmvec4f* HPM_RESTRICT a, const hpmvec4f* 
 	//*res = vreinterpretq_f32_u32( vcltzq_f32(*a, *b) );
 }
 
-HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+HPM_IMP(hpmboolean, hpm_mat4_eqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b) {
 
+	const hpmvec4f row01 = vandq_s32(vceqq_f32(a[0], b[0]), vceqq_f32(a[1], b[1]));
+	const hpmvec4f row23 = vandq_s32(vceqq_f32(a[2], b[2]), vceqq_f32(a[3], b[3]));
+	const hpmvec4f row0123 = vandq_s32(row01, row23);
+
+	//return _mm_cvtsi128_si32(_mm_abs_epi32(_mm_castps_si128(row0123)));
 }
 
 HPM_IMP(hpmboolean, hpm_mat4_neqfv, const hpmvec4x4f_t a, const hpmvec4x4f_t b){
+	const hpmvec4f row01 = vandq_s32(vceqq_f32(a[0], b[0]), vceqq_f32(a[1], b[1]));
+	const hpmvec4f row23 = vandq_s32(vceqq_f32(a[2], b[2]), vceqq_f32(a[3], b[3]));
+	const hpmvec4f row0123 = vandq_s32(row01, row23);
 
+	//return _mm_cvtsi128_si32(_mm_abs_epi32(_mm_castps_si128(row0123)));
 }
