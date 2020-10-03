@@ -34,10 +34,10 @@ HPM_IMP( hpmvecf, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 	hpmvec4f lvMult = (*arg) * (*arg);			/*	{ x^2, y^2, z^2, w^2 }	*/
 
 	/*	Sum each components in the vector.	*/
-	hpmvec4f lvTemp = vextq_f32(lvMult, lvMult, _MM_SHUFFLE(2, 3, 0, 1));  /*	{ x , y, z , w} => { y, x, w, z }	*/
-	lvTemp = vaddq_f32(lvTemp, lvMult);									   /*	{ x + y, y + x, w + z, w + z }	*/
-	hpmvec4f lvTemp2 = vextq_f32(lvTemp, lvTemp, _MM_SHUFFLE(0, 1, 3, 2)); /*	{ w + z, w + z, x + y, y + x }	*/
-	lvTemp = vaddq_f32(lvTemp, lvTemp2);								   /*	{ w + z + x + y, ... , w + z + x + y }	*/
+	hpmvec4f lvTemp = vextq_f32(lvMult, lvMult, _MM_SHUFFLE(2, 3, 0, 1));	/*	{ x , y, z , w} => { y, x, w, z }	*/
+	lvTemp = vaddq_f32(lvTemp, lvMult);										/*	{ x + y, y + x, w + z, w + z }	*/
+	hpmvec4f lvTemp2 = vextq_f32(lvTemp, lvTemp, _MM_SHUFFLE(0, 1, 3, 2));	/*	{ w + z, w + z, x + y, y + x }	*/
+	lvTemp = vaddq_f32(lvTemp, lvTemp2);									/*	{ w + z + x + y, ... , w + z + x + y }	*/
 
 	// /*	Return first element.	*/
 	return vget_low_f32(lvTemp); 		/*	sqrt(w^2 + z^2 + x^2 + y^2)	*/
