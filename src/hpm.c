@@ -392,7 +392,8 @@ int hpm_support_cpu_feat(unsigned int simd) {
             cpuid(cpuInfo, 1);
             return (cpuInfo[2] & bit_SSE3);
         case HPM_SSSE3:
-            cpuid(cpuInfo, 1);
+			return 0; /*	Not supported in the library.	*/
+			cpuid(cpuInfo, 1);
             return (cpuInfo[2] & bit_SSSE3);
         case HPM_SSE4_1:
             cpuid(cpuInfo, 1);
