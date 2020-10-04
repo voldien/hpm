@@ -22,8 +22,3 @@ ADD_TEST(
 		NAME assert
 		COMMAND hpmassert --assert)
 SET_TESTS_PROPERTIES(assert PROPERTIES DEPENDS hpmassert)
-
-# ADD_TEST(
-# 		NAME performance
-# 		COMMAND hpmassert --performance --quite --simd=all)
-#SET_TESTS_PROPERTIES(performance PROPERTIES DEPENDS hpmassert)
