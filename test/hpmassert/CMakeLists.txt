@@ -20,5 +20,6 @@ ENDIF()
 
 ADD_TEST(
 		NAME assert
-		COMMAND hpmassert --assert)
+		COMMAND hpmassert --assert
+		WORKING_DIRECTORY ${CMAKE_BINARY_DIR})
 SET_TESTS_PROPERTIES(assert PROPERTIES DEPENDS hpmassert)

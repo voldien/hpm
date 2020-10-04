@@ -278,7 +278,7 @@
 	#if defined(HPM_UNIX)
 		#define HPMDECLSPEC	 __attribute__((__visibility__ ("default")))
 	#else
-		#define HPMDECLSPEC
+		#define HPMDECLSPEC 
 	#endif
 #elif defined(HPM_VC)
 	#if HPM_INTERNAL
@@ -316,7 +316,9 @@
  */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 
-	#if defined(HPM_AVX2_SIMD_PREFIX)
+	#if defined(HPM_NEON_SIMD_PREFIX)
+		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_NEON
+	#elif defined(HPM_AVX2_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX2
 	#elif defined(HPM_AVX_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_AVX
@@ -330,7 +332,7 @@
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE2
 	#elif defined(HPM_SSE_SIMD_PREFIX)
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_SSE
-	#else
+	#else	/*	No SIMD version.	*/
 		#define HPM_INTERNAL_FUNCSYM(func)	fimp##func##_NOSIMD
 	#endif
 #endif
@@ -380,13 +382,18 @@
 		extern HPM_FUNCPOINTER(func);                                       \
 		HPM_DEFINEFUNC(func)                                                \
 
-
+/**
+ * Used by the SIMD extensions.
+ */
 #elif defined(HPM_INTERNAL_IMP)	/*	*/
 #define HPM_EXPORT(ret, callback, func, ...)                                        \
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__);                    \
 		extern HPMDECLSPEC ret callback HPM_FUNCSYMBOL(func)(__VA_ARGS__);          \
 
-#else	/*	*/
+#else	
+/**
+ *	Used by libraris using the library. 
+ */
 #define HPM_EXPORT(ret, callback, func, ...)                                \
 		typedef ret (callback *HPM_FUNCTYPE(func))(__VA_ARGS__);            \
 		extern HPM_FUNCPOINTER(func)                                        \

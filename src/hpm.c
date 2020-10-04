@@ -7,39 +7,44 @@
  */
 #ifdef HPM_UNIX
 	#include<dlfcn.h>
-	#define HPM_LOAD_LIBRARY(path) dlopen( ( path ), RTLD_LAZY)
+	#define HPM_LOAD_LIBRARY(path) dlopen( ( path ), RTLD_LAZY | RTLD_NODELETE)
 	#define HPM_LOAD_SYM(lib, func) dlsym( ( lib ), ( func ) );
 	#define HPM_CLOSE(lib) dlclose( ( lib ) )
     #define HPM_LIB_ERROR() dlerror()
-	/*  HPM library files.  */
-	#define HPM_FILE_SEE "libhpmsse.so"
-	#define HPM_FILE_SEE2 "libhpmsse2.so"
-	#define HPM_FILE_SEE3 "libhpmsse3.so"
-	#define HPM_FILE_SEE41 "libhpmsse41.so"
-	#define HPM_FILE_SEE42 "libhpmsse42.so"
-	#define HPM_FILE_AVX "libhpmavx.so"
-	#define HPM_FILE_AVX2 "libhpmavx2.so"
-	#define HPM_FILE_AVX512 "libhpmavx512.so"
-	#define HPM_FILE_NEON "libhpmneon.so"
-	#define HPM_FILE_NOSIMD "libhpmnosimd.so"
+	#if defined(HPM_USE_SINGLE_LIBRARY)
+	#else
+		/*  HPM library files.  */
+		#define HPM_FILE_SEE "libhpmsse.so"
+		#define HPM_FILE_SEE2 "libhpmsse2.so"
+		#define HPM_FILE_SEE3 "libhpmsse3.so"
+		#define HPM_FILE_SEE41 "libhpmsse41.so"
+		#define HPM_FILE_SEE42 "libhpmsse42.so"
+		#define HPM_FILE_AVX "libhpmavx.so"
+		#define HPM_FILE_AVX2 "libhpmavx2.so"
+		#define HPM_FILE_AVX512 "libhpmavx512.so"
+		#define HPM_FILE_NEON "libhpmneon.so"
+		#define HPM_FILE_NOSIMD "libhpmnosimd.so"
+	#endif
 #elif defined(HPM_WINDOWS)
 	#include<Winbase.h>
 	#define HPM_LOAD_LIBRARY(path) LoadLibrary( ( path ) )
 	#define HPM_LOAD_SYM(lib, func) GetProcAddress( ( lib ), ( func ) )
 	#define HPM_CLOSE(lib) FreeLibrary( ( lib ) )
     #define HPM_LIB_ERROR() GetLastError()
-
-	/*  HPM library files.  */
-	#define HPM_FILE_SEE "libhpmsse.dll"
-	#define HPM_FILE_SEE2 "libhpmsse2.dll"
-	#define HPM_FILE_SEE3 "libhpmsse3.dll"
-	#define HPM_FILE_SEE41 "libhpmsse41.dll"
-	#define HPM_FILE_SEE42 "libhpmsse42.dll"
-	#define HPM_FILE_AVX "libhpmavx.dll"
-	#define HPM_FILE_AVX2 "libhpmavx2.dll"
-	#define HPM_FILE_AVX512 "libhpmavx512.dll"
-	#define HPM_FILE_NEON "libhpmneon.dll"
-	#define HPM_FILE_NOSIMD "libhpmnosimd.dll"
+	#if defined(HPM_USE_SINGLE_LIBRARY)
+	#else
+		/*  HPM library files.  */
+		#define HPM_FILE_SEE "libhpmsse.dll"
+		#define HPM_FILE_SEE2 "libhpmsse2.dll"
+		#define HPM_FILE_SEE3 "libhpmsse3.dll"
+		#define HPM_FILE_SEE41 "libhpmsse41.dll"
+		#define HPM_FILE_SEE42 "libhpmsse42.dll"
+		#define HPM_FILE_AVX "libhpmavx.dll"
+		#define HPM_FILE_AVX2 "libhpmavx2.dll"
+		#define HPM_FILE_AVX512 "libhpmavx512.dll"
+		#define HPM_FILE_NEON "libhpmneon.dll"
+		#define HPM_FILE_NOSIMD "libhpmnosimd.dll"
+	#endif
 #else
     #pragma error("Warning: None supported platform!")
 #endif
@@ -64,12 +69,26 @@ int hpm_init(unsigned int simd){
 
 	/*	Check if argument is a power of two.	*/
 	if( ( simd && ((simd - 1) & simd) ) ){
-		fprintf(stderr, "Argument not a power of 2.\n");
+		fprintf(stderr, "Argument not a valid single flag argument (not a power of 2).\n");
 		return 0;
 	}
 
 	/*	Translate SIMD to library filename.	*/
 	switch (simd) {
+	#if defined(HPM_USE_SINGLE_LIBRARY)
+		case HPM_SSE:
+		case HPM_SSE2:
+		case HPM_SSE3:
+		case HPM_SSSE3:
+		case HPM_SSE4_1:
+		case HPM_SSE4_2:
+		case HPM_NEON:
+		case HPM_NOSIMD:
+		case HPM_AVX512:
+		case HPM_AVX2:
+		case HPM_AVX:
+			break;
+	#else
 		case HPM_SSE:
 			libpath = HPM_FILE_SEE;
 			break;
@@ -101,6 +120,7 @@ int hpm_init(unsigned int simd){
 		case HPM_NOSIMD:
 			libpath = HPM_FILE_NOSIMD;
 			break;
+	#endif
 		case HPM_DEFAULT: {
 			unsigned int i;
 			for (i = HPM_NEON; i < HPM_DEFAULT; i >>= 1) {
@@ -116,25 +136,29 @@ int hpm_init(unsigned int simd){
 	}
 
 	/*	load library.	*/
-#ifndef HPM_USE_SINGLE_LIBRARY
+#ifdef HPM_USE_SINGLE_LIBRARY
+	libhandle = HPM_LOAD_LIBRARY(NULL);
+#else
 	if(libhandle == NULL){
 		libhandle = HPM_LOAD_LIBRARY((const char*)libpath);
 	}else{
 		/*	if library has only been initialized.	*/
 		return 0;
 	}
-#else
-	libhandle = HPM_LOAD_LIBRARY((const char*)NULL);
 #endif
 
 	/*	Error checks.	*/
-	if(libhandle == NULL){
+	if(libhandle == NULL) {
 		fprintf(stderr, "%s\n", HPM_LIB_ERROR());
 		goto error;
 	}
 
+	g_simd = simd;
+
 	/*	Matrices.	*/
 	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
+	hpmvec4x4f_t a, b;
+	hpm_mat4x4_copyfv(a,b);
 
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
 	hpm_mat4x4_multiply_scalarf = hpm_get_symbolfuncp(hpm_mat4x4_multiply_scalarf);
@@ -320,8 +344,8 @@ void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
 #if defined(HPM_USE_SINGLE_LIBRARY)
 	char buf[128];
 	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
-
 	pfunc = HPM_LOAD_SYM(libhandle, buf);
+
 #else
 	pfunc = HPM_LOAD_SYM(libhandle, cfunctionName);
 #endif
@@ -405,7 +429,7 @@ int hpm_support_cpu_feat(unsigned int simd) {
     }
 }
 
-static int log2MutExlusive32(unsigned int a){
+static unsigned int log2MutExlusive32(unsigned int a){
 
 	int i = 0;
 	const int bitlen = 32;
@@ -426,7 +450,7 @@ static int log2MutExlusive32(unsigned int a){
 }
 
 const char* hpm_get_simd_symbol(unsigned int SIMD) {
-	static const char* gc_simd_symbols[] = {
+	static const char* gc_simd_symbols[32] = {
 			"",         /*  None    */
 			"NOSIMD",   /*  (1 << 0)    */
 			"MMX",      /*  (1 << 1)    */
