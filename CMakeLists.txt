@@ -9,7 +9,7 @@ IF(NOT BUILD_SHARED_LIBS)
 	set(LINK_SEARCH_START_STATIC TRUE)
 ENDIF()
 OPTION(USE_SINGLE_LIBRARY "Build a single library binary file" OFF) # Not Full Supported.
-
+OPTION(BUILD_WITH_INSTALL "Add Install Targets" ON)
 
 
 # hpm version setup.
@@ -232,29 +232,31 @@ ELSE()
 ENDIF()
 SET_TARGET_PROPERTIES(hpm PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL=1 -DHPM_ENTRY" )
 
-# Non specific SIMD targets.
-INSTALL (FILES ${headers} DESTINATION include/hpm)
+IF(BUILD_WITH_INSTALL)
+	# Non specific SIMD targets.
+	INSTALL (FILES ${headers} DESTINATION include/hpm)
 
-# Add the install targets
-INSTALL (TARGETS hpm DESTINATION lib)
-IF(NOT USE_SINGLE_LIBRARY)
+	# Add the install targets
+	INSTALL (TARGETS hpm DESTINATION lib)
+	IF(NOT USE_SINGLE_LIBRARY)
 
-	# Install each individual SIMD library extensions.
-	INSTALL (TARGETS hpmnosimd DESTINATION lib)
-	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
-		#INSTALL (TARGETS hpmavx512 DESTINATION lib)
-		INSTALL (TARGETS hpmavx2 DESTINATION lib)
-		INSTALL (TARGETS hpmavx DESTINATION lib)
-		INSTALL (TARGETS hpmsse DESTINATION lib)
-		INSTALL (TARGETS hpmsse2 DESTINATION lib)
-		INSTALL (TARGETS hpmsse3 DESTINATION lib)
-		INSTALL (TARGETS hpmsse41 DESTINATION lib)
-		INSTALL (TARGETS hpmsse42 DESTINATION lib)
-	ENDIF()
-	
-	# Install NEON SIMD extension if on an ARM platform.
-	IF(__arm__)
-		INSTALL (TARGETS hpmneon DESTINATION lib)
+		# Install each individual SIMD library extensions.
+		INSTALL (TARGETS hpmnosimd DESTINATION lib)
+		IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+			#INSTALL (TARGETS hpmavx512 DESTINATION lib)
+			INSTALL (TARGETS hpmavx2 DESTINATION lib)
+			INSTALL (TARGETS hpmavx DESTINATION lib)
+			INSTALL (TARGETS hpmsse DESTINATION lib)
+			INSTALL (TARGETS hpmsse2 DESTINATION lib)
+			INSTALL (TARGETS hpmsse3 DESTINATION lib)
+			INSTALL (TARGETS hpmsse41 DESTINATION lib)
+			INSTALL (TARGETS hpmsse42 DESTINATION lib)
+		ENDIF()
+		
+		# Install NEON SIMD extension if on an ARM platform.
+		IF(__arm__)
+			INSTALL (TARGETS hpmneon DESTINATION lib)
+		ENDIF()
 	ENDIF()
 ENDIF()
 
