@@ -5,7 +5,7 @@ OPTION(BUILD_GLBUNNY "Build " ON)
 ENABLE_TESTING()
 
 # Add hpmglbunny test.
-IF(BUILD_BUNNY)
+IF(BUILD_GLBUNNY)
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/glbunny)
 ENDIF()
 # Add hpm assert for testing each function and assert them.
