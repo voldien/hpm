@@ -80,7 +80,8 @@ HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){
 
 /*	TODO add Cramer's rule version	*/
 HPM_IMP(hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
-	const hpmmat4f* mat = (const hpmmat4f*)&f_mat4[0][0];
+	const hpmmat4f *mat = (const hpmmat4f *)&f_mat4[0];
+	//[0];
 	return (mat->m41 * mat->m32 * mat->m23 * mat->m14 - mat->m31 * mat->m42 * mat->m23 * mat->m14 - mat->m41 * mat->m22 * mat->m33 * mat->m14 + mat->m21 * mat->m42 * mat->m33 * mat->m14 +
 	        mat->m31 * mat->m22 * mat->m43 * mat->m14 - mat->m21 * mat->m32 * mat->m43 * mat->m14 - mat->m41 * mat->m32 * mat->m13 * mat->m24 + mat->m31 * mat->m42 * mat->m13 * mat->m24 +
 	        mat->m41 * mat->m12 * mat->m33 * mat->m24 - mat->m11 * mat->m42 * mat->m33 * mat->m24 - mat->m31 * mat->m12 * mat->m43 * mat->m24 + mat->m11 * mat->m32 * mat->m43 * mat->m24 +
@@ -93,7 +94,7 @@ HPM_IMP(hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
 HPM_IMP( hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res){
 
 	hpmvecf detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
-	if(detm > 0.0f || detm < 0.0f){
+	if(detm > 0.0f || detm < 0.0f) {
 		hpmvecf invdet = 1.0f / detm;
 		res[0][0] = invdet  * (f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[1][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][1] = -invdet * (f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) + f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) + f_mat4[0][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));

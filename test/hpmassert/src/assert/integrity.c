@@ -10,6 +10,15 @@ int compare_vec4_less_precise(const hpmvec4f* a, const hpmvec4f* b){
 	return fabsf(dot) > 0.999f && fabs(dot) < 1.00001f && fabsf(hpm_vec4_lengthfv(a) - hpm_vec4_lengthfv(b)) < 0.000001f;
 }
 
+int compare_mat_less_precise(const hpmvec4f* a, const hpmvec4f* b, int col){
+	for (int i = 0; i < col; i++){
+		if(compare_vec4_less_precise(&a[i], &b[i]))
+			continue;
+		return 0;
+	}
+	return 1;
+}
+
 /**
  * Compare all equality function
  * in order to determine that all the other
@@ -517,7 +526,7 @@ START_TEST (matrix4x4){
 	hpm_mat4x4_transposefv(m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m3, m2), 1);
 
-	/*	Transpose non identical diagonal.	*/
+	/*	Transpose none identical diagonal.	*/
 	hpm_mat4x4_scalef(m2, (hpmvecf)HPM_PI / 3.5f,(hpmvecf)HPM_PI / 5.5f,(hpmvecf)HPM_PI / 1.5f);
 	hpm_mat4x4_copyfv(m1, m2);
 	hpm_mat4x4_sprint(mac1msg, m1);
@@ -526,7 +535,7 @@ START_TEST (matrix4x4){
 	hpm_mat4x4_transposefv(m2);
 	ck_assert_msg(hpm_mat4_eqfv(m1, m2), "hpm_mat4_eqfv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
 
-	/*	Transpose non symmetric matrix.	*/
+	/*	Transpose none symmetric matrix.	*/
 	hpm_mat4x4_projfv(m2, (hpmvecf)HPM_PI / 4.0f, 4.0f / 3.0f, 0.15, 1000.0f);
 	hpm_mat4x4_copyfv(m1, m2);
 	ck_assert_int_eq(hpm_mat4_eqfv(m1, m2), 1);
@@ -552,26 +561,27 @@ START_TEST (matrix4x4){
 
 	/*  Inverse.    */
 	const hpmvec4x4f_t expInverse2 = {
-			{-15.0f/276.0f,   135.0f/276.0f,    -52.0f/276.0f, -24.0f/276.0f},  /*  col1    */
-			{54.0f/276.0f,   66.0f/276.0f,    -52.0f/276.0f, -24.0f/276.0f},   /*  col2    */
-			{-12.0f/276.0f,   -168.0f/276.0f,    124.0f/276.0f, 36.0f/276.0f},   /*  col3    */
-			{27.0f/276.0f, 309.0f/276.0f, -256.0f/276.0f, -12.0f/276.0f},   /*  col4    */
+		{-0.0256410f, 0.1794872f, -0.5299145f, 0.6410256f}, /*  col1    */
+		{0.1282051f, 0.1025641f, -0.3162393f, -0.2051282f}, /*  col2    */
+		{0.0897436f, -0.1282051f, -0.1452991f, 0.2564103f}, /*  col3    */
+		{0.0641026f, 0.0512821, -0.0085470f, -0.1025641f},	/*  col4    */
 	};
-	const hpmvecf det2 = -276.0f;
+	const hpmvecf det2 = -234.0f;
 	const hpmvec4x4f_t mm = {
-			{1.0f,   6.0f,    5.0f,  1.0f},   /*  col1    */
-			{5.0f,   2.0f,    5.0f,  1.0f},   /*  col2    */
-			{6.0f,   3.0f,    6.0f,  0.0f},   /*  col3    */
-			{3.0f,   1.0f,    12.0f, 5.0f},   /*  col4    */
+			{0.0f,   2.0f,    4.0f,  6.0f},		/*  col1    */
+			{2.0f,   2.0f,    -3.0f,  1.0f},	/*  col2    */
+			{0.0f,   3.0f,    0.0f,  -6.0f},	/*  col3    */
+			{1.0f,   2.0f,    1.0f, -5.0f},	/*  col4    */
 	};
 	const hpmvecf resDet = hpm_mat4x4_inversefv(mm, m2);
 	hpm_mat4x4_sprint(mac1msg, m2);
 	hpm_mat4x4_sprint(mex2msg, expInverse2);
-	ck_assert_msg(hpm_vec_eqfv(resDet, det2), "hpm_mat4x4_determinantfv failed: expected: %f actual: %f", det2, resDet);
-	ck_assert_msg(hpm_vec_eqfv(hpm_mat4x4_determinantfv(m2), hpm_mat4x4_determinantfv(expInverse)),
-		              "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n:determine expected: %f actual: %f",
-		              mex2msg, mac1msg, hpm_mat4x4_determinantfv(expInverse), hpm_mat4x4_determinantfv(m2));
-	ck_assert_msg(hpm_mat4_eqfv(m2, expInverse), "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
+	ck_assert_msg(hpm_vec_eqfv(resDet, det2), "hpm_mat4x4_determinantfv failed: expected: %f actual: %f\n", det2, resDet);		/*	Check determine.	*/
+	ck_assert_msg(compare_mat_less_precise(m2, expInverse, 4), "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
+
+	/*	Check that the inverse of an inverse (A^-1)^-1 == A*/
+	hpm_mat4x4_inversefv(m2, m3);
+	ck_assert_msg(compare_mat_less_precise(m2, mm, 4), "hpm_mat4x4_inversefv failed: expected : \n%s \n actual:\n%s\n", mex2msg, mac1msg);
 }
 END_TEST
 
@@ -632,16 +642,16 @@ START_TEST (transformation) {
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	hpm_vec4_sprint(mac1msg, &v3);
 	hpm_vec4_sprint(mex2msg, &forward);
-	ck_assert_msg(hpm_vec4_eqfv(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
-	              mac1msg);
+	ck_assert_msg(compare_vec4_less_precise(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
+				  mac1msg);
 
 	/*  Rotate around forward axis with 180 degree angle. */
 	hpm_mat4x4_rotationfv(m1, HPM_PI_2, &forward);
 	hpm_mat4x4_multiply_mat1x4fv(m1, &forward, &v3);
 	hpm_vec4_sprint(mac1msg, &v3);
 	hpm_vec4_sprint(mex2msg, &forward);
-	ck_assert_msg(hpm_vec4_eqfv(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
-	              mac1msg);
+	ck_assert_msg(compare_vec4_less_precise(&forward, &v3), "hpm_mat4x4_rotationfv failed: expected: %s, actual: %s", mex2msg,
+				  mac1msg);
 
 	/*  Rotate around up axis with 180 degree angle. */
 	const hpmvec4f exprot = {-1.0f, 0.0f, 0.0f, 0.0f};

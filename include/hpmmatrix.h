@@ -26,7 +26,8 @@
 /**
  *                  Information.
  * hpm follows how OpenGL allocates their matrices.
- * That is to say in a not how a 2 dimensional array in c.
+ * That is to say in a not how a 2-dimensional array in c.
+ * It follows per columns rather than per rows.
  *
  *      C array                 OpenGL matrix array
  *
@@ -104,10 +105,13 @@ typedef union {
 } hpmmat2uf;
 
 /**
- * Set individual rows of matrix.
+ * Set individual rows of matrix, inlined.
  */
 #define hpm_mat4x4_set_rowfv(mat4x4, index, row)    hpm_vec4_setxf(mat4x4[0], row[0])
 #define hpm_mat4x4_get_rowfv(mat4x4, index)
+/**
+ * 	Get individual columns of a matrix, inlined.
+ */
 #define hpm_mat4x4_set_colfv(mat4x4, index, col)    ((mat4x4)[index]) = (col)
 #define hpm_mat4x4_get_colfv(mat4x4, index)         ((mat4x4)[index])
 
