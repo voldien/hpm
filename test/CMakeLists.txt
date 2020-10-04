@@ -2,7 +2,7 @@
 # hpm library.
 OPTION(BUILD_ASSERT "Build " ON)
 OPTION(BUILD_GLBUNNY "Build " ON)
-ENABLE_TESTING()
+
 
 # Add hpmglbunny test.
 IF(BUILD_GLBUNNY)

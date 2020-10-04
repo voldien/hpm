@@ -200,7 +200,7 @@ extern long int hptGetTime(void);					/*	Get current time in nano seconds.	*/
 extern long int hptGetTimeResolution(void);			/*	Get time resolution used.	*/
 extern void htpSimdExecute(unsigned int simd, SIMDBenchmarksRaw* benchmarkResult);		/*	*/
 extern void htpBenchmarkPerformanceTest(SIMDBenchmarksRaw* benchmarkResult);		/*	*/
-extern void htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
+extern int htpIntegritySpCheckf(void);				/*	Check each function is working as accordingly.	*/
 extern void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmarkResults);
 extern void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw* HPM_RESTRICT results,
 		SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels);  /*  Benchmark result model.   */

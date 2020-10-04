@@ -816,7 +816,7 @@ Suite* htpCreateSuite(void){
 	return suite;
 }
 
-void htpIntegritySpCheckf(void) {
+int htpIntegritySpCheckf(void) {
 
 
 	int number_failed;
@@ -837,4 +837,5 @@ void htpIntegritySpCheckf(void) {
 	printf("number of total failure : %d\n", number_failed);
 	printf("\n");
 	srunner_free(sr);
+	return number_failed == 0;
 }

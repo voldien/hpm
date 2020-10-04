@@ -264,6 +264,7 @@ ENDIF()
 
 # Invoke cmake file from the test directory.
 IF(BUILD_TEST)
+	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 ENDIF()
 
