@@ -1,4 +1,4 @@
-name: HPM Window
+name: Hpm
 on: [push,pull_request]
 
 env:
@@ -9,7 +9,7 @@ jobs:
   Window:
     # Windows 10 with latest image
     runs-on: "windows-latest"
-    name: Library
+    name: Library Window
 
     steps:
     - uses: actions/checkout@v2

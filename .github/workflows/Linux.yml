@@ -1,4 +1,4 @@
-name: HPM Linux
+name: Hpm
 
 on: [push,pull_request]
 
@@ -13,7 +13,7 @@ jobs:
     # cross-platform coverage.
     # See: https://docs.github.com/en/actions/configuring-and-managing-workflows/configuring-a-workflow#configuring-a-build-matrix
     runs-on: ubuntu-latest
-    name: Library
+    name: Library Linux
 
     steps:
     - uses: actions/checkout@v2
