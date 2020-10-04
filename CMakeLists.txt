@@ -197,7 +197,7 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1 ${SIMD_FLAGS} ${SIMD_FLAGS_SSE42} -DHPM_SSE42_SIMD_PREFIX=1")
 	TARGET_LINK_LIBRARIES(hpmsse42 -lm)
 
-ELSE()
+ELSEIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
 	# Target for Neon 
 	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the neon specific implementation later.
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " -DHPM_INTERNAL_IMP=1  -mfpu=neon" )	#-funsafe-math-optimizations 

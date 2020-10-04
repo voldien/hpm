@@ -1,7 +1,5 @@
-name: Hpm
-
+name: Hpm Linux
 on: [push,pull_request]
-
 env:
   # Customize the CMake build type here (Release, Debug, RelWithDebInfo, etc.)
   BUILD_TYPE: Release
@@ -11,27 +9,28 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, ubuntu-latest, ubuntu-latest]
+        os: [ubuntu-latest]
+        platform: [x32, x64]
+        compiler: [gcc, clang]
         include:
         - os: ubuntu-latest
-          TARGET: x86_64-unknown-linux-musl
-          COMPILER: clang
-          LINKER: clang
-
+          platform: x64
+          compiler: clang
         - os: ubuntu-latest
-          TARGET: armv7-unknown-linux-musleabihf
-          COMPILER: arm-linux-gnueabihf-gcc-5
-          LINKER: gcc-5-arm-linux-gnueabihf
-
+          platform: x32
+          compiler: clang
         - os: ubuntu-latest
-          TARGET: x86_64-unknown-linux-musl
-          COMPILER: gcc
-          LINKER: gcc
-    name: Library Linux ${{matrix.TARGET}}
+          platform: x64
+          compiler: gcc
+        - os: ubuntu-latest
+          platform: x32
+          compiler: gcc
+
+    name: Library Linux ${{matrix.compiler}} ${{matrix.platform}}
     steps:
-    - uses: actions/checkout@v2
-    - run: echo ${{matrix.TARGET}}
+    - uses: actions/checkout@v1
     - name: Configure dependencies
+
       run: |
         sudo apt-get install check libsubunit-dev
 
@@ -48,6 +47,8 @@ jobs:
       # Note the current convention is to use the -S and -B options here to specify source 
       # and build directories, but this is only available with CMake 3.13 and higher.  
       # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
+      env:
+        CC: ${{ matrix.compiler }}
       run: |
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TEST=ON -DBUILD_WITH_INSTALL=OFF \
         -DBUILD_GLBUNNY=OFF -DBUILD_ASSERT=ON
