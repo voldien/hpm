@@ -5,11 +5,11 @@ PROJECT(hpm VERSION 0.9.1 LANGUAGES C)
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
 OPTION(BUILD_TEST "Build Test Suite" ON)
 IF(NOT BUILD_SHARED_LIBS)
-	set(CMAKE_EXE_LINKER_FLAGS "-static")
-	set(LINK_SEARCH_START_STATIC TRUE)
+	SET(CMAKE_EXE_LINKER_FLAGS "-static")
+	SET(LINK_SEARCH_START_STATIC TRUE)
 ENDIF()
 #TODO rename to BUILD_WITH_SINGLE_LIBRARY
-OPTION(USE_SINGLE_LIBRARY "Build a single library binary file" ON)
+OPTION(BUILD_WITH_SINGLE_LIBRARY "Build a single library binary file" ON)
 OPTION(BUILD_WITH_INSTALL "Add Install Targets" ON)
 
 
@@ -29,11 +29,11 @@ ADD_COMPILE_DEFINITIONS(HPM_STATE_VERSION=${HPM_VERSION_STATE})
 ADD_COMPILE_DEFINITIONS(HPM_STR_VERSION="${HPM_VERSION}")
 
 # Check if compile single library.
-IF(USE_SINGLE_LIBRARY)
+IF(BUILD_WITH_SINGLE_LIBRARY)
 	MESSAGE(STATUS "Single Library Mode.")
 	ADD_COMPILE_DEFINITIONS(HPM_USE_SINGLE_LIBRARY=1)
 ELSE()
-	MESSAGE(STATUS "Individual SIMD Library Mode.")
+	MESSAGE(STATUS "Individual SIMD Libraries Mode.")
 ENDIF()
 
 # GCC compiler options.
@@ -41,9 +41,7 @@ IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 	ADD_DEFINITIONS(-fPIC)
 	# Compiling language standard.
 	ADD_DEFINITIONS(-std=c11)
-	ADD_DEFINITIONS(-Werror -rdynamic)
-	# 
-	ADD_DEFINITIONS(-w)
+	ADD_DEFINITIONS(-w -Werror -rdynamic)
 
 	# Check build target.
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -61,9 +59,8 @@ IF(CMAKE_C_COMPILER_ID STREQUAL "GNU")
 
 ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	# Compiling language standard.
-	ADD_DEFINITIONS(-fPIC -rdynamic)
+	ADD_DEFINITIONS(-w -fPIC -rdynamic)
 	ADD_DEFINITIONS(-std=c11)
-	ADD_DEFINITIONS(-w)
 
 	# Check build target.
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -99,9 +96,6 @@ ELSEIF(MSVC)
 ELSE()
 	MESSAGE(FATAL_ERROR "No supported compiler")
 ENDIF()
-#ADD_COMPILE_DEFINITIONS(HPM_INTERNAL=1)
-#ADD_COMPILE_DEFINITIONS(HPM_INTERNAL_IMP=1)
-
 
 # Source files.
 FILE (GLOB headers 	${CMAKE_CURRENT_SOURCE_DIR}/include/*.h)
@@ -193,8 +187,10 @@ IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 	ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "${SIMD_FLAGS} ${SIMD_FLAGS_SSE42}  ${SIMD_TARGET_FLAGS}")
 	TARGET_LINK_LIBRARIES(hpmsse42 m)
+ENDIF()
 
-ELSEIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
+# Check for NEON support.
+IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
 	# Target for NEON
 	# SIMD extension support.
 	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the NEON specific implementation later.
@@ -208,7 +204,7 @@ TARGET_LINK_LIBRARIES(hpmnosimd m)
 
 
 # Main library target for initializing the library. The Hpm library is always a shared library.
-IF(USE_SINGLE_LIBRARY)
+IF(BUILD_WITH_SINGLE_LIBRARY)
 	ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c $<TARGET_OBJECTS:hpmnosimd>
 	 $<TARGET_OBJECTS:hpmsse42>  $<TARGET_OBJECTS:hpmsse41>  $<TARGET_OBJECTS:hpmsse>  $<TARGET_OBJECTS:hpmsse2> $<TARGET_OBJECTS:hpmsse3>
 	 $<TARGET_OBJECTS:hpmavx> $<TARGET_OBJECTS:hpmavx2>)
@@ -232,7 +228,7 @@ IF(BUILD_WITH_INSTALL)
 
 	# Add the install targets
 	INSTALL (TARGETS hpm DESTINATION lib)
-	IF(NOT USE_SINGLE_LIBRARY)
+	IF(NOT BUILD_WITH_SINGLE_LIBRARY)
 
 		# Install each individual SIMD library extensions.
 		INSTALL (TARGETS hpmnosimd DESTINATION lib)
@@ -283,5 +279,3 @@ IF( UNIX )
 				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
 				COMMAND rm -r ${TARGETDIR} )
 ENDIF()
-
-
