@@ -1,5 +1,5 @@
 # Performance #
-The following is a list of tables of the performance result from using the 'hpmassert --perfomance' command.
+The following is a list of tables of the performance result from using the 'hpmassert --performance' command.
 
 ## Intel I7 2600k ##
 
