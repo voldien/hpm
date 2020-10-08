@@ -23,7 +23,7 @@ The main motivation of this project is to create a single library header interfa
 Where it can be done either automatically or manually.
 
 ## Installation
-The software can be easily installed with invoking the following command.
+The software can be easily installed with invoking the following commands.
 ```bash
 mkdir build && cd build
 cmake ..
@@ -43,43 +43,53 @@ int main(int argc, const char** argv){
 	hpm_mat4x4_print(mat4);
 	hpm_release();
 }
-
 ```
-
-The following line demonstrates how to compile it and link the program:
+The following line demonstrates how to compile it and link the program in a Unix environment:
 ```
 gcc *.c -o hpmexample -lhpm
 ```
 
 ## Assert/Performance Tools
 In order to evaluate if the library has any performance differences on the system. The following test program for *hpm* can be used.
+### Performance 
 It will perform a performance test for all SIMD feature if supported by the machine when no SIMD extension argument has been set.
 ```bash
 hpmassert --performance
 ```
-The performance gain can be rather subtle for high-end computer specification, whereas low ends are more distinguishable. What should remark about the hpmassert program is that everything is executed in consecutive order. This does not represent what the performance differences would be when each function is called in random order.
+The performance gain can be rather subtle for high-end computer specification, whereas low ends are more distinguishable. What should remark about the *hpmassert* program is that everything is executed in consecutive order. This does not represent what the performance differences would be when each function is called in random order.
 
-The following command will perform a unit test that checks and determine if all of the implementations for each of the SIMD extensions work.
+The following table is an example of a subset of the result that is presented with the benchmark program. To see some tested CPU performance, Check the [benchmarks](test/hpmassert/README.md).
+
+
+|         Function             | NOSIMD |   SSE  |  SSE2  |  SSE3  | SSSE3  | SSE41  | SSE42  |   AVX  |
+| :---                         |     :---:  |      ---: |      ---: |      ---: |      ---: |      ---: |      ---: |      ---: |
+| hpm_mat4x4_copyfv            |      1.000 |     1.375 |     1.375 |     1.375 |     1.375 |     1.375 |     1.376 |     1.032 |
+| hpm_mat4x4_multiply_mat4x4fv |      1.000 |     2.949 |     2.936 |     2.925 |     2.949 |     2.899 |     2.939 |     3.476 |
+| hpm_mat4x4_multiply_mat1x4fv |      1.000 |     2.352 |     2.352 |     2.352 |     2.352 |     2.353 |     2.354 |     2.537 |
+| hpm_mat4x4_identityfv        |      1.143 |     1.143 |     1.143 |     1.143 |     1.143 |     1.143 |     1.143 |     1.000 |
+| hpm_mat4x4_transposefv       |      1.111 |     1.000 |     1.000 |     1.000 |     1.000 |     1.000 |     1.000 |     1.213 |
+| hpm_mat4x4_determinantfv     |      1.111 |     1.000 |     1.000 |     1.000 |     1.000 |     1.000 |     1.000 |     1.212 |
+....
+### Assertion - Integrity
+The following command will perform a set of unit tests that will check and determine that all of the implementations for each of the SIMD extensions work.
 ```bash
 hpmassert --assert
 ```
 
 ## hpmglbunny 
-The *hpmglbunny* is a test program to determine if the matrices and quaternion function implementation, which is commonly used in rendering 3D models, works as accordingly. This program will render multiple rotating bunnies.
-See following for example of how to execute the test tool:
+The *hpmglbunny* program is a simple test program to determine if the matrices and quaternion function implementation work, which is commonly used in rendering 3D models. This program will render multiple rotating bunnies.
+See the following for an example of how to execute the test tool:
 ```bash
 hpmglbunny --simd=avx
 ```
 The *hpmglbunny* will by default use the *HPM_SIMD_DEFAULT* enumerator as the flag parameter for loading function pointers through the *hpm_init* function. This will attempt to load the latest *SIMD* extension supported on the system. However, the *simd=* argument can override it to a specific *SIMD* extension.
 
-The primarily purpose of this project is to check if the *hpm* implementations works as accordingly.
+The primary purpose of this small program is to check if the *hpm* implementations work as accordingly in a 3D environment.
 
-Important 
----
+# Important 
 Because the library is still in development. That means that the symbol table has yet not been finalized. Thus it can be expected that it might change in till the first stable release.
 
- Dependencies 
-----------------
+## Dependencies 
 The *hpm* project does not have any additional dependency other than the libraries provided with the standard *c* libraries.
 However, it is recommended that the following Debian packages have to be installed prior, see the following. If a higher version is already installed this is not required.
 ```bash
