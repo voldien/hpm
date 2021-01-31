@@ -782,6 +782,17 @@ START_TEST(utility){
 }
 END_TEST
 
+START_TEST(internal) {
+	int nr;
+	hpm_get_method_callbacks(&nr, NULL);
+	HpmCallBackEntry* entries = malloc(nr * sizeof(HpmCallBackEntry));
+	hpm_get_method_callbacks(&nr, entries);
+	for (int i = 0; i < nr; i++){
+		ck_assert_int_eq(entries[i].id, nr);
+		ck_assert_ptr_ne(entries[i].callback, NULL);
+	}
+}
+END_TEST
 
 Suite* htpCreateSuite(void){
 
@@ -794,6 +805,7 @@ Suite* htpCreateSuite(void){
 	TCase* testTransCase = tcase_create("transformation");
 	TCase* testMathCase = tcase_create("math");
 	TCase* testUtilCase = tcase_create("utility");
+	TCase *testInternalCase = tcase_create("internal");
 
 	/*	Link test cases with functions.	*/
 	tcase_add_test(testEquCase, equality);          /*  Testing all condition functions. */
@@ -803,6 +815,7 @@ Suite* htpCreateSuite(void){
 	tcase_add_test(testTransCase, transformation);  /*  Testing all transformation functions. */
 	tcase_add_test(testMathCase, math);             /*  Testing all math functions. */
 	tcase_add_test(testUtilCase, utility);          /*  Testing all utilities functions. */
+	tcase_add_test(testInternalCase, internal);		/*  Testing all internal functions. */
 
 	/*	Add test cases to test suite.	*/
 	suite_add_tcase(suite, testEquCase);
@@ -812,6 +825,7 @@ Suite* htpCreateSuite(void){
 	suite_add_tcase(suite, testTransCase);
 	suite_add_tcase(suite, testMathCase);
 	suite_add_tcase(suite, testUtilCase);
+	suite_add_tcase(suite, testInternalCase);
 
 	return suite;
 }
