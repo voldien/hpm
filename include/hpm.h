@@ -26,6 +26,7 @@
 #include"hpmmath.h"
 #include"hpmlogic.h"
 #include"hpmprint.h"
+#include"hpmentries.h"
 
 /**
  * The main hpm library header file.
@@ -142,6 +143,11 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_support_cpu_feat(unsigned int SIMD);
  */
 extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
 
+/**
+ *
+ *
+ */
+extern HPMDECLSPEC void hpm_get_method_callbacks(int *nr, HpmCallBackEntry *pEntries);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }
