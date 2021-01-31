@@ -157,9 +157,6 @@ int hpm_init(unsigned int simd){
 
 	/*	Matrices.	*/
 	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
-	hpmvec4x4f_t a, b;
-	hpm_mat4x4_copyfv(a,b);
-
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
 	hpm_mat4x4_multiply_scalarf = hpm_get_symbolfuncp(hpm_mat4x4_multiply_scalarf);
 	hpm_mat4x4_multiply_mat1x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4fv);
