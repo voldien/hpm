@@ -1,0 +1,38 @@
+FIND_PACKAGE( Doxygen )
+IF(DOXYGEN_FOUND)
+	MESSAGE(STATUS "Doxygen found: ${DOXYGEN_EXECUTABLE} -- ${DOXYGEN_VERSION}")
+	SET( HTML_OUTPUT "HpmDoc_Html" CACHE STRING "Output directory for generated HTML documentation. Defaults to HpmDoc_Html." )
+
+	# Enable Microsoft CHM help style only on Windows
+	SET( MICROSOFT_HELP_WORKSHOP "NO")
+	IF( MSVC )
+		SET( MICROSOFT_HELP_WORKSHOP "YES" )
+	ENDIF( MSVC )
+
+	# Generate doxygen file.
+	CONFIGURE_FILE(
+		${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+		${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		@ONLY
+	)
+	ADD_CUSTOM_TARGET(
+		docs ALL
+		DEPENDS docs.done
+	)
+	ADD_CUSTOM_COMMAND(
+		OUTPUT docs.done
+		COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+		COMMAND ${CMAKE_CURRENT_BINARY_DIR}/latex/make.bat
+		COMMAND ${CMAKE_COMMAND} -E touch docs.done
+		COMMENT "Generating hpm documentation"
+		VERBATIM
+		)
+
+	IF( DEFINED CMAKE_INSTALL_DOCDIR )
+		INSTALL(
+			DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/${HTML_OUTPUT}
+			DESTINATION ${CMAKE_INSTALL_DOCDIR}
+		)
+
+	ENDIF( DEFINED CMAKE_INSTALL_DOCDIR )
+ENDIF()
