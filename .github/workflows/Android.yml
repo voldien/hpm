@@ -22,8 +22,8 @@ jobs:
         run: |
           echo "::set-env name=PATH::/usr/lib/jvm/java-8-openjdk-amd64/jre/bin:${PATH}"
           java -version
-          echo "::set-env name=ANDROID_HOME::$(pwd)/fragengine-dev/build-tools/android-sdk"
-          echo "::set-env name=ANDROID_NDK_ROOT::$(pwd)/fragengine-dev/build-tools/android-ndk"
+          echo "::set-env name=ANDROID_HOME::$(pwd)/hpm-dev/build-tools/android-sdk"
+          echo "::set-env name=ANDROID_NDK_ROOT::$(pwd)/hpm-dev/build-tools/android-ndk"
       
           #TODO add NDK
           
