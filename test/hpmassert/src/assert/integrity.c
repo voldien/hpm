@@ -788,7 +788,7 @@ START_TEST(internal) {
 	HpmCallBackEntry* entries = malloc(nr * sizeof(HpmCallBackEntry));
 	hpm_get_method_callbacks(&nr, entries);
 	for (int i = 0; i < nr; i++){
-		ck_assert_int_eq(entries[i].id, nr);
+		ck_assert_int_eq(entries[i].id, i);
 		ck_assert_ptr_ne(entries[i].callback, NULL);
 	}
 }
