@@ -473,154 +473,147 @@ const char* hpm_get_simd_symbol(unsigned int SIMD) {
 	array[index++].id = funcID;
 
 void hpm_get_method_callbacks(int *nr, HpmCallBackEntry *pEntries) {
-	const int npfuns = 101;
-	int ind = 0;
+	int inc = 0;
 	if (nr != NULL)
-		*nr = 101;
-
+		*nr = HPM_util_lookatfv;
+	if(pEntries == NULL)
+		return;
 	/*	Matrices.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_copyfv, HPM_Vec4Copy, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat4x4fv, 1, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_scalarf, 2, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat1x4fv, 3, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_copyfv, 				HPM_mat4x4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat4x4fv, 	HPM_mat4x4_multiply_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_scalarf, 	HPM_mat4x4_multiply_scalarf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat1x4fv, 	HPM_mat4x4_multiply_mat1x4fv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_division_mat4x4f, 4, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_additition_mat4x4fv, 5, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_subraction_mat4x4fv, 6, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_division_mat4x4f, 	HPM_mat4x4_division_mat4x4f, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_additition_mat4x4fv, 	HPM_mat4x4_additition_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_subraction_mat4x4fv, 	HPM_mat4x4_subraction_mat4x4fv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_identityfv, 7, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_transposefv, 8, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_determinantfv, 9, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_inversefv, 10, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_identityfv, 		HPM_mat4x4_identityfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_transposefv, 		HPM_mat4x4_transposefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_determinantfv, 	HPM_mat4x4_determinantfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_inversefv, 		HPM_mat4x4_inversefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_decomposefv, 11, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_decomposefv, 		HPM_mat4x4_decomposefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationf, 	HPM_mat4x4_translationf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationfv, 	HPM_mat4x4_translationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalef, 			HPM_mat4x4_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalefv, 			HPM_mat4x4_scalefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationf, 12, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationfv, 13, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalef, 14, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalefv, 15, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationfv, 	HPM_mat4x4_rotationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationXf, 	HPM_mat4x4_rotationXf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationYf, 	HPM_mat4x4_rotationYf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationZf, 	HPM_mat4x4_rotationZf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationQfv, 	HPM_mat4x4_rotationQfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationfv, 16, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationXf, 17, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationYf, 18, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationZf, 19, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationQfv, 20, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_translationfv, 	HPM_mat4x4_multi_translationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_scalefv, 		HPM_mat4x4_multi_scalefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_translationfv, 21, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_scalefv, 22, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationxf, 23, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationyf, 24, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationzf, 25, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationQfv, 26, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationxf, 	HPM_mat4x4_multi_rotationxf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationyf, 	HPM_mat4x4_multi_rotationyf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationzf, 	HPM_mat4x4_multi_rotationzf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationQfv, 	HPM_mat4x4_multi_rotationQfv, inc)
 
 	/*	Projection matrix functions.    */
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_projfv, 27, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_orthfv, 28, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_unprojf, 29, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_projfv, 	HPM_mat4x4_projfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_orthfv, 	HPM_mat4x4_orthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_unprojf, 	HPM_mat4x4_unprojf, inc)
 
 	/*	vector4	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 30, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_setf, 31, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_setsf, 32, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalefv, 33, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalef, 34, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_subtractionf, 35, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_multifv, 36, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_multi_scalef, 37, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 38, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 39, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 40, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 41, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_negatefv, 42, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 	HPM_vec4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_setf, 		HPM_vec4_setf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_setsf, 		HPM_vec4_setsf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalefv, 	HPM_vec4_addition_scalefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalef, 	HPM_vec4_addition_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_subtractionf, 		HPM_vec4_subtractionf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_multifv, 			HPM_vec4_multifv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_multi_scalef, 		HPM_vec4_multi_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 			HPM_vec4_dotfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 		HPM_vec4_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 	HPM_vec4_lengthsqurefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 	HPM_vec4_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_negatefv, 		HPM_vec4_negatefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_max_compfv, 43, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_min_compfv, 44, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_max_compfv, 	HPM_vec4_max_compfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_min_compfv, 	HPM_vec4_min_compfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lerpfv, 45, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_slerpfv, 46, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lerpfv, 		HPM_vec4_lerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_slerpfv, 		HPM_vec4_slerpfv, inc)
 
 	/*	Vector3.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_crossproductfv, 47, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_tripleProductfv, 48, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_dotfv, 49, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthfv, 50, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthsquarefv, 51, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_normalizefv, 52, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_reflectfv, 53, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_refractfv, 54, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_refract2fv, 55, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_projfv, 56, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_crossproductfv, 	HPM_vec3_crossproductfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_tripleProductfv, 	HPM_vec3_tripleProductfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_dotfv, 				HPM_vec3_dotfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthfv, 			HPM_vec3_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthsquarefv, 	HPM_vec3_lengthsquarefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_normalizefv, 		HPM_vec3_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_reflectfv, 			HPM_vec3_reflectfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_refractfv, 			HPM_vec3_refractfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_refract2fv, 		HPM_vec3_refract2fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_projfv, 			HPM_vec3_projfv, inc)
 
 	/*	Quaternion	*/
-	PUSH_METHOD_CALL(pEntries, hpm_quat_setf, 57, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_quatfv, 58, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_vec3fv, 59, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_directionfv, 60, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_get_vectorfv, 61, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_conjugatefv, 62, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_from_mat4x4fv, 63, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_setf, 			HPM_quat_setf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_quatfv, 	HPM_quat_multi_quatfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_vec3fv, 	HPM_quat_multi_vec3fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_directionfv, 	HPM_quat_directionfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_get_vectorfv, 	HPM_quat_get_vectorfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_conjugatefv, 	HPM_quat_conjugatefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_from_mat4x4fv, 	HPM_quat_from_mat4x4fv, inc)
 
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 64, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 65, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 66, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 67, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 68, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 		HPM_vec4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 		HPM_vec4_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 	HPM_vec4_lengthsqurefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 	HPM_vec4_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 			HPM_vec4_dotfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_quat_inversefv, 69, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_inversefv, 		HPM_quat_inversefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_axis_anglefv, 	HPM_quat_axis_anglefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_axisf, 			HPM_quat_axisf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_lookatfv, 		HPM_quat_lookatfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_powfv, 			HPM_quat_powfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_identityfv, 	HPM_quat_identityfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_lerpfv, 		HPM_quat_lerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_slerpfv, 		HPM_quat_slerpfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_quat_axis_anglefv, 70, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_axisf, 71, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_lookatfv, 72, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_powfv, 73, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_identityfv, 74, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_lerpfv, 75, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_slerpfv, 76, ind)
-
-	PUSH_METHOD_CALL(pEntries, hpm_quat_eularfv, 77, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_pitchfv, 78, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_yawfv, 79, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_rollfv, 80, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_eularfv, 	HPM_quat_eularfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_pitchfv, 	HPM_quat_pitchfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_yawfv, 		HPM_quat_yawfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_rollfv, 	HPM_quat_rollfv, inc)
 
 	/*	Math	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_maxfv, 81, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec8_maxfv, 82, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_minfv, 83, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec8_minfv, 84, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_maxfv, HPM_vec4_maxfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec8_maxfv, HPM_vec8_maxfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_minfv, HPM_vec4_minfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec8_minfv, HPM_vec8_minfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_sqrtfv, 85, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec8_sqrtfv, 86, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_sqrtfv, HPM_vec4_sqrtfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec8_sqrtfv, HPM_vec8_sqrtfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_fast_sqrtfv, 87, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec8_fast_sqrtfv, 88, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_fast_sqrtfv, HPM_vec4_fast_sqrtfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec8_fast_sqrtfv, HPM_vec8_fast_sqrtfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_randomfv, 89, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec8_randomfv, 90, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_randomfv, HPM_vec4_randomfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec8_randomfv, HPM_vec8_randomfv, inc)
 
 	/*	Logic equality conditions.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec_eqfv, 91, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec_neqfv, 92, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_eqfv, 93, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_eqfv, 94, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_neqfv, 95, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_neqfv, 96, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec_eqfv, 		HPM_vec_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec_neqfv, 		HPM_vec_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_eqfv, 	HPM_vec4_com_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_eqfv, 		HPM_vec4_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_neqfv, 	HPM_vec4_com_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_neqfv, 		HPM_vec4_neqfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_gfv, 97, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_lfv, 98, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_gfv, HPM_vec4_com_gfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_lfv, HPM_vec4_com_lfv, inc)
 
 	/*	Utility.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_mat4_eqfv, 99, ind)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4_neqfv, 100, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4_eqfv, 	HPM_mat4_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4_neqfv, 	HPM_mat4_neqfv, inc)
 
 	/*	Utilities.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_util_lookatfv, 101, ind)
+	PUSH_METHOD_CALL(pEntries, hpm_util_lookatfv, HPM_util_lookatfv, inc)
 }
 
 int hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
