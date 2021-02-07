@@ -32,8 +32,8 @@ jobs:
         # Note the current convention is to use the -S and -B options here to specify source 
         # and build directories, but this is only available with CMake 3.13 and higher.  
         # The CMake binaries on the Github Actions machines are (as of this writing) 3.12
-        run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TEST=OFF  -DBUILD_WITH_INSTALL=OFF \
-          -DBUILD_GLBUNNY=OFF -DBUILD_ASSERT=ON-DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake \
+        run: cmake -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TEST=OFF -DBUILD_WITH_INSTALL=OFF \
+          -DBUILD_GLBUNNY=OFF -DBUILD_ASSERT=ON -DCMAKE_TOOLCHAIN_FILE=$ANDROID_NDK_ROOT/build/cmake/android.toolchain.cmake \
           -DANDROID_NDK=$ANDROID_NDK_ROOT -DANDROID_ABI="armeabi-v7a with NEON" -DANDROID_PLATFORM=android-16 $GITHUB_WORKSPACE 
 
       - name: Compilation
