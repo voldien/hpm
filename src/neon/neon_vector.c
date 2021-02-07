@@ -10,7 +10,7 @@ HPM_IMP(hpmvecf, hpm_vec4_dotfv, const hpmvec4f* larg, const hpmvec4f* rarg){
 	// hpmvec4f lvTemp2 = vextq_f32(lvTemp, lvTemp, _MM_SHUFFLE( 0, 1, 3, 2 ) );		/*	{ w + z, w + z, x + y, y + x }	*/
 	// lvTemp = vaddq_f32 ( lvTemp, lvTemp2 );											/*	{ w + z + x + y, ... , w + z + x + y }	*/
 
-    hpmvec4f prod = vmulq_f32(larg, rarg);
+    hpmvec4f prod = vmulq_f32(*larg, *rarg);
     hpmvec4f sum1 = vaddq_f32(prod, vrev64q_f32(prod));
     hpmvec4f sum2 = vaddq_f32(sum1, vcombine_f32(vget_high_f32(sum1), vget_low_f32(sum1)));
 
@@ -27,7 +27,7 @@ HPM_IMP(hpmvecf, hpm_vec4_lengthfv, const hpmvec4f* arg){
 	// hpmvec4f lvTemp2 = vextq_f32(lvTemp, lvTemp, _MM_SHUFFLE(0, 1, 3, 2));		/*	{ w + z, w + z, x + y, y + x }	*/
 	// lvTemp = vaddq_f32(lvTemp, lvTemp2);										/*	{ w + z + x + y, ... , w + z + x + y }	*/
 
-    hpmvec4f prod = vmulq_f32(arg, arg);
+    hpmvec4f prod = vmulq_f32(*arg, *arg);
     hpmvec4f sum1 = vaddq_f32(prod, vrev64q_f32(prod));
     hpmvec4f sum2 = vaddq_f32(sum1, vcombine_f32(vget_high_f32(sum1), vget_low_f32(sum1)));
 
@@ -47,7 +47,7 @@ HPM_IMP( hpmvecf, hpm_vec4_lengthsqurefv, const hpmvec4f* arg){
 	//hpmvec4f lvTemp2 = vextq_f32(lvTemp, lvTemp, _MM_SHUFFLE(0, 1, 3, 2));	/*	{ w + z, w + z, x + y, y + x }	*/
 	//lvTemp = vaddq_f32(lvTemp, lvTemp2);									/*	{ w + z + x + y, ... , w + z + x + y }	*/
 
-    hpmvec4f prod = vmulq_f32(arg, arg);
+    hpmvec4f prod = vmulq_f32(*arg, *arg);
     hpmvec4f sum1 = vaddq_f32(prod, vrev64q_f32(prod));
     hpmvec4f sum2 = vaddq_f32(sum1, vcombine_f32(vget_high_f32(sum1), vget_low_f32(sum1)));
 
