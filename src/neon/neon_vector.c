@@ -32,7 +32,7 @@ HPM_IMP(hpmvecf, hpm_vec4_lengthfv, const hpmvec4f* arg){
     hpmvec4f sum1 = vaddq_f32(prod, vrev64q_f32(prod));
     hpmvec4f sum2 = vaddq_f32(sum1, vcombine_f32(vget_high_f32(sum1), vget_low_f32(sum1)));
 
-	const hpmvec4f sqr = vsqrtq_f32(sum2);
+	hpmvec4f sqr = vsqrtq_f32(sum2);
 
 	// /*	Return first element.	*/
 	return sqr[0]; /*	sqrt(w^2 + z^2 + x^2 + y^2)	*/
