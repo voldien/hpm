@@ -139,7 +139,7 @@ ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
 	SET(SIMD_FLAGS_SSE42 "/arch:SSE4.2 /DHPM_SSE42_SIMD_PREFIX=1")
 	SET(SIMD_FLAGS_AVX "/arch:AVX /DHPM_AVX_SIMD_PREFIX=1")
 	SET(SIMD_FLAGS_AVX2 "/arch:AVX2 /DHPM_AVX2_SIMD_PREFIX=1 ")
-	SET(SIMD_FLAGS_NEON "/DHPM_NEON_SIMD_PREFIX=1 ") # TODO add -mfpu=neon 
+	SET(SIMD_FLAGS_NEON "/DHPM_NEON_SIMD_PREFIX=1 ") # TODO add -mfpu=neon
 ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	SET(HPM_FLAGS "-DHPM_INTERNAL=1 -DHPM_ENTRY=1")
 	SET(SIMD_TARGET_FLAGS " -DHPM_INTERNAL_IMP=1")
@@ -200,7 +200,7 @@ IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
 	# Target for NEON
 	# SIMD extension support.
 	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the NEON specific implementation later.
-	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS_NEON} ${SIMD_TARGET_FLAGS}" )	#-funsafe-math-optimizations 
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS_NEON} ${SIMD_TARGET_FLAGS}" )	#-funsafe-math-optimizations
 ENDIF()
 
 # Target with no SIMD extension requirements.
@@ -211,9 +211,15 @@ TARGET_LINK_LIBRARIES(hpmnosimd m)
 
 # Main library target for initializing the library. The Hpm library is always a shared library.
 IF(BUILD_WITH_SINGLE_LIBRARY)
-	ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c $<TARGET_OBJECTS:hpmnosimd>
-	 $<TARGET_OBJECTS:hpmsse42>  $<TARGET_OBJECTS:hpmsse41>  $<TARGET_OBJECTS:hpmsse>  $<TARGET_OBJECTS:hpmsse2> $<TARGET_OBJECTS:hpmsse3>
-	 $<TARGET_OBJECTS:hpmavx> $<TARGET_OBJECTS:hpmavx2>)
+	# X86 and Amd64 targets
+	IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
+		ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c $<TARGET_OBJECTS:hpmnosimd>
+		$<TARGET_OBJECTS:hpmsse42>  $<TARGET_OBJECTS:hpmsse41>  $<TARGET_OBJECTS:hpmsse>  $<TARGET_OBJECTS:hpmsse2> $<TARGET_OBJECTS:hpmsse3>
+		$<TARGET_OBJECTS:hpmavx> $<TARGET_OBJECTS:hpmavx2>)
+	 ELSEIF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
+	 	# ARM targets
+		ADD_LIBRARY(hpm SHARED ${CMAKE_CURRENT_SOURCE_DIR}/src/hpm.c $<TARGET_OBJECTS:hpmnosimd> $<TARGET_OBJECTS:hpmneon> )
+	 ENDIF()
 TARGET_LINK_LIBRARIES(hpm m dl)
 ELSE()
 	TARGET_LINK_LIBRARIES(hpm m dl)
@@ -248,7 +254,7 @@ IF(BUILD_WITH_INSTALL)
 			INSTALL (TARGETS hpmsse41 DESTINATION lib)
 			INSTALL (TARGETS hpmsse42 DESTINATION lib)
 		ENDIF()
-		
+
 		# Install NEON SIMD extension if on an ARM platform.
 		IF(__arm__)
 			INSTALL (TARGETS hpmneon DESTINATION lib)
