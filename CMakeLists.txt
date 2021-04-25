@@ -10,7 +10,7 @@ IF(NOT BUILD_SHARED_LIBS)
 ENDIF()
 #TODO rename to BUILD_WITH_SINGLE_LIBRARY
 OPTION(BUILD_WITH_SINGLE_LIBRARY "Build a single library binary file" ON)
-OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" ON)
+OPTION(BUILD_OPT_BUILD_PACKAGES "Set to ON to generate CPack configuration files and packaging targets" OFF)
 OPTION(BUILD_WITH_INSTALL "Add Install Targets" ON)
 OPTION(BUILD_WITH_DOCS "Generate Docs"  OFF)
 
@@ -37,8 +37,10 @@ ELSE()
 	MESSAGE(STATUS "Individual SIMD Libraries Mode.")
 ENDIF()
 
-
+#
 LIST(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake-modules" )
+
+# Package components
 SET(LIBHPM_COMPONENT     "libhpm${HPM_VERSION_MAJOR}.${HPM_VERSION_MINOR}.${HPM_VERSION_REVISION}" )
 SET(LIBHPM-DEV_COMPONENT "libhpm${HPM_VERSION_MAJOR}.${HPM_VERSION_MINOR}.${HPM_VERSION_REVISION}-dev" )
 SET(CPACK_COMPONENTS_ALL ${LIBHPM_COMPONENT} ${LIBHPM-DEV_COMPONENT} hpm-dev)
