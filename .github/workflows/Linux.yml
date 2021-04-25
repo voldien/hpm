@@ -51,7 +51,7 @@ jobs:
         CC: ${{ matrix.compiler }}
       run: |
         cmake $GITHUB_WORKSPACE -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DBUILD_TEST=ON -DBUILD_WITH_INSTALL=OFF \
-        -DBUILD_GLBUNNY=OFF -DBUILD_ASSERT=ON
+        -DBUILD_GLBUNNY=OFF -DBUILD_ASSERT=ON  -DBUILD_OPT_BUILD_PACKAGES=ON
 
     - name: Build
       working-directory: ${{runner.workspace}}/build
