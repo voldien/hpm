@@ -73,6 +73,7 @@ jobs:
       working-directory: ${{runner.workspace}}/build
       run: |
         mkdir deb && mv -v *.deb deb/
+        
     - name: Upload deb packages
       uses: actions/upload-artifact@v2
       with:

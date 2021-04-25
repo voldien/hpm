@@ -296,7 +296,15 @@ IF(BUILD_WITH_INSTALL)
 		SET(CPACK_DEBIAN_PACKAGE_REMOVE_SOURCE_FILES workspaces test docs obj packaging)
 		SET(CPACK_DEBIAN_PACKAGE_SOURCE_COPY svn export --force)
 		SET(CPACK_DEBIAN_CHANGELOG)
-
+		
+		execute_process(COMMAND lsb_release -is
+			OUTPUT_VARIABLE _lsb_distribution OUTPUT_STRIP_TRAILING_WHITESPACE
+			RESULT_VARIABLE _lsb_release_failed)
+		SET(CPACK_DEBIAN_DISTRIBUTION_NAME ${_lsb_distribution} CACHE STRING "Name of the distrubiton")
+		STRING(TOLOWER ${CPACK_DEBIAN_DISTRIBUTION_NAME} CPACK_DEBIAN_DISTRIBUTION_NAME)
+		IF( ${CPACK_DEBIAN_DISTRIBUTION_NAME} STREQUAL "ubuntu" )
+			SET(CPACK_DEBIAN_DISTRIBUTION_RELEASES lucid maverick natty oneiric precise CACHE STRING "Release code-names of the distrubiton release")
+		ENDIF()
 		SET(DPUT_HOST "" CACHE STRING "PPA repository to upload the debian sources")
 
 		INCLUDE(DebSourcePPA)
