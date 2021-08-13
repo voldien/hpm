@@ -12,6 +12,7 @@ ENDIF()
 OPTION(BUILD_WITH_SINGLE_LIBRARY "Build a single library binary file" ON)
 OPTION(BUILD_WITH_INSTALL "Add Install Targets" ON)
 OPTION(BUILD_WITH_DOCS "Generate Docs"  OFF)
+OPTION(BUILD_WTIH_DISTRIBUTION "" OFF)
 
 # hpm version setup.
 SET(HPM_VERSION_MAJOR 0)
@@ -139,7 +140,7 @@ ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "MSVC")
 	SET(SIMD_FLAGS_SSE42 "/arch:SSE4.2 /DHPM_SSE42_SIMD_PREFIX=1")
 	SET(SIMD_FLAGS_AVX "/arch:AVX /DHPM_AVX_SIMD_PREFIX=1")
 	SET(SIMD_FLAGS_AVX2 "/arch:AVX2 /DHPM_AVX2_SIMD_PREFIX=1 ")
-	SET(SIMD_FLAGS_NEON "/DHPM_NEON_SIMD_PREFIX=1 ") # TODO add -mfpu=neon 
+	SET(SIMD_FLAGS_NEON "/DHPM_NEON_SIMD_PREFIX=1 ") # TODO add -mfpu=neon
 ELSEIF(CMAKE_C_COMPILER_ID STREQUAL "Clang")
 	SET(HPM_FLAGS "-DHPM_INTERNAL=1 -DHPM_ENTRY=1")
 	SET(SIMD_TARGET_FLAGS " -DHPM_INTERNAL_IMP=1")
@@ -200,7 +201,7 @@ IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
 	# Target for NEON
 	# SIMD extension support.
 	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the NEON specific implementation later.
-	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS_NEON} ${SIMD_TARGET_FLAGS}" )	#-funsafe-math-optimizations 
+	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS_NEON} ${SIMD_TARGET_FLAGS}" )	#-funsafe-math-optimizations
 ENDIF()
 
 # Target with no SIMD extension requirements.
@@ -248,7 +249,7 @@ IF(BUILD_WITH_INSTALL)
 			INSTALL (TARGETS hpmsse41 DESTINATION lib)
 			INSTALL (TARGETS hpmsse42 DESTINATION lib)
 		ENDIF()
-		
+
 		# Install NEON SIMD extension if on an ARM platform.
 		IF(__arm__)
 			INSTALL (TARGETS hpmneon DESTINATION lib)
@@ -268,26 +269,28 @@ ENDIF()
 
 # Create distrubtion archive file.
 IF( UNIX )
-	SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
-	ADD_CUSTOM_TARGET(	distribution
-				COMMAND mkdir -p ${TARGETDIR}
-				COMMAND mkdir -p ${TARGETDIR}/test
-				COMMAND mkdir -p ${TARGETDIR}/test/glbunny
-				COMMAND mkdir -p ${TARGETDIR}/test/hpmassert
-				COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/src
-				${CMAKE_CURRENT_SOURCE_DIR}/include
-				${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
-				${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
-				${CMAKE_CURRENT_SOURCE_DIR}/README.md
-				${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt
-				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/inlcude
-				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/src
-				${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/CMakeLists.txt
-				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/inlcude
-				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/src
-				${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/CMakeLists.txt ${TARGETDIR}
-				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
-				COMMAND rm -r ${TARGETDIR} )
+	IF(BUILD_WTIH_DISTRIBUTION)
+		SET( TARGETDIR "${PROJECT_NAME}-${HPM_VERSION}")
+		ADD_CUSTOM_TARGET(	distribution
+					COMMAND mkdir -p ${TARGETDIR}
+					COMMAND mkdir -p ${TARGETDIR}/test
+					COMMAND mkdir -p ${TARGETDIR}/test/glbunny
+					COMMAND mkdir -p ${TARGETDIR}/test/hpmassert
+					COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/src
+					${CMAKE_CURRENT_SOURCE_DIR}/include
+					${CMAKE_CURRENT_SOURCE_DIR}/CMakeLists.txt
+					${CMAKE_CURRENT_SOURCE_DIR}/LICENSE
+					${CMAKE_CURRENT_SOURCE_DIR}/README.md
+					${CMAKE_CURRENT_SOURCE_DIR}/test/CMakeLists.txt
+					${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/inlcude
+					${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/src
+					${CMAKE_CURRENT_SOURCE_DIR}/test/hpmassert/CMakeLists.txt
+					${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/inlcude
+					${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/src
+					${CMAKE_CURRENT_SOURCE_DIR}/test/glbunny/CMakeLists.txt ${TARGETDIR}
+					COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
+					COMMAND rm -r ${TARGETDIR} )
+	ENDIF()
 ENDIF()
 
 
