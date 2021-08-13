@@ -50,7 +50,7 @@ typedef struct hpm_vec2uf_t{
 		hpmvec2f v;
 		struct{hpmvecf x, y;};
 	};
-};
+}hpmvec2uf;
 
 /**
  *	SSE 128 bit data types.
@@ -65,7 +65,7 @@ typedef struct hpm_vec3uf_t {
 			hpmvecf x, y, z;
 		};
 	};
-};
+}hpmvec3uf;
 
 
 /**
@@ -78,9 +78,9 @@ typedef struct hpm_vec4uf_t {
 		hpmvec4f v;
 		struct {
 			hpmvecf x, y, z, w;
-		};
+		}vcom;
 	};
-};
+}hpmvec4uf;
 
 /**
  * 	Internal SSE 128 bit  data types
