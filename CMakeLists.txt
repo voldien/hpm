@@ -3,7 +3,7 @@ PROJECT(hpm VERSION 0.9.1 LANGUAGES C)
 
 #	build shared/dynamic library option
 OPTION(BUILD_SHARED_LIBS "Build package with shared libraries." ON)
-OPTION(BUILD_TEST "Build Test Suite" ON)
+OPTION(HPM_BUILD_TEST "Build Test Suite" OFF)
 IF(NOT BUILD_SHARED_LIBS)
 	SET(CMAKE_EXE_LINKER_FLAGS "-static")
 	SET(LINK_SEARCH_START_STATIC TRUE)
@@ -273,7 +273,7 @@ IF(BUILD_WITH_INSTALL)
 ENDIF()
 
 # Invoke cmake file from the test directory.
-IF(BUILD_TEST)
+IF(HPM_BUILD_TEST)
 	ENABLE_TESTING()
 	ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/test)
 ENDIF()
