@@ -157,53 +157,63 @@ ELSE()
 	MESSAGE(FATAL_ERROR "No supported Compiler")
 ENDIF()
 
+IF(BUILD_WITH_SINGLE_LIBRARY)
+	SET(TARGET_LIB_EXPORT OBJECT)
+ELSE()
+	IF(BUILD_SHARED_LIBS)
+		SET(TARGET_LIB_EXPORT SHARED)
+	ELSE()
+		SET(TARGET_LIB_EXPORT STATIC)
+	ENDIF()
+ENDIF()
+
 # X86 and amd64 CPU architecture.
 IF (CMAKE_SYSTEM_PROCESSOR MATCHES "(x86)|(X86)|(amd64)|(AMD64)")
 
 	# Target for AVX2
-	ADD_LIBRARY(hpmavx2 ${avx_source} ${basecore})
+	ADD_LIBRARY(hpmavx2 ${TARGET_LIB_EXPORT} ${avx_source} ${basecore})
 	SET_TARGET_PROPERTIES(hpmavx2 PROPERTIES COMPILE_FLAGS "${SIMD_FLAGS} ${SIMD_FLAGS_AVX2} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmavx2 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmavx2 m)
 
 	# Target for AVX
-	ADD_LIBRARY(hpmavx ${avx_source} ${basecore})
+	ADD_LIBRARY(hpmavx ${TARGET_LIB_EXPORT} ${avx_source} ${basecore})
 	SET_TARGET_PROPERTIES(hpmavx PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS} ${SIMD_FLAGS_AVX} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmavx PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmavx m)
 
 	# Target for SSE
-	ADD_LIBRARY(hpmsse ${basecore} ${all_sse_source})
+	ADD_LIBRARY(hpmsse ${TARGET_LIB_EXPORT} ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS} ${SIMD_FLAGS_SSE} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmsse PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmsse m)
 
 	# Target for SSE2
-	ADD_LIBRARY(hpmsse2 ${basecore} ${all_sse_source})
+	ADD_LIBRARY(hpmsse2 ${TARGET_LIB_EXPORT} ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse2 PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS} ${SIMD_FLAGS_SSE2} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmsse2 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmsse2 m)
 
 	# Target for SSE3
-	ADD_LIBRARY(hpmsse3 ${basecore} ${all_sse_source})
+	ADD_LIBRARY(hpmsse3 ${TARGET_LIB_EXPORT} ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse3 PROPERTIES COMPILE_FLAGS "  ${SIMD_FLAGS} ${SIMD_FLAGS_SSE3} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmsse3 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmsse3 m)
 
 	# Target for SSE4.1
-	ADD_LIBRARY(hpmsse41 ${basecore} ${all_sse_source})
+	ADD_LIBRARY(hpmsse41 ${TARGET_LIB_EXPORT} ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse41 PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS} ${SIMD_FLAGS_SSE41} ${SIMD_TARGET_FLAGS}" )
 	TARGET_INCLUDE_DIRECTORIES(hpmsse41 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
 	TARGET_LINK_LIBRARIES(hpmsse41 m)
 
 	# Target for SSE4.2
-	ADD_LIBRARY(hpmsse42 ${basecore} ${all_sse_source})
+	ADD_LIBRARY(hpmsse42 ${TARGET_LIB_EXPORT} ${basecore} ${all_sse_source})
 	SET_TARGET_PROPERTIES(hpmsse42 PROPERTIES COMPILE_FLAGS "${SIMD_FLAGS} ${SIMD_FLAGS_SSE42}  ${SIMD_TARGET_FLAGS}")
 	TARGET_INCLUDE_DIRECTORIES(hpmsse42 PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
@@ -214,12 +224,12 @@ ENDIF()
 IF(${CMAKE_SYSTEM_PROCESSOR} MATCHES "(arm)|(arm64)")
 	# Target for NEON
 	# SIMD extension support.
-	ADD_LIBRARY(hpmneon ${basecore} ${neon_source}) #	Will resolve the NEON specific implementation later.
+	ADD_LIBRARY(hpmneon ${TARGET_LIB_EXPORT} ${basecore} ${neon_source}) #	Will resolve the NEON specific implementation later.
 	SET_TARGET_PROPERTIES(hpmneon PROPERTIES COMPILE_FLAGS " ${SIMD_FLAGS_NEON} ${SIMD_TARGET_FLAGS}" )	#-funsafe-math-optimizations
 ENDIF()
 
 # Target with no SIMD extension requirements.
-ADD_LIBRARY(hpmnosimd ${basecore} ${nosimdsource})
+ADD_LIBRARY(hpmnosimd ${TARGET_LIB_EXPORT} ${basecore} ${nosimdsource})
 SET_TARGET_PROPERTIES(hpmnosimd PROPERTIES COMPILE_FLAGS "${NOSIMD_FLAGS} ${SIMD_FLAGS_NO} ${SIMD_TARGET_FLAGS}" )
 TARGET_INCLUDE_DIRECTORIES(hpmnosimd PUBLIC
 	$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include> )
