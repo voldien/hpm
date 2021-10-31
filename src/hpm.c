@@ -74,7 +74,7 @@ int hpm_init(unsigned int simd){
 	}
 
 	/*	Translate SIMD to library filename.	*/
-	switch (simd) {
+	switch ((unsigned int)simd) {
 	#if defined(HPM_USE_SINGLE_LIBRARY)
 		case HPM_SSE:
 		case HPM_SSE2:

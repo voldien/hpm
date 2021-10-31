@@ -67,9 +67,9 @@ typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 #define HPM_AVX512      (1 << 10)   /*  AVX512 (Advanced Vector Extension). (Yet not supported)	*/
 #define HPM_NEON        (1 << 11)   /*  ARM	FPU (floating-point unit) feature.	*/
 #define HPM_FMA         (1 << 12)   /*  Not supported.	*/
-#define HPM_SVML        (1 << 29)   /*  Not supported.	*/
-#define HPM_ACML        (1 << 30)   /*  Not supported.	*/
-#define HPM_DEFAULT     (1 << 31)   /*  Default, makes attempt to take the best SIMD extension on the system.	*/
+#define HPM_SVML        (1 << 28)   /*  Not supported.	*/
+#define HPM_ACML        (1 << 29)   /*  Not supported.	*/
+#define HPM_DEFAULT     (1 << 30)   /*  Default, makes attempt to take the best SIMD extension on the system.	*/
 
 
 /**
