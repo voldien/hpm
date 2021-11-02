@@ -48,7 +48,7 @@ typedef hpmvecd hpmvec2d HPM_VECTORALIGN(16);   /*	*/
 typedef struct hpm_vec2uf_t{
 	union{
 		hpmvec2f v;
-		struct{hpmvecf x, y;};
+		struct{hpmvecf x, y;}vcom;
 	};
 }hpmvec2uf;
 
@@ -63,7 +63,7 @@ typedef struct hpm_vec3uf_t {
 		hpmvec3f v;
 		struct {
 			hpmvecf x, y, z;
-		};
+		}vcom;
 	};
 }hpmvec3uf;
 

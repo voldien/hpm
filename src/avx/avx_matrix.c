@@ -13,8 +13,8 @@ HPM_IMP( void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t s
 	const hpmmat4uf* HPM_RESTRICT s = source;
 
 	/*  Copy memory.    */
-	d->oc[0] = s->oc[0];
-	d->oc[1] = s->oc[1];
+	d->vcom.oc[0] = s->vcom.oc[0];
+	d->vcom.oc[1] = s->vcom.oc[1];
 	/*
 	 _mm256_storeu_ps(&d->oc[0], s->oc[0]);
 	 _mm256_storeu_ps(&d->oc[1], s->oc[1]);
@@ -70,8 +70,8 @@ HPM_IMP(void, hpm_mat4x4_identityfv, hpmvec4x4f_t mat4x4){
 	const hpmvec8f row0 = { 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f };
 	const hpmvec8f row1 = { 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 	hpmmat4uf* mat8 = mat4x4;
-	mat8->oc[0] = row0;
-	mat8->oc[1] = row1;
+	mat8->vcom.oc[0] = row0;
+	mat8->vcom.oc[1] = row1;
 }
 
 HPM_IMP( void,  hpm_mat4x4_transposefv, hpmvec4x4f_t mat){

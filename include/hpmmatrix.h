@@ -68,7 +68,7 @@ typedef union {
 	hpmmat4f s;
 	struct {
 		hpmvec8f oc[2];
-	};
+	}vcom;
 } hpmmat4uf;
 
 
