@@ -49,6 +49,7 @@ typedef struct hpm_vec2uf_t{
 	union{
 		hpmvec2f v;
 		struct{hpmvecf x, y;}vcom;
+		float vco[2];
 	};
 }hpmvec2uf;
 
@@ -64,6 +65,7 @@ typedef struct hpm_vec3uf_t {
 		struct {
 			hpmvecf x, y, z;
 		}vcom;
+		float vco[4];
 	};
 }hpmvec3uf;
 
@@ -79,6 +81,7 @@ typedef struct hpm_vec4uf_t {
 		struct {
 			hpmvecf x, y, z, w;
 		}vcom;
+		float vco[4];
 	};
 }hpmvec4uf;
 
