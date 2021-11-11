@@ -18,15 +18,15 @@
 */
 #ifndef _HPM_H_
 #define _HPM_H_ 1
-#include"hpmdef.h"
-#include"hpmmatrix.h"
-#include"hpmvector.h"
-#include"hpmquaternion.h"
-#include"hpmutil.h"
-#include"hpmmath.h"
-#include"hpmlogic.h"
-#include"hpmprint.h"
-#include"hpmentries.h"
+#include "hpmdef.h"
+#include "hpmentries.h"
+#include "hpmlogic.h"
+#include "hpmmath.h"
+#include "hpmmatrix.h"
+#include "hpmprint.h"
+#include "hpmquaternion.h"
+#include "hpmutil.h"
+#include "hpmvector.h"
 
 /**
  * The main hpm library header file.
@@ -41,14 +41,14 @@ extern "C" {
 /**
  * Function data types.
  */
-typedef int (HPMAPIENTRY PHPMINIT)(unsigned int simd);
-typedef int (HPMAPIENTRY PHPMRELEASE)(void);
-typedef int (HPMAPIENTRY PHPMISINIT)(void);
-typedef unsigned int (HPMAPIENTRY PHPMGETSIMD)(void);
-typedef void* (HPMAPIENTRY PHPMGETADDRESS)(const char* cfunctionName, unsigned int simd);
-typedef const char* (HPMAPIENTRY PHPMVERSION)(void);
-typedef int (HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
-typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
+typedef int(HPMAPIENTRY PHPMINIT)(unsigned int simd);
+typedef int(HPMAPIENTRY PHPMRELEASE)(void);
+typedef int(HPMAPIENTRY PHPMISINIT)(void);
+typedef unsigned int(HPMAPIENTRY PHPMGETSIMD)(void);
+typedef void *(HPMAPIENTRY PHPMGETADDRESS)(const char *cfunctionName, unsigned int simd);
+typedef const char *(HPMAPIENTRY PHPMVERSION)(void);
+typedef int(HPMAPIENTRY PHPMSUPPORTCPUFEAT)(unsigned int simd);
+typedef const char *(HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 
 /**
  * SIMD (single instruction multiple data) extensions flags.
@@ -70,7 +70,6 @@ typedef const char* (HPMAPIENTRY PHPMGETSIMDSYMBOL)(unsigned int SIMD);
 #define HPM_SVML        (1 << 28)   /*  Not supported.	*/
 #define HPM_ACML        (1 << 29)   /*  Not supported.	*/
 #define HPM_DEFAULT     (1 << 30)   /*  Default, makes attempt to take the best SIMD extension on the system.	*/
-
 
 /**
  * Initialize hpm library by assigning all function pointer in respect
@@ -114,16 +113,17 @@ extern HPMDECLSPEC unsigned int HPMAPIENTRY hpm_get_simd(void);
  * @param simd the SIMD associated with the function. used for extracting
  * correct symbol for when using hpm in single library mode.
  *
- * @return func pointer to the function. if NULL then the cfunction Name was valid.
+ * @return func pointer to the function. if NULL then the cfunction Name was
+ * valid.
  */
-extern HPMDECLSPEC void* HPMAPIENTRY hpm_get_address(const char* cfunctionName, unsigned int simd);
+extern HPMDECLSPEC void *HPMAPIENTRY hpm_get_address(const char *cfunctionName, unsigned int simd);
 
 /**
  * Get hpm version.
  *
  * @return non NULL terminated string pointer.
  */
-extern HPMDECLSPEC const char* HPMAPIENTRY hpm_version(void);
+extern HPMDECLSPEC const char *HPMAPIENTRY hpm_version(void);
 
 /**
  * Determine if SIMD extension is supported on the CPU.
@@ -141,7 +141,7 @@ extern HPMDECLSPEC int HPMAPIENTRY hpm_support_cpu_feat(unsigned int SIMD);
  *
  * @return non-null terminated string.
  */
-extern HPMDECLSPEC const char* HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
+extern HPMDECLSPEC const char *HPMAPIENTRY hpm_get_simd_symbol(unsigned int SIMD);
 
 /**
  *

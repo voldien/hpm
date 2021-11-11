@@ -1,16 +1,16 @@
-#include"hpmmath.h"
-#include<limits.h>
-#include<time.h>
+#include "hpmmath.h"
+#include <limits.h>
+#include <time.h>
 
-#   ifdef HPM_VC
-#      include<intrin.h>
-#	elif defined(HPM_GNUC) || defined(HPM_CLANG)
-#       if defined(HPM_X86) || defined(HPM_X86_64)
-#		    include<x86intrin.h>
-#       endif
-#   endif
+#ifdef HPM_VC
+#include <intrin.h>
+#elif defined(HPM_GNUC) || defined(HPM_CLANG)
+#if defined(HPM_X86) || defined(HPM_X86_64)
+#include <x86intrin.h>
+#endif
+#endif
 
-HPM_IMP(void, hpm_vec4_randomfv, hpmvec4f* out){
+HPM_IMP(void, hpm_vec4_randomfv, hpmvec4f *out) {
 
 	unsigned int p;
 	int result;
@@ -21,7 +21,7 @@ HPM_IMP(void, hpm_vec4_randomfv, hpmvec4f* out){
 
 	/*  Iterate through each element.   */
 	for (i = 0; i < n; i++)
-		(*out)[i] = (hpmvecf) rand() / (hpmvecf) UINT_MAX;
+		(*out)[i] = (hpmvecf)rand() / (hpmvecf)UINT_MAX;
 	/*
 	do{
 		result = _rdrand32_step(&p);
@@ -33,7 +33,7 @@ HPM_IMP(void, hpm_vec4_randomfv, hpmvec4f* out){
 	*/
 }
 
-HPM_IMP(void, hpm_vec8_randomfv, hpmvec8f* out){
+HPM_IMP(void, hpm_vec8_randomfv, hpmvec8f *out) {
 
 	unsigned int p;
 	int result;
@@ -44,7 +44,7 @@ HPM_IMP(void, hpm_vec8_randomfv, hpmvec8f* out){
 
 	/*  Iterate through each element.   */
 	for (i = 0; i < n; i++)
-		(*out)[i] = (hpmvecf) rand() / (hpmvecf) UINT_MAX;
+		(*out)[i] = (hpmvecf)rand() / (hpmvecf)UINT_MAX;
 	/*
 	do{
 		result = _rdrand32_step(&p);

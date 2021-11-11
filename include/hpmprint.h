@@ -18,10 +18,10 @@
 */
 #ifndef _HPM_PRINT_H_
 #define _HPM_PRINT_H_ 1
-#include"hpmdef.h"
-#include"hpmmatrix.h"
-#include"hpmquaternion.h"
-#include"hpmvector.h"
+#include "hpmdef.h"
+#include "hpmmatrix.h"
+#include "hpmquaternion.h"
+#include "hpmvector.h"
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
@@ -82,7 +82,6 @@ extern HPMDECLSPEC int hpm_mat4x4_print(const hpmvec4x4f_t mat);
  * @param mat non-null valid vector address.
  */
 extern HPMDECLSPEC int hpm_mat4x4_sprint(char *HPM_RESTRICT text, const hpmvec4x4f_t mat);
-
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

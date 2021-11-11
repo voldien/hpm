@@ -1,5 +1,5 @@
-#include"hpm.h"
-#include<assert.h>
+#include "hpm.h"
+#include <assert.h>
 
 /**
  * Macro for adding cross platform
@@ -50,105 +50,104 @@
 #endif
 
 /*	library handle.
- 	NULL means that there is no library open.	*/
-void* libhandle = NULL;
+	NULL means that there is no library open.	*/
+void *libhandle = NULL;
 unsigned int g_simd = HPM_NONE;
 
 /**
  *	Macro for getting function pointer by variable name of
  *	the function pointer.
  */
-#define hpm_get_symbolfuncp(symbol)		( HPM_FUNCTYPE( symbol ) )hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL( symbol )), simd)
+#define hpm_get_symbolfuncp(symbol) (HPM_FUNCTYPE(symbol)) hpm_get_address(HPM_STR(HPM_DEFFUNCSYMBOL(symbol)), simd)
 
-int hpm_init(unsigned int simd){
-	char* libpath = NULL;
+int hpm_init(unsigned int simd) {
+	char *libpath = NULL;
 
 	/*	*/
-	if(simd == HPM_NONE)
+	if (simd == HPM_NONE)
 		return 0;
 
 	/*	Check if argument is a power of two.	*/
-	if( ( simd && ((simd - 1) & simd) ) ){
+	if ((simd && ((simd - 1) & simd))) {
 		fprintf(stderr, "Argument not a valid single flag argument (not a power of 2).\n");
 		return 0;
 	}
 
 	/*	Translate SIMD to library filename.	*/
 	switch ((unsigned int)simd) {
-	#if defined(HPM_USE_SINGLE_LIBRARY)
-		case HPM_SSE:
-		case HPM_SSE2:
-		case HPM_SSE3:
-		case HPM_SSSE3:
-		case HPM_SSE4_1:
-		case HPM_SSE4_2:
-		case HPM_NEON:
-		case HPM_NOSIMD:
-		case HPM_AVX512:
-		case HPM_AVX2:
-		case HPM_AVX:
-			break;
-	#else
-		case HPM_SSE:
-			libpath = HPM_FILE_SEE;
-			break;
-		case HPM_SSE2:
-			libpath = HPM_FILE_SEE2;
-			break;
-		case HPM_SSE3:
-		case HPM_SSSE3:
-			libpath = HPM_FILE_SEE3;
-			break;
-		case HPM_SSE4_1:
-			libpath = HPM_FILE_SEE41;
-			break;
-		case HPM_SSE4_2:
-			libpath = HPM_FILE_SEE42;
-			break;
-		case HPM_AVX:
-			libpath = HPM_FILE_AVX;
-			break;
-		case HPM_AVX2:
-			libpath = HPM_FILE_AVX2;
-			break;
-		case HPM_AVX512:
-			libpath = HPM_FILE_AVX512;
-			break;
-		case HPM_NEON:
-			libpath = HPM_FILE_NEON;
-			break;
-		case HPM_NOSIMD:
-			libpath = HPM_FILE_NOSIMD;
-			break;
-	#endif
-		case HPM_DEFAULT: {
-			unsigned int i;
-			for (i = HPM_NEON; i < HPM_DEFAULT; i >>= 1) {
-				if (hpm_support_cpu_feat(i)) {
-					return hpm_init(i);
-				}
+#if defined(HPM_USE_SINGLE_LIBRARY)
+	case HPM_SSE:
+	case HPM_SSE2:
+	case HPM_SSE3:
+	case HPM_SSSE3:
+	case HPM_SSE4_1:
+	case HPM_SSE4_2:
+	case HPM_NEON:
+	case HPM_NOSIMD:
+	case HPM_AVX512:
+	case HPM_AVX2:
+	case HPM_AVX:
+		break;
+#else
+	case HPM_SSE:
+		libpath = HPM_FILE_SEE;
+		break;
+	case HPM_SSE2:
+		libpath = HPM_FILE_SEE2;
+		break;
+	case HPM_SSE3:
+	case HPM_SSSE3:
+		libpath = HPM_FILE_SEE3;
+		break;
+	case HPM_SSE4_1:
+		libpath = HPM_FILE_SEE41;
+		break;
+	case HPM_SSE4_2:
+		libpath = HPM_FILE_SEE42;
+		break;
+	case HPM_AVX:
+		libpath = HPM_FILE_AVX;
+		break;
+	case HPM_AVX2:
+		libpath = HPM_FILE_AVX2;
+		break;
+	case HPM_AVX512:
+		libpath = HPM_FILE_AVX512;
+		break;
+	case HPM_NEON:
+		libpath = HPM_FILE_NEON;
+		break;
+	case HPM_NOSIMD:
+		libpath = HPM_FILE_NOSIMD;
+		break;
+#endif
+	case HPM_DEFAULT: {
+		unsigned int i;
+		for (i = HPM_NEON; i < HPM_DEFAULT; i >>= 1) {
+			if (hpm_support_cpu_feat(i)) {
+				return hpm_init(i);
 			}
 		}
-			break;
-		default:
-			fprintf(stderr, "Not a valid SIMD extension.\n");
-			return -2;
+	} break;
+	default:
+		fprintf(stderr, "Not a valid SIMD extension.\n");
+		return -2;
 	}
 
 	/*	load library.	*/
 #ifdef HPM_USE_SINGLE_LIBRARY
 	libhandle = HPM_LOAD_LIBRARY(NULL);
 #else
-	if(libhandle == NULL){
-		libhandle = HPM_LOAD_LIBRARY((const char*)libpath);
-	}else{
+	if (libhandle == NULL) {
+		libhandle = HPM_LOAD_LIBRARY((const char *)libpath);
+	} else {
 		/*	if library has only been initialized.	*/
 		return 0;
 	}
 #endif
 
 	/*	Error checks.	*/
-	if(libhandle == NULL) {
+	if (libhandle == NULL) {
 		fprintf(stderr, "%s\n", HPM_LIB_ERROR());
 		goto error;
 	}
@@ -156,16 +155,14 @@ int hpm_init(unsigned int simd){
 	g_simd = simd;
 
 	/*	Matrices.	*/
-	hpm_mat4x4_copyfv = hpm_get_symbolfuncp( hpm_mat4x4_copyfv );
+	hpm_mat4x4_copyfv = hpm_get_symbolfuncp(hpm_mat4x4_copyfv);
 	hpm_mat4x4_multiply_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat4x4fv);
 	hpm_mat4x4_multiply_scalarf = hpm_get_symbolfuncp(hpm_mat4x4_multiply_scalarf);
 	hpm_mat4x4_multiply_mat1x4fv = hpm_get_symbolfuncp(hpm_mat4x4_multiply_mat1x4fv);
 
-
 	hpm_mat4x4_division_mat4x4f = hpm_get_symbolfuncp(hpm_mat4x4_division_mat4x4f);
 	hpm_mat4x4_additition_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_additition_mat4x4fv);
 	hpm_mat4x4_subraction_mat4x4fv = hpm_get_symbolfuncp(hpm_mat4x4_subraction_mat4x4fv);
-
 
 	hpm_mat4x4_identityfv = hpm_get_symbolfuncp(hpm_mat4x4_identityfv);
 	hpm_mat4x4_transposefv = hpm_get_symbolfuncp(hpm_mat4x4_transposefv);
@@ -247,7 +244,6 @@ int hpm_init(unsigned int simd){
 	hpm_quat_conjugatefv = hpm_get_symbolfuncp(hpm_quat_conjugatefv);
 	hpm_quat_from_mat4x4fv = hpm_get_symbolfuncp(hpm_quat_from_mat4x4fv);
 
-
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
 	hpm_quat_copyfv = hpm_get_symbolfuncp(hpm_vec4_copyfv);
@@ -255,7 +251,6 @@ int hpm_init(unsigned int simd){
 	hpm_quat_lengthsqurefv = hpm_get_symbolfuncp(hpm_vec4_lengthsqurefv);
 	hpm_quat_normalizefv = hpm_get_symbolfuncp(hpm_vec4_normalizefv);
 	hpm_quat_dotfv = hpm_get_symbolfuncp(hpm_vec4_dotfv);
-
 
 	/*	*/
 	hpm_quat_inversefv = hpm_get_symbolfuncp(hpm_quat_inversefv);
@@ -292,7 +287,7 @@ int hpm_init(unsigned int simd){
 
 	/*	Logic equality conditions.	*/
 	hpm_vec_eqfv = hpm_get_symbolfuncp(hpm_vec_eqfv);
-	hpm_vec_neqfv= hpm_get_symbolfuncp(hpm_vec_neqfv);
+	hpm_vec_neqfv = hpm_get_symbolfuncp(hpm_vec_neqfv);
 	hpm_vec4_com_eqfv = hpm_get_symbolfuncp(hpm_vec4_com_eqfv);
 	hpm_vec4_eqfv = hpm_get_symbolfuncp(hpm_vec4_eqfv);
 	hpm_vec4_com_neqfv = hpm_get_symbolfuncp(hpm_vec4_com_neqfv);
@@ -310,34 +305,30 @@ int hpm_init(unsigned int simd){
 
 	/*	Store current SIMD extension.	*/
 	g_simd = simd;
-	error:	/*	error.	*/
+error: /*	error.	*/
 
 	/*  Determine if successfully.   */
-	return ( libhandle != NULL) ;
+	return (libhandle != NULL);
 }
 
 int hpm_release(void) {
-    int status = HPM_CLOSE(libhandle);
-    if (status < 0)
-        fprintf(stderr, "Failed to close library. | %s\n", HPM_LIB_ERROR());
-    libhandle = NULL;
-    g_simd = 0;
-    return status == 0;
+	int status = HPM_CLOSE(libhandle);
+	if (status < 0)
+		fprintf(stderr, "Failed to close library. | %s\n", HPM_LIB_ERROR());
+	libhandle = NULL;
+	g_simd = 0;
+	return status == 0;
 }
 
-int hpm_isinit(void) {
-	return libhandle != NULL;
-}
+int hpm_isinit(void) { return libhandle != NULL; }
 
-unsigned int hpm_get_simd(void) {
-	return g_simd;
-}
+unsigned int hpm_get_simd(void) { return g_simd; }
 
-void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
+void *hpm_get_address(const char *cfunctionName, unsigned int simd) {
 
-	void* pfunc;
+	void *pfunc;
 
-    /*  Load function from main library.    */
+	/*  Load function from main library.    */
 #if defined(HPM_USE_SINGLE_LIBRARY)
 	char buf[128];
 	sprintf(buf, "%s_%s", cfunctionName, hpm_get_simd_symbol(simd));
@@ -347,98 +338,96 @@ void* hpm_get_address(const char* cfunctionName, unsigned int simd) {
 	pfunc = HPM_LOAD_SYM(libhandle, cfunctionName);
 #endif
 
-    /*	Check error.    */
-    if (pfunc == NULL)
-        fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, HPM_LIB_ERROR());
+	/*	Check error.    */
+	if (pfunc == NULL)
+		fprintf(stderr, "Couldn't load function with symbol %s | %s\n", cfunctionName, HPM_LIB_ERROR());
 
-    return (pfunc);
+	return (pfunc);
 }
 
-const char* hpm_version(void) {
-	return HPM_STR_VERSION;
-}
+const char *hpm_version(void) { return HPM_STR_VERSION; }
 
 /*	TODO resolve for non x86 and non x86_64 CPUS*/
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
-	#include<cpuid.h>
-	#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
+#include <cpuid.h>
+#define cpuid(regs, i) __get_cpuid(i, &regs[0], &regs[1], &regs[2], &regs[3])
 #elif defined(HPM_ARM)
-	#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
+#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
 #else
-	#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
+#define cpuid(regs, i) regs[0] = regs[1] = regs[2] = regs[3] = 0
 #endif
 
 int hpm_support_cpu_feat(unsigned int simd) {
-    int cpuInfo[4] = {0};
+	int cpuInfo[4] = {0};
 
-    switch (simd) {
-        case HPM_NOSIMD:
-            return 1;    /*	Always supported.	*/
+	switch (simd) {
+	case HPM_NOSIMD:
+		return 1; /*	Always supported.	*/
 #if defined(HPM_X86) || defined(HPM_X64) || defined(HPM_X32)
-        case HPM_MMX:
-            cpuid(cpuInfo, 1);
-            return 0;    /*	Not supported in the library.	*/
-            return (cpuInfo[2] & bit_MMX);
-        case HPM_SSE:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[3] & bit_SSE);
-        case HPM_SSE2:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[3] & bit_SSE2);
-        case HPM_SSE3:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[2] & bit_SSE3);
-        case HPM_SSSE3:
-			return 0; /*	Not supported in the library.	*/
-			cpuid(cpuInfo, 1);
-            return (cpuInfo[2] & bit_SSSE3);
-        case HPM_SSE4_1:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[2] & bit_SSE4_1);
-        case HPM_SSE4_2:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[2] & bit_SSE4_2);
-        case HPM_AVX:
-            cpuid(cpuInfo, 1);
-            return (cpuInfo[2] & bit_AVX);
-        case HPM_AVX2:
-            cpuid(cpuInfo, 7);
-            return (cpuInfo[2] & bit_AVX2);
-        case HPM_AVX512:
+	case HPM_MMX:
+		cpuid(cpuInfo, 1);
+		return 0; /*	Not supported in the library.	*/
+		return (cpuInfo[2] & bit_MMX);
+	case HPM_SSE:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[3] & bit_SSE);
+	case HPM_SSE2:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[3] & bit_SSE2);
+	case HPM_SSE3:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE3);
+	case HPM_SSSE3:
+		return 0; /*	Not supported in the library.	*/
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSSE3);
+	case HPM_SSE4_1:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE4_1);
+	case HPM_SSE4_2:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_SSE4_2);
+	case HPM_AVX:
+		cpuid(cpuInfo, 1);
+		return (cpuInfo[2] & bit_AVX);
+	case HPM_AVX2:
+		cpuid(cpuInfo, 7);
+		return (cpuInfo[2] & bit_AVX2);
+	case HPM_AVX512:
 #if defined(bit_AVX512F)
-            cpuid(cpuInfo, 7);
-            return 0;   /*  Not supported yet!  */
-            return (cpuInfo[0] & (bit_AVX512F | bit_AVX512DQ | bit_AVX512BW));
+		cpuid(cpuInfo, 7);
+		return 0; /*  Not supported yet!  */
+		return (cpuInfo[0] & (bit_AVX512F | bit_AVX512DQ | bit_AVX512BW));
 #else
-            return 0;
+		return 0;
 #endif
-	    case HPM_FMA:
-		    cpuid(cpuInfo, 7);
-		    return (cpuInfo[3] & bit_FMA4);
+	case HPM_FMA:
+		cpuid(cpuInfo, 7);
+		return (cpuInfo[3] & bit_FMA4);
 #endif
-        case HPM_NEON:
+	case HPM_NEON:
 #if defined(HPM_ARM_NEON)
-            return 1;
+		return 1;
 #else
-            return 0;
+		return 0;
 #endif
-        default:
-            return 0;
-    }
+	default:
+		return 0;
+	}
 }
 
-static unsigned int log2MutExlusive32(unsigned int a){
+static unsigned int log2MutExlusive32(unsigned int a) {
 
 	int i = 0;
 	const int bitlen = 32;
 
 	/*  */
-	if(a == 0)
+	if (a == 0)
 		return 0;
 
 	/*  Iterate through each bit.   */
-	for(; i < bitlen; i++){
-		if((a >> i) & 0x1)
+	for (; i < bitlen; i++) {
+		if ((a >> i) & 0x1)
 			return (i + 1);
 	}
 
@@ -447,140 +436,140 @@ static unsigned int log2MutExlusive32(unsigned int a){
 	return 0;
 }
 
-const char* hpm_get_simd_symbol(unsigned int SIMD) {
-	static const char* gc_simd_symbols[32] = {
-			"",         /*  None    */
-			"NOSIMD",   /*  (1 << 0)    */
-			"MMX",      /*  (1 << 1)    */
-			"SSE",      /*  (1 << 2)    */
-			"SSE2",     /*  (1 << 3)    */
-			"SSE3",     /*  (1 << 4)    */
-			"SSSE3",    /*  (1 << 5)    */
-			"SSE41",    /*  (1 << 6)    */
-			"SSE42",    /*  (1 << 7)    */
-			"AVX",      /*  (1 << 8)    */
-			"AVX2",     /*  (1 << 9)    */
-			"AVX512",   /*  (1 << 10)   */
-			"NEON",     /*  (1 << 11)   */
-			"FMA",      /*  (1 << 12)   */
-			NULL,
+const char *hpm_get_simd_symbol(unsigned int SIMD) {
+	static const char *gc_simd_symbols[32] = {
+		"",		  /*  None    */
+		"NOSIMD", /*  (1 << 0)    */
+		"MMX",	  /*  (1 << 1)    */
+		"SSE",	  /*  (1 << 2)    */
+		"SSE2",	  /*  (1 << 3)    */
+		"SSE3",	  /*  (1 << 4)    */
+		"SSSE3",  /*  (1 << 5)    */
+		"SSE41",  /*  (1 << 6)    */
+		"SSE42",  /*  (1 << 7)    */
+		"AVX",	  /*  (1 << 8)    */
+		"AVX2",	  /*  (1 << 9)    */
+		"AVX512", /*  (1 << 10)   */
+		"NEON",	  /*  (1 << 11)   */
+		"FMA",	  /*  (1 << 12)   */
+		NULL,
 	};
 	return gc_simd_symbols[log2MutExlusive32(SIMD)];
 }
 
-#define PUSH_METHOD_CALL(array, pfunc, funcID, index) \
-	array[index].callback = (pfunc);                  \
+#define PUSH_METHOD_CALL(array, pfunc, funcID, index)                                                                  \
+	array[index].callback = (pfunc);                                                                                   \
 	array[index++].id = funcID;
 
 void hpm_get_method_callbacks(int *nr, HpmCallBackEntry *pEntries) {
 	int inc = 0;
 	if (nr != NULL)
 		*nr = HPM_util_lookatfv;
-	if(pEntries == NULL)
+	if (pEntries == NULL)
 		return;
 	/*	Matrices.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_copyfv, 				HPM_mat4x4_copyfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat4x4fv, 	HPM_mat4x4_multiply_mat4x4fv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_scalarf, 	HPM_mat4x4_multiply_scalarf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat1x4fv, 	HPM_mat4x4_multiply_mat1x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_copyfv, HPM_mat4x4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat4x4fv, HPM_mat4x4_multiply_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_scalarf, HPM_mat4x4_multiply_scalarf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multiply_mat1x4fv, HPM_mat4x4_multiply_mat1x4fv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_division_mat4x4f, 	HPM_mat4x4_division_mat4x4f, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_additition_mat4x4fv, 	HPM_mat4x4_additition_mat4x4fv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_subraction_mat4x4fv, 	HPM_mat4x4_subraction_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_division_mat4x4f, HPM_mat4x4_division_mat4x4f, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_additition_mat4x4fv, HPM_mat4x4_additition_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_subraction_mat4x4fv, HPM_mat4x4_subraction_mat4x4fv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_identityfv, 		HPM_mat4x4_identityfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_transposefv, 		HPM_mat4x4_transposefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_determinantfv, 	HPM_mat4x4_determinantfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_inversefv, 		HPM_mat4x4_inversefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_identityfv, HPM_mat4x4_identityfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_transposefv, HPM_mat4x4_transposefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_determinantfv, HPM_mat4x4_determinantfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_inversefv, HPM_mat4x4_inversefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_decomposefv, 		HPM_mat4x4_decomposefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationf, 	HPM_mat4x4_translationf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationfv, 	HPM_mat4x4_translationfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalef, 			HPM_mat4x4_scalef, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalefv, 			HPM_mat4x4_scalefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_decomposefv, HPM_mat4x4_decomposefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationf, HPM_mat4x4_translationf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_translationfv, HPM_mat4x4_translationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalef, HPM_mat4x4_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_scalefv, HPM_mat4x4_scalefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationfv, 	HPM_mat4x4_rotationfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationXf, 	HPM_mat4x4_rotationXf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationYf, 	HPM_mat4x4_rotationYf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationZf, 	HPM_mat4x4_rotationZf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationQfv, 	HPM_mat4x4_rotationQfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationfv, HPM_mat4x4_rotationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationXf, HPM_mat4x4_rotationXf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationYf, HPM_mat4x4_rotationYf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationZf, HPM_mat4x4_rotationZf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_rotationQfv, HPM_mat4x4_rotationQfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_translationfv, 	HPM_mat4x4_multi_translationfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_scalefv, 		HPM_mat4x4_multi_scalefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_translationfv, HPM_mat4x4_multi_translationfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_scalefv, HPM_mat4x4_multi_scalefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationxf, 	HPM_mat4x4_multi_rotationxf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationyf, 	HPM_mat4x4_multi_rotationyf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationzf, 	HPM_mat4x4_multi_rotationzf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationQfv, 	HPM_mat4x4_multi_rotationQfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationxf, HPM_mat4x4_multi_rotationxf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationyf, HPM_mat4x4_multi_rotationyf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationzf, HPM_mat4x4_multi_rotationzf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_multi_rotationQfv, HPM_mat4x4_multi_rotationQfv, inc)
 
 	/*	Projection matrix functions.    */
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_projfv, 	HPM_mat4x4_projfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_orthfv, 	HPM_mat4x4_orthfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_unprojf, 	HPM_mat4x4_unprojf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_projfv, HPM_mat4x4_projfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_orthfv, HPM_mat4x4_orthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4x4_unprojf, HPM_mat4x4_unprojf, inc)
 
 	/*	vector4	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 	HPM_vec4_copyfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_setf, 		HPM_vec4_setf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_setsf, 		HPM_vec4_setsf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalefv, 	HPM_vec4_addition_scalefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalef, 	HPM_vec4_addition_scalef, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_subtractionf, 		HPM_vec4_subtractionf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_multifv, 			HPM_vec4_multifv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_multi_scalef, 		HPM_vec4_multi_scalef, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 			HPM_vec4_dotfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 		HPM_vec4_lengthfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 	HPM_vec4_lengthsqurefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 	HPM_vec4_normalizefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_negatefv, 		HPM_vec4_negatefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, HPM_vec4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_setf, HPM_vec4_setf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_setsf, HPM_vec4_setsf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalefv, HPM_vec4_addition_scalefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_addition_scalef, HPM_vec4_addition_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_subtractionf, HPM_vec4_subtractionf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_multifv, HPM_vec4_multifv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_multi_scalef, HPM_vec4_multi_scalef, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, HPM_vec4_dotfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, HPM_vec4_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, HPM_vec4_lengthsqurefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, HPM_vec4_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_negatefv, HPM_vec4_negatefv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_max_compfv, 	HPM_vec4_max_compfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_min_compfv, 	HPM_vec4_min_compfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_max_compfv, HPM_vec4_max_compfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_min_compfv, HPM_vec4_min_compfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lerpfv, 		HPM_vec4_lerpfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_slerpfv, 		HPM_vec4_slerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lerpfv, HPM_vec4_lerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_slerpfv, HPM_vec4_slerpfv, inc)
 
 	/*	Vector3.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_crossproductfv, 	HPM_vec3_crossproductfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_tripleProductfv, 	HPM_vec3_tripleProductfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_dotfv, 				HPM_vec3_dotfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthfv, 			HPM_vec3_lengthfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthsquarefv, 	HPM_vec3_lengthsquarefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_normalizefv, 		HPM_vec3_normalizefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_reflectfv, 			HPM_vec3_reflectfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_refractfv, 			HPM_vec3_refractfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_refract2fv, 		HPM_vec3_refract2fv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec3_projfv, 			HPM_vec3_projfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_crossproductfv, HPM_vec3_crossproductfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_tripleProductfv, HPM_vec3_tripleProductfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_dotfv, HPM_vec3_dotfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthfv, HPM_vec3_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_lengthsquarefv, HPM_vec3_lengthsquarefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_normalizefv, HPM_vec3_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_reflectfv, HPM_vec3_reflectfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_refractfv, HPM_vec3_refractfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_refract2fv, HPM_vec3_refract2fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec3_projfv, HPM_vec3_projfv, inc)
 
 	/*	Quaternion	*/
-	PUSH_METHOD_CALL(pEntries, hpm_quat_setf, 			HPM_quat_setf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_quatfv, 	HPM_quat_multi_quatfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_vec3fv, 	HPM_quat_multi_vec3fv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_directionfv, 	HPM_quat_directionfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_get_vectorfv, 	HPM_quat_get_vectorfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_conjugatefv, 	HPM_quat_conjugatefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_from_mat4x4fv, 	HPM_quat_from_mat4x4fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_setf, HPM_quat_setf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_quatfv, HPM_quat_multi_quatfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_multi_vec3fv, HPM_quat_multi_vec3fv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_directionfv, HPM_quat_directionfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_get_vectorfv, HPM_quat_get_vectorfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_conjugatefv, HPM_quat_conjugatefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_from_mat4x4fv, HPM_quat_from_mat4x4fv, inc)
 
 	/*	Because some function for quaternion is computed the same
 		as some vec4 function, thus we're using their pointer instead. */
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, 		HPM_vec4_copyfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, 		HPM_vec4_lengthfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, 	HPM_vec4_lengthsqurefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, 	HPM_vec4_normalizefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, 			HPM_vec4_dotfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_copyfv, HPM_vec4_copyfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthfv, HPM_vec4_lengthfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_lengthsqurefv, HPM_vec4_lengthsqurefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_normalizefv, HPM_vec4_normalizefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_dotfv, HPM_vec4_dotfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_quat_inversefv, 		HPM_quat_inversefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_axis_anglefv, 	HPM_quat_axis_anglefv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_axisf, 			HPM_quat_axisf, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_lookatfv, 		HPM_quat_lookatfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_powfv, 			HPM_quat_powfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_identityfv, 	HPM_quat_identityfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_lerpfv, 		HPM_quat_lerpfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_slerpfv, 		HPM_quat_slerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_inversefv, HPM_quat_inversefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_axis_anglefv, HPM_quat_axis_anglefv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_axisf, HPM_quat_axisf, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_lookatfv, HPM_quat_lookatfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_powfv, HPM_quat_powfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_identityfv, HPM_quat_identityfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_lerpfv, HPM_quat_lerpfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_slerpfv, HPM_quat_slerpfv, inc)
 
-	PUSH_METHOD_CALL(pEntries, hpm_quat_eularfv, 	HPM_quat_eularfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_pitchfv, 	HPM_quat_pitchfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_yawfv, 		HPM_quat_yawfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_quat_rollfv, 	HPM_quat_rollfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_eularfv, HPM_quat_eularfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_pitchfv, HPM_quat_pitchfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_yawfv, HPM_quat_yawfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_quat_rollfv, HPM_quat_rollfv, inc)
 
 	/*	Math	*/
 	PUSH_METHOD_CALL(pEntries, hpm_vec4_maxfv, HPM_vec4_maxfv, inc)
@@ -598,77 +587,69 @@ void hpm_get_method_callbacks(int *nr, HpmCallBackEntry *pEntries) {
 	PUSH_METHOD_CALL(pEntries, hpm_vec8_randomfv, HPM_vec8_randomfv, inc)
 
 	/*	Logic equality conditions.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_vec_eqfv, 		HPM_vec_eqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec_neqfv, 		HPM_vec_neqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_eqfv, 	HPM_vec4_com_eqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_eqfv, 		HPM_vec4_eqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_neqfv, 	HPM_vec4_com_neqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_vec4_neqfv, 		HPM_vec4_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec_eqfv, HPM_vec_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec_neqfv, HPM_vec_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_eqfv, HPM_vec4_com_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_eqfv, HPM_vec4_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_neqfv, HPM_vec4_com_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_vec4_neqfv, HPM_vec4_neqfv, inc)
 
 	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_gfv, HPM_vec4_com_gfv, inc)
 	PUSH_METHOD_CALL(pEntries, hpm_vec4_com_lfv, HPM_vec4_com_lfv, inc)
 
 	/*	Utility.	*/
-	PUSH_METHOD_CALL(pEntries, hpm_mat4_eqfv, 	HPM_mat4_eqfv, inc)
-	PUSH_METHOD_CALL(pEntries, hpm_mat4_neqfv, 	HPM_mat4_neqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4_eqfv, HPM_mat4_eqfv, inc)
+	PUSH_METHOD_CALL(pEntries, hpm_mat4_neqfv, HPM_mat4_neqfv, inc)
 
 	/*	Utilities.	*/
 	PUSH_METHOD_CALL(pEntries, hpm_util_lookatfv, HPM_util_lookatfv, inc)
 }
 
-int hpm_vec4_print(const hpmvec4f* HPM_RESTRICT vec) {
-	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
-	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+int hpm_vec4_print(const hpmvec4f *HPM_RESTRICT vec) {
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec), hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec),
+				  hpm_vec4_getwf(*vec));
 }
 
-int hpm_vec4_sprint(char* text, const hpmvec4f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
-	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+int hpm_vec4_sprint(char *text, const hpmvec4f *HPM_RESTRICT vec) {
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec), hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec),
+				   hpm_vec4_getwf(*vec));
 }
 
-int hpm_vec3_print(const hpmvec3f* vec) {
-	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
-	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+int hpm_vec3_print(const hpmvec3f *vec) {
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec), hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec),
+				  hpm_vec4_getwf(*vec));
 }
 
-int hpm_vec3_sprint(char* HPM_RESTRICT text, const hpmvec3f* HPM_RESTRICT vec){
-	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec),
-	        hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec), hpm_vec4_getwf(*vec));
+int hpm_vec3_sprint(char *HPM_RESTRICT text, const hpmvec3f *HPM_RESTRICT vec) {
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_vec4_getxf(*vec), hpm_vec4_getyf(*vec), hpm_vec4_getzf(*vec),
+				   hpm_vec4_getwf(*vec));
 }
 
-int hpm_quat_print(const hpmquatf* quat) {
-	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
-	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
-	        hpm_quat_getwf(*quat));
+int hpm_quat_print(const hpmquatf *quat) {
+	return printf("{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat), hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
+				  hpm_quat_getwf(*quat));
 }
 
-int hpm_quat_sprint(char* HPM_RESTRICT text, const hpmquatf* HPM_RESTRICT quat){
-	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat),
-	        hpm_quat_getyf(*quat), hpm_quat_getzf(*quat),
-	        hpm_quat_getwf(*quat));
+int hpm_quat_sprint(char *HPM_RESTRICT text, const hpmquatf *HPM_RESTRICT quat) {
+	return sprintf(text, "{ %.5f, %.5f, %.5f, %.5f }", hpm_quat_getxf(*quat), hpm_quat_getyf(*quat),
+				   hpm_quat_getzf(*quat), hpm_quat_getwf(*quat));
 }
 
-int hpm_mat4x4_print(const hpmvec4x4f_t mat){
-	return printf(
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n",
-		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
-		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
-		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
-		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+int hpm_mat4x4_print(const hpmvec4x4f_t mat) {
+	return printf("{ %.5f, %.5f, %.5f, %.5f }\n"
+				  "{ %.5f, %.5f, %.5f, %.5f }\n"
+				  "{ %.5f, %.5f, %.5f, %.5f }\n"
+				  "{ %.5f, %.5f, %.5f, %.5f }\n",
+				  mat[0][0], mat[1][0], mat[2][0], mat[3][0], mat[0][1], mat[1][1], mat[2][1], mat[3][1], mat[0][2],
+				  mat[1][2], mat[2][2], mat[3][2], mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
 }
 
-int hpm_mat4x4_sprint(char* HPM_RESTRICT text, const hpmvec4x4f_t mat){
-    return sprintf(text,
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n"
-		"{ %.5f, %.5f, %.5f, %.5f }\n",
-		mat[0][0], mat[1][0], mat[2][0], mat[3][0],
-		mat[0][1], mat[1][1], mat[2][1], mat[3][1],
-		mat[0][2], mat[1][2], mat[2][2], mat[3][2],
-		mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
+int hpm_mat4x4_sprint(char *HPM_RESTRICT text, const hpmvec4x4f_t mat) {
+	return sprintf(text,
+				   "{ %.5f, %.5f, %.5f, %.5f }\n"
+				   "{ %.5f, %.5f, %.5f, %.5f }\n"
+				   "{ %.5f, %.5f, %.5f, %.5f }\n"
+				   "{ %.5f, %.5f, %.5f, %.5f }\n",
+				   mat[0][0], mat[1][0], mat[2][0], mat[3][0], mat[0][1], mat[1][1], mat[2][1], mat[3][1], mat[0][2],
+				   mat[1][2], mat[2][2], mat[3][2], mat[0][3], mat[1][3], mat[2][3], mat[3][3]);
 }
-

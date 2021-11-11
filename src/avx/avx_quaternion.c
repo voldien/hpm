@@ -7,8 +7,7 @@
 #		include<x86intrin.h>
 #   endif
 
-
-HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg, hpmquatf* out){
+HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf *larg, const hpmquatf *rarg, hpmquatf *out) {
 
 	const hpmquatf lwwww = _mm_shuffle_ps(*larg, *larg, _MM_SHUFFLE(0,0,0,0) );     /*	{ w, x, y, z } => { w, w, w, w }	*/
 	const hpmquatf rwxyz = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(3,2,1,0) );     /*	{ w, x, y, z } => { w, x, y, z }	*/
@@ -20,9 +19,9 @@ HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg,
 	const hpmquatf rzyxw = _mm_shuffle_ps(*rarg, *rarg, _MM_SHUFFLE(0,1,2,3) );     /*	{ w, x, y, z } => { z, y, x, w }	*/
 
 	/*  Coefficients.    */
-	const hpmquatf row1 = {-1.0f,  1.0f, -1.0f,  1.0f};
-	const hpmquatf row2 = {-1.0f,  1.0f,  1.0f, -1.0f};
-	const hpmquatf row3 = {-1.0f, -1.0f,  1.0f,  1.0f};
+	const hpmquatf row1 = {-1.0f, 1.0f, -1.0f, 1.0f};
+	const hpmquatf row2 = {-1.0f, 1.0f, 1.0f, -1.0f};
+	const hpmquatf row3 = {-1.0f, -1.0f, 1.0f, 1.0f};
 
 	/*  Column 1.   */
 	const hpmquatf qwwww_rwxyz = _mm_mul_ps(lwwww, rwxyz);
@@ -38,20 +37,19 @@ HPM_IMP(void, hpm_quat_multi_quatfv, const hpmquatf* larg, const hpmquatf* rarg,
 
 	/*  Sum the products.   */
 	*out = qwwww_rwxyz + qxxxx_rxwzy + qyyyy_rxyzw + qzzzz_rzyxw;
-
 }
 
-HPM_IMP( void, hpm_quat_multi_vec3fv, const hpmquatf* quat, const hpmquatf* rf_vec, hpmvec3f* vec){
+HPM_IMP(void, hpm_quat_multi_vec3fv, const hpmquatf *quat, const hpmquatf *rf_vec, hpmvec3f *vec) {
 	hpmvec3f t;
 	hpmvec4f q_xyz;
 	hpmquatf tcross;
 
 	/*  Compute t.  */
 	HPM_CALLLOCALFUNC(hpm_vec4_setf)(&q_xyz, hpm_quat_getxf(*quat), hpm_quat_getyf(*quat), hpm_quat_getzf(*quat), 0.0f);
-	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)( &q_xyz, rf_vec,  &t);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&q_xyz, rf_vec, &t);
 	t *= 2.0f;
 
 	/*  Compute rotated vector. */
-	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)( &q_xyz, &t,  &tcross);
+	HPM_CALLLOCALFUNC(hpm_vec3_crossproductfv)(&q_xyz, &t, &tcross);
 	*vec = *rf_vec + hpm_quat_getwf(*quat) * t + tcross;
 }

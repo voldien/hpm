@@ -18,8 +18,8 @@
 */
 #ifndef _HPM_UTIL_H_
 #define _HPM_UTIL_H_ 1
-#include"hpmmatrix.h"
-#include"hpmquaternion.h"
+#include "hpmmatrix.h"
+#include "hpmquaternion.h"
 
 #ifdef __cplusplus /*	C++ Environment	*/
 extern "C" {
@@ -36,9 +36,8 @@ extern "C" {
  *
  * @param mat look at matrix.
  */
-HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f* HPM_RESTRICT eye,
-        const hpmvec4f* HPM_RESTRICT position, const hpmvec4f* HPM_RESTRICT up,
-        hpmvec4x4f_t mat);
+HPM_EXPORT(void, HPMAPIENTRY, hpm_util_lookatfv, const hpmvec4f *HPM_RESTRICT eye,
+		   const hpmvec4f *HPM_RESTRICT position, const hpmvec4f *HPM_RESTRICT up, hpmvec4x4f_t mat);
 
 #ifdef __cplusplus /*	C++ Environment	*/
 }

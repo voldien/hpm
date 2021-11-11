@@ -1,24 +1,23 @@
-#include"hpmmatrix.h"
+#include "hpmmatrix.h"
 
-
-HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source){
+HPM_IMP(void, hpm_mat4x4_copyfv, hpmvec4x4f_t destination, const hpmvec4x4f_t source) {
 	destination[0] = source[0];
 	destination[1] = source[1];
 	destination[2] = source[2];
 	destination[3] = source[3];
 }
 
-HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf){
+HPM_IMP(void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmvec4x4f_t rarg, hpmvec4x4f_t outf) {
 
-	const hpmvecf a00 = larg[0][0], a01 =  larg[0][1], a02 = larg[0][2], a03 = larg[0][3],
-	        a10 =    larg[1][0], a11 =  larg[1][1], a12 = larg[1][2], a13 = larg[1][3],
-	        a20 =    larg[2][0], a21 =  larg[2][1], a22 = larg[2][2], a23 = larg[2][3],
-	        a30 =    larg[3][0], a31 =  larg[3][1], a32 = larg[3][2], a33 = larg[3][3],
+	const hpmvecf a00 = larg[0][0], a01 = larg[0][1], a02 = larg[0][2], a03 = larg[0][3], a10 = larg[1][0],
+				  a11 = larg[1][1], a12 = larg[1][2], a13 = larg[1][3], a20 = larg[2][0], a21 = larg[2][1],
+				  a22 = larg[2][2], a23 = larg[2][3], a30 = larg[3][0], a31 = larg[3][1], a32 = larg[3][2],
+				  a33 = larg[3][3],
 
-	        b00 = rarg[0][0], b01 = rarg[0][1], b02 = rarg[0][2], b03 = rarg[0][3],
-	        b10 = rarg[1][0], b11 = rarg[1][1], b12 = rarg[1][2], b13 = rarg[1][3],
-	        b20 = rarg[2][0], b21 = rarg[2][1], b22 = rarg[2][2], b23 = rarg[2][3],
-	        b30 = rarg[3][0], b31 = rarg[3][1], b32 = rarg[3][2], b33 = rarg[3][3];
+				  b00 = rarg[0][0], b01 = rarg[0][1], b02 = rarg[0][2], b03 = rarg[0][3], b10 = rarg[1][0],
+				  b11 = rarg[1][1], b12 = rarg[1][2], b13 = rarg[1][3], b20 = rarg[2][0], b21 = rarg[2][1],
+				  b22 = rarg[2][2], b23 = rarg[2][3], b30 = rarg[3][0], b31 = rarg[3][1], b32 = rarg[3][2],
+				  b33 = rarg[3][3];
 
 	outf[0][0] = b00 * a00 + b01 * a10 + b02 * a20 + b03 * a30;
 	outf[0][1] = b00 * a01 + b01 * a11 + b02 * a21 + b03 * a31;
@@ -41,110 +40,112 @@ HPM_IMP( void, hpm_mat4x4_multiply_mat4x4fv, const hpmvec4x4f_t larg, const hpmv
 	outf[3][3] = b30 * a03 + b31 * a13 + b32 * a23 + b33 * a33;
 }
 
-HPM_IMP( void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f* rarg, hpmvec4f* output){
+HPM_IMP(void, hpm_mat4x4_multiply_mat1x4fv, const hpmvec4x4f_t larg, const hpmvec4f *rarg, hpmvec4f *output) {
 
 	/*	X	*/
-	(*output)[0] =	larg[0][0] * (*rarg)[0] +
-					larg[1][0] * (*rarg)[1] +
-					larg[2][0] * (*rarg)[2] +
-					larg[3][0] * (*rarg)[3];
+	(*output)[0] =
+		larg[0][0] * (*rarg)[0] + larg[1][0] * (*rarg)[1] + larg[2][0] * (*rarg)[2] + larg[3][0] * (*rarg)[3];
 	/*	Y	*/
-	(*output)[1] =	larg[0][1] * (*rarg)[0] +
-					larg[1][1] * (*rarg)[1] +
-					larg[2][1] * (*rarg)[2] +
-					larg[3][1] * (*rarg)[3];
+	(*output)[1] =
+		larg[0][1] * (*rarg)[0] + larg[1][1] * (*rarg)[1] + larg[2][1] * (*rarg)[2] + larg[3][1] * (*rarg)[3];
 	/*	Z	*/
-	(*output)[2] =	larg[0][2] * (*rarg)[0] +
-					larg[1][2] * (*rarg)[1] +
-					larg[2][2] * (*rarg)[2] +
-					larg[3][2] * (*rarg)[3];
+	(*output)[2] =
+		larg[0][2] * (*rarg)[0] + larg[1][2] * (*rarg)[1] + larg[2][2] * (*rarg)[2] + larg[3][2] * (*rarg)[3];
 	/*	W	*/
-	(*output)[3] =	larg[0][3] * (*rarg)[0] +
-					larg[1][3] * (*rarg)[1] +
-					larg[2][3] * (*rarg)[2] +
-					larg[3][3] * (*rarg)[3];
+	(*output)[3] =
+		larg[0][3] * (*rarg)[0] + larg[1][3] * (*rarg)[1] + larg[2][3] * (*rarg)[2] + larg[3][3] * (*rarg)[3];
 }
 
-HPM_IMP( hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4){
+HPM_IMP(hpmvecf, hpm_mat4x4_determinantfv, const hpmvec4x4f_t f_mat4) {
 	const hpmmat4f *mat = (const hpmmat4f *)&f_mat4[0];
 	//[0];
-	return (mat->m41 * mat->m32 * mat->m23 * mat->m14 - mat->m31 * mat->m42 * mat->m23 * mat->m14 - mat->m41 * mat->m22 * mat->m33 * mat->m14 + mat->m21 * mat->m42 * mat->m33 * mat->m14 +
-	        mat->m31 * mat->m22 * mat->m43 * mat->m14 - mat->m21 * mat->m32 * mat->m43 * mat->m14 - mat->m41 * mat->m32 * mat->m13 * mat->m24 + mat->m31 * mat->m42 * mat->m13 * mat->m24 +
-	        mat->m41 * mat->m12 * mat->m33 * mat->m24 - mat->m11 * mat->m42 * mat->m33 * mat->m24 - mat->m31 * mat->m12 * mat->m43 * mat->m24 + mat->m11 * mat->m32 * mat->m43 * mat->m24 +
-	        mat->m41 * mat->m22 * mat->m13 * mat->m34 - mat->m21 * mat->m42 * mat->m13 * mat->m34 - mat->m41 * mat->m12 * mat->m23 * mat->m34 + mat->m11 * mat->m42 * mat->m23 * mat->m34 +
-	        mat->m21 * mat->m12 * mat->m43 * mat->m34 - mat->m11 * mat->m22 * mat->m43 * mat->m34 - mat->m31 * mat->m22 * mat->m13 * mat->m44 + mat->m21 * mat->m32 * mat->m13 * mat->m44 +
-	        mat->m31 * mat->m12 * mat->m23 * mat->m44 - mat->m11 * mat->m32 * mat->m23 * mat->m44 - mat->m21 * mat->m12 * mat->m33 * mat->m44 + mat->m11 * mat->m22 * mat->m33 * mat->m44);
+	return (mat->m41 * mat->m32 * mat->m23 * mat->m14 - mat->m31 * mat->m42 * mat->m23 * mat->m14 -
+			mat->m41 * mat->m22 * mat->m33 * mat->m14 + mat->m21 * mat->m42 * mat->m33 * mat->m14 +
+			mat->m31 * mat->m22 * mat->m43 * mat->m14 - mat->m21 * mat->m32 * mat->m43 * mat->m14 -
+			mat->m41 * mat->m32 * mat->m13 * mat->m24 + mat->m31 * mat->m42 * mat->m13 * mat->m24 +
+			mat->m41 * mat->m12 * mat->m33 * mat->m24 - mat->m11 * mat->m42 * mat->m33 * mat->m24 -
+			mat->m31 * mat->m12 * mat->m43 * mat->m24 + mat->m11 * mat->m32 * mat->m43 * mat->m24 +
+			mat->m41 * mat->m22 * mat->m13 * mat->m34 - mat->m21 * mat->m42 * mat->m13 * mat->m34 -
+			mat->m41 * mat->m12 * mat->m23 * mat->m34 + mat->m11 * mat->m42 * mat->m23 * mat->m34 +
+			mat->m21 * mat->m12 * mat->m43 * mat->m34 - mat->m11 * mat->m22 * mat->m43 * mat->m34 -
+			mat->m31 * mat->m22 * mat->m13 * mat->m44 + mat->m21 * mat->m32 * mat->m13 * mat->m44 +
+			mat->m31 * mat->m12 * mat->m23 * mat->m44 - mat->m11 * mat->m32 * mat->m23 * mat->m44 -
+			mat->m21 * mat->m12 * mat->m33 * mat->m44 + mat->m11 * mat->m22 * mat->m33 * mat->m44);
 
+	const hpmvecf a1 = mat->m11 * (mat->m22 * (mat->m33 * mat->m44 - mat->m43 * mat->m34) -
+								   mat->m23 * (mat->m32 * mat->m44 + mat->m42 * mat->m34) +
+								   mat->m24 * (mat->m32 * mat->m43 - mat->m42 * mat->m33));
 
+	const hpmvecf a2 = mat->m12 * (mat->m21 * (mat->m33 * mat->m44 - mat->m43 * mat->m34) -
+								   mat->m23 * (mat->m31 * mat->m44 + mat->m41 * mat->m34) +
+								   mat->m24 * (mat->m31 * mat->m43 - mat->m41 * mat->m33));
 
-	const hpmvecf a1 =  mat->m11 *(mat->m22 * (mat->m33 * mat->m44 - mat->m43*mat->m34) - mat->m23 * (mat->m32 * mat->m44 + mat->m42*mat->m34) + mat->m24 * (mat->m32 * mat->m43 - mat->m42*mat->m33));
+	const hpmvecf a3 = mat->m13 * (mat->m21 * (mat->m32 * mat->m44 - mat->m42 * mat->m34) -
+								   mat->m22 * (mat->m31 * mat->m44 + mat->m41 * mat->m34) +
+								   mat->m24 * (mat->m31 * mat->m42 - mat->m41 * mat->m32));
 
-	const hpmvecf a2 =  mat->m12 *(mat->m21 * (mat->m33 * mat->m44 - mat->m43*mat->m34) - mat->m23 * (mat->m31 * mat->m44 + mat->m41*mat->m34) + mat->m24 * (mat->m31 * mat->m43 - mat->m41*mat->m33));
-
-	const hpmvecf a3 =  mat->m13 *(mat->m21 * (mat->m32 * mat->m44 - mat->m42*mat->m34) - mat->m22 * (mat->m31 * mat->m44 + mat->m41*mat->m34) + mat->m24 * (mat->m31 * mat->m42 - mat->m41*mat->m32));
-
-	const hpmvecf a4 =  mat->m14 *(mat->m21 * (mat->m32 * mat->m43 - mat->m42*mat->m33) - mat->m22 * (mat->m31 * mat->m43 + mat->m41*mat->m33) + mat->m23 * (mat->m31 * mat->m42 - mat->m41*mat->m32));
+	const hpmvecf a4 = mat->m14 * (mat->m21 * (mat->m32 * mat->m43 - mat->m42 * mat->m33) -
+								   mat->m22 * (mat->m31 * mat->m43 + mat->m41 * mat->m33) +
+								   mat->m23 * (mat->m31 * mat->m42 - mat->m41 * mat->m32));
 
 	const hpmvecf det = a1 - a2 + a3 - a4;
 	return det;
-
-
 }
 
 /*	Cramer's rule	*/ /*	TODO Fix	*/
 HPM_IMP(hpmvecf, hpm_mat4x4_inversefv, const hpmvec4x4f_t f_mat4, hpmvec4x4f_t res) {
 
 	const hpmvecf detm = HPM_CALLLOCALFUNC(hpm_mat4x4_determinantfv)(f_mat4);
-	if(detm > 0.0f || detm < 0.0f){
+	if (detm > 0.0f || detm < 0.0f) {
 		hpmvecf invdet = 1.0f / detm;
 		res[0][0] = invdet * (f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) +
-		                      f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) +
-		                      f_mat4[1][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
+							  f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) +
+							  f_mat4[1][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][1] = -invdet * (f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) +
-		                       f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) +
-		                       f_mat4[0][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
+							   f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][3]) +
+							   f_mat4[0][3] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]));
 		res[0][2] = invdet * (f_mat4[0][1] * (f_mat4[1][2] * f_mat4[3][3] - f_mat4[1][3] * f_mat4[3][2]) +
-		                      f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][3]) +
-		                      f_mat4[0][3] * (f_mat4[1][1] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][1]));
+							  f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][3]) +
+							  f_mat4[0][3] * (f_mat4[1][1] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][1]));
 		res[0][3] = -invdet * (f_mat4[0][1] * (f_mat4[1][2] * f_mat4[2][3] - f_mat4[1][3] * f_mat4[2][2]) +
-		                       f_mat4[0][2] * (f_mat4[1][3] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][3]) +
-		                       f_mat4[0][3] * (f_mat4[1][1] * f_mat4[2][2] - f_mat4[1][2] * f_mat4[2][1]));
+							   f_mat4[0][2] * (f_mat4[1][3] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][3]) +
+							   f_mat4[0][3] * (f_mat4[1][1] * f_mat4[2][2] - f_mat4[1][2] * f_mat4[2][1]));
 		res[1][0] = -invdet * (f_mat4[1][0] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) +
-		                       f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
-		                       f_mat4[1][3] * (f_mat4[2][0] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][0]));
+							   f_mat4[1][2] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
+							   f_mat4[1][3] * (f_mat4[2][0] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][0]));
 		res[1][1] = invdet * (f_mat4[0][0] * (f_mat4[2][2] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][2]) +
-		                      f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
-		                      f_mat4[0][3] * (f_mat4[2][0] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][0]));
+							  f_mat4[0][2] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
+							  f_mat4[0][3] * (f_mat4[2][0] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][0]));
 		res[1][2] = -invdet * (f_mat4[0][0] * (f_mat4[1][2] * f_mat4[3][3] - f_mat4[1][3] * f_mat4[3][2]) +
-		                       f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][3]) +
-		                       f_mat4[0][3] * (f_mat4[1][0] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][0]));
+							   f_mat4[0][2] * (f_mat4[1][3] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][3]) +
+							   f_mat4[0][3] * (f_mat4[1][0] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][0]));
 		res[1][3] = invdet * (f_mat4[0][0] * (f_mat4[1][2] * f_mat4[2][3] - f_mat4[1][3] * f_mat4[2][2]) +
-		                      f_mat4[0][2] * (f_mat4[1][3] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][3]) +
-		                      f_mat4[0][3] * (f_mat4[1][0] * f_mat4[2][2] - f_mat4[1][2] * f_mat4[2][0]));
+							  f_mat4[0][2] * (f_mat4[1][3] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][3]) +
+							  f_mat4[0][3] * (f_mat4[1][0] * f_mat4[2][2] - f_mat4[1][2] * f_mat4[2][0]));
 		res[2][0] = invdet * (f_mat4[1][0] * (f_mat4[2][1] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][1]) +
-		                      f_mat4[1][1] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
-		                      f_mat4[1][3] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
+							  f_mat4[1][1] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
+							  f_mat4[1][3] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
 		res[2][1] = -invdet * (f_mat4[0][0] * (f_mat4[2][1] * f_mat4[3][3] - f_mat4[2][3] * f_mat4[3][1]) +
-		                       f_mat4[0][1] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
-		                       f_mat4[0][3] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
+							   f_mat4[0][1] * (f_mat4[2][3] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][3]) +
+							   f_mat4[0][3] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
 		res[2][2] = invdet * (f_mat4[0][0] * (f_mat4[1][1] * f_mat4[3][3] - f_mat4[1][3] * f_mat4[3][1]) +
-		                      f_mat4[0][1] * (f_mat4[1][3] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][3]) +
-		                      f_mat4[0][3] * (f_mat4[1][0] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][0]));
+							  f_mat4[0][1] * (f_mat4[1][3] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][3]) +
+							  f_mat4[0][3] * (f_mat4[1][0] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][0]));
 		res[2][3] = -invdet * (f_mat4[0][0] * (f_mat4[1][1] * f_mat4[2][3] - f_mat4[1][3] * f_mat4[2][1]) +
-		                       f_mat4[0][1] * (f_mat4[1][3] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][3]) +
-		                       f_mat4[0][3] * (f_mat4[1][0] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][0]));
+							   f_mat4[0][1] * (f_mat4[1][3] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][3]) +
+							   f_mat4[0][3] * (f_mat4[1][0] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][0]));
 		res[3][0] = -invdet * (f_mat4[1][0] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]) +
-		                       f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][2]) +
-		                       f_mat4[1][2] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
+							   f_mat4[1][1] * (f_mat4[2][2] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][2]) +
+							   f_mat4[1][2] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
 		res[3][1] = invdet * (f_mat4[0][0] * (f_mat4[2][1] * f_mat4[3][2] - f_mat4[2][2] * f_mat4[3][1]) +
-		                      f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][2]) +
-		                      f_mat4[0][2] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
+							  f_mat4[0][1] * (f_mat4[2][2] * f_mat4[3][0] - f_mat4[2][0] * f_mat4[3][2]) +
+							  f_mat4[0][2] * (f_mat4[2][0] * f_mat4[3][1] - f_mat4[2][1] * f_mat4[3][0]));
 		res[3][2] = -invdet * (f_mat4[0][0] * (f_mat4[1][1] * f_mat4[3][2] - f_mat4[1][2] * f_mat4[3][1]) +
-		                       f_mat4[0][1] * (f_mat4[1][2] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][2]) +
-		                       f_mat4[0][2] * (f_mat4[1][0] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][0]));
+							   f_mat4[0][1] * (f_mat4[1][2] * f_mat4[3][0] - f_mat4[1][0] * f_mat4[3][2]) +
+							   f_mat4[0][2] * (f_mat4[1][0] * f_mat4[3][1] - f_mat4[1][1] * f_mat4[3][0]));
 		res[3][3] = invdet * (f_mat4[0][0] * (f_mat4[1][1] * f_mat4[2][2] - f_mat4[1][2] * f_mat4[2][1]) +
-		                      f_mat4[0][1] * (f_mat4[1][2] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][2]) +
-		                      f_mat4[0][2] * (f_mat4[1][0] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][0]));
+							  f_mat4[0][1] * (f_mat4[1][2] * f_mat4[2][0] - f_mat4[1][0] * f_mat4[2][2]) +
+							  f_mat4[0][2] * (f_mat4[1][0] * f_mat4[2][1] - f_mat4[1][1] * f_mat4[2][0]));
 	}
 	return detm;
 }
