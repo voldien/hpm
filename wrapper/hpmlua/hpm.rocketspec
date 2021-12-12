@@ -1,0 +1,9 @@
+package = "Lua-HPM"
+
+source = {
+   url = "https://github.com/voldien/hpm",
+   md5 = "",
+}
+source = {
+   url = "git://github.com/voldien/hpm"
+}

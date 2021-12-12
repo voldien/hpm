@@ -1,0 +1,79 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 3.4.2)
+PROJECT(javahpm)
+
+# jhpm version setup.
+SET(VERSION_MAJOR 0)
+SET(VERSION_MINOR 1)
+SET(VERSION_REVISION 0)
+SET(VERSION_STATE b)
+SET(VERSION ${VERSION_MAJOR}.${VERSION_MINOR}${VERSION_STATE}${VERSION_REVISION} )
+
+# Set version preprocessor macros.
+MESSAGE(STATUS "Version ${VERSION}")
+ADD_DEFINITIONS(-DHPM_MAJOR_VERSION=${HPM_VERSION_MAJOR})
+ADD_DEFINITIONS(-DHPM_MINOR_VERSION=${HPM_VERSION_MINOR})
+ADD_DEFINITIONS(-DHPM_REVISION_VERSION=${HPM_VERSION_REVISION})
+ADD_DEFINITIONS(-DHPM_STATE_VERSION=${HPM_VERSION_STATE})
+ADD_DEFINITIONS(-DHPM_STR_VERSION="${HPM_VERSION}")
+
+# Check if package exist in order to continue.
+FIND_PACKAGE(JNI REQUIRED)
+FIND_PACKAGE(Java 11 REQUIRED)
+# Needs UseJava module in order to work.
+INCLUDE(UseJava)
+
+# Set java compiler options.
+SET(CMAKE_JAVA_COMPILE_FLAGS "-source" "1.8" "-target" "1.8")
+SET(CMAKE_JNI_TARGET TRUE)
+SET(JAVA_SOURCE_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/src/org/jhpm)
+SET(PACKAGE_NAME "org.jhpm")
+SET(CMAKE_JAR_CLASSES_PREFIX org/jhpm)
+
+# Java source code.
+FILE (GLOB JAVA_SOURCE_FILES ${JAVA_SOURCE_DIRECTORY}/*.java)
+
+# Set Java target
+ADD_JAR(jhpm ${JAVA_SOURCE_FILES}
+	OUTPUT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/lib
+	VERSION 1.8
+	GENERATE_NATIVE_HEADERS jhpm-native)
+
+# Get property of the jhpm.
+GET_TARGET_PROPERTY(_jarFile jhpm JAR_FILE)
+GET_TARGET_PROPERTY(_classDir jhpm CLASSDIR)
+
+# Print properties.
+MESSAGE(STATUS "Jar file ${_jarFile}")
+MESSAGE(STATUS "Class compiled to ${_classDir}")
+
+# JNI.
+ADD_SUBDIRECTORY(${CMAKE_CURRENT_SOURCE_DIR}/jni)
+
+#install_jar(target_name destination)
+INSTALL_JAR(jhpm DESTINATION ${LIB_INSTALL_DIR}/jhpm)
+#INSTALL_JNI_SYMLINK(jhpm DESTINATION ${JAVA_LIB_INSTALL_DIR})
+
+# Create html documenation for the Java API for this library.
+IF( DOCS )
+	create_javadoc(docs
+	   PACKAGES org.jhpm
+	   FILES ${JAVA_SOURCE_FILES}
+	   CLASSPATH ${CMAKE_JAVA_INCLUDE_PATH}
+	   WINDOWTITLE "Source"
+	   DOCTITLE "<h1>jhpm API documentation</h1>"
+	   AUTHOR FALSE
+	   USE TRUE
+	   VERSION TRUE
+	)
+ENDIF()
+
+# Distribution target.
+IF( UNIX )
+	SET( TARGETDIR "${PROJECT_NAME}-${VERSION}")
+	ADD_CUSTOM_TARGET(	distribution
+				COMMAND mkdir -p ${TARGETDIR}
+				COMMAND cp -r src jni CMakeLists.txt LICENSE ${TARGETDIR}
+				COMMAND tar cf - ${TARGETDIR} | gzip -c > ${TARGETDIR}.tar.gz
+				COMMAND rm -r ${TARGETDIR} )
+ENDIF()
+

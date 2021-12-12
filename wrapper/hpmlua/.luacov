@@ -1,0 +1,8 @@
+modules = {
+   ['lhpm'] = 'lib/hpm/init.lua',
+   ['lhpm.*'] = 'lib',
+}
+
+runreport = true
+
+tick = true
