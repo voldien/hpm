@@ -1,16 +1,15 @@
-#include"glbunny.h"
-#include<hpm.h>
-#include<assert.h>
-#include<getopt.h>
-#include<unistd.h>
-#include<SDL2/SDL.h>
-#include<GL/glew.h>
-
+#include "glbunny.h"
+#include <GL/glew.h>
+#include <SDL2/SDL.h>
+#include <assert.h>
+#include <getopt.h>
+#include <hpm.h>
+#include <unistd.h>
 
 #define BUNNY_IMPLEMENTATION
-#include"Bunny.h"
+#include "Bunny.h"
 uint32_t g_hpmflag = HPM_SSE2;
-FILE* g_outputfd = NULL;
+FILE *g_outputfd = NULL;
 int g_fullscreen = 0;
 int g_debug = 0;
 
@@ -67,20 +66,18 @@ const char* gc_fragmentpolygone = ""
 "	#endif\n"
 "}\n";
 
-const char* get_glbunny_version(void){
-	return hpm_version();
-}
+const char *get_glbunny_version(void) { return hpm_version(); }
 
-unsigned int getGLSLVersion(void){
+unsigned int getGLSLVersion(void) {
 
 	unsigned int version;
 	char glstring[128] = {0};
-	char* wspac;
+	char *wspac;
 
 	/*	Extract version number.	*/
-	strcpy(glstring, (const char*)glGetString(GL_SHADING_LANGUAGE_VERSION));
+	strcpy(glstring, (const char *)glGetString(GL_SHADING_LANGUAGE_VERSION));
 	wspac = strstr(glstring, " ");
-	if(wspac){
+	if (wspac) {
 		*wspac = '\0';
 	}
 
@@ -90,16 +87,15 @@ unsigned int getGLSLVersion(void){
 	return version;
 }
 
-GLint createShader(const char* HPM_RESTRICT vsource,
-        const char* HPM_RESTRICT fsource) {
+GLint createShader(const char *HPM_RESTRICT vsource, const char *HPM_RESTRICT fsource) {
 
 	GLuint prog;
 	GLuint vs, fs;
 	GLuint vstatus, lstatus;
 
-	char version[128];					/*	*/
-	char* vsources[2];					/*	*/
-	char* fsources[2];					/*	*/
+	char version[128]; /*	*/
+	char *vsources[2]; /*	*/
+	char *fsources[2]; /*	*/
 	int sourcecount = sizeof(vsources) / sizeof(vsources[0]);
 
 	/*  Get version string. */
@@ -107,8 +103,8 @@ GLint createShader(const char* HPM_RESTRICT vsource,
 	vsources[0] = version;
 	fsources[0] = version;
 	/*  Assgin shader string.   */
-	vsources[1] = (char*)vsource;
-	fsources[1] = (char*)fsource;
+	vsources[1] = (char *)vsource;
+	fsources[1] = (char *)fsource;
 
 	/*	Create shader.	*/
 	prog = glCreateProgram();
@@ -132,7 +128,7 @@ GLint createShader(const char* HPM_RESTRICT vsource,
 	glGetProgramiv(prog, GL_VALIDATE_STATUS, &vstatus);
 
 	/*  */
-	if(lstatus == GL_FALSE){
+	if (lstatus == GL_FALSE) {
 		char errorlog[2048];
 		glGetProgramInfoLog(prog, sizeof(errorlog), NULL, &errorlog[0]);
 		fprintf(stderr, errorlog);
@@ -141,19 +137,18 @@ GLint createShader(const char* HPM_RESTRICT vsource,
 
 	/*	Release shader data.	*/
 	/*	detach shader object and release their resources.	*/
-	if(glIsShader(vs)){
+	if (glIsShader(vs)) {
 		glDetachShader(prog, vs);
 		glDeleteShader(vs);
 	}
-	if(glIsShader(fs)){
+	if (glIsShader(fs)) {
 		glDetachShader(prog, fs);
 		glDeleteShader(fs);
 	}
 	return prog;
 }
 
-GLuint createBunny(Geometry* geometry){
-
+GLuint createBunny(Geometry *geometry) {
 
 	/*	Create bunny geometry.	*/
 	glGenVertexArrays(1, &geometry->vao);
@@ -172,7 +167,8 @@ GLuint createBunny(Geometry* geometry){
 
 	/*	*/
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, geometry->ibo);
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices, GL_STATIC_DRAW_ARB);
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, BUNNY_NUM_INDICES * sizeof(unsigned short), bunny_indices,
+					GL_STATIC_DRAW_ARB);
 
 	glEnableVertexAttribArrayARB(0);
 	glVertexAttribPointerARB(0, 3, GL_FLOAT, GL_FALSE, 12, NULL);
@@ -188,15 +184,9 @@ GLuint createBunny(Geometry* geometry){
 	return geometry->vao;
 }
 
-GLuint createGrid(unsigned int* numvertices,
-		unsigned int* HPM_RESTRICT* numindices){
+GLuint createGrid(unsigned int *numvertices, unsigned int *HPM_RESTRICT *numindices) { return 0; }
 
-
-
-	return 0;
-}
-
-void print_dependency_versions(void){
+void print_dependency_versions(void) {
 	SDL_version sdl_version;
 	printf("------- Version ------\n");
 	printf("hpm version %s.\n", hpm_version());
@@ -205,52 +195,52 @@ void print_dependency_versions(void){
 	printf("------------------\n\n");
 }
 
-void readargument(int argc, const char** argv){
+void readargument(int argc, const char **argv) {
 
-    /*	Possible long options.	*/
+	/*	Possible long options.	*/
 	static struct option longoption[] = {
-			{"version", no_argument,        NULL, 'v'},	/*	Print version of the glbunny and hpm library.	*/
-			{"debug",	no_argument,  		NULL, 'd'},	/*	Change default SIMD. */
-			{"output",  required_argument,  NULL, 'o'},	/*	Override the time output.	*/
-			{"simd",    required_argument,  NULL, 's'},	/*	Change default SIMD. */
-			{NULL,	0,	NULL, 0},
+		{"version", no_argument, NULL, 'v'},	  /*	Print version of the glbunny and hpm library.	*/
+		{"debug", no_argument, NULL, 'd'},		  /*	Change default SIMD. */
+		{"output", required_argument, NULL, 'o'}, /*	Override the time output.	*/
+		{"simd", required_argument, NULL, 's'},	  /*	Change default SIMD. */
+		{NULL, 0, NULL, 0},
 	};
 
 	int c;
 	int indexopt;
-	const char* shortopt = "vVdo:s:";
+	const char *shortopt = "vVdo:s:";
 
 	/*  Iterate through all argument.	*/
-	while ( ( c = getopt_long(argc, ( char *const *)argv, shortopt, longoption, &indexopt)) != EOF){
-		switch(c){
+	while ((c = getopt_long(argc, (char *const *)argv, shortopt, longoption, &indexopt)) != EOF) {
+		switch (c) {
 		case 'v':
 			printf("version %s.\n", get_glbunny_version());
 			exit(EXIT_SUCCESS);
 		case 's':
-			if(optarg){
+			if (optarg) {
 				int i = 1;
 
-				do{
-					if(strcmp(hpm_get_simd_symbol(i), optarg) == 0){
+				do {
+					if (strcmp(hpm_get_simd_symbol(i), optarg) == 0) {
 						break;
 					}
 					i <<= 1;
-					if(hpm_get_simd_symbol(i) == NULL){
+					if (hpm_get_simd_symbol(i) == NULL) {
 						fprintf(stderr, "Invalid SIMD option, %s.\n", optarg);
 						exit(EXIT_FAILURE);
 					}
-				}while(hpm_get_simd_symbol(i));
+				} while (hpm_get_simd_symbol(i));
 				g_hpmflag = i;
 
 				/*	Check if supported.	*/
-				if(!hpm_support_cpu_feat(g_hpmflag)){
+				if (!hpm_support_cpu_feat(g_hpmflag)) {
 					fprintf(stderr, "SIMD extension not supported.\n");
 					exit(EXIT_FAILURE);
 				}
 			}
 			break;
 		case 'o':
-			if(optarg)
+			if (optarg)
 				g_outputfd = fopen(optarg, "wb");
 			break;
 		case 'd':
@@ -262,7 +252,7 @@ void readargument(int argc, const char** argv){
 	}
 
 	/*	Default output.	*/
-	if(g_outputfd == NULL)
+	if (g_outputfd == NULL)
 		g_outputfd = stdout;
 
 	/*	Reset getopt.	*/

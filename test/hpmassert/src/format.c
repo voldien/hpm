@@ -1,12 +1,12 @@
-#include"hpmassert.h"
-#include<string.h>
-#include<time.h>
-#include<sys/time.h>
-#include<getopt.h>
+#include "hpmassert.h"
+#include "hpmparser.h"
+#include <getopt.h>
 #include <hpmlog.h>
-#include"hpmparser.h"
+#include <string.h>
+#include <sys/time.h>
+#include <time.h>
 
-static void drawSep(const unsigned int size){
+static void drawSep(const unsigned int size) {
 
 	char buf[256];
 	const unsigned int bufSize = sizeof(buf);
@@ -20,7 +20,7 @@ static void drawSep(const unsigned int size){
 	fwrite("\n", 1, 1, stdout);
 }
 
-void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmarkResults){
+void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw *benchmarkResults) {
 
 	int i, j;
 	int x;
@@ -34,7 +34,7 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 	char format[128];
 
 	/*  Requires at least two benchmarks.   */
-	if (numResults <= 1){
+	if (numResults <= 1) {
 		fprintf(stderr, "Requires at least two benchmarks to compute performance differences.\n");
 		return;
 	}
@@ -68,9 +68,10 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 	for (i = 0; i < numResults; i++) {
 		int length;
 
-		length = htpLogPrint(HTP_VERBOSE_QUITE, " %5s - %c |",  hpm_get_simd_symbol(benchmarkResults[i].simd), (benchmarkResults[i].type == eFloat) ? 'f' : 'd');
+		length = htpLogPrint(HTP_VERBOSE_QUITE, " %5s - %c |", hpm_get_simd_symbol(benchmarkResults[i].simd),
+							 (benchmarkResults[i].type == eFloat) ? 'f' : 'd');
 
-		if(length > maxNameLength)
+		if (length > maxNameLength)
 			maxNameLength = length;
 	}
 	htpLogPrint(HTP_VERBOSE_QUITE, "\n");
@@ -112,16 +113,13 @@ void htpFormatResult(unsigned int numResults, const SIMDBenchmarksRaw* benchmark
 	free(timeResults);
 }
 
-
-void htpResultModel(unsigned int numBench,
-                    const SIMDBenchmarksRaw* HPM_RESTRICT raw,
-                    SIMDTimeResult** HPM_RESTRICT models, int* HPM_RESTRICT numberModels) {
+void htpResultModel(unsigned int numBench, const SIMDBenchmarksRaw *HPM_RESTRICT raw,
+					SIMDTimeResult **HPM_RESTRICT models, int *HPM_RESTRICT numberModels) {
 
 	int x, y;
 	int maxEntries = 0;
 
 	assert(numberModels > 0);
-
 
 	/*  Compute max number of function entries for computing model. */
 	for (x = 0; x < numBench; x++) {
@@ -133,14 +131,13 @@ void htpResultModel(unsigned int numBench,
 
 	/*  Allocate percentage results.   */
 	const size_t resultEntireSize = sizeof(SIMDTimeResult) * maxEntries * numBench;
-	*models = (SIMDTimeResult *) malloc(resultEntireSize);
+	*models = (SIMDTimeResult *)malloc(resultEntireSize);
 	memset(*models, 0, resultEntireSize);
 	assert(*models);
 
-
 	/**
 	 * Performance model:
-	 * 
+	 *
 	 * baseline = slowest result of all SIMD features in nanoseconds which is
 	 * the one with highest nanoseconds.
 	 * result / baseline is greater than 1.
@@ -175,20 +172,20 @@ void htpResultModel(unsigned int numBench,
 
 			/*  Compute result of specified model.  */
 			switch (g_result_model) {
-				case ePercentage:
-					modelResult = ((double) result->nanosec / (double) baseline);
-					modelResult = 1.0 / modelResult;
-					break;
-				case eElapseTime:
-					modelResult = ((double) result->nanosec / (double) hptGetTimeResolution());
-					break;
-				default:
-					/*  Not a valid model.  */
-					assert(0);
+			case ePercentage:
+				modelResult = ((double)result->nanosec / (double)baseline);
+				modelResult = 1.0 / modelResult;
+				break;
+			case eElapseTime:
+				modelResult = ((double)result->nanosec / (double)hptGetTimeResolution());
+				break;
+			default:
+				/*  Not a valid model.  */
+				assert(0);
 			}
 
 			/*  Store percentage.   */
-			(*models)[y * numBench + x].percentage = (float) modelResult;
+			(*models)[y * numBench + x].percentage = (float)modelResult;
 		}
 	}
 
