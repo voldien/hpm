@@ -1,5 +1,5 @@
 # HPM
-[![Actions Build Status](https://github.com/voldien/hpm/workflows/Hpm/badge.svg?branch=master)](https://github.com/voldien/hpm/actions)
+[![Hpm Linux](https://github.com/voldien/hpm/actions/workflows/Linux.yml/badge.svg)](https://github.com/voldien/hpm/actions/workflows/Linux.yml)
 [![License: LGPL v3](https://img.shields.io/badge/License-LGPLv3-blue.svg)](https://www.gnu.org/licenses/lgpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/voldien/hpm.svg)](https://github.com/voldien/hpm/releases)
 
