@@ -101,5 +101,5 @@ gcc --version
 ```
 
 ## License
-This project is licensed under the GPL+3 License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the LGPL+3 License - see the [LICENSE](LICENSE) file for details
 
